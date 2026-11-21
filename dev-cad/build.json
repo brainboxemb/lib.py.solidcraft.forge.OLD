@@ -30,10 +30,10 @@
       "engine_schema": 2,
       "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
       "final_step": "tool_test",
-      "final_target_spec_digest": "f47a297cce6987fb7554323f31f379c5fd6fdcbc883fcb6350a7d5a193cf8dcb",
+      "final_target_spec_digest": "bfbaa3372768e542fa24ebd42696c315e38426643573d30e9a19efd0ffc85b76",
       "item_id": "forge-tests",
       "outputs": [],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "96845d13b4c21c6d953ea018dc968304f876a32b"
     },
     "ci/model-verification-batch": {
       "engine": "scons",
@@ -69,6 +69,16 @@
       "item_id": "site-source",
       "outputs": [],
       "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+    },
+    "ci/solidcraft-reference": {
+      "engine": "scons",
+      "engine_schema": 2,
+      "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
+      "final_step": "verify_registry",
+      "final_target_spec_digest": "50d23802fd7e3cb55e2cf212e77e45b8ce252cdaf0d1ee7fa9ce5dcfff8542dd",
+      "item_id": "solidcraft-reference",
+      "outputs": [],
+      "source_commit": "96845d13b4c21c6d953ea018dc968304f876a32b"
     },
     "ci/verification-diagrams": {
       "engine": "scons",
@@ -2294,5 +2304,5 @@
   "name": "dev-cad",
   "schema": 1,
   "scope": "named",
-  "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+  "source_commit": "96845d13b4c21c6d953ea018dc968304f876a32b"
 }
