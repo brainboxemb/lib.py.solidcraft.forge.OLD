@@ -702,11 +702,80 @@ def _evidence_link(url, label):
     )
 
 
+
+def qualification_raw_files(source_files, raw_files):
+    """Render exact source and durable evidence files as readable groups."""
+
+    def row_link(row):
+        label = row.get("label") or row.get("path") or "file"
+        path = row.get("path") or ""
+        link = _evidence_link(row.get("url"), label)
+        if not link:
+            return ""
+        path_note = (
+            f' <code class="qualification-file-path">{escape(path)}</code>'
+            if path and path != label
+            else ""
+        )
+        return f"<li>{link}{path_note}</li>"
+
+    source_items = "".join(
+        item for item in (row_link(row) for row in source_files) if item
+    )
+    sections = []
+    if source_items:
+        sections.append(
+            '<section class="qualification-file-group">'
+            "<h4>Accepted source files</h4>"
+            f'<ul class="qualification-file-list">{source_items}</ul>'
+            "</section>"
+        )
+
+    groups = {}
+    labels = {}
+    for row in raw_files:
+        group = row.get("group") or "other"
+        groups.setdefault(group, []).append(row)
+        labels.setdefault(group, row.get("group_label") or "Evidence")
+
+    preferred_order = (
+        "solidcraft",
+        "visual",
+        "pythonscad",
+        "pybosl2",
+        "cadquery",
+        "build123d",
+        "other",
+    )
+    ordered_groups = [
+        group for group in preferred_order if group in groups
+    ] + sorted(group for group in groups if group not in preferred_order)
+
+    for group in ordered_groups:
+        rows = groups[group]
+        label = labels[group]
+        items = "".join(
+            item for item in (row_link(row) for row in rows) if item
+        )
+        if not items:
+            continue
+        sections.append(
+            '<section class="qualification-file-group">'
+            f"<h4>{escape(label)} <span class=\"meta\">"
+            f"({len(rows)} files)</span></h4>"
+            f'<ul class="qualification-file-list">{items}</ul>'
+            "</section>"
+        )
+
+    if not sections:
+        return '<p class="meta">No raw test files are available.</p>'
+    return '<div class="qualification-file-groups">' + "".join(sections) + "</div>"
+
+
 def qualification_current_evidence(
     view,
     title,
     *,
-    forge_model="",
     saved_design_test="",
     bounds_sufficient="",
     geometry_reason="",
@@ -831,18 +900,9 @@ def qualification_current_evidence(
             "qualification-visual-not-required.html"
         )
 
-    raw_links = " · ".join(
-        value
-        for value in (
-            _evidence_link(view["commands_url"], "commands"),
-            _evidence_link(view["verification_url"], "verification"),
-            _evidence_link(view["measurements_url"], "measurements"),
-            _evidence_link(view["native_model_url"], "native .sc"),
-            _evidence_link(view["native_step_url"], "STEP"),
-            _evidence_link(view["native_results_url"], "native results"),
-            _evidence_link(view["preview_metadata_url"], "preview metadata"),
-        )
-        if value
+    raw_files = qualification_raw_files(
+        view.get("source_files", ()),
+        view.get("raw_files", ()),
     )
 
     return render_template(
@@ -854,9 +914,8 @@ def qualification_current_evidence(
         build_commit=escape(view["build_commit"]),
         verification_checks="".join(check_fragments),
         saved_designs=saved,
-        raw_links=raw_links,
+        raw_files=raw_files,
         visual_section=visual_section,
-        forge_model=escape(forge_model),
         saved_design_test=escape(saved_design_test),
         bounds_sufficient=escape(bounds_sufficient),
         geometry_reason=escape(geometry_reason),

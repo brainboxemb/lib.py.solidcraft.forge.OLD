@@ -14,24 +14,39 @@ ${visual_section}
   <div class="qualification-technical-details-body">
     ${status_line}
 
-    <h3>Forge model</h3>
-    <p>${forge_model}</p>
+    <section class="qualification-technical-section">
+      <h3>Verification checks</h3>
+      <p class="meta">
+        Automated contract and geometry checks. Open an individual check for
+        its exact machine evidence.
+      </p>
+      ${verification_checks}
+    </section>
 
-    <h3>Verification checks</h3>
-    ${verification_checks}
+    <section class="qualification-technical-section">
+      <h3>Geometry evidence</h3>
+      <p><strong>Are outer bounds sufficient?</strong> ${bounds_sufficient}</p>
+      <p>${geometry_reason}</p>
+    </section>
 
-    <h3>Saved-design test</h3>
-    <p>${saved_design_test}</p>
+    <section class="qualification-technical-section">
+      <h3>Saved-design test</h3>
+      <p>${saved_design_test}</p>
+    </section>
 
-    <h3>Geometry evidence</h3>
-    <p><strong>Are outer bounds sufficient?</strong> ${bounds_sufficient}</p>
-    <p>${geometry_reason}</p>
+    <section class="qualification-technical-section">
+      <h3>Raw test files</h3>
+      <p class="meta">
+        Exact accepted source files and durable build evidence used by this
+        Verification case.
+      </p>
+      ${raw_files}
+    </section>
 
-    <h3>Raw test files</h3>
-    <p class="evidence-links">${raw_links}</p>
-
-    <h3>Reference documentation</h3>
-    <ul>${reference_notes}</ul>
+    <section class="qualification-technical-section">
+      <h3>Reference documentation</h3>
+      <ul>${reference_notes}</ul>
+    </section>
 
     <p class="source-stamp">
       Site source <code>${site_source_commit}</code> · accepted model evidence source

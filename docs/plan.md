@@ -155,7 +155,12 @@ Primary lane: `dev-cad`. Presentation, reference truth and Forge-owned
 Verification content belong here; only generic CI/runtime mechanics discovered
 during the work move to `dev-ci` or the central CAD-CI repositories.
 
-- #574 is P1: restore structured Raw test files on all Verification case pages.
+- #574 is **P1 now**: restore the readable Technical test details hierarchy and
+  enumerate the complete accepted source/evidence inventory instead of seven
+  hard-coded inline links.
+- #617 is blocked on the runtime-owner 0.45 qualification: discard the
+  hand-authored 0.43 reference tree and capture a canonical 0.45 command
+  snapshot from the qualified runtime.
 - #570 is P2: remove the remaining CADCraft dependency from the six explanatory
   Verification diagrams without moving generic verification rendering into Forge.
 - #335 is P2: make the sheet-fold build123d reference use real sheet-metal
@@ -202,9 +207,10 @@ HUB75 uses explicit Placement today.
 | #355 Support current SolidCraft parametric Slot API in Forge | `dev-cad` | WS1 | **P1 blocked on #612** | PR #608 already proves Forge emits symbolic Slot width; rerun it against released SolidCraft 0.43.0 after runtime adoption and dev-cad synchronization, then continue length/position qualification. |
 | #354 Support standalone sketch extrusions as boolean operands | `dev-cad` | WS1 | **P1** | Generalize boolean operand lowering for `sketch_base_extrusion`. |
 | #567 Mixed line/arc closed Sketch profiles for sheet-metal blanks | `dev-cad` | WS1 | **P1** | Deliver focused connected-curve profile API; do not wait for all of #9. |
-| #568 Native sheet-metal flange and contour features | `dev-cad` | WS1 | **P1** | Qualify the required SolidCraft 0.43 command contracts and expose generic fabrication-intent APIs. |
+| #568 Native sheet-metal flange and contour features | `dev-cad` | WS1 | **P1** | Qualify required command contracts against the selected current immutable SolidCraft runtime before exposing generic fabrication-intent APIs. |
 | #349 Remaining SolidCraft SOLID › CREATE coverage | `dev-cad` | WS1/WS3 | **P1 Revolve; P2 remainder** | Split focused Revolve child for latch; retain parent as truthful coverage inventory. |
-| #574 Restore structured Raw test files presentation | `dev-cad` | WS2 | **P1** | Fix generic Verification template/writer and add regression tests for representative cases. |
+| #574 Restore Technical test details hierarchy and complete Raw test files | `dev-cad` | WS2 | **P1 now** | Restore the old test-oriented hierarchy, enumerate complete durable evidence generically, and add representative regression tests. |
+| #617 Replace incomplete 0.43 command reference with canonical current-runtime snapshot | `dev-cad` | WS2 | **P1 blocked** | Remove the hand-authored 0.43 reference material; after runtime #21/#22 resolves, capture the canonical 0.45 command registry/reference from the qualified immutable runtime. |
 | #335 Use build123d Sheet Metal for sheet-fold reference | `dev-cad` | WS2 | **P2** | Replace solid approximation with current build123d Sheet Metal workflow and update historical terminology/tests. |
 | #347 Patterns accept any applied Shape feature | `dev-cad` | WS3 | **P2** | Base source validation on native history-feature identity; qualify Hole + sketch-extrude seeds. |
 | #9 First-class Sketch objects, constraints and face workplanes | `dev-cad` | WS3 | **P2 epic** | Refresh scope against current Sketch/attachment capabilities; use focused child issues for deliverable slices. |

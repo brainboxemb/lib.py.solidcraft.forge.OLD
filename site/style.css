@@ -230,4 +230,11 @@ margin:14px 0 10px;padding-left:20px}
 .qualification-technical-details{margin-top:22px}
 .qualification-technical-details>summary{cursor:pointer;font-size:1.05rem;padding:2px 0}
 .qualification-technical-details-body{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
-.qualification-technical-details-body>h3{margin-top:26px}
+.qualification-technical-section{margin-top:26px;padding-top:4px}
+.qualification-technical-section>h3{margin:0 0 8px}
+.qualification-file-groups{display:grid;gap:18px;margin-top:12px}
+.qualification-file-group{min-width:0}
+.qualification-file-group>h4{margin:0 0 7px;color:#284e78}
+.qualification-file-list{margin:0;padding-left:22px}
+.qualification-file-list li{padding:3px 0;line-height:1.45}
+.qualification-file-path{margin-left:5px;color:var(--muted);white-space:normal;overflow-wrap:anywhere}
