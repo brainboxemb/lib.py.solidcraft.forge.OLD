@@ -127,7 +127,7 @@ Immediate order:
 
 1. promote the accepted #481 cleanup correction from `dev-ci` to `main`
    through direct lane PR #629; do not run cleanup before that lands;
-2. adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 through `dev-ci` only;
+2. #630 adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 through `dev-ci` only;
 3. verify the durable `dev-ci` scope after each accepted change;
 4. rewrite the still-useful performance goal from #261 against the current
    released CAD-CI/runtime architecture.
@@ -199,6 +199,7 @@ HUB75 uses explicit Placement today.
 | Issue | Lane | Workstream | Priority | Next action |
 | --- | --- | --- | --- | --- |
 | #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P0 audit fix** | #626 is accepted on dev-ci; promote #629 to main before cleanup is used again. Current-tip integration or exact merged-PR head SHA is required; issue state and backup refs are never general deletion evidence. |
+| #630 Adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 | `dev-ci` | WS0 | **P1 now** | Update only both immutable runtime-role pins and Forge/CI tested SolidCraft version; keep #355 and #617 on dev-cad. |
 | #570 Remove CADCraft from Forge verification diagrams | `dev-cad` | WS2 | **P2** | Replace the six explanatory diagram sources with deterministic Forge-owned SVG/static sources; remove its CI/runtime input only after the content path no longer needs it. |
 | #261 Reduce full qualification from minutes to seconds | `dev-ci` | WS0 | **Retire/rewrite → P2** | Original Qualification/image plan is obsolete; retain measured-performance goal and rewrite against current runtime images, batching and SCons execution. |
 | #340 Reuse full release qualification after identical squash merge | `dev-ci` | WS0 | **Retire** | Old Qualification + squash-to-main model is superseded by long-lived lanes and normal promotion merges; close with historical note. |
@@ -266,8 +267,8 @@ The two long-lived development lanes are independent execution tracks.
 ## Immediate execution order
 
 1. [P0 dev-ci] Finish #629 and put the conservative #481 cleanup policy on main.
-2. [dev-ci] Adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 only; no Forge
-   Slot/API work in this lane.
+2. [dev-ci #630] Adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 only; no
+   Forge Slot/API work in this lane.
 3. [dev-cad #617] Capture the canonical 0.45 command registry from that released
    runtime and remove the noncanonical 0.43 tree.
 4. [dev-cad #355] Re-derive Slot qualification from the 0.45 evidence.
