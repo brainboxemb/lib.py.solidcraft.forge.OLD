@@ -23,13 +23,14 @@ The long-lived lanes intentionally diverge while work is active. Do not record a
 single hard-coded "current baseline" SHA here; use the live GitHub branch heads
 and durable `build/<lane>/build.json.source_commit` manifests for identity.
 
-The exact accepted generic stack remains:
+The current externally accepted generic stack is:
 
-- `lib.py.cad.ci 0.9.2` @
-  `3f688243f4ee65b1fa42f82adde5344fe5101775`;
-- `tool.cad.ci 0.16.1` @
-  `4c6bb8b35009ef5008bd99134cf84b59fddc0b8a`;
-- external named-scope acceptance: `tool.cad.ci.test` PR #61.
+- `lib.py.cad.ci 0.9.3` @
+  `74486c441f1f2b170ff3dc06e0edcaf662fbec6b`;
+- `tool.cad.ci 0.16.2` @
+  `59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9`;
+- external acceptance: `tool.cad.ci.test` #62 / PR #63, including the
+  selective active-closure regression proof.
 
 The generated `build` branch is now clean and contains exactly:
 
@@ -125,10 +126,10 @@ runtime/tooling simplification and operational Pages publication.
 
 Immediate order:
 
-1. promote the accepted #481 cleanup correction from `dev-ci` to `main`
-   through direct lane PR #629; do not run cleanup before that lands;
-2. #630 adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 through `dev-ci` only;
-3. verify the durable `dev-ci` scope after each accepted change;
+1. #633 adopt the externally accepted CAD-CI 0.16.2 / lib 0.9.3 stack on
+   `dev-ci` and capture the real Forge pre-target startup interval;
+2. verify the durable `dev-ci` scope after the accepted repin;
+3. promote #633 separately to `main` through the direct lane path;
 4. rewrite the still-useful performance goal from #261 against the current
    released CAD-CI/runtime architecture.
 
@@ -266,11 +267,10 @@ The two long-lived development lanes are independent execution tracks.
 
 ## Immediate execution order
 
-1. [P0 dev-ci] Finish #629 and put the conservative #481 cleanup policy on main.
-2. [dev-ci #630] Adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 only; no
-   Forge Slot/API work in this lane.
-3. [dev-cad #617] Capture the canonical 0.45 command registry from that released
-   runtime and remove the noncanonical 0.43 tree.
+1. [dev-ci #633] Adopt externally accepted CAD-CI 0.16.2 / lib 0.9.3 and
+   measure the real Forge selective startup interval.
+2. [dev-cad #617] Capture the canonical 0.45 command registry from released
+   runtime v0.3.4 and remove the noncanonical 0.43 tree.
 4. [dev-cad #355] Re-derive Slot qualification from the 0.45 evidence.
 5. [dev-cad #574] Promote the accepted Technical test details/evidence layout
    and verify stable Pages.
