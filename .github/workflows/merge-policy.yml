@@ -216,7 +216,7 @@ jobs:
           sparse-checkout: scripts/merge_policy.py
           sparse-checkout-cone-mode: false
 
-      - name: Delete only retired temporary branches
+      - name: Delete only evidence-backed retired temporary branches
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
@@ -232,10 +232,10 @@ jobs:
               --json headRefName \
               --jq '.[].headRefName'
           )
-          mapfile -t MERGED_HEADS < <(
+          mapfile -t MERGED_HEAD_TIPS < <(
             gh api --paginate \
               "repos/$REPOSITORY/pulls?state=closed&per_page=100" \
-              --jq '.[] | select(.merged_at != null) | .head.ref'
+              --jq '.[] | select(.merged_at != null) | [.head.ref, .head.sha] | @tsv'
           )
           mapfile -t BRANCHES < <(
             gh api --paginate \
@@ -244,7 +244,6 @@ jobs:
           )
 
           deleted=()
-          retired_closed_issue=()
           open=()
           unmerged=()
 
@@ -259,30 +258,18 @@ jobs:
             return 1
           }
 
-          is_merged_pr_head() {
+          is_exact_merged_pr_head() {
             local candidate="$1"
+            local candidate_sha="$2"
             local item
-            for item in "${MERGED_HEADS[@]}"; do
-              if [ "$item" = "$candidate" ]; then
+            local ref
+            local sha
+            for item in "${MERGED_HEAD_TIPS[@]}"; do
+              IFS=$'\t' read -r ref sha <<<"$item"
+              if [ "$ref" = "$candidate" ] && [ "$sha" = "$candidate_sha" ]; then
                 return 0
               fi
             done
-            return 1
-          }
-
-          closed_issue_number() {
-            local candidate="$1"
-            if [[ "$candidate" =~ ^issue/([0-9]+)- ]]; then
-              local number="${BASH_REMATCH[1]}"
-              local state
-              state="$(
-                gh api "repos/$REPOSITORY/issues/$number" --jq '.state'
-              )"
-              if [ "$state" = "closed" ]; then
-                printf '%s' "$number"
-                return 0
-              fi
-            fi
             return 1
           }
 
@@ -323,21 +310,12 @@ jobs:
               continue
             fi
 
-            if is_integrated "$source_branch" || is_merged_pr_head "$source_branch"; then
+            if is_integrated "$source_branch" || \
+               is_exact_merged_pr_head "$source_branch" "$source_sha"; then
               gh api -X DELETE \
                 "repos/$REPOSITORY/git/refs/heads/$source_branch" \
                 >/dev/null
               deleted+=("$source_branch @ $source_sha")
-              continue
-            fi
-
-            if issue_number="$(closed_issue_number "$source_branch")"; then
-              gh api -X DELETE \
-                "repos/$REPOSITORY/git/refs/heads/$source_branch" \
-                >/dev/null
-              retired_closed_issue+=(
-                "$source_branch @ $source_sha (issue #$issue_number closed)"
-              )
               continue
             fi
 
@@ -357,11 +335,9 @@ jobs:
 
           summary="$(
             {
-              echo "Branch cleanup completed by repository policy."
+              echo "Branch cleanup completed by conservative repository policy."
               echo
-              format_group "Deleted integrated or squash-merged temporary branches" "${deleted[@]}"
-              echo
-              format_group "Retired unique branches owned by closed issues" "${retired_closed_issue[@]}"
+              format_group "Deleted integrated or exact merged-PR-head temporary branches" "${deleted[@]}"
               echo
               format_group "Kept because an open PR still uses the branch" "${open[@]}"
               echo

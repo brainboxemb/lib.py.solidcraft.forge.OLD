@@ -8,17 +8,6 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
-### Fixed
-
-- Removed remaining legacy qualification infrastructure and refreshed active repository documentation for the current CAD-CI, `tool_verify`, `model_verify`, and `solidcraft_runtime` architecture.
-
-- Presentation-only main changes now reuse the existing complete `build/main`
-  technical baseline without recalculating every qualification case input hash.
-  Technical changes still require the normal qualification/promotion path
-  (issue #320).
-
-## [0.11.0] - 2026-11-18
-
 ### Added
 
 - Added the first native sheet-metal workflow: `Sketch.sheet_metal(...)`
@@ -40,6 +29,17 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
   repetition path. Repeated history features use native rectangular or circular
   patterns instead. The `anchored-holes` qualification now proves one
   face-attached source cut plus one native rectangular pattern (issue #256).
+
+### Fixed
+
+- Removed remaining legacy qualification infrastructure and refreshed active
+  repository documentation for the current CAD-CI, `tool_verify`,
+  `model_verify`, and `solidcraft_runtime` architecture.
+
+- Presentation-only main changes now reuse the existing complete `build/main`
+  technical baseline without recalculating every qualification case input hash.
+  Technical changes still require the normal qualification/promotion path
+  (issue #320).
 
 
 ## [0.10.0] - 2026-11-18

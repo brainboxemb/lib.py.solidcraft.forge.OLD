@@ -1152,7 +1152,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.16.1`:
+`tool.cad.ci 0.16.2`:
 
 ```text
 push main
