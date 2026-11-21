@@ -5,8 +5,8 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "5536c116351e52e926758db8d93edc30d2a9cc5262fce1804d71484caabd1171",
-          "size": 3528
+          "sha256": "68eab75f8251abb23f42ff7047900c6b0246d47cdb4ea56ef60b461880fd4160",
+          "size": 3580
         }
       ],
       "error": null,
@@ -61,8 +61,8 @@
           {
             "selector": "sole",
             "volume": {
-              "actual": 181578.7614030834,
-              "delta": 3.216555342078209e-07,
+              "actual": 181578.7614034051,
+              "delta": 5.820766091346741e-11,
               "expected": 181578.76140340505,
               "kind": "scalar",
               "label": "sole body volume",
@@ -179,14 +179,14 @@
         {
           "kind": "file",
           "path": "saved_designs/patterns_mutated/model.sc",
-          "sha256": "f11e703a7e433419ab7aa82c36feea2ff262a5b875bb73a0839c73fba8ce67f1",
-          "size": 49666
+          "sha256": "527c5aa0751edaac71553a6d3af8e373bf1714583a78c644d732655f9459324b",
+          "size": 49686
         },
         {
           "kind": "file",
           "path": "saved_designs/patterns_mutated/measurements.json",
-          "sha256": "1385ebb2f26ed3ccd09b078ed1966fc746b2b5f393075238952d0d5c836d06aa",
-          "size": 3562
+          "sha256": "ae0f9683ad24f075f9856a7d6aa79fed87e8756d75ebca87bd492e221033d717",
+          "size": 3572
         }
       ],
       "error": null,
@@ -241,9 +241,9 @@
           {
             "comparison": {
               "actual": {
-                "absolute_delta": 0.07729494172777521,
-                "baseline": 0.24914221233465159,
-                "mutated": 0.3264371540624268
+                "absolute_delta": 0.07729494151012944,
+                "baseline": 0.24914221168844808,
+                "mutated": 0.3264371531985775
               },
               "expected": {
                 "absolute_delta_gt": 0.01
@@ -264,8 +264,8 @@
           {
             "selector": "sole",
             "volume": {
-              "actual": 180447.78805063973,
-              "delta": 2.5269982870668173e-06,
+              "actual": 180447.78805002396,
+              "delta": 1.9112194422632456e-06,
               "expected": 180447.78804811274,
               "kind": "scalar",
               "label": "sole body volume",

@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 80041.06192993665,
+      "area_mm2": 80041.0619301136,
       "bbox": {
         "max": [
           120.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        0.3264371540624268,
-        -5.993840828352277e-10,
-        2.499999999991267
+        0.3264371531985775,
+        -5.343958991847879e-16,
+        2.5
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 88
       },
-      "mass_g": 232.77764658532527,
+      "mass_g": 232.7776465845309,
       "material": "Default",
       "measured_by": "smlib",
       "name": "SketchPatternMirror",
       "notes": [],
       "vertices": 88,
-      "volume_mm3": 180447.78805063973
+      "volume_mm3": 180447.78805002396
     }
   ],
   "body_count": 1,
@@ -107,7 +107,8 @@
       "name": "Dog holes",
       "profiles": 8,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     },
     {
       "curves": 35,
@@ -116,14 +117,15 @@
       "name": "Clamp slots",
       "profiles": 8,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 2.804699,
+      "ms": 2.1009179999999996,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -133,7 +135,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.41251299999999996,
+      "ms": 0.423633,
       "name": "Dog holes",
       "rolled_back": false,
       "suppressed": false,
@@ -143,7 +145,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 68.203689,
+      "ms": 59.272223,
       "name": "Dog holes",
       "rolled_back": false,
       "suppressed": false,
@@ -153,7 +155,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 2.0483409999999997,
+      "ms": 1.390193,
       "name": "Clamp slots",
       "rolled_back": false,
       "suppressed": false,
@@ -163,7 +165,7 @@
     {
       "error": null,
       "id": 5,
-      "ms": 122.85436800000001,
+      "ms": 97.709541,
       "name": "Clamp slots",
       "rolled_back": false,
       "suppressed": false,
@@ -172,12 +174,12 @@
     }
   ],
   "total": {
-    "area_mm2": 80041.06192993665,
+    "area_mm2": 80041.0619301136,
     "edges": 132,
     "faces": 46,
-    "mass_g": 232.77764658532527,
+    "mass_g": 232.7776465845309,
     "open_bodies_skipped": 0,
     "vertices": 88,
-    "volume_mm3": 180447.78805063973
+    "volume_mm3": 180447.78805002396
   }
 }

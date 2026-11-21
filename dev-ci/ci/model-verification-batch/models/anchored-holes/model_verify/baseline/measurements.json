@@ -1,12 +1,12 @@
 {
   "bodies": [
     {
-      "area_mm2": 15501.59289475196,
+      "area_mm2": 15501.592894744621,
       "bbox": {
         "max": [
           100.0,
           60.0,
-          10.0
+          10.000000000000002
         ],
         "min": [
           0.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        50.00000000010663,
-        30.00000000000787,
-        5.000000000010671
+        50.0,
+        30.0,
+        5.0
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 12
       },
-      "mass_g": 76.10315055257217,
+      "mass_g": 76.10315055259814,
       "material": "Default",
       "measured_by": "smlib",
       "name": "AnchoredHoles",
       "notes": [],
       "vertices": 12,
-      "volume_mm3": 58994.69035083114
+      "volume_mm3": 58994.69035085126
     }
   ],
   "body_count": 1,
@@ -89,7 +89,8 @@
       "name": "Base",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     },
     {
       "curves": 1,
@@ -98,14 +99,15 @@
       "name": "Hole",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 0.221195,
+      "ms": 0.22101200000000001,
       "name": "Base",
       "rolled_back": false,
       "suppressed": false,
@@ -115,7 +117,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 2.7892300000000003,
+      "ms": 1.938083,
       "name": "Extrude1",
       "rolled_back": false,
       "suppressed": false,
@@ -125,7 +127,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 0.080161,
+      "ms": 0.093696,
       "name": "Hole",
       "rolled_back": false,
       "suppressed": false,
@@ -135,7 +137,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 11.893730999999999,
+      "ms": 10.544501,
       "name": "Hole",
       "rolled_back": false,
       "suppressed": false,
@@ -145,7 +147,7 @@
     {
       "error": null,
       "id": 5,
-      "ms": 14.888195999999999,
+      "ms": 19.373455,
       "name": "RectangularPattern1",
       "rolled_back": false,
       "suppressed": false,
@@ -154,12 +156,12 @@
     }
   ],
   "total": {
-    "area_mm2": 15501.59289475196,
+    "area_mm2": 15501.592894744621,
     "edges": 18,
     "faces": 8,
-    "mass_g": 76.10315055257217,
+    "mass_g": 76.10315055259814,
     "open_bodies_skipped": 0,
     "vertices": 12,
-    "volume_mm3": 58994.69035083114
+    "volume_mm3": 58994.69035085126
   }
 }

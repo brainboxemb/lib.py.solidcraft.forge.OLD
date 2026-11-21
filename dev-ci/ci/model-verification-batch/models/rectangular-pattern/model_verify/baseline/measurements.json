@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 20673.097335363043,
+      "area_mm2": 20673.097335529223,
       "bbox": {
         "max": [
           60.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        -1.4014341758610742,
-        -0.8175032694527715,
-        2.0000000000056692
+        -1.4014341759614333,
+        -0.8175032693108363,
+        2.0
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 56
       },
-      "mass_g": 46.803026622581775,
+      "mass_g": 46.80302662300371,
       "material": "Default",
       "measured_by": "smlib",
       "name": "RectangularPattern",
       "notes": [],
       "vertices": 56,
-      "volume_mm3": 36281.4159864975
+      "volume_mm3": 36281.41598682458
     }
   ],
   "body_count": 1,
@@ -89,14 +89,15 @@
       "name": "Slot",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 2.766328,
+      "ms": 1.796832,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -106,7 +107,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.283893,
+      "ms": 0.26192099999999996,
       "name": "Slot",
       "rolled_back": false,
       "suppressed": false,
@@ -116,7 +117,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 15.309047,
+      "ms": 11.619164,
       "name": "Slot",
       "rolled_back": false,
       "suppressed": false,
@@ -126,7 +127,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 102.131051,
+      "ms": 99.265136,
       "name": "RectangularPattern1",
       "rolled_back": false,
       "suppressed": false,
@@ -135,12 +136,12 @@
     }
   ],
   "total": {
-    "area_mm2": 20673.097335363043,
+    "area_mm2": 20673.097335529223,
     "edges": 84,
     "faces": 30,
-    "mass_g": 46.803026622581775,
+    "mass_g": 46.80302662300371,
     "open_bodies_skipped": 0,
     "vertices": 56,
-    "volume_mm3": 36281.4159864975
+    "volume_mm3": 36281.41598682458
   }
 }

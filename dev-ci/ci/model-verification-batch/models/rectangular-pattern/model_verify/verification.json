@@ -5,8 +5,8 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "50846c2c6fbb5a9c10ff490a4e8daab9d0c3c1e9fc898d1b8b45422814c7b678",
-          "size": 2777
+          "sha256": "de5f53a1d9fbef21562a45db55c64432834876eb085939b8fa6363f7ad65167a",
+          "size": 2796
         }
       ],
       "error": null,
@@ -79,8 +79,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 36281.4159864975,
-              "delta": 3.271052264608443e-07,
+              "actual": 36281.41598682458,
+              "delta": 2.9103830456733704e-11,
               "expected": 36281.415986824606,
               "kind": "scalar",
               "label": "sole body volume",
@@ -157,14 +157,14 @@
         {
           "kind": "file",
           "path": "saved_designs/columns_2_pitch_30/model.sc",
-          "sha256": "1503bba43eeedeb0135a2a22abd614dc5beb91e868ab650c7d11f1931d265394",
-          "size": 20249
+          "sha256": "48ff0ec3a4f6ae2f29d2ec421182f939eccb701635f8ea3f7474b6f2f0badac4",
+          "size": 20260
         },
         {
           "kind": "file",
           "path": "saved_designs/columns_2_pitch_30/measurements.json",
-          "sha256": "4a9d1f92ae4839ac86fc86509ca852dc8a6e93c9af4c648c7d250ac3983b836c",
-          "size": 2775
+          "sha256": "c1818f4d9f5f139b6b2669be97a74b0db87a756ac0afa32dba00f0519cb5542e",
+          "size": 2787
         }
       ],
       "error": null,
@@ -219,14 +219,14 @@
           {
             "center_of_mass": {
               "actual": [
-                -0.572782068049407,
-                -0.5345965971250489,
-                2.0000000000040603
+                -0.5727820682366423,
+                -0.5345965970208669,
+                2.0
               ],
               "deltas": [
-                1.872356714116563e-10,
-                1.0418244045240499e-10,
-                4.0603076456591225e-12
+                3.3306690738754696e-16,
+                4.440892098500626e-16,
+                0.0
               ],
               "expected": [
                 -0.5727820682366427,
@@ -235,7 +235,7 @@
               ],
               "kind": "vector",
               "label": "sole body center of mass",
-              "max_delta": 1.872356714116563e-10,
+              "max_delta": 4.440892098500626e-16,
               "pass": true,
               "tolerance": 0.001
             },
@@ -259,8 +259,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 36987.61065771006,
-              "delta": 1.7301499610766768e-07,
+              "actual": 36987.61065788305,
+              "delta": 2.1827872842550278e-11,
               "expected": 36987.61065788307,
               "kind": "scalar",
               "label": "sole body volume",

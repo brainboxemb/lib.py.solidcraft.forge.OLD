@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 12051.327412289518,
+      "area_mm2": 12051.327412287179,
       "bbox": {
         "max": [
           40.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        2.1953168780396142e-11,
-        3.1320976292294114e-11,
-        4.33329802825963
+        -2.55549964421068e-16,
+        -3.999232278376713e-15,
+        4.333298028237692
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 24
       },
-      "mass_g": 43.122530904832786,
+      "mass_g": 43.12253090462617,
       "material": "Default",
       "measured_by": "smlib",
       "name": "RoundedRectangleSketch",
       "notes": [],
       "vertices": 24,
-      "volume_mm3": 33428.318530878125
+      "volume_mm3": 33428.31853071796
     }
   ],
   "body_count": 1,
@@ -125,14 +125,15 @@
       "name": "Rounded pad",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 2.718518,
+      "ms": 1.732107,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -142,7 +143,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.42718999999999996,
+      "ms": 0.402409,
       "name": "Rounded pad",
       "rolled_back": false,
       "suppressed": false,
@@ -152,7 +153,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 19.376393,
+      "ms": 14.21617,
       "name": "Rounded pad",
       "rolled_back": false,
       "suppressed": false,
@@ -161,12 +162,12 @@
     }
   ],
   "total": {
-    "area_mm2": 12051.327412289518,
+    "area_mm2": 12051.327412287179,
     "edges": 36,
     "faces": 15,
-    "mass_g": 43.122530904832786,
+    "mass_g": 43.12253090462617,
     "open_bodies_skipped": 0,
     "vertices": 24,
-    "volume_mm3": 33428.318530878125
+    "volume_mm3": 33428.31853071796
   }
 }

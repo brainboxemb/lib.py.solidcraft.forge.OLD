@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "202d109bd47bebbaac65eb3b42f928f3ec3f6933b354221986c1b6104ad3aec9",
-  "duration_seconds": 0.572,
+  "bundle_sha256": "cee65d61c360f1d451ca3e7d650a1125398e06ac3665bfb92ff916d5c517cab0",
+  "duration_seconds": 0.285,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:37:03.176Z",
+  "finished_at": "2026-11-21T22:06:03.575Z",
   "item": "examples-assembly-decorator-build123d",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "d668e8efce51950ea4000d2802cbee0e6e5ba0133d2fac2b4109569224364521"
+      "sha256": "f2a9dc9e4c592701d7ad7866087db6d9aafbff9a77f63e938b5dd9fa170b803f"
     }
   },
-  "run_finished_at": "2026-11-21T15:38:22.881Z",
-  "run_started_at": "2026-11-21T15:33:04.086Z",
+  "run_finished_at": "2026-11-21T22:06:43.349Z",
+  "run_started_at": "2026-11-21T22:03:22.620Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:37:03.117Z",
+  "started_at": "2026-11-21T22:06:03.532Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "f2aa112e0cbb9f3d484ec65f0161fdd5cc546f4ca2f929bcd8e36a0785bcadf8",
+  "target_spec_digest": "234e50a194b74bd0fea6674c0a24eb475db72193c57ebde54b5dfe8ee9c6b60a",
   "timeout_seconds": null
 }

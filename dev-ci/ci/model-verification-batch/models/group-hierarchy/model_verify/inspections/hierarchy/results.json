@@ -6,6 +6,8 @@
     ],
     "group_children": false,
     "levels": "top",
+    "mass": false,
+    "numbered": false,
     "rows": [
       {
         "bom_type": "normal",
@@ -16,6 +18,7 @@
         "definition": "Frame",
         "description": "",
         "item": 1,
+        "material": "Default",
         "part_number": "",
         "properties": {},
         "revision": ""
@@ -29,11 +32,14 @@
         "definition": "PanelGroup",
         "description": "",
         "item": 2,
+        "material": "Default",
         "part_number": "",
         "properties": {},
         "revision": ""
       }
     ],
+    "show_purchased_contents": false,
+    "show_suppressed_parts": false,
     "total_occurrences": 2
   },
   {
@@ -43,6 +49,8 @@
     ],
     "group_children": false,
     "levels": "flat",
+    "mass": false,
+    "numbered": false,
     "rows": [
       {
         "bom_type": "normal",
@@ -53,6 +61,7 @@
         "definition": "Frame",
         "description": "",
         "item": 1,
+        "material": "Default",
         "part_number": "",
         "properties": {},
         "revision": ""
@@ -66,15 +75,19 @@
         "definition": "Panel",
         "description": "",
         "item": 2,
+        "material": "Default",
         "part_number": "",
         "properties": {},
         "revision": ""
       }
     ],
+    "show_purchased_contents": false,
+    "show_suppressed_parts": false,
     "total_occurrences": 3
   },
   {
     "active": 0,
+    "active_path": [],
     "components": [
       {
         "bodies": [],

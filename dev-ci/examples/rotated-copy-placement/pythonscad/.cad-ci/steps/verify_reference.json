@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "ba171fd50f7a0dfbb79a7c3c8ce704d499f05b56e38d0f4d3f6119f74d23ce48",
-  "duration_seconds": 0.595,
+  "bundle_sha256": "6c3e9373befffe136269765c9aac2ce8b3c1e251135efa2a2117562aaa2bf022",
+  "duration_seconds": 0.288,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:37:59.556Z",
+  "finished_at": "2026-11-21T22:06:31.798Z",
   "item": "examples-rotated-copy-placement-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "8f9be8d223bb4668d48d1fd01702719c54dafba0e0c282aa222531dd521bb54e"
+      "sha256": "e0e03946ed09ec0abf35b45d9787b051488669045b86a1b0e7e310fe4bfe7735"
     }
   },
-  "run_finished_at": "2026-11-21T15:38:22.881Z",
-  "run_started_at": "2026-11-21T15:33:04.086Z",
+  "run_finished_at": "2026-11-21T22:06:43.349Z",
+  "run_started_at": "2026-11-21T22:03:22.620Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:37:59.497Z",
+  "started_at": "2026-11-21T22:06:31.756Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "23a29ba4fd997ae7f118cd1f88767bf5d1c3f0a5f62cd4b51f9dfaef2c68aff0",
+  "target_spec_digest": "9c23cac89c67e8ce40e4e606ff22b768670ae21bc6e638b62beadbe2a476841c",
   "timeout_seconds": null
 }

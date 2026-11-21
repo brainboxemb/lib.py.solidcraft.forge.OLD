@@ -1,10 +1,10 @@
 {
   "bodies": [
     {
-      "area_mm2": 5306.854626039655,
+      "area_mm2": 5306.854626018847,
       "bbox": {
         "max": [
-          25.0,
+          25.000000000000004,
           20.0,
           20.0
         ],
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        5.4757643426463485,
-        -1.000686360559398e-11,
-        9.250190527965362
+        5.475764284501979,
+        1.4690838933105967e-15,
+        9.250190477086516
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -34,13 +34,13 @@
         "shells": 1,
         "vertices": 18
       },
-      "mass_g": 29.38222184492997,
+      "mass_g": 29.382223032093112,
       "material": "Default",
       "measured_by": "smlib",
       "name": "PrimitiveCsg",
       "notes": [],
       "vertices": 16,
-      "volume_mm3": 22776.91615886044
+      "volume_mm3": 22776.917079141946
     }
   ],
   "body_count": 1,
@@ -50,7 +50,7 @@
     {
       "error": null,
       "id": 1,
-      "ms": 4.486813,
+      "ms": 3.5799719999999997,
       "name": "Sphere1",
       "rolled_back": false,
       "suppressed": false,
@@ -60,7 +60,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 204.85432,
+      "ms": 131.513532,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -70,7 +70,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 88.82902700000001,
+      "ms": 79.513177,
       "name": "Cylinder1",
       "rolled_back": false,
       "suppressed": false,
@@ -80,7 +80,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 23.880349,
+      "ms": 27.543747,
       "name": "Box2",
       "rolled_back": false,
       "suppressed": false,
@@ -89,12 +89,12 @@
     }
   ],
   "total": {
-    "area_mm2": 5306.854626039655,
+    "area_mm2": 5306.854626018847,
     "edges": 23,
     "faces": 9,
-    "mass_g": 29.38222184492997,
+    "mass_g": 29.382223032093112,
     "open_bodies_skipped": 0,
     "vertices": 16,
-    "volume_mm3": 22776.91615886044
+    "volume_mm3": 22776.917079141946
   }
 }

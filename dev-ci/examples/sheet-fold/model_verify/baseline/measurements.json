@@ -1,46 +1,46 @@
 {
   "bodies": [
     {
-      "area_mm2": 6861.150444061311,
+      "area_mm2": 6861.150444078208,
       "bbox": {
         "max": [
-          21.643805510000004,
-          20.0,
-          21.643805509615312
+          21.64380550980766,
+          20.000000000000004,
+          21.643805509807656
         ],
         "min": [
           -40.0,
-          -20.0,
+          -20.000000000000004,
           0.0
         ]
       },
       "center_of_mass": [
-        -2.1880555564455832,
-        -3.106204579277266e-10,
-        3.69111782081914
+        -2.188055557151772,
+        -3.449235278359257e-16,
+        3.691117820822088
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 30,
+      "edges": 26,
       "face_types": {
         "cylinder": 3,
         "plane": 8
       },
-      "faces": 15,
+      "faces": 11,
       "kernel": {
         "edges": 34,
         "faces": 16,
         "shells": 1,
         "vertices": 20
       },
-      "mass_g": 8.183052218727108,
+      "mass_g": 8.183052218583642,
       "material": "Default",
       "measured_by": "smlib",
       "name": "SheetFold",
       "notes": [],
       "sheet_metal": true,
       "vertices": 18,
-      "volume_mm3": 6343.451332346595
+      "volume_mm3": 6343.451332235381
     }
   ],
   "body_count": 1,
@@ -117,14 +117,15 @@
       "name": "Blank",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 0.233938,
+      "ms": 0.218718,
       "name": "Blank",
       "rolled_back": false,
       "suppressed": false,
@@ -134,7 +135,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 1.942703,
+      "ms": 1.059536,
       "name": "BaseFlange1",
       "rolled_back": false,
       "suppressed": false,
@@ -144,7 +145,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 32.153487,
+      "ms": 14.066473,
       "name": "Hole1",
       "rolled_back": false,
       "suppressed": false,
@@ -154,7 +155,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 8.708808,
+      "ms": 12.063994999999998,
       "name": "Fold1",
       "rolled_back": false,
       "suppressed": false,
@@ -163,12 +164,12 @@
     }
   ],
   "total": {
-    "area_mm2": 6861.150444061311,
-    "edges": 30,
-    "faces": 15,
-    "mass_g": 8.183052218727108,
+    "area_mm2": 6861.150444078208,
+    "edges": 26,
+    "faces": 11,
+    "mass_g": 8.183052218583642,
     "open_bodies_skipped": 0,
     "vertices": 18,
-    "volume_mm3": 6343.451332346595
+    "volume_mm3": 6343.451332235381
   }
 }
