@@ -71,13 +71,12 @@ even when GitHub's repository setting auto-deletes merged head branches.
 Named-lane incremental selection uses the previous durable
 `build/<lane>/build.json.source_commit`, not `github.event.before`.
 
-The public GitHub Pages source still intentionally uses
-`backup/gh-pages-before-f11-2026-11-20`. #366 owns the explicit live cut-over.
+Public GitHub Pages has already been cut over to the generated `gh-pages`
+branch. #366 is complete; there is no remaining live Pages go/no-go gate.
 
-#481 has retired every closed-issue branch through repository policy, with the
-old branch SHA recorded in the audit comment. Only four explicit
-`backup/*clean-history*` refs remain to be reviewed/retired; the separate
-#366 Pages rollback ref remains intentionally protected.
+#481 owns any remaining branch-retention cleanup independently. A historical
+Pages rollback ref is branch-history material, not an active publication
+decision gate.
 
 Docs-only pull-request classification (#576) is complete. Acceptance run
 `44904510041` kept the normal `cad_ci_pr` check green while skipping the
@@ -132,8 +131,7 @@ Immediate order:
    tested SolidCraft version through `dev-ci`;
 3. #481 retire only evidence-backed temporary refs that satisfy the approved
    cleanup policy;
-4. make an explicit go/no-go decision for #366 live Pages cut-over;
-5. rewrite the still-useful performance goal from #261 against the current
+4. rewrite the still-useful performance goal from #261 against the current
    released CAD-CI/runtime architecture.
 
 ### WS1 — Active CAD blockers and developer UX
@@ -200,8 +198,7 @@ HUB75 uses explicit Placement today.
 
 | Issue | Lane | Workstream | Priority | Next action |
 | --- | --- | --- | --- | --- |
-| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P1 cleanup tail** | All closed-issue branches are retired with SHA audit. Decide and retire only the four obsolete clean-history backup refs; keep the explicit #366 Pages rollback ref. |
-| #366 Make verified output durable, then cut Pages over | `dev-ci` | WS0 | **P1 decision gate** | Durable/generated side is complete; request explicit approval before changing the live Pages source, then verify public/legacy routes. |
+| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P1 cleanup tail** | Continue only evidence-backed branch-retention cleanup; Pages cut-over is already complete and is not a reason to keep #366 active. |
 | #570 Remove CADCraft from Forge verification diagrams | `dev-cad` | WS2 | **P2** | Replace the six explanatory diagram sources with deterministic Forge-owned SVG/static sources; remove its CI/runtime input only after the content path no longer needs it. |
 | #261 Reduce full qualification from minutes to seconds | `dev-ci` | WS0 | **Retire/rewrite → P2** | Original Qualification/image plan is obsolete; retain measured-performance goal and rewrite against current runtime images, batching and SCons execution. |
 | #340 Reuse full release qualification after identical squash merge | `dev-ci` | WS0 | **Retire** | Old Qualification + squash-to-main model is superseded by long-lived lanes and normal promotion merges; close with historical note. |
@@ -277,9 +274,7 @@ The two long-lived development lanes are independent execution tracks.
    qualification and continue parametric length/position work.
 4. [dev-cad #574] Promote the already accepted Technical test details/evidence
    layout and verify the stable Pages output.
-5. [#366, decision gate] Decide whether to cut the live Pages source over to
-   generated `gh-pages`; do not change it without explicit approval.
-6. [dev-cad P1] Continue #354, #567 and #568 after their actual dependencies
+5. [dev-cad P1] Continue #354, #567 and #568 after their actual dependencies
    are satisfied.
-7. Rewrite/retire the superseded issues identified in the table (#261, #340,
+6. Rewrite/retire the superseded issues identified in the table (#261, #340,
    #175, #5) before treating them as implementation work.
