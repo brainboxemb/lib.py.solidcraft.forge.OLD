@@ -687,11 +687,15 @@ two lowering paths:
 The perpendicular endpoint coordinate intents must be identical. This prevents
 a symbolic pair that happens to be horizontal/vertical at the current values
 from becoming skewed later. The signed authored axis delta is normalized to a
-positive native length expression according to its current direction.
+positive native `length` expression according to its current direction.
 
-`SlotCenterPoint2D` maps its center-to-end delta to twice that value for the
-native whole centre-line `length`. Arc-Slot points remain fixed until their
-radius/sweep/placement contracts are qualified separately.
+SolidCraft assigns the `length` role according to the selected Slot creator:
+centre distance for `slot.center_to_center`, overall end-to-end distance for
+`slot.overall`, and the authored center-to-end line length for
+`slot.center_point`. Forge therefore passes the authored point delta unchanged
+for all three instead of converting between those creator-specific semantics.
+Arc-Slot points remain fixed until their radius/sweep/placement contracts are
+qualified separately.
 
 Replay bindings are used for `centre_line` and `middle`; profile `curves`
 bindings are merged rather than replaced so sketch patterns/mirrors retain the
