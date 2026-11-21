@@ -50,7 +50,7 @@ class CiRuntimeContractTests(unittest.TestCase):
             solidcraft.rsplit(":", 1)[1],
             reference.rsplit(":", 1)[1],
         )
-        self.assertEqual(solidcraft.rsplit(":", 1)[1], "v0.3.3")
+        self.assertEqual(solidcraft.rsplit(":", 1)[1], "v0.3.4")
 
     def test_runtime_consumers_use_separate_roles(self):
         """Keep model and reference execution on their own released images."""
