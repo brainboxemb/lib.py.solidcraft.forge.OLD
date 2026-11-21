@@ -865,7 +865,7 @@ def _explicit_sketch_commands(
                 delta = _dim_sub(intent_b[axis], intent_a[axis])
                 if pv(delta) < 0:
                     delta = -delta
-                length = delta * 2 if center_point else delta
+                length = delta
                 middle = (
                     intent_a if center_point else (
                         midpoint(intent_a[0], intent_b[0]),
