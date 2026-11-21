@@ -80,15 +80,25 @@ history.
 
 When Forge intentionally targets a newer SolidCraft release:
 
-1. do not modify or replace an already qualified version directory;
-2. add a new sibling `docs/reference/solidcraft/<new-version>/` directory;
-3. record the exact upstream release and commit in its `SOURCE.md`;
-4. capture the relevant command/reference material and known contract gaps for
-   that exact version before changing Forge compatibility code;
-5. update `scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION` and the matching
-   Forge CI/runtime expectation only as part of the deliberate compatibility
+1. qualify the current stable release in `docker.cad.solidcraft` and publish an
+   immutable runtime first;
+2. run `scripts/capture_solidcraft_reference.py` against the exact qualified
+   `solidcraft-cli`;
+3. retain the complete raw `solidcraft-cli commands` registry as
+   `commands.json` and generate `commands.md` from it;
+4. record the exact upstream commit, runtime release and runtime image in
+   `SOURCE.md`;
+5. review the complete version-to-version registry diff before changing Forge
+   compatibility code;
+6. update `scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION` and the matching
+   immutable Forge runtime pin only as part of the deliberate compatibility
    change;
-6. qualify the new target before treating it as the current supported version.
+7. qualify the new target before treating it as supported.
+
+Do not hand-author a small version directory from only the commands currently
+being investigated. Once a canonical version directory is accepted it remains
+immutable; a noncanonical migration tree may instead be removed and recaptured
+from the qualified runtime.
 
 The index and current version notes are in
 [reference/solidcraft/README.md](reference/solidcraft/README.md).

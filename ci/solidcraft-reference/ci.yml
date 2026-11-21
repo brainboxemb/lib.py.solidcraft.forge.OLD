@@ -1,0 +1,25 @@
+# Verify canonical SolidCraft reference against the exact immutable runtime.
+id: solidcraft-reference
+process: true
+kind: verification
+watch:
+  - docs/reference/solidcraft/**
+  - scripts/capture_solidcraft_reference.py
+  - scripts/verify_solidcraft_reference_runtime.py
+strategy:
+  reuse: true
+steps:
+  - id: verify_registry
+    inputs:
+      - docs/reference/solidcraft/**
+      - scripts/capture_solidcraft_reference.py
+      - scripts/verify_solidcraft_reference_runtime.py
+    run:
+      - python
+      - ../../scripts/verify_solidcraft_reference_runtime.py
+      - --image
+      - ghcr.io/brainboxemb/cad-solidcraft:v0.3.4
+      - --version
+      - 0.45.0
+      - --snapshot
+      - docs/reference/solidcraft/0.45.0/commands.json

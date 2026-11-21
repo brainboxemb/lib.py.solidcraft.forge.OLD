@@ -1,32 +1,57 @@
 # SolidCraft version references
 
-Forge keeps one immutable reference directory per qualified SolidCraft target:
+Forge keeps immutable, version-pinned SolidCraft engineering evidence under:
 
 ```text
 docs/reference/solidcraft/
   0.42.0/
-  0.43.0/
+  0.45.0/
   <future-version>/
 ```
 
-The current qualified reference is [0.43.0](0.43.0/SOURCE.md).
-The previous [0.42.0](0.42.0/SOURCE.md) snapshot remains immutable historical
+The historical [0.42.0](0.42.0/SOURCE.md) tree remains accepted historical
 qualification evidence.
+
+The hand-authored 0.43.0 migration tree was removed during the 2026-11-21
+audit because it was not a canonical command snapshot. Do not reconstruct it or
+use it as an input for newer versions.
+
+## Canonical capture rule
+
+For current and future SolidCraft targets, the command reference is captured
+from the exact qualified runtime:
+
+```text
+qualified immutable solidcraft-cli
+        |
+        +--> solidcraft-cli commands
+                |
+                +--> commands.json   canonical machine evidence
+                |
+                +--> commands.md     generated human catalog
+```
+
+Use `scripts/capture_solidcraft_reference.py` to create the version tree.
+
+A versioned command reference must never be a manually selected subset. The raw
+registry is retained so completeness and later diffs can be checked directly.
 
 ## Adding a new SolidCraft version
 
-Before Forge compatibility code is changed for a newer SolidCraft release:
+1. qualify the current stable SolidCraft release in the runtime owner
+   repository;
+2. release an immutable runtime image from the exact green commit;
+3. run the capture script against that exact `solidcraft-cli`;
+4. record the exact upstream commit, runtime release and runtime image in
+   `SOURCE.md`;
+5. review the generated registry diff before adapting Forge compatibility code;
+6. update Forge's tested SolidCraft version/runtime pin through the appropriate
+   lane;
+7. run Forge API/compiler qualification against that evidence.
 
-1. keep every existing version directory unchanged;
-2. add a sibling directory named for the exact SolidCraft version;
-3. add `SOURCE.md` with the exact upstream release and commit;
-4. capture the command/reference material and version-specific contract gaps
-   needed by Forge;
-5. review those differences before adapting Forge;
-6. only then update the tested SolidCraft version and qualify the new target.
-
-Do not update the existing version directory in place. Version-to-version
-changes must remain reviewable as a new tree.
+An accepted canonical version directory is immutable. A noncanonical migration
+note is not promoted to canonical status merely because it already exists in
+Git history.
 
 The repository-level development procedure is documented in
 [../../development.md](../../development.md).
