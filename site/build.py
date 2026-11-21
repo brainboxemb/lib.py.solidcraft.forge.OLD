@@ -686,7 +686,6 @@ def build(
             current_evidence = qualification_current_evidence(
                 stable_view,
                 info.title,
-                forge_model=documentation.forge_model,
                 saved_design_test=documentation.saved_design_test,
                 bounds_sufficient=(
                     "yes" if documentation.bounds_sufficient else "no"
