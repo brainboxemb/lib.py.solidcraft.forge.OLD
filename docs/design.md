@@ -663,6 +663,40 @@ the catalog must not add a second CAD-CI item or duplicate generic image
 mechanics.
 
 
+## Native Slot parameter lowering
+
+`core._slot_width()` validates a Slot width by evaluating it with `_pv()`
+for positivity/finite checks, then returns the original number/Parameter/
+Expression unchanged.
+
+`features._emit_explicit_sketch()` already routes every Slot width through
+`command_value()`. Therefore a symbolic SCPF width lowers directly to the
+native `sketch.slot.center_to_center`, `slot.overall`,
+`slot.center_point`, `slot.arc_three_point` or `slot.arc_center` width
+field without introducing a second authoring representation.
+
+SolidCraft's direct Slot point fields remain numeric. Forge therefore keeps
+two lowering paths:
+
+- fixed-point Slots use the direct `sketch.slot.*` creator unchanged;
+- an axis-aligned straight Slot with symbolic endpoint intent uses numeric seed
+  points in `sketch.draw.dimensioned`, with native `length`, then binds the
+  returned `centre_line` and `middle` to add native orientation and
+  horizontal/vertical position dimensions.
+
+The perpendicular endpoint coordinate intents must be identical. This prevents
+a symbolic pair that happens to be horizontal/vertical at the current values
+from becoming skewed later. The signed authored axis delta is normalized to a
+positive native length expression according to its current direction.
+
+`SlotCenterPoint2D` maps its center-to-end delta to twice that value for the
+native whole centre-line `length`. Arc-Slot points remain fixed until their
+radius/sweep/placement contracts are qualified separately.
+
+Replay bindings are used for `centre_line` and `middle`; profile `curves`
+bindings are merged rather than replaced so sketch patterns/mirrors retain the
+same source semantics.
+
 ## F10 diagram evidence flow
 
 F10 is one independent CAD-CI item discovered through the existing `ci/*`

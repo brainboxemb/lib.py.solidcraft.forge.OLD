@@ -1824,31 +1824,41 @@ def RoundedRectangle2D(width, depth, radius):
     return register_profile(Shape("rounded_rectangle", (width, depth, radius)))
 
 
-def _slot_point(name, value):
+def _slot_point(name, value, *, allow_symbolic=False):
     if not isinstance(value, (tuple, list)) or len(value) != 2:
         raise ValueError(f"{name} must be an (x, y) point")
     point = tuple(value)
     concrete = tuple(_pv(coordinate) for coordinate in point)
     if not all(isfinite(coordinate) for coordinate in concrete):
         raise ValueError(f"{name} must contain finite coordinates")
-    # SolidCraft's native Slot creators take authored sketch points. Keep
-    # those positions fixed; dimensions such as width remain symbolic.
-    if any(isinstance(coordinate, (Parameter, Expression)) for coordinate in point):
+    # SolidCraft's direct Slot point fields remain numeric in 0.43. Forge may
+    # retain symbolic straight-Slot intent here only so feature lowering can
+    # translate it into numeric seed points plus native dimensions/constraints.
+    if (
+        not allow_symbolic
+        and any(isinstance(coordinate, (Parameter, Expression))
+                for coordinate in point)
+    ):
         raise TypeError(f"{name} currently requires fixed numeric coordinates")
     return point
 
 
+def _slot_points_equal(left, right):
+    return all(_pv(a) == _pv(b) for a, b in zip(left, right))
+
+
 def _slot_width(width):
-    # SolidCraft 0.42's direct sketch.slot.* creators require a JSON number.
-    # Parametric Slot dimensions belong to sketch.draw.dimensioned, which is
-    # a separate native authoring contract.
-    if isinstance(width, bool) or not isinstance(width, (int, float)):
+    # SolidCraft 0.43 accepts a number or expression for native Slot width.
+    # Validate the current value without discarding the symbolic dependency.
+    if isinstance(width, bool) or not isinstance(
+        width,
+        (int, float, Parameter, Expression),
+    ):
         raise TypeError(
-            "native Slot width must be a fixed numeric value; "
-            "parametric Slot dimensions require the separate "
-            "sketch.draw.dimensioned capability"
+            "native Slot width must be a number, Parameter or Expression"
         )
-    if not isfinite(width) or width <= 0:
+    concrete = _pv(width)
+    if not isfinite(concrete) or concrete <= 0:
         raise ValueError("slot width must be a positive finite number")
     return width
 
@@ -1857,8 +1867,10 @@ def SlotCenterToCenter2D(p0, p1, width):
     """Create a straight Slot from the centres of its two round ends.
 
     Parameters:
-        p0: Centre of the first round end as (x, y) in sketch coordinates, in mm.
-        p1: Centre of the second round end as (x, y) in sketch coordinates, in mm.
+        p0: Centre of the first round end as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
+        p1: Centre of the second round end as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
         width: Total Slot width in mm. This is also the diameter of each round end.
 
     Limits:
@@ -1868,9 +1880,9 @@ def SlotCenterToCenter2D(p0, p1, width):
     Example:
         SlotCenterToCenter2D((-10, 0), (10, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
-    if p0 == p1:
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
+    if _slot_points_equal(p0, p1):
         raise ValueError("center-to-center Slot endpoints must differ")
     from .explicit_sketch import register_profile
     return register_profile(
@@ -1882,8 +1894,10 @@ def SlotOverall2D(p0, p1, width):
     """Create a straight Slot from its two outermost end points.
 
     Parameters:
-        p0: Outermost point of the first round end as (x, y) in sketch coordinates, in mm.
-        p1: Outermost point of the second round end as (x, y) in sketch coordinates, in mm.
+        p0: Outermost point of the first round end as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
+        p1: Outermost point of the second round end as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
         width: Total Slot width in mm. This is also the diameter of each round end.
 
     Limits:
@@ -1893,10 +1907,10 @@ def SlotOverall2D(p0, p1, width):
     Example:
         SlotOverall2D((-15, 0), (15, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
     width = _slot_width(width)
-    length = sum((b - a) ** 2 for a, b in zip(p0, p1)) ** 0.5
+    length = sum((_pv(b) - _pv(a)) ** 2 for a, b in zip(p0, p1)) ** 0.5
     if length <= _pv(width):
         raise ValueError("overall Slot length must be larger than its width")
     from .explicit_sketch import register_profile
@@ -1907,8 +1921,10 @@ def SlotCenterPoint2D(center, end, width):
     """Create a straight Slot from its centre and one round-end centre.
 
     Parameters:
-        center: Centre of the complete Slot as (x, y) in sketch coordinates, in mm.
-        end: Centre of one round end as (x, y) in sketch coordinates, in mm.
+        center: Centre of the complete Slot as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
+        end: Centre of one round end as (x, y) in sketch coordinates.
+            Axis-aligned straight Slots may use Parameters/Expressions.
         width: Total Slot width in mm. This is also the diameter of each round end.
 
     Limits:
@@ -1918,9 +1934,9 @@ def SlotCenterPoint2D(center, end, width):
     Example:
         SlotCenterPoint2D((0, 0), (10, 0), 6)
     """
-    center = _slot_point("center", center)
-    end = _slot_point("end", end)
-    if center == end:
+    center = _slot_point("center", center, allow_symbolic=True)
+    end = _slot_point("end", end, allow_symbolic=True)
+    if _slot_points_equal(center, end):
         raise ValueError("center-point Slot end must differ from its centre")
     from .explicit_sketch import register_profile
     return register_profile(

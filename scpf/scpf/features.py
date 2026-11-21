@@ -15,6 +15,7 @@ from .core import (
     _DirectionSelector,
     _ProfileEdgeSelection,
     _dim_add,
+    _dim_sub,
     _cylinder_base_from_anchor,
     half,
     midpoint,
@@ -718,7 +719,7 @@ def _explicit_sketch_commands(
     def append_profile(command, profile):
         variable = profile_variables.get(id(profile))
         if variable is not None:
-            command["bind"] = {variable: "curves"}
+            command.setdefault("bind", {})[variable] = "curves"
         commands.append(command)
 
     def source_variable(source):
@@ -731,7 +732,9 @@ def _explicit_sketch_commands(
             )
         return variable
 
-    for profile, profile_anchor, offset in profiles:
+    for profile_index, (profile, profile_anchor, offset) in enumerate(
+        profiles, start=1
+    ):
         ox = _combine(relative_origin[0], offset[0])
         oy = _combine(relative_origin[1], offset[1])
 
@@ -808,50 +811,170 @@ def _explicit_sketch_commands(
             if profile_anchor is not None:
                 raise ModelError("native Slot profiles use authored sketch coordinates")
 
-            def slot_point(point):
-                values = [
-                    command_value(_combine(ox, point[0])),
-                    command_value(_combine(oy, point[1])),
-                ]
+            def slot_intent(point):
+                return (
+                    _combine(ox, point[0]),
+                    _combine(oy, point[1]),
+                )
+
+            def direct_slot_point(point):
+                values = [command_value(value) for value in slot_intent(point)]
                 if any(isinstance(value, str) for value in values):
                     raise ModelError(
                         "native Slot point coordinates currently require fixed values"
                     )
                 return values
 
+            def seed_point(intent):
+                return [pv(intent[0]), pv(intent[1])]
+
+            def same_intent(left, right):
+                return command_value(left) == command_value(right)
+
+            def emit_parametric_straight_slot(
+                command_name, point_key_a, point_a, point_key_b, point_b,
+                width, *, center_point=False,
+            ):
+                intent_a = slot_intent(point_a)
+                intent_b = slot_intent(point_b)
+                dx = pv(intent_b[0]) - pv(intent_a[0])
+                dy = pv(intent_b[1]) - pv(intent_a[1])
+                tolerance = 1e-9
+                if abs(dy) <= tolerance and abs(dx) > tolerance:
+                    axis = 0
+                    mode = "horizontal"
+                    if not same_intent(intent_a[1], intent_b[1]):
+                        raise ModelError(
+                            "parametric horizontal Slot endpoints must share "
+                            "the same y-coordinate intent"
+                        )
+                elif abs(dx) <= tolerance and abs(dy) > tolerance:
+                    axis = 1
+                    mode = "vertical"
+                    if not same_intent(intent_a[0], intent_b[0]):
+                        raise ModelError(
+                            "parametric vertical Slot endpoints must share "
+                            "the same x-coordinate intent"
+                        )
+                else:
+                    raise ModelError(
+                        "parametric straight Slot endpoints currently require "
+                        "a horizontal or vertical axis"
+                    )
+
+                delta = _dim_sub(intent_b[axis], intent_a[axis])
+                if pv(delta) < 0:
+                    delta = -delta
+                length = delta * 2 if center_point else delta
+                middle = (
+                    intent_a if center_point else (
+                        midpoint(intent_a[0], intent_b[0]),
+                        midpoint(intent_a[1], intent_b[1]),
+                    )
+                )
+
+                params = {
+                    point_key_a: seed_point(intent_a),
+                    point_key_b: seed_point(intent_b),
+                    "width": command_value(width),
+                }
+                centre_line = (
+                    f"$sketch_{sketch_index}_slot_{profile_index}_centre_line"
+                )
+                middle_point = (
+                    f"$sketch_{sketch_index}_slot_{profile_index}_middle"
+                )
+                dimensioned = _command(
+                    "sketch.draw.dimensioned",
+                    command=command_name,
+                    params=params,
+                    dimensions={"length": command_value(length)},
+                )
+                dimensioned["bind"] = {
+                    centre_line: "centre_line",
+                    middle_point: "middle",
+                }
+                append_profile(dimensioned, profile)
+                commands.append(_command(
+                    "sketch.constraint.horizontal_vertical",
+                    line=centre_line,
+                    mode=mode,
+                ))
+                commands.append(_command(
+                    "sketch.dimension",
+                    entities=["origin", middle_point],
+                    type="horizontal",
+                    value=command_value(middle[0]),
+                ))
+                commands.append(_command(
+                    "sketch.dimension",
+                    entities=["origin", middle_point],
+                    type="vertical",
+                    value=command_value(middle[1]),
+                ))
+
             if profile.kind == "slot_center_to_center":
                 p0, p1, width = profile.data
-                params = dict(p0=slot_point(p0), p1=slot_point(p1),
-                              width=command_value(width))
+                intents = (slot_intent(p0), slot_intent(p1))
+                if parameters_in(*(intents[0] + intents[1])):
+                    emit_parametric_straight_slot(
+                        "sketch.slot.center_to_center",
+                        "p0", p0, "p1", p1, width,
+                    )
+                    continue
+                params = dict(
+                    p0=direct_slot_point(p0), p1=direct_slot_point(p1),
+                    width=command_value(width),
+                )
                 command = "sketch.slot.center_to_center"
             elif profile.kind == "slot_overall":
                 p0, p1, width = profile.data
-                params = dict(p0=slot_point(p0), p1=slot_point(p1),
-                              width=command_value(width))
+                intents = (slot_intent(p0), slot_intent(p1))
+                if parameters_in(*(intents[0] + intents[1])):
+                    emit_parametric_straight_slot(
+                        "sketch.slot.overall",
+                        "p0", p0, "p1", p1, width,
+                    )
+                    continue
+                params = dict(
+                    p0=direct_slot_point(p0), p1=direct_slot_point(p1),
+                    width=command_value(width),
+                )
                 command = "sketch.slot.overall"
             elif profile.kind == "slot_center_point":
                 center, end, width = profile.data
-                params = dict(center=slot_point(center), end=slot_point(end),
-                              width=command_value(width))
+                intents = (slot_intent(center), slot_intent(end))
+                if parameters_in(*(intents[0] + intents[1])):
+                    emit_parametric_straight_slot(
+                        "sketch.slot.center_point",
+                        "center", center, "end", end, width,
+                        center_point=True,
+                    )
+                    continue
+                params = dict(
+                    center=direct_slot_point(center),
+                    end=direct_slot_point(end),
+                    width=command_value(width),
+                )
                 command = "sketch.slot.center_point"
             elif profile.kind == "slot_arc_three_point":
                 start, through, end, width = profile.data
                 params = dict(
-                    start=slot_point(start),
-                    through=slot_point(through),
-                    end=slot_point(end),
+                    start=direct_slot_point(start),
+                    through=direct_slot_point(through),
+                    end=direct_slot_point(end),
                     width=command_value(width),
                 )
                 command = "sketch.slot.arc_three_point"
             else:
                 center, start, end, sweep, width = profile.data
                 params = dict(
-                    center=slot_point(center),
-                    start=slot_point(start),
+                    center=direct_slot_point(center),
+                    start=direct_slot_point(start),
                     width=command_value(width),
                 )
                 if end is not None:
-                    params["end"] = slot_point(end)
+                    params["end"] = direct_slot_point(end)
                 else:
                     params["sweep"] = sweep
                 command = "sketch.slot.arc_center"

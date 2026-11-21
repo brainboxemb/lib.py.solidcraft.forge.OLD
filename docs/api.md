@@ -290,9 +290,22 @@ SlotArcThreePoint2D(start, through, end, width)
 SlotArcCenter2D(center, start, width, *, end=None, sweep=None)
 ```
 
-Slot authoring points are fixed sketch-local numeric coordinates. Native direct
-Slot width is currently a fixed positive number; parametric Slot dimensions
-belong to SolidCraft's separate dimensioned-sketch capability.
+Straight Slot authoring points may use fixed numbers, `Parameter` or
+`Expression` coordinates when the current Slot axis is horizontal or vertical.
+Forge lowers those symbolic endpoints as numeric native seed points plus
+SolidCraft-native length, orientation and middle-point position constraints;
+it does not pass expressions into SolidCraft's numeric Slot point fields.
+
+For a parametric straight Slot the two perpendicular coordinate intents must be
+identical, so the Slot cannot become skewed when parameters change. A currently
+diagonal parametric straight Slot is rejected. Fixed numeric straight Slots
+retain the direct native creator path, including diagonal geometry.
+
+Arc-Slot authoring points remain fixed sketch-local numeric coordinates in this
+qualification slice.
+
+`width` may be a fixed positive number, `Parameter` or `Expression`; the
+symbolic value remains a native driving Slot dimension.
 
 Slots can participate in the supported native sketch
 `rectangular_pattern()` and `mirror()` operations.
