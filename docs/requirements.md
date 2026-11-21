@@ -48,6 +48,26 @@ Changing either runtime role is a two-repository operation:
 Forge never derives a runtime version from source hashes, timestamps or local
 Docker files.
 
+## Canonical SolidCraft reference evidence
+
+Version-sensitive Forge compatibility work requires a canonical external
+SolidCraft reference for the target runtime.
+
+Requirements:
+
+- the reference is captured from the exact immutable runtime release selected
+  by `docker.cad.solidcraft`;
+- provenance records the exact upstream release/commit and owner-runtime
+  release;
+- the canonical command snapshot contains the complete
+  `solidcraft-cli commands` registry, not a Forge-selected subset;
+- the human command catalog is reproducibly generated from that complete
+  registry or its exact upstream generator;
+- selective Forge contract notes are derived evidence and must not masquerade
+  as the canonical snapshot;
+- a target-version compatibility change must not rely on a partial handwritten
+  version directory.
+
 ## Runtime consumption
 
 Forge CAD-CI commands read the injected repository environment:
