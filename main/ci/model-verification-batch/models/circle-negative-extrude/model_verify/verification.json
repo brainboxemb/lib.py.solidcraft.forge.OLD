@@ -5,8 +5,8 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "5d6c42d97bb2b6c444c4500da2372d4c02e475292c68bd180df964b912dbcffb",
-          "size": 2199
+          "sha256": "0009191124e614bb76d51ca66b75094398de8d66d957189e574294c8480a3de7",
+          "size": 2222
         }
       ],
       "error": null,
@@ -33,7 +33,7 @@
                 "min": [
                   -10.0,
                   -10.0,
-                  -30.0
+                  -30.000000000000004
                 ]
               },
               "expected": {
@@ -49,7 +49,7 @@
                   -30.0
                 ]
               },
-              "max_delta": 0.0
+              "max_delta": 3.552713678800501e-15
             }
           ],
           "pass": true,
@@ -71,8 +71,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 9424.77796074068,
-              "delta": 2.8700014809146523e-08,
+              "actual": 9424.777960769381,
+              "delta": 1.8189894035458565e-12,
               "expected": 9424.77796076938,
               "kind": "scalar",
               "label": "sole body volume",

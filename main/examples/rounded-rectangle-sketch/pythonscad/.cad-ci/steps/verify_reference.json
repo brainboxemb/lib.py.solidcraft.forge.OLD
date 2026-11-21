@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "edd7f1bd644bc1f30393095632a5fadd6dca0b325a5a84cea5669971ee33314b",
-  "duration_seconds": 0.443,
+  "bundle_sha256": "4912146f55033a3da0c4210e1704698a4ee5216d2e41b4f0bc7922d923809f35",
+  "duration_seconds": 0.583,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:50:38.937Z",
+  "finished_at": "2026-11-21T22:19:17.951Z",
   "item": "examples-rounded-rectangle-sketch-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "6bef11fa054d284d38c93c7dbc0ada1ee0da5af2daf2f16d5e82646d11835d7a"
+      "sha256": "d20b4a09d7924537df359f2a4bc57f18876199ad233b48533b1cb583fab17118"
     }
   },
-  "run_finished_at": "2026-11-21T15:50:53.752Z",
-  "run_started_at": "2026-11-21T15:46:03.268Z",
+  "run_finished_at": "2026-11-21T22:19:36.362Z",
+  "run_started_at": "2026-11-21T22:14:11.975Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:50:38.886Z",
+  "started_at": "2026-11-21T22:19:17.890Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "cc58342b11f42b37313ec1abc0d2bce5ee451dd077547397643a9bf81a55ed7e",
+  "target_spec_digest": "95d8aebe80632ba2d843550ecaade7cf5653429381147f2347c184b68b286c78",
   "timeout_seconds": null
 }

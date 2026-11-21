@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "6d672dbb4c657621d1a8562bd15822eca04a8c15d924f822cb633bf44216fe3f",
-  "duration_seconds": 0.517,
+  "bundle_sha256": "da37b81859e3a9b6068c4964f3f119c558a733b21904fa90e85d7ba69be59eff",
+  "duration_seconds": 0.58,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:50:34.865Z",
+  "finished_at": "2026-11-21T22:19:12.538Z",
   "item": "examples-rotated-copy-placement-pybosl2",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "3a36be1e1f9e4b7f2c2db9ef4f6385d6ed0c00498cc844fdb9821fcddaae3d67"
+      "sha256": "c44530e207d9baa3930c836ac1dc4239f43dfda19f6cec2d87a9735a9fc8ecd1"
     }
   },
-  "run_finished_at": "2026-11-21T15:50:53.752Z",
-  "run_started_at": "2026-11-21T15:46:03.268Z",
+  "run_finished_at": "2026-11-21T22:19:36.362Z",
+  "run_started_at": "2026-11-21T22:14:11.975Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:50:34.812Z",
+  "started_at": "2026-11-21T22:19:12.478Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "65b893c7425464b5e7c415033bb8a7ae0cbff8149fd29e0522a3b9c9c6ba0938",
+  "target_spec_digest": "5c93a915184cdff281b405f52476ec10d125c27ecb5be91395e20cf0e5ff98a8",
   "timeout_seconds": null
 }

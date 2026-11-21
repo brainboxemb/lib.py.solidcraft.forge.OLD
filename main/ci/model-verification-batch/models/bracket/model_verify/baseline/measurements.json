@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        14.23529411764706,
-        -9.288140336733336e-16,
-        -14.23529411764706
+        14.235294117647058,
+        1.3387983532244534e-16,
+        -14.235294117647058
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -79,14 +79,15 @@
       "name": "Profile",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 0.229208,
+      "ms": 0.25042899999999996,
       "name": "Profile",
       "rolled_back": false,
       "suppressed": false,
@@ -96,7 +97,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 3.404563,
+      "ms": 3.806629,
       "name": "Extrude1",
       "rolled_back": false,
       "suppressed": false,

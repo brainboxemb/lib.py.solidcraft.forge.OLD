@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 22701.592894659156,
+      "area_mm2": 22701.59289474463,
       "bbox": {
         "max": [
           50.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        1.3151702876783028e-11,
-        -5.633627408639147e-12,
-        2.999999999997918
+        -2.845022556570973e-16,
+        -3.831550810681557e-16,
+        3.0
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 20
       },
-      "mass_g": 75.06567099423009,
+      "mass_g": 75.06567099467664,
       "material": "Default",
       "measured_by": "smlib",
       "name": "CircularFeaturePattern",
       "notes": [],
       "vertices": 20,
-      "volume_mm3": 58190.44263118612
+      "volume_mm3": 58190.44263153228
     }
   ],
   "body_count": 1,
@@ -71,14 +71,15 @@
       "name": "BoltHole",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 3.65337,
+      "ms": 2.8287299999999997,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -88,7 +89,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.148749,
+      "ms": 0.16486800000000001,
       "name": "BoltHole",
       "rolled_back": false,
       "suppressed": false,
@@ -98,7 +99,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 9.331971999999999,
+      "ms": 14.801303,
       "name": "BoltHole",
       "rolled_back": false,
       "suppressed": false,
@@ -108,7 +109,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 63.97905600000001,
+      "ms": 115.76433,
       "name": "CircularPattern1",
       "rolled_back": false,
       "suppressed": false,
@@ -117,12 +118,12 @@
     }
   ],
   "total": {
-    "area_mm2": 22701.592894659156,
+    "area_mm2": 22701.59289474463,
     "edges": 30,
     "faces": 12,
-    "mass_g": 75.06567099423009,
+    "mass_g": 75.06567099467664,
     "open_bodies_skipped": 0,
     "vertices": 20,
-    "volume_mm3": 58190.44263118612
+    "volume_mm3": 58190.44263153228
   }
 }

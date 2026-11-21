@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "5fd55692dc496293fbedde08df5351421fb717fd77778d49f705b1e25a3d2f30",
-  "duration_seconds": 0.438,
+  "bundle_sha256": "987a7fca987f9530e29bf3da83afd99917484b169f539fa1f142c15665966e94",
+  "duration_seconds": 0.577,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:50:42.739Z",
+  "finished_at": "2026-11-21T22:19:22.679Z",
   "item": "examples-sheet-fold-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "0d27f38b989428cd1edb421ba3003e346fa6e1cfabd29c634ff8afeb5bf25757"
+      "sha256": "94e051211829cf95364c82924593606bd9550f2b0937b86bd27d9a80fa59dff0"
     }
   },
-  "run_finished_at": "2026-11-21T15:50:53.752Z",
-  "run_started_at": "2026-11-21T15:46:03.268Z",
+  "run_finished_at": "2026-11-21T22:19:36.362Z",
+  "run_started_at": "2026-11-21T22:14:11.975Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:50:42.686Z",
+  "started_at": "2026-11-21T22:19:22.619Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "380cee1bd7598003eed85b5e1c18d72b08dfca2593bdf2337013bd826a3d88e9",
+  "target_spec_digest": "bb74a958afc0c2149bc140445016062e0cc9b2ed879ca2206a6d1e4997513a08",
   "timeout_seconds": null
 }

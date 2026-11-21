@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "f9d4b2335a02afb502f0a854e7f958b014d8e180c9e15c18843198eb1f21343f",
-  "duration_seconds": 0.441,
+  "bundle_sha256": "bfd27be528a100c570f3e8b4a274ed01ce1ac0b736e4fba08120bbc5ecb8fd19",
+  "duration_seconds": 0.585,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:49:59.377Z",
+  "finished_at": "2026-11-21T22:18:27.821Z",
   "item": "examples-circle-negative-extrude-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "53a97021874175d08c061e2e578260701a9feafc9245cb3443c2d656fb0d8bf7"
+      "sha256": "7da7767bb0c8398763f81aacf9975621f5c3678c9d96a2edf7af22039636197e"
     }
   },
-  "run_finished_at": "2026-11-21T15:50:53.752Z",
-  "run_started_at": "2026-11-21T15:46:03.268Z",
+  "run_finished_at": "2026-11-21T22:19:36.362Z",
+  "run_started_at": "2026-11-21T22:14:11.975Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:49:59.326Z",
+  "started_at": "2026-11-21T22:18:27.759Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "8d26e8584f90b98e1c7b9755b4f7bc5bff5084858bd83557258d2ea6d2a00bd4",
+  "target_spec_digest": "592010e35e2e1acbce3f5a72da797c2a3e57d7802a295e39ee9bade967cd1551",
   "timeout_seconds": null
 }

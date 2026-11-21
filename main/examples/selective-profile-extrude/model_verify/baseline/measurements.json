@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 16275.398223722332,
+      "area_mm2": 16275.398223686154,
       "bbox": {
         "max": [
           60.0,
@@ -15,9 +15,9 @@
         ]
       },
       "center_of_mass": [
-        0.07130661232547605,
-        -1.8474526943185054e-10,
-        2.4999999999986064
+        0.07130661227494901,
+        -3.00219276092636e-16,
+        2.5
       ],
       "closed": true,
       "density_g_cm3": 1.29,
@@ -33,13 +33,13 @@
         "shells": 1,
         "vertices": 14
       },
-      "mass_g": 45.467362914430744,
+      "mass_g": 45.46736291444861,
       "material": "Default",
       "measured_by": "smlib",
       "name": "SelectiveProfileExtrude",
       "notes": [],
       "vertices": 14,
-      "volume_mm3": 35246.017763124604
+      "volume_mm3": 35246.01776313845
     }
   ],
   "body_count": 1,
@@ -80,14 +80,15 @@
       "name": "Selected holes",
       "profiles": 4,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 2.421566,
+      "ms": 2.7325180000000002,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -97,7 +98,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.219273,
+      "ms": 0.27331099999999997,
       "name": "Selected holes",
       "rolled_back": false,
       "suppressed": false,
@@ -107,7 +108,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 22.488397,
+      "ms": 35.00799,
       "name": "Selected holes",
       "rolled_back": false,
       "suppressed": false,
@@ -116,12 +117,12 @@
     }
   ],
   "total": {
-    "area_mm2": 16275.398223722332,
+    "area_mm2": 16275.398223686154,
     "edges": 21,
     "faces": 9,
-    "mass_g": 45.467362914430744,
+    "mass_g": 45.46736291444861,
     "open_bodies_skipped": 0,
     "vertices": 14,
-    "volume_mm3": 35246.017763124604
+    "volume_mm3": 35246.01776313845
   }
 }
