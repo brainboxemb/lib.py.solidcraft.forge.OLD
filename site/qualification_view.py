@@ -250,6 +250,120 @@ def _reference_rows(
     return tuple(rows)
 
 
+
+_ARTIFACT_GROUP_LABELS = {
+    "solidcraft": "SolidCraft model and verification evidence",
+    "visual": "Visual verification evidence",
+    "pythonscad": "PythonSCAD reference evidence",
+    "pybosl2": "pyBOSL2 reference evidence",
+    "cadquery": "CadQuery reference evidence",
+    "build123d": "build123d reference evidence",
+    "other": "Other accepted evidence",
+}
+
+
+def _artifact_group(relative: Path) -> str:
+    """Classify one accepted durable file for human evidence browsing."""
+    parts = relative.parts
+    if not parts:
+        return "other"
+    if parts[0] in IMPLEMENTATIONS:
+        return parts[0]
+    if parts[0] == "model_verify" and len(parts) > 1 and (
+        parts[1] == "visual" or relative.as_posix() == "model_verify/visual.json"
+    ):
+        return "visual"
+    if parts[0] in {"model_verify", "solidcraft.json"}:
+        return "solidcraft"
+    return "other"
+
+
+def _artifact_label(relative: Path) -> str:
+    """Return a concise descriptive label without hiding the exact path."""
+    labels = {
+        "solidcraft.json": "Generated SolidCraft command JSON",
+        "model_verify/verification.json": "Verification result",
+        "model_verify/baseline/measurements.json": "Baseline measurements",
+        "model_verify/native/model.sc": "Native SolidCraft design",
+        "model_verify/native/model.step": "Native STEP export",
+        "model_verify/native/results.json": "Native execution results",
+        "model_verify/native/replay-log.json": "Native replay log",
+        "model_verify/visual.json": "Visual verification result",
+        "model_verify/presentation/preview.json": "Presentation preview metadata",
+        "model_verify/presentation/preview-iso.png": "Presentation preview image",
+    }
+    return labels.get(relative.as_posix(), relative.name)
+
+
+def _raw_file_rows(
+    stable: StableBuildEvidence,
+    example: ExampleBuildEvidence,
+) -> tuple[dict[str, Any], ...]:
+    """Enumerate the complete accepted human-facing evidence inventory."""
+    item_root = stable.root / "examples" / example.slug
+    rows = []
+    for path in sorted(item_root.rglob("*")):
+        if not path.is_file() or path.stat().st_size <= 0:
+            continue
+        relative = path.relative_to(item_root)
+        if ".cad-ci" in relative.parts:
+            continue
+        group = _artifact_group(relative)
+        rows.append(
+            {
+                "group": group,
+                "group_label": _ARTIFACT_GROUP_LABELS[group],
+                "path": relative.as_posix(),
+                "label": _artifact_label(relative),
+                "url": _artifact_url(stable, path),
+            }
+        )
+    return tuple(rows)
+
+
+def _source_file_rows(
+    example: ExampleBuildEvidence,
+) -> tuple[dict[str, Any], ...]:
+    """Expose exact accepted source files that produced the durable evidence."""
+    slug = example.slug
+    source_commit = example.item.source_commit
+    rows = [
+        {
+            "label": "Forge model source",
+            "path": f"examples/{slug}/scpf/model.py",
+            "url": _source_url(source_commit, f"examples/{slug}/scpf/model.py"),
+        },
+        {
+            "label": "Integration contract test",
+            "path": f"examples/{slug}/tests/test_contract.py",
+            "url": _source_url(
+                source_commit,
+                f"examples/{slug}/tests/test_contract.py",
+            ),
+        },
+        {
+            "label": "Verification contract",
+            "path": f"examples/{slug}/verification/verify.py",
+            "url": _source_url(
+                source_commit,
+                f"examples/{slug}/verification/verify.py",
+            ),
+        },
+    ]
+    for reference in example.references:
+        source = reference.verification.get("source")
+        if not isinstance(source, str) or not source.strip():
+            source = f"examples/{slug}/{reference.implementation}/model.py"
+        rows.append(
+            {
+                "label": f"{reference.implementation} reference source",
+                "path": source,
+                "url": _source_url(reference.item.source_commit, source),
+            }
+        )
+    return tuple(rows)
+
+
 def qualification_case_view(
     stable: StableBuildEvidence,
     example: ExampleBuildEvidence,
@@ -284,6 +398,8 @@ def qualification_case_view(
         "native_model_url": _artifact_url(stable, example.native_model_path),
         "native_step_url": _artifact_url(stable, example.native_step_path),
         "native_results_url": _artifact_url(stable, example.native_results_path),
+        "source_files": _source_file_rows(example),
+        "raw_files": _raw_file_rows(stable, example),
         "parameters": _parameter_rows(example.measurements),
         "bodies": _body_rows(example.measurements),
         "verification_checks": _verification_rows(example.verification),
