@@ -73,24 +73,32 @@ output where required.
 
 ## Updating the SolidCraft target
 
-Forge keeps current version-pinned SolidCraft engineering references under
-`docs/reference/solidcraft/<version>/`. These references are part of the
-active development inputs for compiler compatibility work, not background
-history.
+Forge consumes an immutable SolidCraft runtime owned by
+`docker.cad.solidcraft`. Forge does not select a source-tree version and then
+invent a compatibility reference around it.
 
-When Forge intentionally targets a newer SolidCraft release:
+The sequence is strict:
 
-1. do not modify or replace an already qualified version directory;
-2. add a new sibling `docs/reference/solidcraft/<new-version>/` directory;
-3. record the exact upstream release and commit in its `SOURCE.md`;
-4. capture the relevant command/reference material and known contract gaps for
-   that exact version before changing Forge compatibility code;
-5. update `scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION` and the matching
-   Forge CI/runtime expectation only as part of the deliberate compatibility
-   change;
-6. qualify the new target before treating it as the current supported version.
+1. the runtime owner selects and qualifies the intended upstream stable release;
+2. the runtime owner publishes one immutable runtime release;
+3. Forge runs that exact released runtime and captures canonical version
+   evidence under `docs/reference/solidcraft/<version>/`;
+4. the canonical capture includes the **complete** runtime command registry,
+   exact upstream/runtime provenance and reproducible command-catalog
+   generation;
+5. Forge reviews version-to-version differences from those canonical inputs;
+6. only then may version-sensitive Forge compatibility work use the new
+   contracts;
+7. update `scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION` and matching
+   Forge CI/runtime expectations as part of the accepted compatibility move.
 
-The index and current version notes are in
+A versioned reference directory is not a migration notebook. Do not populate it
+with a hand-picked Forge-relevant command subset. Selective contract notes are
+allowed only as derived material beside a complete canonical snapshot.
+
+Never modify an already accepted canonical version directory in place.
+
+The exact requirements and current retained snapshots are in
 [reference/solidcraft/README.md](reference/solidcraft/README.md).
 
 ## Testing ownership
