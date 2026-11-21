@@ -186,6 +186,40 @@ class NativeSlotFamilyTests(unittest.TestCase):
                         profile = factory()
                         sketch.add(profile, anchor=CENTER)
 
+    def _compile_dimensioned_slot(self, factory):
+        body = Box(80, 60, 5)
+        with Sketch(on=body) as sketch:
+            factory()
+        commands = compile_model(
+            body - sketch.extrude(Depth.THROUGH_ALL),
+            "ParametricSlotLength",
+        )["commands"]
+        return next(
+            command
+            for command in commands
+            if command["command"] == "sketch.draw.dimensioned"
+        )
+
+    def test_straight_slot_length_role_uses_authored_point_distance(self):
+        end_x = Parameter("slot_end_x", 20)
+        commands = (
+            self._compile_dimensioned_slot(
+                lambda: SlotCenterToCenter2D((0, 0), (end_x, 0), 6)
+            ),
+            self._compile_dimensioned_slot(
+                lambda: SlotOverall2D((0, 0), (end_x, 0), 6)
+            ),
+            self._compile_dimensioned_slot(
+                lambda: SlotCenterPoint2D((0, 0), (end_x, 0), 6)
+            ),
+        )
+        lengths = [
+            command["params"]["dimensions"]["length"]
+            for command in commands
+        ]
+        self.assertEqual(lengths[1:], lengths[:1] * 2)
+        self.assertIn("slot_end_x", str(lengths[0]))
+
     def test_symbolic_width_lowers_on_all_native_slot_creators(self):
         width = Parameter("slot_width", 8)
         for command_name, factory in self._slot_cases(width):
