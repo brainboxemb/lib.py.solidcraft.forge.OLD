@@ -19,11 +19,9 @@ dev-cad
 dev-ci
 ```
 
-The current synchronized stable baseline is
-`49d59aec5356a880510222a2af9f4399fce44ae2`. `main`, `dev-ci` and
-`dev-cad` all reached this baseline after the runtime-v0.3.3 promotion.
-#355 now owns the active CAD delta on its short-lived branch.
-Use GitHub branch heads and durable scope manifests for live commit identity.
+The long-lived lanes intentionally diverge while work is active. Do not record a
+single hard-coded "current baseline" SHA here; use the live GitHub branch heads
+and durable `build/<lane>/build.json.source_commit` manifests for identity.
 
 The exact accepted generic stack remains:
 
@@ -71,25 +69,30 @@ even when GitHub's repository setting auto-deletes merged head branches.
 Named-lane incremental selection uses the previous durable
 `build/<lane>/build.json.source_commit`, not `github.event.before`.
 
-The public GitHub Pages source still intentionally uses
-`backup/gh-pages-before-f11-2026-11-20`. #366 owns the explicit live cut-over.
+Public GitHub Pages has already been cut over to the generated `gh-pages`
+branch. #366 is complete; there is no remaining live Pages go/no-go gate.
 
-#481 is reopened after the 2026-11-21 eight-hour audit found that #604/#610/#615
-weakened the original conservative cleanup contract. Cleanup must again require
-positive integration evidence, must compare the current branch SHA with the
-recorded merged-PR head SHA before treating a squash-merged head as retired,
-must never delete a branch merely because its issue is closed, and must never
-target `backup/*` refs through the general cleanup command.
+#481 is reopened as a P0 repository-integrity correction after the 2026-11-21
+audit found that #604/#610/#615 weakened the conservative cleanup contract.
+Corrective PR #626 is accepted on `dev-ci`; direct promotion #629 must land
+before any further `/cleanup-branches` command is used. A historical Pages
+rollback ref is branch-history material, not an active publication decision gate.
 
 Docs-only pull-request classification (#576) is complete. Acceptance run
 `44904510041` kept the normal `cad_ci_pr` check green while skipping the
 released CAD-CI action entirely for a `docs/plan.md`-only PR. Promotion PRs
 to `main` still bypass that shortcut and require complete validation.
 
-Runtime owner release `docker.cad.solidcraft v0.3.3` is immutable and Forge
-has promoted that release to `main` and synchronized `dev-cad`. SolidCraft
-0.43.0 is therefore the active qualification target. #355 is no longer blocked
-on runtime ownership and can proceed with native Slot qualification.
+Runtime v0.3.3 / SolidCraft 0.43.0 remains immutable historical evidence only.
+Runtime owner `docker.cad.solidcraft` has now released **v0.3.4** from exact
+green main commit `89acce00bd760c523251c6c84d291d758c2a4dc5`; both immutable
+runtime roles are built/smoke-tested and the SolidCraft role contains exact
+`solidcraft-cli 0.45.0`.
+
+Forge must now adopt only the immutable v0.3.4 runtime pins and tested
+SolidCraft version through `dev-ci`. Canonical 0.45 reference capture and
+Forge API/compiler/qualification work remain on `dev-cad`; the discarded
+hand-authored 0.43 reference material is not evidence.
 
 ## Priority model
 
@@ -122,11 +125,10 @@ runtime/tooling simplification and operational Pages publication.
 
 Immediate order:
 
-1. #355 rerun native Slot qualification against the promoted SolidCraft 0.43.0
-   baseline, then continue parametric length/position;
-2. #481 retire only the four obsolete clean-history backup refs after
-   recording their provenance mapping;
-3. make an explicit go/no-go decision for #366 live Pages cut-over;
+1. promote the accepted #481 cleanup correction from `dev-ci` to `main`
+   through direct lane PR #629; do not run cleanup before that lands;
+2. adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 through `dev-ci` only;
+3. verify the durable `dev-ci` scope after each accepted change;
 4. rewrite the still-useful performance goal from #261 against the current
    released CAD-CI/runtime architecture.
 
@@ -137,7 +139,9 @@ Primary lane: `dev-cad`.
 These are concrete blockers found in current HUB75/latch work and should be
 handled before broad coverage expansion:
 
-1. #355 parametric native Slot support — active now on SolidCraft 0.43.0;
+1. #355 parametric native Slot support — `dev-cad`, blocked only until the
+   released v0.3.4 / SolidCraft 0.45.0 runtime pin is adopted and #617 provides
+   canonical 0.45 reference evidence;
 2. #354 standalone sketch extrusion as a boolean operand;
 3. #567 connected line/arc Sketch profiles for sheet-metal blanks;
 4. #568 native sheet-metal flange/contour features;
@@ -155,7 +159,8 @@ Primary lane: `dev-cad`. Presentation, reference truth and Forge-owned
 Verification content belong here; only generic CI/runtime mechanics discovered
 during the work move to `dev-ci` or the central CAD-CI repositories.
 
-- #574 is P1: restore structured Raw test files on all Verification case pages.
+- #574 is P1 promotion-pending: #618 is accepted on `dev-cad`; promote and
+  verify stable Pages.
 - #570 is P2: remove the remaining CADCraft dependency from the six explanatory
   Verification diagrams without moving generic verification rendering into Forge.
 - #335 is P2: make the sheet-fold build123d reference use real sheet-metal
@@ -193,17 +198,17 @@ HUB75 uses explicit Placement today.
 
 | Issue | Lane | Workstream | Priority | Next action |
 | --- | --- | --- | --- | --- |
-| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P0 audit fix** | Restore evidence-only cleanup: current tip integrated or exact current SHA equals a merged PR head SHA; closed issue alone is never proof; backup refs are never general cleanup targets. |
-| #366 Make verified output durable, then cut Pages over | `dev-ci` | WS0 | **P1 decision gate** | Durable/generated side is complete; request explicit approval before changing the live Pages source, then verify public/legacy routes. |
+| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P0 audit fix** | #626 is accepted on dev-ci; promote #629 to main before cleanup is used again. Current-tip integration or exact merged-PR head SHA is required; issue state and backup refs are never general deletion evidence. |
 | #570 Remove CADCraft from Forge verification diagrams | `dev-cad` | WS2 | **P2** | Replace the six explanatory diagram sources with deterministic Forge-owned SVG/static sources; remove its CI/runtime input only after the content path no longer needs it. |
 | #261 Reduce full qualification from minutes to seconds | `dev-ci` | WS0 | **Retire/rewrite → P2** | Original Qualification/image plan is obsolete; retain measured-performance goal and rewrite against current runtime images, batching and SCons execution. |
 | #340 Reuse full release qualification after identical squash merge | `dev-ci` | WS0 | **Retire** | Old Qualification + squash-to-main model is superseded by long-lived lanes and normal promotion merges; close with historical note. |
-| #355 Support current SolidCraft parametric Slot API in Forge | `dev-cad` | WS1 | **P1 now** | Revalidate symbolic native Slot width against SolidCraft 0.43.0, then add native dimension/constraint lowering for axis-aligned parametric length and position without relaxing numeric Slot point fields. |
+| #355 Support current SolidCraft parametric Slot API in Forge | `dev-cad` | WS1 | **P1 blocked on adoption/reference** | Runtime v0.3.4 / SolidCraft 0.45.0 is released; after dev-ci pin adoption and #617 canonical evidence, revalidate Slot width and continue native dimension/constraint lowering. |
 | #354 Support standalone sketch extrusions as boolean operands | `dev-cad` | WS1 | **P1** | Generalize boolean operand lowering for `sketch_base_extrusion`. |
 | #567 Mixed line/arc closed Sketch profiles for sheet-metal blanks | `dev-cad` | WS1 | **P1** | Deliver focused connected-curve profile API; do not wait for all of #9. |
-| #568 Native sheet-metal flange and contour features | `dev-cad` | WS1 | **P1** | Qualify the required SolidCraft 0.43 command contracts and expose generic fabrication-intent APIs. |
+| #568 Native sheet-metal flange and contour features | `dev-cad` | WS1 | **P1** | Qualify the required contracts against the selected current immutable SolidCraft runtime and expose generic fabrication-intent APIs. |
 | #349 Remaining SolidCraft SOLID › CREATE coverage | `dev-cad` | WS1/WS3 | **P1 Revolve; P2 remainder** | Split focused Revolve child for latch; retain parent as truthful coverage inventory. |
-| #574 Restore structured Raw test files presentation | `dev-cad` | WS2 | **P1** | Fix generic Verification template/writer and add regression tests for representative cases. |
+| #574 Restore Technical test details hierarchy and complete Raw test files | `dev-cad` | WS2 | **P1 promotion pending** | #618 is accepted on dev-cad and the generated sheet-fold page exposes 60 structured file links; keep open until promoted to main and stable Pages is verified. |
+| #617 Replace incomplete 0.43 command reference with canonical current-runtime snapshot | `dev-cad` | WS2 | **P1 now** | Remove the hand-authored 0.43 tree and capture complete `solidcraft-cli commands` evidence from released runtime v0.3.4; raw registry is canonical, Markdown is generated. |
 | #335 Use build123d Sheet Metal for sheet-fold reference | `dev-cad` | WS2 | **P2** | Replace solid approximation with current build123d Sheet Metal workflow and update historical terminology/tests. |
 | #347 Patterns accept any applied Shape feature | `dev-cad` | WS3 | **P2** | Base source validation on native history-feature identity; qualify Hole + sketch-extrude seeds. |
 | #9 First-class Sketch objects, constraints and face workplanes | `dev-cad` | WS3 | **P2 epic** | Refresh scope against current Sketch/attachment capabilities; use focused child issues for deliverable slices. |
@@ -260,18 +265,13 @@ The two long-lived development lanes are independent execution tracks.
 
 ## Immediate execution order
 
-1. [#355, now dev-cad] Revalidate native symbolic Slot width against immutable
-   runtime v0.3.3 / SolidCraft 0.43.0, then qualify parametric length/position
-   through native dimensions and constraints.
-2. [#481, dev-ci cleanup tail] Retire only the four obsolete clean-history
-   backup refs after recording their SHA/provenance mapping; keep the explicit
-   #366 Pages rollback ref.
-3. [#366, decision gate] Decide whether to cut the live Pages source over to
-   generated `gh-pages`; do not change it without explicit approval.
-4. [dev-cad P1] Continue #354, #567 and #568 after the Slot blocker is resolved.
-5. [#574, dev-cad P1] Restore the generic structured Raw test files block on
-   Verification case pages.
-6. [#349] Split the latch-required Revolve work into a focused P1 child; keep
-   the remaining SOLID › CREATE inventory at P2.
-7. Rewrite/retire the superseded issues identified in the table (#261, #340,
-   #175, #5) before treating them as implementation work.
+1. [P0 dev-ci] Finish #629 and put the conservative #481 cleanup policy on main.
+2. [dev-ci] Adopt immutable runtime v0.3.4 / SolidCraft 0.45.0 only; no Forge
+   Slot/API work in this lane.
+3. [dev-cad #617] Capture the canonical 0.45 command registry from that released
+   runtime and remove the noncanonical 0.43 tree.
+4. [dev-cad #355] Re-derive Slot qualification from the 0.45 evidence.
+5. [dev-cad #574] Promote the accepted Technical test details/evidence layout
+   and verify stable Pages.
+6. Continue #354/#567/#568 and the focused #349 Revolve work as dependencies
+   permit; rewrite/retire #261/#340/#175/#5 before implementation.
