@@ -732,13 +732,28 @@ def qualification_raw_files(source_files, raw_files):
         )
 
     groups = {}
+    labels = {}
     for row in raw_files:
-        groups.setdefault(
-            (row.get("group") or "other", row.get("group_label") or "Evidence"),
-            [],
-        ).append(row)
+        group = row.get("group") or "other"
+        groups.setdefault(group, []).append(row)
+        labels.setdefault(group, row.get("group_label") or "Evidence")
 
-    for (_group, label), rows in groups.items():
+    preferred_order = (
+        "solidcraft",
+        "visual",
+        "pythonscad",
+        "pybosl2",
+        "cadquery",
+        "build123d",
+        "other",
+    )
+    ordered_groups = [
+        group for group in preferred_order if group in groups
+    ] + sorted(group for group in groups if group not in preferred_order)
+
+    for group in ordered_groups:
+        rows = groups[group]
+        label = labels[group]
         items = "".join(
             item for item in (row_link(row) for row in rows) if item
         )
@@ -901,7 +916,6 @@ def qualification_current_evidence(
         saved_designs=saved,
         raw_files=raw_files,
         visual_section=visual_section,
-        forge_model=escape(forge_model),
         saved_design_test=escape(saved_design_test),
         bounds_sufficient=escape(bounds_sufficient),
         geometry_reason=escape(geometry_reason),
