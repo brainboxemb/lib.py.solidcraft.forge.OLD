@@ -761,7 +761,6 @@ def qualification_current_evidence(
     view,
     title,
     *,
-    forge_model="",
     saved_design_test="",
     bounds_sufficient="",
     geometry_reason="",
