@@ -74,10 +74,12 @@ Named-lane incremental selection uses the previous durable
 The public GitHub Pages source still intentionally uses
 `backup/gh-pages-before-f11-2026-11-20`. #366 owns the explicit live cut-over.
 
-#481 has retired every closed-issue branch through repository policy, with the
-old branch SHA recorded in the audit comment. Only four explicit
-`backup/*clean-history*` refs remain to be reviewed/retired; the separate
-#366 Pages rollback ref remains intentionally protected.
+#481 is reopened after the 2026-11-21 eight-hour audit found that #604/#610/#615
+weakened the original conservative cleanup contract. Cleanup must again require
+positive integration evidence, must compare the current branch SHA with the
+recorded merged-PR head SHA before treating a squash-merged head as retired,
+must never delete a branch merely because its issue is closed, and must never
+target `backup/*` refs through the general cleanup command.
 
 Docs-only pull-request classification (#576) is complete. Acceptance run
 `44904510041` kept the normal `cad_ci_pr` check green while skipping the
@@ -191,7 +193,7 @@ HUB75 uses explicit Placement today.
 
 | Issue | Lane | Workstream | Priority | Next action |
 | --- | --- | --- | --- | --- |
-| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P1 cleanup tail** | All closed-issue branches are retired with SHA audit. Decide and retire only the four obsolete clean-history backup refs; keep the explicit #366 Pages rollback ref. |
+| #481 Remove stale Forge development branches | `dev-ci` | WS0 | **P0 audit fix** | Restore evidence-only cleanup: current tip integrated or exact current SHA equals a merged PR head SHA; closed issue alone is never proof; backup refs are never general cleanup targets. |
 | #366 Make verified output durable, then cut Pages over | `dev-ci` | WS0 | **P1 decision gate** | Durable/generated side is complete; request explicit approval before changing the live Pages source, then verify public/legacy routes. |
 | #570 Remove CADCraft from Forge verification diagrams | `dev-cad` | WS2 | **P2** | Replace the six explanatory diagram sources with deterministic Forge-owned SVG/static sources; remove its CI/runtime input only after the content path no longer needs it. |
 | #261 Reduce full qualification from minutes to seconds | `dev-ci` | WS0 | **Retire/rewrite → P2** | Original Qualification/image plan is obsolete; retain measured-performance goal and rewrite against current runtime images, batching and SCons execution. |
