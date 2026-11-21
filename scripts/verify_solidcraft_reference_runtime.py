@@ -18,7 +18,6 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def runtime_output(image: str, *command: str) -> str:
-    subprocess.run(["docker", "pull", image], check=True)
     completed = subprocess.run(
         ["docker", "run", "--rm", "--pull=never", image, *command],
         check=True,
@@ -45,6 +44,8 @@ def main() -> int:
     parser.add_argument("--version", required=True)
     parser.add_argument("--snapshot", type=Path, required=True)
     args = parser.parse_args()
+
+    subprocess.run(["docker", "pull", args.image], check=True)
 
     version_text = runtime_output(args.image, "solidcraft-cli", "--version").strip()
     if args.version not in version_text:
