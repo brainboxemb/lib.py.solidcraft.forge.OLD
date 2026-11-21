@@ -4,8 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import base64
-import gzip
 import json
 from pathlib import Path
 import subprocess
@@ -32,10 +30,12 @@ def normalized_registry(text: str) -> list[dict]:
     return sorted(rows, key=lambda row: str(row["id"]))
 
 
-def bootstrap_line(rows: list[dict]) -> str:
-    raw = (json.dumps(rows, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    payload = base64.b64encode(gzip.compress(raw, mtime=0)).decode("ascii")
-    return f"SOLIDCRAFT_REFERENCE_GZIP_BASE64={payload}"
+def emit_registry(rows: list[dict]) -> None:
+    """Emit normalized runtime evidence between stable log markers."""
+
+    print("SOLIDCRAFT_REFERENCE_JSON_BEGIN")
+    print(json.dumps(rows, indent=2, sort_keys=True))
+    print("SOLIDCRAFT_REFERENCE_JSON_END")
 
 
 def main() -> int:
@@ -59,7 +59,7 @@ def main() -> int:
 
     snapshot = ROOT / args.snapshot
     if not snapshot.is_file():
-        print(bootstrap_line(rows))
+        emit_registry(rows)
         raise SystemExit(
             f"missing canonical snapshot: {args.snapshot}; "
             "capture the emitted runtime registry and rerun"
@@ -67,7 +67,7 @@ def main() -> int:
 
     expected = normalized_registry(snapshot.read_text(encoding="utf-8"))
     if expected != rows:
-        print(bootstrap_line(rows))
+        emit_registry(rows)
         raise SystemExit(
             f"canonical snapshot differs from {args.image}; "
             "runtime registry emitted for audit"
