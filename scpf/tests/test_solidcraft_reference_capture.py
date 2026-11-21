@@ -113,6 +113,23 @@ class SolidCraftReferenceCaptureTests(unittest.TestCase):
             self.assertIn("v0.3.4", source)
             self.assertIn("solidcraft-cli 0.45.0", source)
 
+    def test_checked_045_catalog_is_generated_from_canonical_registry(self):
+        reference = ROOT / "docs" / "reference" / "solidcraft" / "0.45.0"
+        raw = json.loads(
+            (reference / "commands.json").read_text(encoding="utf-8")
+        )
+        commands = capture.validate_registry(raw)
+        expected = capture.render_commands(
+            sorted(commands, key=lambda row: str(row["id"]))
+        )
+        actual = (reference / "commands.md").read_text(encoding="utf-8")
+        self.assertEqual(actual, expected)
+
+        source = (reference / "SOURCE.md").read_text(encoding="utf-8")
+        self.assertIn(f"Registered commands: `{len(commands)}`", source)
+        self.assertIn("cad-solidcraft:v0.3.4", source)
+        self.assertIn("solidcraft-cli 0.45.0", source)
+
     def test_discarded_043_reference_tree_is_absent(self):
         self.assertFalse(
             (ROOT / "docs" / "reference" / "solidcraft" / "0.43.0").exists()
