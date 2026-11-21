@@ -122,6 +122,8 @@ Primary lane: `dev-cad`.
   the reference-capture rules. Do not change the factual package runtime pin.
 - #619 is **P1 blocked** on `docker.cad.solidcraft` #21/#22: capture canonical
   0.45 evidence from the released immutable runtime.
+- #621 is **P2**: generalize the canonical-reference capture/completeness rules
+  after the immediate 0.43 cleanup and first compliant 0.45 capture.
 - #570 is **P2**: remove CADCraft from the six explanatory Verification
   diagrams without moving generic verification rendering into Forge.
 - #335 is **P2**: use real build123d sheet-metal semantics for the sheet-fold
@@ -178,6 +180,7 @@ preempt current P1 blockers.
 | #617 Remove invalid 0.43 reference | `dev-cad` | WS2 | **P1 now** | Delete tree and tighten canonical-reference procedure. |
 | #619 Canonical SolidCraft 0.45 reference | `dev-cad` | WS2 | **P1 blocked** | Wait for immutable owner runtime, then capture complete runtime-derived reference. |
 | #620 Re-audit branch cleanup safety | `dev-ci` | WS0 | **P1 now** | Reconstruct affected SHAs and restore conservative cleanup proof. |
+| #621 Canonical SolidCraft reference capture/completeness rules | `dev-cad` | WS2 | **P2** | Generalize checks after #617 cleanup and the first compliant #619 capture. |
 
 Every open issue has one primary lane and current disposition. Closed issues are
 not kept in this active table.
