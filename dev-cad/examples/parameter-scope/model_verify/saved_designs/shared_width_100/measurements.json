@@ -15,8 +15,8 @@
         ]
       },
       "center_of_mass": [
-        -2.842170943040401e-16,
-        1.4210854715202004e-16,
+        0.0,
+        8.881784197001253e-17,
         5.0
       ],
       "closed": true,
@@ -56,7 +56,7 @@
       },
       "center_of_mass": [
         100.0,
-        1.4210854715202004e-16,
+        2.4424906541753446e-16,
         5.0
       ],
       "closed": true,
@@ -96,7 +96,7 @@
       },
       "center_of_mass": [
         220.0,
-        3.808509063674136e-15,
+        2.2085444584263335e-15,
         5.0
       ],
       "closed": true,
@@ -112,13 +112,13 @@
         "shells": 1,
         "vertices": 8
       },
-      "mass_g": 25.80000000000001,
+      "mass_g": 25.8,
       "material": "Default",
       "measured_by": "smlib",
       "name": "Panel_3",
       "notes": [],
       "vertices": 8,
-      "volume_mm3": 20000.000000000007
+      "volume_mm3": 20000.0
     },
     {
       "area_mm2": 6400.000000000002,
@@ -136,7 +136,7 @@
       },
       "center_of_mass": [
         340.0,
-        3.808509063674136e-15,
+        2.2085444584263335e-15,
         5.0
       ],
       "closed": true,
@@ -152,13 +152,13 @@
         "shells": 1,
         "vertices": 8
       },
-      "mass_g": 25.80000000000001,
+      "mass_g": 25.8,
       "material": "Default",
       "measured_by": "smlib",
       "name": "Panel_3 (Panel 3:2)",
       "notes": [],
       "vertices": 8,
-      "volume_mm3": 20000.000000000007
+      "volume_mm3": 20000.0
     },
     {
       "area_mm2": 3400.0,
@@ -176,7 +176,7 @@
       },
       "center_of_mass": [
         460.0,
-        1.7621459846850484e-15,
+        1.6822099269120379e-15,
         5.0
       ],
       "closed": true,
@@ -236,7 +236,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 1.759013,
+      "ms": 2.855503,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -246,7 +246,7 @@
     {
       "error": null,
       "id": 6,
-      "ms": 1.312858,
+      "ms": 1.6619519999999999,
       "name": "Box2",
       "rolled_back": false,
       "suppressed": false,
@@ -256,7 +256,7 @@
     {
       "error": null,
       "id": 9,
-      "ms": 1.715949,
+      "ms": 2.2644610000000003,
       "name": "Box3",
       "rolled_back": false,
       "suppressed": false,
@@ -266,7 +266,7 @@
     {
       "error": null,
       "id": 13,
-      "ms": 1.5436239999999999,
+      "ms": 2.289278,
       "name": "Box4",
       "rolled_back": false,
       "suppressed": false,
@@ -278,9 +278,9 @@
     "area_mm2": 23000.000000000004,
     "edges": 60,
     "faces": 30,
-    "mass_g": 90.30000000000003,
+    "mass_g": 90.30000000000001,
     "open_bodies_skipped": 0,
     "vertices": 40,
-    "volume_mm3": 70000.00000000001
+    "volume_mm3": 70000.0
   }
 }

@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "57622fcdf0e1521f97d8edab54eaea25c4d27c080197a70d3fd9749f503e3615",
-  "duration_seconds": 0.294,
+  "bundle_sha256": "096c5ce3df255e86c61f4fa3f9bfb4b2b9136318227c19d56f6630d6f4f38ba2",
+  "duration_seconds": 0.572,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:55:02.352Z",
+  "finished_at": "2026-11-21T22:33:54.475Z",
   "item": "examples-selective-profile-extrude-pybosl2",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "d1564ea89ef338a0ef07332a502b068143aaa158fc364e163cd31ca8e3d2240a"
+      "sha256": "5adf161c17390e954d84270360ba7a92f9dccdbc60160eada1d6f6e06dc44b07"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:55:02.307Z",
+  "started_at": "2026-11-21T22:33:54.409Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "7385fefa70eea00f233543e5c58691139a7a58fa803c8a99acfe7c398af0151b",
+  "target_spec_digest": "974d50bc662b2a2e372a83eb0941b6b66a7d6b1838dfd2ab4d9b1e70a615e7bc",
   "timeout_seconds": null
 }

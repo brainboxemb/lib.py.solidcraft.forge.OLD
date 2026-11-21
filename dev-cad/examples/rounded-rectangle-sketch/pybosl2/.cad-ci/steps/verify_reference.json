@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "1d3667c76faecf3f752f5c48a4cd24acb8f43aac1dc50f79011afb667d8c2701",
-  "duration_seconds": 0.292,
+  "bundle_sha256": "f68de294b414ac0896bda63173a1b950729bf30784599e2d45ac1754152c3167",
+  "duration_seconds": 0.569,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:55:01.163Z",
+  "finished_at": "2026-11-21T22:33:52.150Z",
   "item": "examples-rounded-rectangle-sketch-pybosl2",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "4ab7ee7d7f1a037ac30ec201b5ef241debf6bbd0443801377a4743c67a953027"
+      "sha256": "1fc7c02b4f41f529b1e328eb97bd95178bf23b95ab589bffa4ab692b1f4f900f"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:55:01.119Z",
+  "started_at": "2026-11-21T22:33:52.084Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "ea141c3da50f0f02c6df0485d6f2021361e7dcdec750936a7cf2cfef7d631ca5",
+  "target_spec_digest": "6dd9db83526386a28d11cadfd45ce74e32e1b5b9198defdd98840390e991fb8f",
   "timeout_seconds": null
 }

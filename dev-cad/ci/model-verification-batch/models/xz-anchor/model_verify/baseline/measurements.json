@@ -150,14 +150,15 @@
       "name": "Profile",
       "profiles": 1,
       "status": "solved",
-      "visible": false
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 3,
-      "ms": 0.18611,
+      "ms": 0.301795,
       "name": "Profile",
       "rolled_back": false,
       "suppressed": false,
@@ -167,7 +168,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 2.347976,
+      "ms": 3.260476,
       "name": "Extrude1",
       "rolled_back": false,
       "suppressed": false,
@@ -177,7 +178,7 @@
     {
       "error": null,
       "id": 7,
-      "ms": 1.2340330000000002,
+      "ms": 1.660854,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -187,7 +188,7 @@
     {
       "error": null,
       "id": 10,
-      "ms": 1.810867,
+      "ms": 2.232178,
       "name": "Box2",
       "rolled_back": false,
       "suppressed": false,

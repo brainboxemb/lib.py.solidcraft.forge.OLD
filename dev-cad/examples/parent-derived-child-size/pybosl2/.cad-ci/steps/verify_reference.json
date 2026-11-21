@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "83e7e27a5179c4deeae3bf6f5d5fc53b0ec110f1945208053099796bff2c543c",
-  "duration_seconds": 0.295,
+  "bundle_sha256": "540c1e8e145989f0973427c24725a4630f4bab424c0e3d2f163be7ded6bb86d1",
+  "duration_seconds": 0.571,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:54:53.927Z",
+  "finished_at": "2026-11-21T22:33:38.203Z",
   "item": "examples-parent-derived-child-size-pybosl2",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "d483599ac1bb66530688e65afbf75347fffe9f3a7df30ed8e9b987c9a864c2a1"
+      "sha256": "0a572f05e40e11f71762895a51e2c105304ae6d30366ad1299a5aa70ff9088f5"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:54:53.883Z",
+  "started_at": "2026-11-21T22:33:38.135Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "a3dd4be4c631d3d83bec4182f1024e9fcb4a139034efc07287616b102b6ceaa3",
+  "target_spec_digest": "c4126d6c053111dcdd6dbedcf8eb819a56c41a91a34db49ff55aeef5d095e83b",
   "timeout_seconds": null
 }

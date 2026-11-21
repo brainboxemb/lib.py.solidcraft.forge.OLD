@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "4f99fd4213d8cc5d05d685e242538ca5dc845389dfb6d11840db1a1b77e0dac4",
-  "duration_seconds": 0.367,
+  "bundle_sha256": "9663b0c8b817da471bca7781afc1d4460ddbd041366a28e5f0825852794de979",
+  "duration_seconds": 0.567,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:54:28.951Z",
+  "finished_at": "2026-11-21T22:32:49.227Z",
   "item": "examples-anchored-holes-pybosl2",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "172de78a708fbf0d9afca8535e159c90f70e74df0b04ad6024bd549f53672375"
+      "sha256": "1b8b808fc8a4e6b0570c103279e849b33e708afe05b8b8eed0588fab4c530c99"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:54:28.895Z",
+  "started_at": "2026-11-21T22:32:49.165Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "a13cabaedcb902b3f671be93286652127c2ff187b90c3efa7f240af2a1d5927b",
+  "target_spec_digest": "ad321535fb684c31b44933069d3f500898fbcfa88f5ad1f461507068ae063b0a",
   "timeout_seconds": null
 }

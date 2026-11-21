@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "41467fbb81eb08cb03c159c07e5eb83cd40f6d87c3bb6240dbb771a4564322a2",
-  "duration_seconds": 0.291,
+  "bundle_sha256": "57a9084137b0c399c850f73652511a477a5b3cebd113c9f58fb1c847c8777f08",
+  "duration_seconds": 0.574,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:54:47.080Z",
+  "finished_at": "2026-11-21T22:33:24.735Z",
   "item": "examples-parameter-scope-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "cf7a6adda7ba285d07e5e579cf42d2593260d9b807a21033a8eb30dc9e9ca229"
+      "sha256": "cc4d95cffa84ee9a1ed02ccf375cdda940fbe3382fd1503da8abee6a9f9c9efe"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:54:47.037Z",
+  "started_at": "2026-11-21T22:33:24.668Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "3a6cb53e53a69a7b07238950467443e5e330ff77b7d60637a5da13f3e5e2e3a1",
+  "target_spec_digest": "e76080527dd812d7018a5153cc023a9841667f5adfbeba6acab15c175419645c",
   "timeout_seconds": null
 }

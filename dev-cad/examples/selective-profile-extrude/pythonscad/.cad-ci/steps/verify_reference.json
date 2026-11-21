@@ -1,12 +1,12 @@
 {
   "action_executed": true,
-  "bundle_sha256": "81b75057609feaaffe87c42cb0eae8d83041993b962d97d948169934a97ba4ce",
-  "duration_seconds": 0.289,
+  "bundle_sha256": "89c8a9d074c12e3e79024796430dcefbe074996dd481aa864ffb3a1da41122cc",
+  "duration_seconds": 0.572,
   "engine": "scons",
   "engine_schema": 2,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T15:55:02.645Z",
+  "finished_at": "2026-11-21T22:33:55.053Z",
   "item": "examples-selective-profile-extrude-pythonscad",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +14,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "7f3cfb160f0b33286f8712303ec8feb77310e2dbad1913af805e0da3b4ed90f1"
+      "sha256": "6ebfd32f94319d980e5412a22f0adb4a353662fd0a961946b4656534f4e1c5e6"
     }
   },
-  "run_finished_at": "2026-11-21T15:55:11.243Z",
-  "run_started_at": "2026-11-21T15:51:50.396Z",
+  "run_finished_at": "2026-11-21T22:34:10.794Z",
+  "run_started_at": "2026-11-21T22:28:53.662Z",
   "schema": 3,
-  "started_at": "2026-11-21T15:55:02.601Z",
+  "started_at": "2026-11-21T22:33:54.987Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "0dec786ca62821cabf2339f0095479892f95c6fafeeda5db9249e3ee5bb288e5",
+  "target_spec_digest": "c333be3cec3ac5940988ca019421ececdb7fbd84d16837fd92b0d9493d4f6bb1",
   "timeout_seconds": null
 }

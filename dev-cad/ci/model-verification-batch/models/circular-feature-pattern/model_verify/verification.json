@@ -5,7 +5,7 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "10622594626c6ce4f57716095155a358ace0944ca17c3cd751884d80c5e60a37",
+          "sha256": "9441088a46b6be29cbd24dbeac323f5ebc4aa88c920e0943e945eef41bf5ae7e",
           "size": 2497
         }
       ],
@@ -71,8 +71,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 58190.44263118612,
-              "delta": 3.4616095945239067e-07,
+              "actual": 58190.44263153228,
+              "delta": 0.0,
               "expected": 58190.44263153228,
               "kind": "scalar",
               "label": "sole body volume",
@@ -161,14 +161,14 @@
         {
           "kind": "file",
           "path": "saved_designs/bolts_4/model.sc",
-          "sha256": "70edca636219d4ba1bd0de3d637b08338dfb7e2974b90eb931b29e56348c9b1e",
-          "size": 13281
+          "sha256": "968b32ec5a25f2c6ff4cda068b6a0aac61e4af662ccc494b5694d0ea4eddb569",
+          "size": 13260
         },
         {
           "kind": "file",
           "path": "saved_designs/bolts_4/measurements.json",
-          "sha256": "757d3b42b3523d8df26be436a99a4aa19a7a736eb32f40e332b119c807d3165f",
-          "size": 2493
+          "sha256": "1cc7b761541bca2bf5487a1ee5a420f3f86a2b0b864ee90600671d275cc1ac66",
+          "size": 2508
         }
       ],
       "error": null,
@@ -193,8 +193,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 58793.62842106025,
-              "delta": 3.873719833791256e-08,
+              "actual": 58793.62842102151,
+              "delta": 7.275957614183426e-12,
               "expected": 58793.628421021516,
               "kind": "scalar",
               "label": "sole body volume",
