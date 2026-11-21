@@ -256,7 +256,6 @@ Total registered commands: **819**.
 | Issue Revision | `drawing.revise` | – |  |
 | Issue Revision | `drawing.revise.planned` | DRAWING REVIEW › REVISION | 3874 |
 | Add Drawing Revision | `drawing.revision` | DRAWING REVIEW › REVISION | 4894 |
-| Revision Table | `drawing.revision_table` | DRAWING PARTS › TABLES | 4894 |
 | Add Revision | `drawing.revision.add` | – |  |
 | Delete Revision | `drawing.revision.delete` | – |  |
 | Edit Revision | `drawing.revision.edit` | – |  |
@@ -264,15 +263,16 @@ Total registered commands: **819**.
 | Revision Tag | `drawing.revision.tag.add.planned` | DRAWING REVIEW › REVISION | 3874 |
 | Delete Revision Tag | `drawing.revision.tag.delete` | – |  |
 | Edit Revision Tag | `drawing.revision.tag.edit` | – |  |
+| Revision Table | `drawing.revision_table` | DRAWING PARTS › TABLES | 4894 |
 | Draw Sheet | `drawing.scene` | – |  |
 | What Is Under a Point | `drawing.scene.hit` | – |  |
 | Line Under a Point | `drawing.scene.line` | – |  |
 | Drawing Settings | `drawing.set` | – |  |
-| Sheet Sketch | `drawing.sheet_sketch` | DRAWING LAYOUT › INSERT | 5425 |
 | Add Sheet | `drawing.sheet.add` | – |  |
 | Delete Sheet | `drawing.sheet.delete` | – |  |
 | Reorder Sheets | `drawing.sheet.reorder` | – |  |
 | Sheet Settings | `drawing.sheet.set` | – |  |
+| Sheet Sketch | `drawing.sheet_sketch` | DRAWING LAYOUT › INSERT | 5425 |
 | Create Sheet Sketch | `drawing.sketch.create` | – |  |
 | Edit Sheet Sketch | `drawing.sketch.edit` | – |  |
 | Fill Sheet Sketch | `drawing.sketch.fill` | – |  |
@@ -841,9 +841,9 @@ Total registered commands: **819**.
 | Tie Loose Ends | `sketch.loose_ends.tie` | – |  |
 | Mirror | `sketch.mirror` | SKETCH › PATTERN |  |
 | Move/Copy Sketch Entities | `sketch.move` | SKETCH › MODIFY |  |
+| Move 3D Point | `sketch.move3d` | – |  |
 | Drag Sketch Point | `sketch.move_point` | – |  |
 | Move Sketch Points | `sketch.move_points` | – |  |
-| Move 3D Point | `sketch.move3d` | – |  |
 | Offset | `sketch.offset` | SKETCH › MODIFY |  |
 | Break Offset Association | `sketch.offset.break` | – |  |
 | Sketch Palette Options | `sketch.options` | – |  |
