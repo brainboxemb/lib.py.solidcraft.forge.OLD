@@ -9,6 +9,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 
@@ -16,8 +17,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 sys.path.insert(0, str(ROOT / "scpf"))
 
-from html_writer import qualification_reference_comparison, qualification_setup_svg
-from qualification_view import _expected_body_rows
+from html_writer import (
+    qualification_current_evidence,
+    qualification_reference_comparison,
+    qualification_setup_svg,
+)
+from qualification_view import _expected_body_rows, _raw_file_rows
 
 
 class SiteSourceTests(unittest.TestCase):
@@ -130,6 +135,118 @@ class SiteSourceTests(unittest.TestCase):
             SITE / "templates" / "qualification-index.html"
         ).read_text(encoding="utf-8")
         self.assertNotIn("${diagrams}", index_template)
+
+    def test_technical_details_keep_test_order_and_structured_raw_files(self):
+        template = (
+            SITE / "templates" / "qualification-current.html"
+        ).read_text(encoding="utf-8")
+        headings = (
+            "Verification checks",
+            "Geometry evidence",
+            "Saved-design test",
+            "Raw test files",
+            "Reference documentation",
+        )
+        positions = [template.index(value) for value in headings]
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("${raw_files}", template)
+        self.assertNotIn("${raw_links}", template)
+        self.assertNotIn('class="evidence-links"', template)
+
+        writer = (SITE / "html_writer.py").read_text(encoding="utf-8")
+        self.assertNotIn('raw_links = " · ".join', writer)
+        self.assertIn("qualification_raw_files(", writer)
+
+    def test_raw_file_inventory_enumerates_complete_durable_item(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            item_root = root / "examples" / "sheet-fold"
+            wanted = (
+                "solidcraft.json",
+                "model_verify/verification.json",
+                "model_verify/native/model.sc",
+                "model_verify/visual/front/actual.png",
+                "pythonscad/references/sheet-fold/pythonscad/model.stl",
+                "build123d/references/sheet-fold/build123d/verification.json",
+            )
+            for relative in wanted:
+                path = item_root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"x")
+            internal = item_root / ".cad-ci" / "item.json"
+            internal.parent.mkdir(parents=True, exist_ok=True)
+            internal.write_bytes(b"x")
+
+            stable = SimpleNamespace(
+                root=root,
+                blob_url=lambda path: (
+                    "https://build.invalid/"
+                    + path.relative_to(root).as_posix()
+                ),
+            )
+            example = SimpleNamespace(slug="sheet-fold")
+            rows = _raw_file_rows(stable, example)
+            paths = {row["path"] for row in rows}
+
+            self.assertEqual(paths, set(wanted))
+            self.assertNotIn(".cad-ci/item.json", paths)
+            self.assertGreater(len(rows), 5)
+            groups = {row["group"] for row in rows}
+            self.assertIn("solidcraft", groups)
+            self.assertIn("visual", groups)
+            self.assertIn("pythonscad", groups)
+            self.assertIn("build123d", groups)
+
+    def test_raw_test_files_render_as_descriptive_lists(self):
+        view = {
+            "status": "pass",
+            "checks": {},
+            "parameters": (),
+            "bodies": (),
+            "verification_checks": (),
+            "saved_designs": (),
+            "visual_views": (),
+            "site_source_commit": "site-source",
+            "accepted_source_commit": "accepted-source",
+            "build_commit": "build-source",
+            "source_files": (
+                {
+                    "label": "Forge model source",
+                    "path": "examples/demo/scpf/model.py",
+                    "url": "https://source.invalid/model.py",
+                },
+                {
+                    "label": "Integration contract test",
+                    "path": "examples/demo/tests/test_contract.py",
+                    "url": "https://source.invalid/test_contract.py",
+                },
+            ),
+            "raw_files": tuple(
+                {
+                    "group": "solidcraft",
+                    "group_label": "SolidCraft model and verification evidence",
+                    "label": f"Evidence {index}",
+                    "path": f"model_verify/file-{index}.json",
+                    "url": f"https://build.invalid/file-{index}.json",
+                }
+                for index in range(12)
+            ),
+        }
+        rendered = qualification_current_evidence(
+            view,
+            "Demo",
+            saved_design_test="Not required.",
+            bounds_sufficient="yes",
+            geometry_reason="Bounds fully describe this demo.",
+            reference_notes="",
+        )
+        self.assertIn("<ul", rendered)
+        self.assertIn("Accepted source files", rendered)
+        self.assertIn("SolidCraft model and verification evidence", rendered)
+        self.assertIn("(12 files)", rendered)
+        self.assertIn("test_contract.py", rendered)
+        self.assertNotIn('class="evidence-links"', rendered)
+        self.assertNotIn(">commands</a> ·", rendered)
 
     def test_setup_diagram_uses_declared_target_envelopes(self):
         svg = qualification_setup_svg(
