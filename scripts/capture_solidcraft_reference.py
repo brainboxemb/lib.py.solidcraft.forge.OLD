@@ -205,7 +205,6 @@ def main() -> int:
     args = parser.parse_args()
 
     cli_version, commands = capture_registry(args.cli)
-    expected = f"0.{args.version.split('.', 1)[1]}" if args.version.startswith("0.") else args.version
     if args.version not in cli_version:
         raise SystemExit(
             f"CLI version mismatch: expected {args.version!r} in {cli_version!r}"
