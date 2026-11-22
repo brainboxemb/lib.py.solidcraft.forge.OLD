@@ -1541,9 +1541,12 @@ items/examples/<slug>/<implementation>/
 The child `verification.json` has the same one-model/one-implementation
 semantic subset previously written by `materialize_case()`.
 
-After successful projection construction, the aggregate reference tree is not a
-declared CAD-CI batch output and may be removed. This avoids publishing both
-aggregate and child copies in the dependency bundle.
+The aggregate reference tree is runtime working state only and is not a
+declared CAD-CI batch output. Because the released reference container creates
+that tree inside the mounted output root, the container clears its own
+`references/` and `diagrams/` working directories before each execution.
+The host never needs elevated permissions to delete container-owned files, and
+only `items/` plus `diagrams/` enter the dependency bundle.
 
 Each reference item uses the same generic source template:
 
