@@ -153,8 +153,10 @@ def compile_standalone_sketch(
     return sketch, meta
 
 
-def compile_base(shape, name):
-    """Create a native editable base body, regardless of example/model name."""
+def compile_base(shape, name, *, operation="new"):
+    """Create or apply a native editable base feature."""
+    if operation not in ("new", "join", "cut", "intersect"):
+        raise ModelError(f"unsupported base operation: {operation}")
     if shape.kind in ("box", "placed_box"):
         if shape.kind == "box":
             length, width, height, box_anchor = shape.data
@@ -245,8 +247,12 @@ def compile_base(shape, name):
         extrude = dict(
             distance=command_value(distance),
             direction=direction,
-            body_name=name,
         )
+        if operation == "new":
+            extrude["body_name"] = name
+        else:
+            extrude["operation"] = operation
+            extrude["targets"] = [name]
         extrude.update(
             _extrude_profile_params(profile_picks, exact_regions)
         )
