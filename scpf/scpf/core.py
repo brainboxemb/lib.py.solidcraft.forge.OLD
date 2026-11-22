@@ -909,6 +909,23 @@ def _dim_sub(left, right):
         return -right
     return left - right
 
+def _dim_abs(value):
+    """Return a positive CAD distance while preserving symbolic dependencies."""
+
+    if isinstance(value, Parameter):
+        return Expression(
+            abs(value.value),
+            f"abs({value.name})",
+            (value,),
+        )
+    if isinstance(value, Expression):
+        return Expression(
+            abs(value.value),
+            f"abs({value.expression})",
+            value.parameters,
+        )
+    return abs(value)
+
 
 def _box_corner_from_anchor(length, width, height, point, anchor):
     """Return the native Box corner when one box anchor is placed at point."""
