@@ -115,45 +115,26 @@ Do not remove or combine an item merely to reduce directory count. Any future
 structural simplification needs a separate requirements/design decision after
 the current responsibilities and consumers remain preserved.
 
-### WS1 — #661 Forge consumer adoption of selective shared model batch
+### WS1 — #661 / #688 selective shared model batch qualification
 
-Primary lane: `dev-ci`. **Now.**
+Primary lane: `dev-ci`. **Now; implementation merged, qualification active.**
 
-Measured released-stack evidence established the original problem:
+#681 merged the accepted `selection_context: direct_dependents` consumer
+implementation to `dev-ci` at `601fcd7fef7b17610fbdef32e8c5352bf7ba6788`.
 
-- one-model run `45014107995`: top-level graph selected only six targets, but
-  `model-verification-batch` still executed all 36 active Forge models;
-- no-model durable run `45014447149`: no model/reference batch started;
-- explicit full run `45011709878`: full catalog execution is correct.
+Remaining proof is tracked by #688:
 
-The generic gap is now fixed and externally accepted by its owners:
+1. one-model `simple-box` source probe on the merged implementation;
+2. remove that probe before merge;
+3. durable `dev-ci` no-model run after the plan/evidence merge;
+4. explicit complete run through the normal `dev-ci -> main` promotion path.
 
-- `lib.py.cad.ci 0.11.0` adds signature-safe
-  `selection_context: direct_dependents`;
-- `tool.cad.ci 0.18.1` pins that exact release;
-- `tool.cad.ci.test` #77 / PR #78 / run `45019713862` proves the released
-  behavior end-to-end.
+For each run record top-level targets, `active_dependents`, models actually
+executed, container starts and duration. The temporary model probe must never
+land on `dev-ci`.
 
-Forge consumer work is therefore limited to:
-
-1. pin the exact accepted `tool.cad.ci 0.18.1` revision;
-2. opt only `model-verification-batch:verify_models` into
-   `selection_context: direct_dependents`;
-3. read `CAD_CI_ACTIVE_DEPENDENTS_JSON`, validate those ids against Forge's
-   existing processed declarative model ids, and compile/verify only that
-   selected subset;
-4. keep an explicit empty direct-dependent selection runtime-free;
-5. rerun the one-model, no-op and explicit-full evidence and compare actual
-   model count/container starts/duration.
-
-Forge must not re-run Git selection, infer changed paths or add a second
-planner. The exact active-dependent list, target signature, cache identity and
-public evidence remain generic CAD-CI responsibilities.
-
-The independent-reference batch is explicitly outside #661. Its nested
-model/engine sparse-selection problem is different and must not be redesigned
-inside this model-batch fix.
-
+Close #661 only after all three execution modes are recorded. Reference-batch
+sparse selection remains outside this work.
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
 Primary lane: `dev-cad`. **Now, parallel with #661.**
@@ -208,7 +189,8 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Adopt accepted tool 0.18.1/lib 0.11.0 in the model batch only, then remeasure one-model/no-op/full execution. |
+| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **blocked on #688 proof** | Implementation merged in #681; close after one-model/no-op/full qualification is recorded. |
+| #688 Qualify selective Forge model batch | dev-ci | **now** | Run temporary one-model probe, remove it before merge, then record no-op durable and promotion full-run evidence. |
 | #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
