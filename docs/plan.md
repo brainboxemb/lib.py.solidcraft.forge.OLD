@@ -145,7 +145,7 @@ Merge this focused correctness fix into `dev-cad` before completing #567.
 
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
-Primary lane: `dev-cad`. **Now, parallel with #661.**
+Primary lane: `dev-cad`. **Blocked on #676; otherwise parallel with #661.**
 
 Pinned SolidCraft 0.45 native commands already provide the required low-level
 building blocks:
@@ -199,7 +199,7 @@ Requirements/design/API contract must be written before implementation.
 | --- | --- | --- | --- |
 | #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
 | #676 Scope public example catalog to `model.yml` | dev-cad | **now** | Align documentation discovery/tests with existing `model.yml` + `role.yml` contract; unblock #567 regression fixture. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **blocked** | Complete native connected-profile qualification after #676 merges; the fixture already passes SolidCraft verification. | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
+| #567 Mixed line/arc closed Sketch profiles | dev-cad | **blocked** | Complete native connected-profile qualification after #676 merges; the fixture already passes SolidCraft verification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
