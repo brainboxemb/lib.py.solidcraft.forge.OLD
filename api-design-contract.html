@@ -323,7 +323,23 @@ Forge does not expose a second `direction=` argument for current Sketch
 extrusion. Direction is expressed by the sign of `distance` or by
 `sym=True`.
 
-See [change 0024](background/changes/0024-signed-sketch-extrude.md).
+A standalone Sketch extrusion is a normal solid Boolean operand:
+
+```python
+with Sketch(name=&quot;Rear recess&quot;, plane=&quot;YZ&quot;) as recess:
+    recess.add(RoundedRectangle2D(70, 202, 20), offset=(85, 263))
+
+cut = recess.extrude(14, sym=True)
+body = body - cut
+```
+
+`+`, `-` and `&amp;` lower directly to the same native `solid.extrude`
+feature with SolidCraft operations `join`, `cut` and `intersect`
+respectively. Forge does not create a temporary body/combine sequence, and the
+standalone Sketch remains authored on its own world/work plane.
+
+See [change 0024](background/changes/0024-signed-sketch-extrude.md) and
+[change 0043](background/changes/0043-standalone-sketch-boolean.md).
 
 #### Native Slot profiles
 
