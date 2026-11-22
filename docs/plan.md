@@ -3,20 +3,16 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Forge has two parallel responsibility areas:
+Forge has two independent responsibility areas:
 
-1. the **CAD library itself** — public API, compiler/lowering, modelling
-   semantics, examples, native qualification and model-specific verification;
-2. the **CI/verification/runtime integration around that library** — generic
-   CAD-CI consumption, durable build/Page publication, verification package
-   integration, runtime-image consumption and release mechanics.
+1. the CAD library itself — public API, compiler/lowering, modelling semantics,
+   examples, native qualification and model-specific Verification;
+2. CI/runtime/Verification integration around that library — exact released
+   generic CAD-CI consumption, immutable runtime consumption, durable build/Page
+   publication and release mechanics.
 
-Neither area is subordinate to the other. `dev-cad` and `dev-ci` are
-independent execution lanes and should progress in parallel whenever there is no
-real dependency between them.
-
-Permanent requirements, design, API and release contracts belong in the normal
-documents under `docs/`. Issues keep implementation detail and history.
+`dev-cad` and `dev-ci` advance independently unless they share a real owner
+release or architecture gate.
 
 ## Current accepted baseline
 
@@ -28,215 +24,157 @@ dev-cad
 dev-ci
 ```
 
-### Forge package release
+Current stable integration commit:
 
-The current released Forge baseline is **v0.11.0**.
+`6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4`
 
-- annotated tag: `v0.11.0`;
-- tagged source commit:
-  `9258d54079981604b6dd777a4c4face897c190fe`;
-- GitHub Release:
-  `https://github.com/brainboxemb/lib.py.solidcraft.forge/releases/tag/v0.11.0`;
-- release-candidate Forge run: `45004129325` — success;
-- durable `build/main`, `ci/forge-release`, `ci/release-policy` and stable
-  Pages all resolved to that exact source commit before publication.
+That merge contains the accepted standalone Sketch Boolean work from #354.
+`build/main` and stable Pages both resolve to that exact commit.
 
-Source package version `0.11.0` is therefore released state, not release
-preparation. New user-visible work belongs under the fresh `[Unreleased]`
-changelog section.
+### Forge release
 
-### Immutable SolidCraft runtime
+Current package release: **v0.11.0** at
+`9258d54079981604b6dd777a4c4face897c190fe`.
 
-- `docker.cad.solidcraft v0.3.4`;
-- exact runtime source commit
-  `89acce00bd760c523251c6c84d291d758c2a4dc5`;
-- `solidcraft-cli 0.45.0`;
-- immutable roles `cad-solidcraft:v0.3.4` and
-  `cad-reference:v0.3.4`.
+New user-visible work remains under `[Unreleased]`. The next planned package
+checkpoint remains v0.12.0 after a coherent post-v0.11 CAD/CI batch reaches
+main.
 
-### Generic CAD-CI stack consumed by Forge
+### SolidCraft runtime
 
-- `lib.py.cad.ci 0.9.3` @
-  `74486c441f1f2b170ff3dc06e0edcaf662fbec6b`;
-- `tool.cad.ci 0.17.0` @
-  `d88d6e189c12edb5a30158c068145c099c17a019`;
-- external jobs=2 acceptance: `tool.cad.ci.test` #66 / PR #67;
-- Forge explicitly uses `jobs=2` on PR and durable integration runs.
+- docker.cad.solidcraft v0.3.4;
+- cad-solidcraft:v0.3.4;
+- cad-reference:v0.3.4;
+- SolidCraft CLI 0.45.0.
 
-Performance evidence remains diagnostic rather than an SLA:
+### Accepted generic CAD-CI stack
 
-- selective startup: 26.507 s -> 1.375 s after the accepted startup work;
-- jobs=1 full promotion #636: 4m54s;
-- jobs=2 #645: 4m44s first run and 3m12s exact-SHA rerun;
-- clean jobs=2 rerun: 7.015 s pre-target, 62.238 s model verification and
-  59.616 s reference verification with the heavy batches overlapping.
+The previous Forge baseline used tool 0.17.0 / lib 0.9.3.
 
-## Recently completed default-branch work
+A new exact released pair is now externally accepted for #261:
 
-- #355 / #646 / #651: SolidCraft 0.45 parametric native Slot support accepted
-  and promoted through the normal `dev-cad -> main` merge.
-- #637 / #645: exact CAD-CI 0.17.0 with explicit jobs=2 accepted and promoted
-  through the normal `dev-ci -> main` merge.
-- #649 / #650: repository handoff/AGENTS corrected to describe both CAD-library
-  and CI/integration responsibilities.
-- #642 / #652 / #653: release contract restored, release publication made
-  explicit and owner-controlled, exact candidate `forge-release` evidence
-  enforced, and Forge **v0.11.0** published from
-  `9258d54079981604b6dd777a4c4face897c190fe`.
+- `lib.py.cad.ci 0.10.0` @
+  `397fb04005b46de8d433cb18c091b1e73714b877`;
+- `tool.cad.ci 0.17.1` @
+  `1012e6a539a2fddd8194124844fe208bf16cf4e4`;
+- `tool.cad.ci.test` #70 / PR #71;
+- complete acceptance run `45006989548` — success;
+- direct CLI, reusable workflow, same-runner action and dependency-output
+  `copy:` all passed on that exact released pair.
 
-Publication run `45004182308` created and verified the release successfully but
-its final issue-result comment failed because Markdown backticks were evaluated
-by Bash command substitution. #654 owns only that reporting fix and this
-post-release reconciliation; it must not move or recreate v0.11.0.
+Forge still uses `jobs=2`; no jobs increase is part of #261.
 
 ## Lane rule
 
-- `dev-cad` owns the Forge CAD library: API/compiler/model semantics,
-  references, Verification content and CAD-facing behavior.
-- `dev-ci` owns infrastructure around that library: Forge CI integration,
-  runtime-consumer wiring, durable build state and publication.
-- Generic CAD-CI behavior is fixed and released in its owner repository first.
-- Generic verification behavior is fixed and released in
-  `lib.py.cad.verification` first.
-- Runtime construction/release is fixed in `docker.cad.solidcraft` first.
-- A blocked CAD issue remains CAD work; dependency handoffs do not move lanes.
+- `dev-cad`: Forge API/compiler/model/Verification/site-content behavior.
+- `dev-ci`: CAD-CI/runtime/publication integration.
+- Generic CI behavior is fixed and released in lib.py.cad.ci/tool.cad.ci first.
+- Generic Verification behavior is fixed and released in lib.py.cad.verification first.
+- Runtime packaging is fixed and released in docker.cad.solidcraft first.
 
-Short-lived feature/fix PRs target one development lane and are squash-merged.
-Exact `dev-cad -> main` and `dev-ci -> main` promotions use normal merge
-commits through the repository `/merge` policy. Every other PR to `main` is
-squash-merged.
+Short-lived branches target one lane and are squash-merged. Exact
+`dev-cad -> main` and `dev-ci -> main` promotions use the repository
+`/merge` policy and therefore normal merge commits.
 
 ## Active workstreams
 
-### WS0 — post-release governance
+### WS1 — #261 full Forge integration runtime
 
-Primary lane: repository-wide governance.
+Primary lane: `dev-ci`. **Now.**
 
-#654 is **now**:
+Measured accepted jobs=2 runs showed:
 
-1. keep the released v0.11.0 tag/Release untouched;
-2. update primary docs to the released state;
-3. fix only the post-publication result-comment construction;
-4. retain regression coverage for the owner-controlled release path;
-5. merge through `/merge` and then close #654.
+- model/reference heavy batches finish in roughly 60-81 seconds;
+- the remaining SCons tail was roughly 107-176 seconds;
+- reference image-pull variation explained only about 10 seconds;
+- the tail contained many per-item projection actions after shared batch results
+  already existed.
 
-No new CAD/API implementation should be stacked before this reconciliation is
-on `main`.
+Owner-first generic work is complete and externally accepted. Forge may now
+consume the released `copy:` action.
 
-### WS1 — CI performance and integration
+Implementation order:
 
-Primary lane: `dev-ci`.
+1. pin tool.cad.ci 0.17.1 in the Forge workflow;
+2. make shared model/reference batches produce item-shaped projection roots;
+3. replace projection-only model/reference/diagram consumer commands with
+   declarative `copy:`;
+4. keep real per-model `contract_test` commands unchanged;
+5. remove obsolete Forge materialize-only code after the config no longer uses
+   it;
+6. run promotion-equivalent jobs=2 evidence and compare total post-batch tail;
+7. if the remaining tail is still material, measure again before changing any
+   other owner layer;
+8. do not raise jobs beyond 2 in this change.
 
-#261 is **next** and may proceed independently of the CAD lane after #654:
+Target projection layout:
 
-1. separate immutable-image pull time from container execution across repeated
-   promotion-equivalent runs;
-2. explain reference-image pull variance;
-3. identify the remaining serial SCons tail;
-4. fix only the owner layer of the dominant remaining cost;
-5. do not increase jobs beyond 2 without new evidence.
+```text
+model-verification-batch/
+  items/examples/<model>/
+    solidcraft.json
+    model_verify/...
 
-If the dominant remaining cost belongs to image distribution/runtime packaging,
-the implementation belongs in `docker.cad.solidcraft`, not Forge.
+reference-verification-batch/
+  items/examples/<model>/<implementation>/
+    references/
+      verification.json
+      <model>/<implementation>/...
+  diagrams/...
+```
 
-### WS2 — next CAD-library work
+Child items use `copy: source: items/{item_path}`. The generic library owns
+bundle projection; Forge owns only producer layout and declarative config.
+
+### WS2 — CAD-library next work
 
 Primary lane: `dev-cad`.
 
-After #654, the current priority set is:
-
-1. #354 standalone Sketch extrusion as boolean operand;
-2. #567 mixed line/arc closed Sketch profiles;
-3. #568 native sheet-metal flange/contour features;
-4. #349 focused Revolve child first; broad remaining SOLID › CREATE inventory
-   later.
-
-These may be split into independent focused PRs where their native contracts do
-not depend on one another.
+1. #567 mixed line/arc closed Sketch profiles;
+2. #568 native sheet-metal flange/contour;
+3. #349 focused Revolve child first, broader SOLID › CREATE inventory later.
 
 ### WS3 — Verification/reference quality
 
-Primary lane: `dev-cad`.
-
-- #570 remove CADCraft from explanatory Verification diagrams without moving
-  generic rendering into Forge — later.
-- #335 replace the sheet-fold build123d solid approximation with actual
-  build123d sheet-metal semantics — later.
+- #570 remove CADCraft from explanatory Verification diagrams — later.
+- #335 build123d sheet-metal reference semantics — later.
 
 ### WS4 — API coverage roadmap
 
-Primary lane: `dev-cad`.
+- #347 generalized pattern seeds — later.
+- #9 first-class Sketch/constraints/workplanes — later epic.
+- #8 hollow primitive intent — later.
 
-- #347 generalize native pattern seeds beyond Sketch extrusions — later.
-- #9 first-class Sketch objects, constraints and face workplanes — later epic;
-  refresh before implementation.
-- #8 hollow primitive intent — later; reconcile with native pipe/shell/boolean
-  histories.
+### WS5 — AnchorFrame research / interaction polish
 
-### WS5 — AnchorFrame research and interaction polish
-
-Primary lane: `dev-cad`.
-
-- #325 AnchorFrame root-cause research — later.
-- #81 inline rotated-occurrence AnchorFrame references — later.
-- #82 Joints-folder visibility policy — later.
-- #175 historical HUB75-like diagnostic — probably obsolete; consolidate useful
-  evidence into #325/background docs.
-- #5 generic anchors/constraints — probably obsolete in its current broad form;
-  rewrite only the still-missing constraint/associativity scope and consolidate
-  overlap with #9.
-
-Production HUB75 work uses explicit Placement, so WS5 does not preempt current
-CAD priorities.
-
-## Next release checkpoint
-
-Do not let another large development wave accumulate without a package-release
-decision.
-
-The planned next semantic release checkpoint is **Forge v0.12.0**, after the
-first coherent post-v0.11 CAD/CI batch has reached `main`. Before stacking a
-second large batch:
-
-1. open a dedicated v0.12.0 release issue;
-2. audit `[Unreleased]` against the actual merged public changes;
-3. decide explicitly which unfinished CAD/CI work is in or deferred from the
-   release;
-4. use the same exact-SHA durable-evidence and owner-controlled publication
-   contract proven by v0.11.0.
-
-This checkpoint is a planning gate, not permission to bump source metadata or
-create a dated v0.12.0 changelog section early.
+- #325 root-cause research — later.
+- #81 rotated occurrence-local AnchorFrame references — later.
+- #82 Joints-folder visibility — later.
+- #175 probably obsolete; consolidate useful evidence into #325.
+- #5 probably obsolete in current broad form; separate remaining constraint
+  scope from already-delivered anchor behavior.
 
 ## Open issue assignment — 2026-11-22
 
-Every currently open issue is classified below.
-
 | Issue | Lane | Disposition | Next action |
 | --- | --- | --- | --- |
-| #654 Post-v0.11 reconciliation/reporting fix | governance | **now** | Record released baseline, fix safe result comment, regression-test it, merge and close. |
-| #261 Full Forge integration runtime | `dev-ci` | **next** | Measure image-pull/runner variance and remaining serial tail on jobs=2; fix the owning layer only. |
-| #354 Standalone Sketch extrusion boolean operand | `dev-cad` | **next** | Generalize boolean operand lowering for `sketch_base_extrusion`. |
-| #567 Mixed line/arc closed Sketch profiles | `dev-cad` | **next** | Deliver a focused connected-curve profile API from qualified native contracts. |
-| #568 Native sheet-metal flange/contour | `dev-cad` | **next** | Qualify immutable v0.3.4 native contracts before exposing APIs. |
-| #349 Remaining SOLID › CREATE coverage | `dev-cad` | **next** | Split focused Revolve child for the latch; keep broad inventory later. |
-| #335 build123d Sheet Metal reference | `dev-cad` | **later** | Replace solid approximation with current build123d sheet-metal workflow. |
-| #347 Patterns accept any applied Shape feature | `dev-cad` | **later** | Base source validation on native history-feature identity. |
-| #570 Remove CADCraft from Verification diagrams | `dev-cad` | **later** | Replace explanatory sources without moving generic verification rendering into Forge. |
-| #325 AnchorFrame regression root cause | `dev-cad` | **later** | Resume only when AnchorFrame becomes an active dependency. |
-| #81 Inline AnchorFrame references for rotated occurrences | `dev-cad` | **later** | Investigate occurrence-local frames when AnchorFrame work resumes. |
-| #82 Joints folder visibility | `dev-cad` | **later** | Decide interaction/export policy after higher-impact CAD work. |
-| #9 First-class Sketch objects/constraints/workplanes | `dev-cad` | **later** | Refresh epic and deliver focused child slices. |
-| #8 Tube/RectTube/OvalTube | `dev-cad` | **later** | Reconcile intent with native pipe/shell/boolean histories. |
-| #175 HUB75-like AnchorFrame diagnostic | `dev-cad` | **probably obsolete** | Consolidate useful retained evidence into #325/background docs, then close or rewrite. |
-| #5 Generic anchors and parametric constraints | `dev-cad` | **probably obsolete** | Separate already-delivered anchor behavior from remaining constraints and overlap with #9 before any implementation. |
+| #261 Measure/reduce full integration runtime | dev-ci | **now** | Adopt accepted tool 0.17.1/lib 0.10.0 copy projection and remeasure jobs=2. |
+| #567 Mixed line/arc closed Sketch profiles | dev-cad | **next** | Focused connected-curve profile API. |
+| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts first. |
+| #349 Remaining SOLID › CREATE coverage | dev-cad | **next** | Split focused Revolve child for latch work. |
+| #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
+| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with actual sheet-metal workflow. |
+| #347 Patterns accept any applied Shape feature | dev-cad | **later** | Generalize seed validation by native feature identity. |
+| #325 AnchorFrame regression root cause | dev-cad | **later** | Resume only when it becomes an active dependency. |
+| #81 Inline rotated AnchorFrame references | dev-cad | **later** | Investigate occurrence-local frames with #325. |
+| #82 Joints folder visibility | dev-cad | **later** | Decide interaction/export policy later. |
+| #9 First-class Sketch/constraints/workplanes | dev-cad | **later** | Refresh epic and deliver focused slices. |
+| #8 Tube/RectTube/OvalTube | dev-cad | **later** | Reconcile intent with native shell/pipe/boolean histories. |
+| #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325, then close/rewrite. |
+| #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate remaining constraint scope from overlap with #9. |
 
-## Immediate execution order
+## Next release checkpoint
 
-1. [#654] Finish this post-v0.11 reconciliation and safe release-result
-   reporting fix.
-2. After #654, start #261 on `dev-ci` and #354 on `dev-cad` independently;
-   #567/#568/focused #349 may follow as their native/dependency gates allow.
-3. Before a second large post-v0.11 batch accumulates, open the planned v0.12.0
-   release checkpoint and make an explicit include/defer decision.
-4. Rewrite/retire #175 and #5 before treating either as implementation work.
+Before a second large post-v0.11 batch accumulates, open the planned v0.12.0
+release issue and explicitly include/defer the merged CAD/CI work. Do not bump
+source metadata before that release gate exists.

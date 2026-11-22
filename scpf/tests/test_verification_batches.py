@@ -1,4 +1,4 @@
-"""Guard Forge-owned CAD runtime batching without changing item ownership."""
+"""Guard Forge-owned runtime batching and generic output projection."""
 
 from pathlib import Path
 import unittest
@@ -6,6 +6,9 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 CAD_CI = ROOT / "cad-ci.yml"
+MODEL_BATCH_CI = ROOT / "ci" / "model-verification-batch" / "ci.yml"
+REFERENCE_BATCH_CI = ROOT / "ci" / "reference-verification-batch" / "ci.yml"
+DIAGRAM_CI = ROOT / "ci" / "verification-diagrams" / "ci.yml"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
 REFERENCE_VALIDATION = ROOT / "verification" / "reference_validation.py"
@@ -13,20 +16,38 @@ BUILD123D_EXPORT = ROOT / "verification" / "build123d_export.py"
 
 
 class VerificationBatchContractTests(unittest.TestCase):
-    """Keep logical case items separate from expensive runtime startup."""
+    """Keep logical child items separate from expensive runtime startup."""
 
-    def test_existing_case_templates_depend_on_batch_items(self):
+    def test_case_templates_use_generic_dependency_copy(self):
         text = CAD_CI.read_text(encoding="utf-8")
         self.assertIn("- model-verification-batch", text)
         self.assertIn("- reference-verification-batch", text)
-        self.assertIn(
-            "scripts/model_verification_batch.py, materialize",
-            text,
+        self.assertEqual(text.count("copy:"), 3)
+        self.assertIn("dependency: model-verification-batch", text)
+        self.assertEqual(
+            text.count("dependency: reference-verification-batch"),
+            2,
         )
-        self.assertIn(
-            "scripts/reference_verification_batch.py, materialize",
-            text,
-        )
+        self.assertEqual(text.count("source: items/{item_path}"), 3)
+        self.assertNotIn("materialize]", text)
+
+    def test_no_model_item_overrides_copy_with_materializer(self):
+        for path in sorted((ROOT / "examples").glob("*/ci.yml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn(
+                "model_verification_batch.py, materialize",
+                text,
+                path.as_posix(),
+            )
+
+    def test_batch_items_publish_item_projection_roots(self):
+        model = MODEL_BATCH_CI.read_text(encoding="utf-8")
+        reference = REFERENCE_BATCH_CI.read_text(encoding="utf-8")
+        self.assertIn("- items", model)
+        self.assertNotIn("- models", model)
+        self.assertIn("- items", reference)
+        self.assertIn("- diagrams", reference)
+        self.assertNotIn("- references", reference)
 
     def test_reference_batch_groups_all_four_engines(self):
         text = REFERENCE_VALIDATION.read_text(encoding="utf-8")
@@ -45,25 +66,43 @@ class VerificationBatchContractTests(unittest.TestCase):
         self.assertIn("continue so every case gets a result", text)
         self.assertIn("return 1 if failed else 0", text)
 
-    def test_model_batch_keeps_case_output_separate(self):
+    def test_model_batch_writes_child_owned_paths_directly(self):
         text = MODEL_BATCH.read_text(encoding="utf-8")
         self.assertIn("for slug in processed_declarative_slugs()", text)
-        self.assertIn('"output": f"/output/models/{slug}/model_verify"', text)
+        self.assertIn(
+            'case_root = batch_root / "examples" / slug',
+            text,
+        )
+        self.assertIn(
+            '"output": f"/output/items/examples/{slug}/model_verify"',
+            text,
+        )
         self.assertIn("for row in rows:", text)
-        self.assertIn("materialize_case", text)
+        self.assertNotIn("materialize_case", text)
+        self.assertNotIn("dependency_output_root", text)
 
-    def test_reference_batch_runs_cadcraft_in_same_container(self):
+    def test_reference_batch_builds_child_projection_once(self):
         text = REFERENCE_BATCH.read_text(encoding="utf-8")
         self.assertEqual(text.count('"docker",\n            "run"'), 1)
         self.assertIn("/workspace/scripts/build_diagrams.py", text)
         self.assertIn("/output/diagrams", text)
-        self.assertIn("materialize_diagrams", text)
+        self.assertIn("def build_item_projections(", text)
+        self.assertIn('/ "examples"\n                / slug', text)
+        self.assertIn('/ implementation\n                / "references"', text)
+        self.assertIn('"implementations": [implementation_row]', text)
+        self.assertIn('Path("/output") / name', text)
+        self.assertIn('for name in ("references", "diagrams")', text)
+        self.assertNotIn('shutil.rmtree(output / "references")', text)
+        self.assertNotIn("materialize_case", text)
+        self.assertNotIn("materialize_diagrams", text)
+        self.assertNotIn("dependency_output_root", text)
 
-    def test_reference_batch_materializes_only_current_child(self):
-        text = REFERENCE_BATCH.read_text(encoding="utf-8")
-        self.assertIn("reference_identity()", text)
-        self.assertIn("case_destination", text)
-        self.assertIn("implementation_row", text)
+    def test_diagram_item_uses_generic_copy(self):
+        text = DIAGRAM_CI.read_text(encoding="utf-8")
+        self.assertIn("copy:", text)
+        self.assertIn("dependency: reference-verification-batch", text)
+        self.assertIn("source: .", text)
+        self.assertNotIn("run:", text)
 
 
 if __name__ == "__main__":

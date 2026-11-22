@@ -16,15 +16,12 @@ import yaml
 
 from forge_example import (
     compile_commands,
-    dependency_output_root,
     dependency_wheel,
     write_commands,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BATCH_DEPENDENCY = "model-verification-batch"
-
 
 def output_root() -> Path:
     """Return this CAD-CI item's output root."""
@@ -79,7 +76,7 @@ def write_manifest(batch_root: Path, wheel: Path) -> Path:
 
     rows = []
     for slug in processed_declarative_slugs():
-        case_root = batch_root / slug
+        case_root = batch_root / "examples" / slug
         case_root.mkdir(parents=True, exist_ok=True)
         command_path = case_root / "solidcraft.json"
         try:
@@ -96,8 +93,8 @@ def write_manifest(batch_root: Path, wheel: Path) -> Path:
         rows.append(
             {
                 "slug": slug,
-                "input": f"/output/models/{slug}/solidcraft.json",
-                "output": f"/output/models/{slug}/model_verify",
+                "input": f"/output/items/examples/{slug}/solidcraft.json",
+                "output": f"/output/items/examples/{slug}/model_verify",
                 "compile_error": compile_error,
             }
         )
@@ -123,7 +120,7 @@ def run_host_batch() -> int:
     """Compile the case list, then verify it in one SolidCraft container."""
 
     output = output_root()
-    batch_root = output / "models"
+    batch_root = output / "items"
     if batch_root.exists():
         shutil.rmtree(batch_root)
     batch_root.mkdir(parents=True)
@@ -184,7 +181,7 @@ def run_host_batch() -> int:
             "/workspace/scripts/model_verification_batch.py",
             "--inside-runtime",
             "--manifest",
-            "/output/models/manifest.json",
+            "/output/items/manifest.json",
         ],
         cwd=ROOT,
         check=False,
@@ -263,33 +260,6 @@ def run_inside_runtime(manifest_path: Path) -> int:
     return 1 if failed else 0
 
 
-def materialize_case() -> int:
-    """Copy this model's already-produced batch result to its normal output."""
-
-    slug = os.environ.get("CAD_CI_ITEM", "").strip()
-    if not slug:
-        raise RuntimeError("CAD_CI_ITEM is required")
-
-    batch = dependency_output_root(BATCH_DEPENDENCY)
-    source = batch / "models" / slug
-    if not source.is_dir():
-        raise RuntimeError(f"missing model batch result: {source}")
-
-    destination = output_root()
-    command_source = source / "solidcraft.json"
-    verify_source = source / "model_verify"
-    if not command_source.is_file() or not verify_source.is_dir():
-        raise RuntimeError(f"incomplete model batch result: {source}")
-
-    shutil.copy2(command_source, destination / "solidcraft.json")
-    shutil.copytree(
-        verify_source,
-        destination / "model_verify",
-        dirs_exist_ok=True,
-    )
-    return 0
-
-
 def main() -> int:
     """Dispatch batch production, in-runtime execution or case extraction."""
 
@@ -297,7 +267,7 @@ def main() -> int:
     parser.add_argument(
         "operation",
         nargs="?",
-        choices=("batch", "materialize"),
+        choices=("batch",),
         default="batch",
     )
     parser.add_argument("--inside-runtime", action="store_true")
@@ -311,8 +281,6 @@ def main() -> int:
 
     if args.manifest is not None:
         parser.error("--manifest requires --inside-runtime")
-    if args.operation == "materialize":
-        return materialize_case()
     return run_host_batch()
 
 

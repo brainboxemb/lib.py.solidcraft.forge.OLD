@@ -36,15 +36,9 @@ templates:
             - scripts/model_contract_test.py
         run: [python, ../../scripts/model_contract_test.py]
       - id: model_verify
-        inputs:
-          item:
-            - scpf/**
-            - verification/**
-            - tests/**
-          repo:
-            - scripts/forge_example.py
-            - scripts/model_verification_batch.py
-        run: [python, ../../scripts/model_verification_batch.py, materialize]
+        copy:
+          dependency: model-verification-batch
+          source: items/{item_path}
         outputs:
           - solidcraft.json
           - model_verify
@@ -67,16 +61,9 @@ templates:
       reuse: true
     steps:
       - id: verify_reference
-        inputs:
-          item:
-            - model.py
-            - ../verification/reference_geometry.json
-          repo:
-            - verification/reference_preview.py
-            - verification/tests/test_reference_preview.py
-            - scripts/forge_example.py
-            - scripts/reference_verification_batch.py
-        run: [python, ../../../scripts/reference_verification_batch.py, materialize]
+        copy:
+          dependency: reference-verification-batch
+          source: items/{item_path}
         outputs:
           - references
 
@@ -99,16 +86,9 @@ templates:
       reuse: true
     steps:
       - id: verify_reference
-        inputs:
-          item:
-            - model.py
-            - ../verification/reference_geometry.json
-          repo:
-            - verification/reference_preview.py
-            - verification/tests/test_reference_preview.py
-            - scripts/forge_example.py
-            - scripts/reference_verification_batch.py
-        run: [python, ../../../scripts/reference_verification_batch.py, materialize]
+        copy:
+          dependency: reference-verification-batch
+          source: items/{item_path}
         outputs:
           - references
 

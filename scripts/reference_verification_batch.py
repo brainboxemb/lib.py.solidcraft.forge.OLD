@@ -13,12 +13,11 @@ import time
 
 import yaml
 
-from forge_example import dependency_output_root, dependency_wheel
+from forge_example import dependency_wheel
 
 
 ROOT = Path(__file__).resolve().parents[1]
 IMPLEMENTATIONS = ("pythonscad", "pybosl2", "cadquery", "build123d")
-BATCH_DEPENDENCY = "reference-verification-batch"
 
 
 def output_root() -> Path:
@@ -85,6 +84,11 @@ def processed_reference_slugs() -> tuple[str, ...]:
 def run_inside_runtime(cases: str, commit: str) -> int:
     """Run preview tests, references and CADCraft diagrams in one runtime."""
 
+    for name in ("references", "diagrams"):
+        path = Path("/output") / name
+        if path.exists():
+            shutil.rmtree(path)
+
     preview_tests = subprocess.run(
         [
             "python",
@@ -133,14 +137,114 @@ def run_inside_runtime(cases: str, commit: str) -> int:
     )
 
 
+def build_item_projections(output: Path, slugs: tuple[str, ...]) -> int:
+    """Build every child-owned reference output once from the aggregate report."""
+
+    references = output / "references"
+    report_path = references / "verification.json"
+    if not report_path.is_file():
+        raise RuntimeError(f"missing reference batch report: {report_path}")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+
+    items = output / "items"
+    if items.exists():
+        shutil.rmtree(items)
+    items.mkdir(parents=True)
+
+    failed = False
+    for slug in slugs:
+        model = next(
+            (
+                row
+                for row in report.get("models", [])
+                if row.get("model") == slug
+            ),
+            None,
+        )
+        if model is None:
+            raise RuntimeError(f"missing batch report row for {slug}")
+
+        for implementation in IMPLEMENTATIONS:
+            implementation_row = next(
+                (
+                    row
+                    for row in model.get("implementations", [])
+                    if row.get("implementation") == implementation
+                ),
+                None,
+            )
+            if implementation_row is None:
+                raise RuntimeError(
+                    f"missing batch report row for {slug}/{implementation}"
+                )
+
+            source = references / slug / implementation
+            if not source.is_dir():
+                raise RuntimeError(
+                    f"missing reference batch result: {source}"
+                )
+
+            destination = (
+                items
+                / "examples"
+                / slug
+                / implementation
+                / "references"
+            )
+            case_destination = destination / slug / implementation
+            case_destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(
+                source,
+                case_destination,
+                dirs_exist_ok=True,
+            )
+
+            presentation_status = implementation_row.get(
+                "presentation",
+                {},
+            ).get("status")
+            child_status = (
+                "pass"
+                if (
+                    implementation_row.get("status") == "pass"
+                    and presentation_status == "pass"
+                )
+                else "fail"
+            )
+            child_report = {
+                "schema": report.get("schema", 1),
+                "source_sha": report.get("source_sha"),
+                "status": child_status,
+                "models": [
+                    {
+                        "model": slug,
+                        "status": child_status,
+                        "implementations": [implementation_row],
+                    }
+                ],
+            }
+            destination.mkdir(parents=True, exist_ok=True)
+            (destination / "verification.json").write_text(
+                json.dumps(
+                    child_report,
+                    indent=2,
+                    sort_keys=True,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            failed = failed or child_status != "pass"
+
+    return 1 if failed else 0
+
+
 def run_batch() -> int:
-    """Run all active heavy-reference work in one container."""
+    """Run all active heavy-reference work and build child projection outputs."""
 
     output = output_root()
-    for name in ("references", "diagrams"):
-        path = output / name
-        if path.exists():
-            shutil.rmtree(path)
+    items = output / "items"
+    if items.exists():
+        shutil.rmtree(items)
 
     wheel = dependency_wheel(
         "cad-verification-package",
@@ -196,139 +300,38 @@ def run_batch() -> int:
         f"container_process_s={time.perf_counter() - container_started:.3f}",
         flush=True,
     )
+
+    if completed.returncode != 0:
+        print(
+            "REFERENCE BATCH TIMING "
+            f"total_s={time.perf_counter() - batch_started:.3f}",
+            flush=True,
+        )
+        return completed.returncode
+
+    projection_started = time.perf_counter()
+    projection_status = build_item_projections(output, slugs)
+    print(
+        "REFERENCE BATCH TIMING "
+        f"projection_s={time.perf_counter() - projection_started:.3f}",
+        flush=True,
+    )
     print(
         "REFERENCE BATCH TIMING "
         f"total_s={time.perf_counter() - batch_started:.3f}",
         flush=True,
     )
-    return completed.returncode
-
-
-def reference_identity() -> tuple[str, str]:
-    """Return model slug and implementation from the current item path."""
-
-    value = os.environ.get("CAD_CI_ITEM_PATH", "").strip()
-    if not value:
-        raise RuntimeError("CAD_CI_ITEM_PATH is required")
-
-    path = Path(value)
-    if path.is_absolute():
-        repo_value = os.environ.get("CAD_CI_REPO", "").strip()
-        if not repo_value:
-            raise RuntimeError(
-                "CAD_CI_REPO is required with an absolute CAD_CI_ITEM_PATH"
-            )
-        path = path.resolve().relative_to(Path(repo_value).resolve())
-
-    parts = path.parts
-    if len(parts) != 3 or parts[0] != "examples":
-        raise RuntimeError(
-            "reference item path must be examples/<model>/<implementation>"
-        )
-    if parts[2] not in IMPLEMENTATIONS:
-        raise RuntimeError(f"unsupported reference implementation: {parts[2]}")
-    return parts[1], parts[2]
-
-
-def materialize_case() -> int:
-    """Copy one reference result from the shared batch into its normal item."""
-
-    slug, implementation = reference_identity()
-    batch = dependency_output_root(BATCH_DEPENDENCY)
-    batch_references = batch / "references"
-    source = batch_references / slug / implementation
-    if not source.is_dir():
-        raise RuntimeError(f"missing reference batch result: {source}")
-
-    destination = output_root() / "references"
-    case_destination = destination / slug / implementation
-    case_destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(source, case_destination, dirs_exist_ok=True)
-
-    report_path = batch_references / "verification.json"
-    report = json.loads(report_path.read_text(encoding="utf-8"))
-    model = next(
-        (
-            row
-            for row in report.get("models", [])
-            if row.get("model") == slug
-        ),
-        None,
-    )
-    if model is None:
-        raise RuntimeError(f"missing batch report row for {slug}")
-
-    implementation_row = next(
-        (
-            row
-            for row in model.get("implementations", [])
-            if row.get("implementation") == implementation
-        ),
-        None,
-    )
-    if implementation_row is None:
-        raise RuntimeError(
-            f"missing batch report row for {slug}/{implementation}"
-        )
-
-    presentation_status = implementation_row.get(
-        "presentation",
-        {},
-    ).get("status")
-    child_status = (
-        "pass"
-        if (
-            implementation_row.get("status") == "pass"
-            and presentation_status == "pass"
-        )
-        else "fail"
-    )
-    child_report = {
-        "schema": report.get("schema", 1),
-        "source_sha": report.get("source_sha"),
-        "status": child_status,
-        "models": [
-            {
-                "model": slug,
-                "status": child_status,
-                "implementations": [implementation_row],
-            }
-        ],
-    }
-    destination.mkdir(parents=True, exist_ok=True)
-    (destination / "verification.json").write_text(
-        json.dumps(child_report, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-
-    return 0 if child_status == "pass" else 1
-
-
-def materialize_diagrams() -> int:
-    """Copy CADCraft evidence from the shared heavy-reference batch."""
-
-    batch = dependency_output_root(BATCH_DEPENDENCY)
-    source = batch / "diagrams"
-    if not source.is_dir():
-        raise RuntimeError(f"missing CADCraft batch result: {source}")
-
-    destination = output_root() / "diagrams"
-    shutil.copytree(source, destination, dirs_exist_ok=True)
-
-    provenance = json.loads(
-        (destination / "provenance.json").read_text(encoding="utf-8")
-    )
-    return 0 if provenance.get("status") == "pass" else 1
+    return projection_status
 
 
 def main() -> int:
-    """Dispatch batch production, in-runtime work or materialization."""
+    """Dispatch batch production or in-runtime reference work."""
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "operation",
         nargs="?",
-        choices=("batch", "inside", "materialize", "materialize-diagrams"),
+        choices=("batch", "inside"),
         default="batch",
     )
     parser.add_argument("--cases")
@@ -342,10 +345,6 @@ def main() -> int:
 
     if args.cases is not None or args.source_sha is not None:
         parser.error("--cases/--source-sha require inside")
-    if args.operation == "materialize":
-        return materialize_case()
-    if args.operation == "materialize-diagrams":
-        return materialize_diagrams()
     return run_batch()
 
 
