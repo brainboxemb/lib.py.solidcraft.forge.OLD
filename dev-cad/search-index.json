@@ -1752,7 +1752,7 @@
         "p1",
         "width"
       ],
-      "keywords": "SlotCenterToCenter2D(p0, p1, width) p0 and p1 must be different points. The straight part runs between these two end centres. SlotCenterToCenter2D((-10, 0), (10, 0), 6) p0 Centre of the first round end as (x, y) in sketch coordinates, in mm. p1 Centre of the second round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end.",
+      "keywords": "SlotCenterToCenter2D(p0, p1, width) p0 and p1 must be different points. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate. Fixed numeric diagonal Slots remain supported. SlotCenterToCenter2D((-10, 0), (10, 0), 6) p0 Centre of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. p1 Centre of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end.",
       "symbol": "SlotCenterToCenter2D"
     },
     {
@@ -1766,7 +1766,7 @@
         "p1",
         "width"
       ],
-      "keywords": "SlotCenterToCenter2D(p0, p1, width) p0 and p1 must be different points. The straight part runs between these two end centres. SlotCenterToCenter2D((-10, 0), (10, 0), 6) p0 Centre of the first round end as (x, y) in sketch coordinates, in mm. p1 Centre of the second round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end."
+      "keywords": "SlotCenterToCenter2D(p0, p1, width) p0 and p1 must be different points. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate. Fixed numeric diagonal Slots remain supported. SlotCenterToCenter2D((-10, 0), (10, 0), 6) p0 Centre of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. p1 Centre of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
     },
     {
       "title": "SlotOverall2D",
@@ -1779,7 +1779,7 @@
         "p1",
         "width"
       ],
-      "keywords": "SlotOverall2D(p0, p1, width) The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width. SlotOverall2D((-15, 0), (15, 0), 6) p0 Outermost point of the first round end as (x, y) in sketch coordinates, in mm. p1 Outermost point of the second round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end.",
+      "keywords": "SlotOverall2D(p0, p1, width) The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate. SlotOverall2D((-15, 0), (15, 0), 6) p0 Outermost point of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. p1 Outermost point of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end.",
       "symbol": "SlotOverall2D"
     },
     {
@@ -1793,7 +1793,7 @@
         "p1",
         "width"
       ],
-      "keywords": "SlotOverall2D(p0, p1, width) The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width. SlotOverall2D((-15, 0), (15, 0), 6) p0 Outermost point of the first round end as (x, y) in sketch coordinates, in mm. p1 Outermost point of the second round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end."
+      "keywords": "SlotOverall2D(p0, p1, width) The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate. SlotOverall2D((-15, 0), (15, 0), 6) p0 Outermost point of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. p1 Outermost point of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
     },
     {
       "title": "SlotCenterPoint2D",
@@ -1806,7 +1806,7 @@
         "end",
         "width"
       ],
-      "keywords": "SlotCenterPoint2D(center, end, width) center and end must differ. The other round-end centre is mirrored through center. SlotCenterPoint2D((0, 0), (10, 0), 6) center Centre of the complete Slot as (x, y) in sketch coordinates, in mm. end Centre of one round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end.",
+      "keywords": "SlotCenterPoint2D(center, end, width) center and end must differ. The other round-end centre is mirrored through center. Parameterized endpoints currently require a horizontal or vertical Slot. SlotCenterPoint2D((0, 0), (10, 0), 6) center Centre of the complete Slot as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. end Centre of one round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end.",
       "symbol": "SlotCenterPoint2D"
     },
     {
@@ -1820,7 +1820,7 @@
         "end",
         "width"
       ],
-      "keywords": "SlotCenterPoint2D(center, end, width) center and end must differ. The other round-end centre is mirrored through center. SlotCenterPoint2D((0, 0), (10, 0), 6) center Centre of the complete Slot as (x, y) in sketch coordinates, in mm. end Centre of one round end as (x, y) in sketch coordinates, in mm. width Total Slot width in mm. This is also the diameter of each round end."
+      "keywords": "SlotCenterPoint2D(center, end, width) center and end must differ. The other round-end centre is mirrored through center. Parameterized endpoints currently require a horizontal or vertical Slot. SlotCenterPoint2D((0, 0), (10, 0), 6) center Centre of the complete Slot as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. end Centre of one round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values. width Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
     },
     {
       "title": "SlotArcThreePoint2D",
@@ -1834,7 +1834,7 @@
         "through",
         "width"
       ],
-      "keywords": "SlotArcThreePoint2D(start, through, end, width) start, through and end must be three different points. SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6) start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. through A point that the centre arc must pass through, as (x, y) in mm. end End point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, measured perpendicular to the centre arc.",
+      "keywords": "SlotArcThreePoint2D(start, through, end, width) start, through and end must be three different fixed numeric points. Arc-Slot authored points are not parameterized in this release. SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6) start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. through A point that the centre arc must pass through, as (x, y) in mm. end End point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc.",
       "symbol": "SlotArcThreePoint2D"
     },
     {
@@ -1849,7 +1849,7 @@
         "through",
         "width"
       ],
-      "keywords": "SlotArcThreePoint2D(start, through, end, width) start, through and end must be three different points. SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6) start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. through A point that the centre arc must pass through, as (x, y) in mm. end End point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, measured perpendicular to the centre arc."
+      "keywords": "SlotArcThreePoint2D(start, through, end, width) start, through and end must be three different fixed numeric points. Arc-Slot authored points are not parameterized in this release. SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6) start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. through A point that the centre arc must pass through, as (x, y) in mm. end End point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc."
     },
     {
       "title": "SlotArcCenter2D",
@@ -1864,7 +1864,7 @@
         "sweep",
         "width"
       ],
-      "keywords": "SlotArcCenter2D(center, start, width, *, end=None, sweep=None) Supply exactly one of end= or sweep=. center and start must differ. sweep must be greater than 0 and less than 360 degrees. SlotArcCenter2D((0, 0), (12, 0), 6, sweep=120) center Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm. start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, measured perpendicular to the centre arc. end Optional end point of the centre arc as (x, y) in mm. sweep Optional positive sweep angle in degrees.",
+      "keywords": "SlotArcCenter2D(center, start, width, *, end=None, sweep=None) Supply exactly one of end= or sweep=. center, start and end are fixed numeric authored points in this release. center and start must differ. sweep must be greater than 0 and less than 360 degrees. SlotArcCenter2D((0, 0), (12, 0), 6, sweep=120) center Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm. start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc. end Optional fixed numeric end point of the centre arc as (x, y) in mm. sweep Optional positive sweep angle in degrees.",
       "symbol": "SlotArcCenter2D"
     },
     {
@@ -1880,7 +1880,7 @@
         "sweep",
         "width"
       ],
-      "keywords": "SlotArcCenter2D(center, start, width, *, end=None, sweep=None) Supply exactly one of end= or sweep=. center and start must differ. sweep must be greater than 0 and less than 360 degrees. SlotArcCenter2D((0, 0), (12, 0), 6, sweep=120) center Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm. start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, measured perpendicular to the centre arc. end Optional end point of the centre arc as (x, y) in mm. sweep Optional positive sweep angle in degrees."
+      "keywords": "SlotArcCenter2D(center, start, width, *, end=None, sweep=None) Supply exactly one of end= or sweep=. center, start and end are fixed numeric authored points in this release. center and start must differ. sweep must be greater than 0 and less than 360 degrees. SlotArcCenter2D((0, 0), (12, 0), 6, sweep=120) center Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm. start Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm. width Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc. end Optional fixed numeric end point of the centre arc as (x, y) in mm. sweep Optional positive sweep angle in degrees."
     },
     {
       "title": "Hole",
@@ -3929,12 +3929,12 @@
       "title": "Native sketch Slot family",
       "kind": "Example",
       "url": "examples/slot-family/",
-      "summary": "One plate sketch contains five closed Slot profiles created with the five native Slot construction methods and removed with one through cut.",
+      "summary": "One plate sketch contains all five native Slot construction methods. The three straight Slots use editable axis-aligned authored endpoints, all five share one editable native width parameter, and one through cut removes the complete family.",
       "aliases": [
-        "All five SolidCraft Slot construction methods live in one explicit sketch",
+        "SolidCraft 0.45 native Slots keep width, straight length and position editable",
         "features"
       ],
-      "keywords": "Qualify all five SolidCraft 0.42 Slot construction methods as direct SCPF sketch profiles rather than approximating them with rounded rectangles or hand-built curves. SlotCenterToCenter2D(...); SlotOverall2D(...); SlotCenterPoint2D(...); SlotArcThreePoint2D(...); SlotArcCenter2D(...) inside one explicit Sketch One 160 x 120 x 5 mm plate with five separate closed Slot profiles in one named sketch, removed with one through-all cut. Each public constructor emits exactly its matching sketch.slot.* command; the sketch is finished once and one native cut extrusion removes all five profiles. SolidCraft saves one plate, one Slot family sketch containing five closed profiles and one error-free cut extrusion. The native timeline must not contain sketch.rectangle.rounded as a substitute for Slot construction. No saved-design mutation is required; this case isolates the five native sketch construction methods and their saved feature history. The five slot cuts do not change the plate envelope. Volume and 3D slot-wall probes are required. Native integration through geometry checks additionally prove the five sketch.slot.* command identities. The four comparison libraries independently prove the resulting five cut shapes."
+      "keywords": "Qualify all five SolidCraft 0.45 Slot construction methods as direct Forge sketch profiles, and prove the native parametric contracts that Forge exposes. The three straight Slot variants keep axis-aligned length and position editable. All five Slot variants keep width editable. Forge must not approximate any Slot with rounded rectangles or hand-built curves. ```python SlotCenterToCenter2D(...) SlotOverall2D(...) SlotCenterPoint2D(...) SlotArcThreePoint2D(...) SlotArcCenter2D(...) ``` inside one explicit `Sketch`. One 160 \u00d7 120 \u00d7 5 mm plate contains five Slot profiles in one named sketch. Baseline geometry intentionally matches the historical qualification: - width: 8 mm; - straight-Slot Y: -35 mm; - centre-to-centre Slot centres: X=-60 .. -40; - overall Slot endpoints: X=-10 .. 20; - centre-point Slot: centre X=55, end-centre X=65; - both arc Slot paths retain fixed authored points. The lower-case straight-Slot coordinates and `slot_width` are normal editable Forge model parameters. Fixed authored Slot points still use the direct native `sketch.slot.*` creator. For the three straight Slots, symbolic authored endpoints are evaluated only for numeric seed geometry. Forge then uses native `sketch.draw.dimensioned` with the SolidCraft 0.45 `length` role, constrains the returned native `centre_line` horizontal/vertical and dimensions the returned native `middle` point from the sketch origin. The direct Slot point fields therefore remain numeric while native SolidCraft dimensions retain the editable length and position expressions. The two arc Slots keep fixed authored points but share the same editable native width expression. SolidCraft saves: - one plate body; - one solved `Slot family` sketch with five closed native Slot profiles; - one error-free through-cut extrusion. The native timeline must not contain `sketch.rectangle.rounded` as a Slot substitute. Without rerunning Forge Python, change the saved SolidCraft parameters: - `slot_width`: 8 -> 10 mm; - `straight_y`: -35 -> -20 mm; - centre-to-centre end X: -40 -> -35 mm; - overall end X: 20 -> 25 mm; - centre-point end X: 65 -> 70 mm. The saved design must rebuild solved native Slot geometry with the new width, straight lengths and position. The body envelope stays the same while the through-cut volume changes deterministically. The five Slot cuts do not change the plate envelope. Baseline volume and 3D slot-wall probes remain required. The saved-design mutation additionally checks the mutated parameter values, solved sketch state and resulting body volume. the canonical command/reference baseline is SolidCraft 0.45.0 baseline geometry remains unchanged, so the"
     },
     {
       "title": "TOP Sketch after chamfer",

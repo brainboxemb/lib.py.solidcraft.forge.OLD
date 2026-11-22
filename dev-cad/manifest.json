@@ -1,5 +1,5 @@
 {
-  "library_commit": "36b7e04009eb24bf7e9e345afb0a894dbf6f7edb",
+  "library_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b",
   "examples": {
     "anchor-topology-mutation": {
       "source": "examples/anchor-topology-mutation/model.py",
@@ -202,7 +202,7 @@
     "slot-family": {
       "source": "examples/slot-family/model.py",
       "commands": "examples/slot-family/commands.json",
-      "command_count": 13,
+      "command_count": 30,
       "preview_kind": "durable-presentation-preview"
     },
     "top-sketch-after-chamfer": {
@@ -218,7 +218,7 @@
       "preview_kind": "durable-presentation-preview"
     }
   },
-  "build_commit": "81262678bcaa5034c1357e5e2ec3c7c7c0819be5",
+  "build_commit": "51bcec4d9309a32613be4c44edbfc2f6db3750eb",
   "build_scope": "dev-cad",
-  "build_manifest_source_commit": "36b7e04009eb24bf7e9e345afb0a894dbf6f7edb"
+  "build_manifest_source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
 }
