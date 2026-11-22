@@ -1357,6 +1357,93 @@ class Shape:
             (self, (p0, p1), angle, fixed_point, position, flip),
         )
 
+    def flange(
+        self,
+        *,
+        edges,
+        height,
+        angle=90,
+        height_from="outer",
+        position=None,
+        flip=False,
+    ):
+        """Add a native edge flange to existing sheet material.
+
+        Parameters:
+            edges: Non-empty sequence of fixed finite XYZ edge-pick points.
+            height: Flange height in mm. May be a Parameter/Expression.
+            angle: Flange angle in degrees. Defaults to 90.
+            height_from: Native height datum: "outer", "inner" or "tangent".
+            position: Optional native bend position. Leave None for SolidCraft's default.
+            flip: Bend to the opposite side when True.
+
+        The existing sheet rule supplies thickness, K-factor and bend radius.
+        """
+
+        if not isinstance(edges, (list, tuple)) or not edges:
+            raise ValueError("flange edges must be a non-empty sequence of XYZ points")
+
+        normalized_edges = []
+        for point in edges:
+            if not isinstance(point, (list, tuple)) or len(point) != 3:
+                raise ValueError("flange edge picks must be fixed XYZ points")
+            values = tuple(point)
+            if not all(
+                isinstance(value, (int, float)) and not isinstance(value, bool)
+                for value in values
+            ):
+                raise ValueError("flange edge picks must contain fixed numbers")
+            if not all(isfinite(value) for value in values):
+                raise ValueError("flange edge picks must contain finite coordinates")
+            normalized_edges.append(values)
+
+        height_value = _pv(height)
+        if not isfinite(height_value) or height_value <= 0:
+            raise ValueError("flange height must be positive")
+
+        angle_value = _pv(angle)
+        if (
+            not isfinite(angle_value)
+            or angle_value == 0
+            or abs(angle_value) >= 180
+        ):
+            raise ValueError(
+                "flange angle must be non-zero and below 180 degrees"
+            )
+
+        if height_from not in ("outer", "inner", "tangent"):
+            raise ValueError(
+                "flange height_from must be outer, inner or tangent"
+            )
+
+        positions = (
+            "inside",
+            "outside",
+            "middle",
+            "material_outside",
+            "tangent",
+        )
+        if position is not None and position not in positions:
+            raise ValueError(
+                "flange position must be inside, outside, middle, "
+                "material_outside, tangent or None"
+            )
+        if not isinstance(flip, bool):
+            raise TypeError("flange flip must be True or False")
+
+        return Shape(
+            "sheet_edge_flange",
+            (
+                self,
+                tuple(normalized_edges),
+                height,
+                angle,
+                height_from,
+                position,
+                flip,
+            ),
+        )
+
     def fillet(self, radius, *, edges=Edges.VERTICAL):
         """Round selected solid edges with one radius.
 
