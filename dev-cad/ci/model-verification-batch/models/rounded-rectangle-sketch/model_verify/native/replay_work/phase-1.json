@@ -57,6 +57,46 @@
       }
     },
     {
+      "command": "parameters.add",
+      "params": {
+        "name": "cut_width",
+        "expression": "10",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "cut_height",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "cut_y",
+        "expression": "22",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "cut_z",
+        "expression": "2.5",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "cut_length",
+        "expression": "100",
+        "unit": "mm"
+      }
+    },
+    {
       "command": "solid.box",
       "params": {
         "length": "base_width",

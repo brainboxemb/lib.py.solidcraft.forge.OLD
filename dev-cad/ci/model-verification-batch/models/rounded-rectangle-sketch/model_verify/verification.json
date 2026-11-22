@@ -5,8 +5,8 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "8dd776e3af90abf9412a7640f79f27e4370aec49c7f3f3de1158a59e16790e04",
-          "size": 3290
+          "sha256": "96e8a74b078d9657a9451c7eaaf8ffaf156c68e68bf30ccd7e0547e97df2aab8",
+          "size": 4730
         }
       ],
       "error": null,
@@ -71,9 +71,9 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 33428.31853071796,
+              "actual": 31828.31853071796,
               "delta": 0.0,
-              "expected": 33428.31853071796,
+              "expected": 31828.31853071796,
               "kind": "scalar",
               "label": "sole body volume",
               "pass": true,
@@ -82,8 +82,8 @@
           }
         ],
         "sketch_count": {
-          "actual": 1,
-          "expected": 1,
+          "actual": 2,
+          "expected": 2,
           "label": "SolidCraft sketch count",
           "pass": true
         },
@@ -105,6 +105,18 @@
             },
             "label": "Rounded pad sketch",
             "pass": true
+          },
+          {
+            "actual": {
+              "name": "World cut",
+              "status": "solved"
+            },
+            "expected": {
+              "name": "World cut",
+              "status": "solved"
+            },
+            "label": "World cut sketch",
+            "pass": true
           }
         ],
         "timeline": {
@@ -120,6 +132,13 @@
             {
               "name": "Rounded pad",
               "type": "ExtrudeFeature"
+            },
+            {
+              "name": "World cut",
+              "type": "Sketch"
+            },
+            {
+              "type": "ExtrudeFeature"
             }
           ],
           "expected": [
@@ -133,6 +152,13 @@
             },
             {
               "name": "Rounded pad",
+              "type": "ExtrudeFeature"
+            },
+            {
+              "name": "World cut",
+              "type": "Sketch"
+            },
+            {
               "type": "ExtrudeFeature"
             }
           ],

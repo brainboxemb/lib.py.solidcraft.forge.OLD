@@ -45,6 +45,41 @@
         "distance": "pad_height",
         "direction": "positive"
       }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "YZ",
+        "name": "World cut"
+      }
+    },
+    {
+      "command": "sketch.rectangle.two_point",
+      "params": {
+        "p0": [
+          "(cut_y) + (-(cut_width / 2))",
+          "(cut_z) + (-(cut_height / 2))"
+        ],
+        "p1": [
+          "(cut_y) + (cut_width / 2)",
+          "(cut_z) + (cut_height / 2)"
+        ]
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "distance": "cut_length",
+        "direction": "symmetric",
+        "operation": "cut",
+        "targets": [
+          "RoundedRectangleSketch"
+        ]
+      }
     }
   ]
 }
