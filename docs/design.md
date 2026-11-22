@@ -1338,9 +1338,19 @@ The authored endpoint expressions are never passed into SolidCraft's numeric
 Slot point fields.
 
 `slot.center_to_center`, `slot.overall` and `slot.center_point` all use
-the same `length` role, but SolidCraft interprets that role according to the
-creator. Forge therefore preserves each constructor's authored axis-distance
-semantics rather than converting between creator families.
+the same `length` role, but SolidCraft 0.45 interprets that role according to
+the creator:
+
+- center-to-center uses the authored end-centre distance;
+- overall uses the authored outer-end distance;
+- center-point uses the **complete** straight centre-line length, so Forge drives
+  it with twice the authored center-to-end distance.
+
+Native horizontal/vertical position dimensions are positive distances. Forge
+therefore drives each middle-position dimension with `abs(expression)`, while
+the numeric seed point preserves which side of the sketch origin was authored.
+`abs()` is part of SolidCraft 0.45's expression language and the typed Forge
+expression retains the original parameter dependencies for namespacing/replay.
 
 Arc Slot points stay on the direct numeric path until their native parametric
 placement/radius contracts are qualified separately.
