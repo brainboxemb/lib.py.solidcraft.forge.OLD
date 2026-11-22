@@ -10,6 +10,10 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Changed
 
+- Assembly lowering now gives component-local Sketch features deterministic document-global native identities. Independent reusable component definitions and parameterized variants may reuse authored names such as `Profile` without requiring assembly-global naming in consumer code (#679).
+
+### Changed
+
 - Forge long-lived branch integration now consumes the externally accepted
   `tool.cad.ci 0.18.0` durable same-runner action. Generic durable scope/base
   resolution and complete build-scope preparation/publication are no longer
