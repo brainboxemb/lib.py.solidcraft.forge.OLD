@@ -305,6 +305,7 @@ Requirements:
   `solid.extrude` with `operation=join` and the existing body as its target;
 - `body - sketch.extrude(...)` lowers it with `operation=cut`;
 - `body & sketch.extrude(...)` lowers it with `operation=intersect`;
+- standalone `RoundedRectangle2D` uses the same native rounded-rectangle profile lowering as an attached Sketch;
 - the Sketch keeps its authored plane, plane offset, profiles, profile picks,
   exact-region selection, signed/symmetric extrusion direction and editable
   parameter expressions;
