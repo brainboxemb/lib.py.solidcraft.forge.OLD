@@ -152,6 +152,21 @@ Next action is a focused Forge connected-curve profile API that:
 
 Requirements/design/API contract must be written before implementation.
 
+#### #567 branch status
+
+Requirements, design and public API text are written on `issue/567-connected-curve-profile`.
+The builder records `connected_profile` intent and validates authoring/closure, but the current branch does not yet lower that profile kind in either standalone or attached Sketch compilation.
+
+Next implementation order:
+
+1. add one shared connected-profile lowering helper for native `sketch.line`, `sketch.arc.three_point` and `sketch.arc.center_point` with `connect=true`;
+2. use it from standalone Sketch compilation so ordinary extrusion and `sheet_metal()` share exactly one lowering path;
+3. use the same helper from attached Sketch lowering where the existing profile contract permits it;
+4. add focused unit/command-contract coverage before adding the native qualification example;
+5. add the small native saved-design qualification case required by #567, then measure it on the immutable SolidCraft 0.45 runtime.
+
+No polygon approximation, raw caller command dictionaries or second sheet-metal-only profile compiler.
+
 ### WS3 — next CAD-library work
 
 - #568 native sheet-metal flange/contour — **next** after #567 profile
