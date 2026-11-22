@@ -36,6 +36,7 @@ from .placement import (
 )
 from .sketches import (
     compile_base,
+    compile_connected_profile,
     compile_standalone_sketch,
     _extrude_profile_params,
 )
@@ -802,6 +803,22 @@ def _explicit_sketch_commands(
             )
             continue
 
+        if profile.kind == "connected_profile":
+            if profile_anchor is not None:
+                raise ModelError(
+                    "connected profiles use authored sketch coordinates"
+                )
+            if id(profile) in referenced_sources:
+                raise ModelError(
+                    "sketch pattern/mirror does not yet support connected profiles"
+                )
+            connected, _meta = compile_connected_profile(
+                profile,
+                offset=(ox, oy),
+            )
+            commands.extend(connected)
+            continue
+
         if profile.kind in (
             "slot_center_to_center",
             "slot_overall",
@@ -1023,7 +1040,7 @@ def _explicit_sketch_commands(
 
         raise ModelError(
             "explicit Sketch supports Circle2D, Rectangle2D, RoundedRectangle2D, "
-            "Text2D or native Slot*2D profiles"
+            "connected profiles, Text2D or native Slot*2D profiles"
         )
 
     for operation in sketch_operations:
