@@ -9,6 +9,10 @@ The copy block below is deliberately Dutch because it is intended to be pasted
 into the user's Dutch-language ChatGPT session. Repository engineering
 documentation remains English.
 
+## Handoff message
+
+Copy the complete text block below into a new chat.
+
 ~~~text
 Je werkt verder aan Forge als centrale CAD-library en aan de repositories die
 die library ondersteunen en consumeren.
