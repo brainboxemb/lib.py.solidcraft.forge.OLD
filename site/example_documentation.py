@@ -174,12 +174,11 @@ def load_example_documentation(example_root: Path) -> ExampleDocumentation:
 def discover_example_documentation(
     root: Path = EXAMPLES_ROOT,
 ) -> tuple[ExampleDocumentation, ...]:
-    """Discover preserved documentation beside each verified example."""
+    """Discover public example documentation from model.yml membership."""
 
     rows = [
-        load_example_documentation(path)
-        for path in sorted(Path(root).iterdir())
-        if (path / "verification" / "verify.py").is_file()
+        load_example_documentation(path.parent)
+        for path in sorted(Path(root).glob("*/model.yml"))
     ]
     if not rows:
         raise ValueError(f"no verified examples found below {root}")
