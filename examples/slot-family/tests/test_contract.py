@@ -1,4 +1,4 @@
-"""Qualification contract for the five native Slot creators."""
+"""Qualification contract for the five native SolidCraft 0.45 Slot creators."""
 import unittest
 from pathlib import Path
 
@@ -15,11 +15,20 @@ class SlotFamilyQualificationTests(unittest.TestCase):
         self.assertEqual(document["format"], "scpf-replay")
         self.assertEqual(document["version"], 2)
         commands = document["commands"]
-        native = [
-            command["command"]
-            for command in commands
-            if command["command"].startswith("sketch.slot.")
-        ]
+
+        native = []
+        dimensioned = []
+        direct = []
+        for command in commands:
+            if command["command"].startswith("sketch.slot."):
+                native.append(command["command"])
+                direct.append(command)
+            elif command["command"] == "sketch.draw.dimensioned":
+                creator = command["params"]["command"]
+                if creator.startswith("sketch.slot."):
+                    native.append(creator)
+                    dimensioned.append(command)
+
         self.assertEqual(
             native,
             [
@@ -30,9 +39,74 @@ class SlotFamilyQualificationTests(unittest.TestCase):
                 "sketch.slot.arc_center",
             ],
         )
+        self.assertEqual(
+            [row["params"]["command"] for row in dimensioned],
+            [
+                "sketch.slot.center_to_center",
+                "sketch.slot.overall",
+                "sketch.slot.center_point",
+            ],
+        )
+        self.assertEqual(
+            [row["command"] for row in direct],
+            [
+                "sketch.slot.arc_three_point",
+                "sketch.slot.arc_center",
+            ],
+        )
         self.assertNotIn(
             "sketch.rectangle.rounded",
             [command["command"] for command in commands],
+        )
+
+        # SolidCraft direct Slot point fields remain numeric even when Forge
+        # retains parameter intent for the straight Slot dimensions.
+        point_keys = ("p0", "p1", "center", "end", "start", "through")
+        native_params = [
+            row["params"]["params"] for row in dimensioned
+        ] + [row["params"] for row in direct]
+        for params in native_params:
+            for key in point_keys:
+                if key not in params:
+                    continue
+                self.assertTrue(
+                    all(isinstance(value, (int, float)) for value in params[key]),
+                    (key, params[key]),
+                )
+            self.assertEqual(params["width"], "slot_width")
+
+        # Straight Slots use the canonical 0.45 dimensioned-sketch contract.
+        for row in dimensioned:
+            self.assertIn("length", row["params"]["dimensions"])
+            self.assertEqual(
+                set(row["bind"].values()),
+                {"centre_line", "middle"},
+            )
+
+        self.assertEqual(
+            [
+                row["params"]["mode"]
+                for row in commands
+                if row["command"] == "sketch.constraint.horizontal_vertical"
+            ],
+            ["horizontal", "horizontal", "horizontal"],
+        )
+        middle_dimensions = [
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.dimension"
+        ]
+        self.assertEqual(len(middle_dimensions), 6)
+        self.assertEqual(
+            [row["type"] for row in middle_dimensions],
+            ["horizontal", "vertical"] * 3,
+        )
+        self.assertTrue(
+            all(
+                "abs(" in str(row["value"])
+                for row in middle_dimensions
+                if row["type"] == "vertical"
+            )
         )
 
         face_query = next(
@@ -63,22 +137,6 @@ class SlotFamilyQualificationTests(unittest.TestCase):
         self.assertEqual(box["length"], "width")
         self.assertEqual(box["width"], "depth")
         self.assertEqual(box["height"], "thickness")
-
-        slot_commands = [
-            command
-            for command in commands
-            if command["command"].startswith("sketch.slot.")
-        ]
-        point_keys = ("p0", "p1", "center", "end", "start", "through")
-        for command in slot_commands:
-            for key in point_keys:
-                if key not in command["params"]:
-                    continue
-                self.assertTrue(
-                    all(isinstance(value, (int, float))
-                        for value in command["params"][key]),
-                    (command["command"], key, command["params"][key]),
-                )
 
         extrude = next(
             command["params"]
