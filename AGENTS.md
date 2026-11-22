@@ -304,10 +304,12 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The active stack is exact externally accepted `tool.cad.ci 0.17.1` backed by
-`lib.py.cad.ci 0.10.0`, with Forge explicitly using `jobs=2`. One caller-owned runner executes CAD-CI, prepares and
-publishes its own complete scope, builds the Forge site from that exact prepared
-scope and publishes only the matching Pages root/subtree.
+The active stack is exact externally accepted `tool.cad.ci 0.18.0` backed by
+`lib.py.cad.ci 0.10.0`, with Forge explicitly using `jobs=2`. The released
+root composite action owns durable scope/base resolution, the one CAD-CI graph
+and complete build-scope publication on one caller-owned runner. Forge then
+builds its site from the action's exact prepared scope and publishes only the
+matching Pages root/subtree on that same runner.
 
 Do not reintroduce Actions artifact transport, a second publication runner, a
 second tool/library bootstrap, or Forge-owned selection/build-store logic.
