@@ -82,6 +82,7 @@ def _is_feature_tree(shape):
         "sketch_base_extrusion",
         "sheet_base",
         "sheet_fold",
+        "sheet_edge_flange",
     ):
         return True
     if shape.kind in (
