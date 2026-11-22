@@ -74,7 +74,7 @@ jobs:
 
       - name: Run exact released CAD CI stack
         if: steps.classify.outputs.run_cad == 'true'
-        uses: brainboxemb/tool.cad.ci@1012e6a539a2fddd8194124844fe208bf16cf4e4
+        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
         with:
           source_sha: ${{ github.event.pull_request.head.sha }}
           base_sha: ${{ github.event.pull_request.base.sha }}
@@ -92,127 +92,39 @@ jobs:
       group: forge-push-${{ github.repository }}-${{ github.ref_name }}
       cancel-in-progress: true
     steps:
-      - name: Resolve durable source scope
-        id: lane
+      - name: Validate durable source lane
         env:
           SOURCE_SCOPE: ${{ github.ref_name }}
-          SOURCE_SHA: ${{ github.sha }}
         run: |
           case "$SOURCE_SCOPE" in
-            main|dev-cad|dev-ci)
-              echo "scope=$SOURCE_SCOPE" >> "$GITHUB_OUTPUT"
-              probe="$(mktemp -d)"
-              git -C "$probe" init --quiet
-              git -C "$probe" remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
-              if git -C "$probe" fetch --quiet --depth=1 origin build &&
-                 git -C "$probe" cat-file -e "FETCH_HEAD:$SOURCE_SCOPE/build.json" 2>/dev/null; then
-                git -C "$probe" show "FETCH_HEAD:$SOURCE_SCOPE/build.json" > "$probe/build.json"
-                BASE_SHA="$(
-                  python -c 'import json,re,sys; from pathlib import Path; source=json.loads(Path(sys.argv[1]).read_text(encoding="utf-8")).get("source_commit"); print(source) if isinstance(source,str) and re.fullmatch(r"[0-9a-f]{40}", source) else sys.exit("durable scope has invalid source_commit")' "$probe/build.json"
-                )"
-                echo "scope_exists=true" >> "$GITHUB_OUTPUT"
-                echo "full_run=false" >> "$GITHUB_OUTPUT"
-                echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
-              elif [ "$SOURCE_SCOPE" = "main" ]; then
-                echo "durable main scope is missing; stable integration cannot be updated incrementally" >&2
-                exit 2
-              else
-                echo "scope_exists=false" >> "$GITHUB_OUTPUT"
-                echo "full_run=true" >> "$GITHUB_OUTPUT"
-                echo "base_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
-              fi
-              rm -rf "$probe"
-              ;;
+            main|dev-cad|dev-ci) ;;
             *)
               echo "unsupported durable source branch: $SOURCE_SCOPE" >&2
               exit 2
               ;;
           esac
 
-      - name: Run exact released CAD CI stack
-        uses: brainboxemb/tool.cad.ci@1012e6a539a2fddd8194124844fe208bf16cf4e4
+      - name: Run and publish durable CAD CI scope
+        id: cad_ci
+        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
         with:
           source_sha: ${{ github.sha }}
-          base_sha: ${{ steps.lane.outputs.base_sha }}
-          full_run: ${{ steps.lane.outputs.full_run }}
+          durable_scope: ${{ github.ref_name }}
+          source_ref: ${{ github.ref_name }}
           jobs: "2"
           github_token: ${{ github.token }}
-
-      - name: Fetch current durable build branch
-        run: >-
-          python -m cad_ci_tool build fetch
-          --repo .
-          --out generated-build
-
-      - name: Prepare complete durable scope
-        env:
-          BASE_SHA: ${{ steps.lane.outputs.base_sha }}
-          SOURCE_SHA: ${{ github.sha }}
-          SCOPE: ${{ steps.lane.outputs.scope }}
-          SCOPE_EXISTS: ${{ steps.lane.outputs.scope_exists }}
-        run: |
-          if [ "$SCOPE" = "main" ]; then
-            python -m cad_ci_tool build update-main \
-              --repo . \
-              --candidate-root build \
-              --main generated-build/main \
-              --out prepared-scope \
-              --source-commit "$SOURCE_SHA" \
-              --base "$BASE_SHA" \
-              --head "$SOURCE_SHA"
-          elif [ "$SCOPE_EXISTS" = "true" ]; then
-            python -m cad_ci_tool build update-named \
-              --repo . \
-              --candidate-root build \
-              --named "generated-build/$SCOPE" \
-              --name "$SCOPE" \
-              --out prepared-scope \
-              --source-commit "$SOURCE_SHA" \
-              --base "$BASE_SHA" \
-              --head "$SOURCE_SHA"
-          else
-            python -m cad_ci_tool build prepare-named \
-              --repo . \
-              --candidate-root build \
-              --name "$SCOPE" \
-              --out prepared-scope \
-              --source-commit "$SOURCE_SHA"
-          fi
-
-      - name: Publish complete durable scope
-        id: durable_build
-        env:
-          SOURCE_REF: ${{ github.ref_name }}
-          SOURCE_SHA: ${{ github.sha }}
-          SCOPE: ${{ steps.lane.outputs.scope }}
-        run: |
-          if [ "$SCOPE" = "main" ]; then
-            scope_args=(--scope main)
-          else
-            scope_args=(--scope named --scope-name "$SCOPE")
-          fi
-          BUILD_COMMIT="$(
-            python -m cad_ci_tool publish build \
-              --repo . \
-              --candidate prepared-scope \
-              "${scope_args[@]}" \
-              --message "build: $SCOPE $SOURCE_SHA" \
-              --source-ref "$SOURCE_REF" \
-              --expected-source "$SOURCE_SHA"
-          )"
-          test -n "$BUILD_COMMIT"
-          echo "commit=$BUILD_COMMIT" >> "$GITHUB_OUTPUT"
 
       - name: Build Forge Pages for source scope
         env:
           SOURCE_SHA: ${{ github.sha }}
-          BUILD_COMMIT: ${{ steps.durable_build.outputs.commit }}
-          SCOPE: ${{ steps.lane.outputs.scope }}
+          BUILD_COMMIT: ${{ steps.cad_ci.outputs.build_commit }}
+          SCOPE: ${{ steps.cad_ci.outputs.scope }}
+          PREPARED_SCOPE: ${{ steps.cad_ci.outputs.prepared_scope }}
         run: |
           python site/build.py \
             --out generated-site \
             --source-sha "$SOURCE_SHA" \
-            --build-evidence prepared-scope \
+            --build-evidence "$PREPARED_SCOPE" \
             --build-scope "$SCOPE" \
             --build-commit "$BUILD_COMMIT"
           test -s generated-site/provenance.json
@@ -236,7 +148,7 @@ jobs:
         env:
           SOURCE_REF: ${{ github.ref_name }}
           SOURCE_SHA: ${{ github.sha }}
-          SCOPE: ${{ steps.lane.outputs.scope }}
+          SCOPE: ${{ steps.cad_ci.outputs.scope }}
         run: |
           if [ "$SCOPE" = "main" ]; then
             page_args=(

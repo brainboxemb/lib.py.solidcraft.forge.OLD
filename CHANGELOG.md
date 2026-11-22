@@ -10,6 +10,14 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Changed
 
+- Forge long-lived branch integration now consumes the externally accepted
+  `tool.cad.ci 0.18.0` durable same-runner action. Generic durable scope/base
+  resolution and complete build-scope preparation/publication are no longer
+  duplicated in Forge workflow YAML; Forge retains lane policy, site generation
+  and Pages publication on the same runner (#662).
+
+### Changed
+
 - Forge CI now consumes externally accepted `tool.cad.ci 0.17.1` /
   `lib.py.cad.ci 0.10.0` and projects shared model/reference/diagram batch
   results with the library-owned dependency-output `copy:` action instead of

@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.17.1` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.18.0` with one explicit
 bounded value:
 
 ```text
@@ -1177,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.17.1`:
+`tool.cad.ci 0.18.0`:
 
 ```text
 push main
@@ -1574,3 +1574,37 @@ Forge timing comparisons use structured CAD-CI target evidence plus the existing
 batch timing diagnostics. The expected improvement is specifically the removal
 of repeated complete dependency snapshots and projection-only Python actions
 after the shared batches finish.
+
+
+## Durable lane workflow cut-over
+
+Long-lived Forge integration uses the externally accepted tool.cad.ci 0.18.0
+root composite action as one same-runner execution boundary:
+
+```text
+Forge workflow job
+  -> validate supported lane policy (main/dev-cad/dev-ci)
+  -> tool.cad.ci@0.18.0 durable action
+       -> checkout/bootstrap exact tool + pinned library once
+       -> resolve prior durable scope/base
+       -> one CAD-CI/SCons graph
+       -> prepare/update complete durable scope
+       -> publish build scope
+       -> return prepared_scope + build_commit + scope
+  -> Forge site/build.py
+       -> consumes prepared_scope directly in the same workspace
+  -> cad_ci_tool publish pages
+```
+
+The workflow does not run `build fetch`, `update-main`, `update-named`,
+`prepare-named` or `publish build` itself. Those are generic durable-action
+internals owned by the released tool.
+
+The PR job remains one runner because Forge has a repository-specific cheap
+docs-only classifier. That classifier may skip CAD bootstrap for normal
+docs-only dev-lane PRs, while promotions to `main` always run complete
+validation. It does not implement CAD selection itself.
+
+This cut-over deliberately does not use a reusable workflow job for the durable
+push path: site generation must continue immediately after CAD/build publication
+in the same workspace without artifact transport or a second bootstrap.
