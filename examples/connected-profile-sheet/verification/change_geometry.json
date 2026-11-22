@@ -1,0 +1,18 @@
+{
+  "commands": [
+    {
+      "command": "parameters.change",
+      "params": {
+        "name": "half_span",
+        "expression": "50 mm"
+      }
+    },
+    {
+      "command": "parameters.change",
+      "params": {
+        "name": "radius",
+        "expression": "25 mm"
+      }
+    }
+  ]
+}
