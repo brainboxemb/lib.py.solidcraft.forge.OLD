@@ -1888,12 +1888,17 @@ def SlotCenterToCenter2D(p0, p1, width):
 
     Parameters:
         p0: Centre of the first round end as (x, y) in sketch coordinates, in mm.
+            Coordinates may be numeric or Parameter/Expression values.
         p1: Centre of the second round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+            Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
-        p0 and p1 must be different points. The straight part runs between
-        these two end centres.
+        p0 and p1 must be different points. Parameterized endpoints currently
+        require a horizontal or vertical Slot and matching symbolic intent on
+        the perpendicular coordinate. Fixed numeric diagonal Slots remain
+        supported.
 
     Example:
         SlotCenterToCenter2D((-10, 0), (10, 0), 6)
@@ -1912,13 +1917,18 @@ def SlotOverall2D(p0, p1, width):
     """Create a straight Slot from its two outermost end points.
 
     Parameters:
-        p0: Outermost point of the first round end as (x, y) in sketch coordinates, in mm.
-        p1: Outermost point of the second round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+        p0: Outermost point of the first round end as (x, y) in sketch coordinates,
+            in mm. Coordinates may be numeric or Parameter/Expression values.
+        p1: Outermost point of the second round end as (x, y) in sketch coordinates,
+            in mm. Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
         The distance from p0 to p1 is the total Slot length, including both
-        round ends, and must be larger than width.
+        round ends, and must be larger than width. Parameterized endpoints
+        currently require a horizontal or vertical Slot and matching symbolic
+        intent on the perpendicular coordinate.
 
     Example:
         SlotOverall2D((-15, 0), (15, 0), 6)
@@ -1938,12 +1948,16 @@ def SlotCenterPoint2D(center, end, width):
 
     Parameters:
         center: Centre of the complete Slot as (x, y) in sketch coordinates, in mm.
+            Coordinates may be numeric or Parameter/Expression values.
         end: Centre of one round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+            Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
         center and end must differ. The other round-end centre is mirrored
-        through center.
+        through center. Parameterized endpoints currently require a horizontal
+        or vertical Slot.
 
     Example:
         SlotCenterPoint2D((0, 0), (10, 0), 6)
@@ -1965,10 +1979,12 @@ def SlotArcThreePoint2D(start, through, end, width):
         start: Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
         through: A point that the centre arc must pass through, as (x, y) in mm.
         end: End point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm, measured perpendicular to the centre arc.
+        width: Total Slot width in mm, numeric or Parameter/Expression, measured
+            perpendicular to the centre arc.
 
     Limits:
-        start, through and end must be three different points.
+        start, through and end must be three different fixed numeric points.
+        Arc-Slot authored points are not parameterized in this release.
 
     Example:
         SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6)
@@ -1990,12 +2006,14 @@ def SlotArcCenter2D(center, start, width, *, end=None, sweep=None):
     Parameters:
         center: Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm.
         start: Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm, measured perpendicular to the centre arc.
-        end: Optional end point of the centre arc as (x, y) in mm.
+        width: Total Slot width in mm, numeric or Parameter/Expression, measured
+            perpendicular to the centre arc.
+        end: Optional fixed numeric end point of the centre arc as (x, y) in mm.
         sweep: Optional positive sweep angle in degrees.
 
     Limits:
-        Supply exactly one of end= or sweep=. center and start must differ.
+        Supply exactly one of end= or sweep=. center, start and end are fixed
+        numeric authored points in this release. center and start must differ.
         sweep must be greater than 0 and less than 360 degrees.
 
     Example:
