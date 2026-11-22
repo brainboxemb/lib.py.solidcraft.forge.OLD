@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/component-feature-names/verification/verify.py
+reason: >
+  Issue #679 requires focused SolidCraft qualification that independent reusable
+  component definitions may reuse the same authored feature name while Forge
+  lowers deterministic document-global native feature identities. This remains
+  Forge compiler regression evidence rather than a public catalog model.
