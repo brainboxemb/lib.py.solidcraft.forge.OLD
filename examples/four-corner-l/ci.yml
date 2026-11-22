@@ -25,13 +25,9 @@ steps:
       - scripts/model_contract_test.py
     run: [python, ../../scripts/model_contract_test.py]
   - id: model_verify
-    inputs:
-      - examples/four-corner-l/scpf/**
-      - examples/four-corner-l/verification/**
-      - examples/four-corner-l/tests/**
-      - scripts/forge_example.py
-      - scripts/model_verification_batch.py
-    run: [python, ../../scripts/model_verification_batch.py, materialize]
+    copy:
+      dependency: model-verification-batch
+      source: items/{item_path}
     outputs:
       - solidcraft.json
       - model_verify

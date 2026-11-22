@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.17.0` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.17.1` with one explicit
 bounded value:
 
 ```text
@@ -704,7 +704,7 @@ verification/diagrams/sources/*.cadcraft.json
            -> render SVG (DXF may remain as historical/internal CADCraft evidence)
            -> copy source JSON into output
            -> write provenance.json
-     -> verification-diagrams materializes its diagram output
+     -> verification-diagrams projects its diagram output with released CAD-CI copy
 ```
 
 The historical sources are restored byte-identically from the last green
@@ -833,7 +833,7 @@ ci/model-verification-batch
         |
         v
 selected examples/<case>/model_verify
-  -> copy only that case result into the existing item output
+  -> released CAD-CI copy projects only that case result into the existing item output
 ```
 
 The independent-reference path is equivalent:
@@ -852,7 +852,7 @@ ci/reference-verification-batch
         |
         v
 selected reference child
-  -> copy only its own result into the existing item output
+  -> released CAD-CI copy projects only its own result into the existing item output
 ```
 
 Batch inputs include the case membership/configuration files and all source
@@ -1177,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.17.0`:
+`tool.cad.ci 0.17.1`:
 
 ```text
 push main
@@ -1493,3 +1493,84 @@ Implementation boundary:
 
 This preserves one editable native Sketch + Extrude history and keeps authored
 Sketch coordinates/parameters unchanged.
+
+
+## Shared-batch item projection with CAD-CI copy
+
+The shared batch remains the expensive producer. The change is only the shape
+of its published dependency output and the child action used to claim one
+result.
+
+### Model batch
+
+```text
+ci/model-verification-batch
+  -> items/examples/<slug>/
+       solidcraft.json
+       model_verify/...
+```
+
+The batch compiles/verifies all active declarative models exactly as before.
+Its internal runtime manifest points at those item-shaped paths directly.
+
+Each model item keeps its real `contract_test` step, then uses:
+
+```yaml
+copy:
+  dependency: model-verification-batch
+  source: items/{item_path}
+outputs:
+  - solidcraft.json
+  - model_verify
+```
+
+### Reference batch
+
+The heavy runtime may still create one temporary aggregate
+`references/<slug>/<implementation>/...` tree because the released
+verification library owns that output format. After the runtime returns, the
+Forge batch producer converts it once into child-owned projection roots:
+
+```text
+items/examples/<slug>/<implementation>/
+  references/
+    verification.json
+    <slug>/<implementation>/...
+```
+
+The child `verification.json` has the same one-model/one-implementation
+semantic subset previously written by `materialize_case()`.
+
+The aggregate reference tree is runtime working state only and is not a
+declared CAD-CI batch output. Because the released reference container creates
+that tree inside the mounted output root, the container clears its own
+`references/` and `diagrams/` working directories before each execution.
+The host never needs elevated permissions to delete container-owned files, and
+only `items/` plus `diagrams/` enter the dependency bundle.
+
+Each reference item uses the same generic source template:
+
+```yaml
+copy:
+  dependency: reference-verification-batch
+  source: items/{item_path}
+outputs:
+  - references
+```
+
+### Diagrams
+
+The reference batch continues producing `diagrams/`. The
+`verification-diagrams` item uses a generic copy from source `.` with output
+`diagrams`; no Forge materializer process remains.
+
+### Ownership and timing
+
+`lib.py.cad.ci 0.10.0` owns direct bundle-member projection, target signatures,
+SCons ordering, CacheDir reuse, CURRENT/CACHE_RESTORED evidence and parallel
+safety. Forge does not duplicate those mechanics.
+
+Forge timing comparisons use structured CAD-CI target evidence plus the existing
+batch timing diagnostics. The expected improvement is specifically the removal
+of repeated complete dependency snapshots and projection-only Python actions
+after the shared batches finish.

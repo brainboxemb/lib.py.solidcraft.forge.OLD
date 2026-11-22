@@ -8,6 +8,14 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Changed
+
+- Forge CI now consumes externally accepted `tool.cad.ci 0.17.1` /
+  `lib.py.cad.ci 0.10.0` and projects shared model/reference/diagram batch
+  results with the library-owned dependency-output `copy:` action instead of
+  launching per-item materializer processes. Shared batches emit item-shaped
+  projection roots; real model contract tests remain executable steps (#261).
+
 ### Added
 
 - Standalone `Sketch(...).extrude(...)` can now be used directly as a Boolean

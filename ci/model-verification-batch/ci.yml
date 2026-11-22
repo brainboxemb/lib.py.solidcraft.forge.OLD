@@ -25,4 +25,4 @@ steps:
       - scpf/scpf/version.py
     run: [python, ../../scripts/model_verification_batch.py, batch]
     outputs:
-      - models
+      - items
