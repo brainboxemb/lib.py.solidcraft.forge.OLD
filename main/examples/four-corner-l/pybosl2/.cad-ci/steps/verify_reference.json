@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "f5c217c2a8b2bf74cb20e82d1c1c89d1a6c2ba8bdeb05d8beda0f035eb37b20f",
-  "duration_seconds": 0.579,
+  "action_type": "copy",
+  "bundle_sha256": "2cfcbb69e1ba5620399307c90d2e2d2c81271d294b865b2f32c7c71cb8eafd53",
+  "duration_seconds": 0.09,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:18:41.520Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:56:35.224Z",
   "item": "examples-four-corner-l-pybosl2",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "f5d5c7feb6e8439d57cd02e173954fe910ae0285dcd7612968f2e17022a84f8b"
+      "sha256": "b8c092113707afa96e58ed3f66299d43de4e12c41297ce90ff348c48658a9be3"
     }
   },
-  "run_finished_at": "2026-11-21T22:19:36.362Z",
-  "run_started_at": "2026-11-21T22:14:11.975Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:18:41.459Z",
+  "run_finished_at": "2026-11-22T09:57:31.473Z",
+  "run_started_at": "2026-11-22T09:55:01.266Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:56:35.134Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "02165921517fc192c5fd1d345e96bf87bff6f74b443df8e57e41f7c337fb3e62",
+  "target_spec_digest": "63f8e82e12b6684c32bfdf05a844a207d4eaa51ed10f6700815b6135461edf57",
   "timeout_seconds": null
 }

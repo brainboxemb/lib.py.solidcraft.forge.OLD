@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "2730d1038be1fe89fd3f12385a2f5bde56b73f6cfbd157a5b59e4e61879634c9",
-  "duration_seconds": 0.601,
+  "action_type": "copy",
+  "bundle_sha256": "9afadeefc315da1f155c292221e9b88ab7ab86ee9f1067e224ac9789a8abb07d",
+  "duration_seconds": 0.09,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:18:20.702Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:56:31.915Z",
   "item": "examples-assembly-owned-anchor-pythonscad",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "30e854a1a51e0da1b7edbcea1f6d62b4f8ce277332cc6c750ed42a215390717f"
+      "sha256": "e58eda4cdaf00dbaf41d1860c970e713a0df584566907d0a61bdb0c6b955662e"
     }
   },
-  "run_finished_at": "2026-11-21T22:19:36.362Z",
-  "run_started_at": "2026-11-21T22:14:11.975Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:18:20.639Z",
+  "run_finished_at": "2026-11-22T09:57:31.473Z",
+  "run_started_at": "2026-11-22T09:55:01.266Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:56:31.825Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "8a7373e91e03e8a66d613945c0eb2d7a2b009722baf4c9c73ec7bea18891aa8f",
+  "target_spec_digest": "6366ff8754cc019a3eb639d8d531182485b543e97fab4ba3aef573ec80a9361d",
   "timeout_seconds": null
 }

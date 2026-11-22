@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "d3b483b5e46d8f2ff7d9c58b7ac6073348f068675025502ad2a8f5b593e1d508",
-  "duration_seconds": 0.598,
+  "action_type": "copy",
+  "bundle_sha256": "9bb370e458081e578882dd0d7a07bc930a829973d3f65f9ec7ca7c41764b2404",
+  "duration_seconds": 0.241,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:19:15.512Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:57:25.446Z",
   "item": "examples-round-top-sketch-pythonscad",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "2eb0b2ac72a5d90e2cce9e7075b1d740ba8434e3c849874360612a91ba6e5c86"
+      "sha256": "259eb8b6efcc6375b759cbff87c199499f0c36b898e6263c5f00baa76551c67a"
     }
   },
-  "run_finished_at": "2026-11-21T22:19:36.362Z",
-  "run_started_at": "2026-11-21T22:14:11.975Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:19:15.450Z",
+  "run_finished_at": "2026-11-22T09:57:31.473Z",
+  "run_started_at": "2026-11-22T09:55:01.266Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:57:25.205Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "ac0074fccb85e35cbe4b373d9384b425c566242c59169ffe1517109a69655825",
+  "target_spec_digest": "215ff7380cbf18c882cdee90dd999656b03501fde33077951fbe3265cd12af27",
   "timeout_seconds": null
 }

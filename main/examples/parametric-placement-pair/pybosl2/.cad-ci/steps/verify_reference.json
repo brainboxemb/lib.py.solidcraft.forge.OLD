@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "cde5b8a681ce2b57ddcfd2077c3f0563f09042c769959de3c8371f285dba2b42",
-  "duration_seconds": 0.583,
+  "action_type": "copy",
+  "bundle_sha256": "3e5a59c1efa68c01dfd4c6788366dcdc29247ef681f112df1d619e30694f5961",
+  "duration_seconds": 0.124,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:19:00.574Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:56:38.722Z",
   "item": "examples-parametric-placement-pair-pybosl2",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "c2ff95d6966c0db0afb91255e6df9db300ff5f54dd088a4eba732d49a07c144a"
+      "sha256": "f985d522f96842472a7f3e17ff9064754fe1d234b17c1b011292529ba0d4b027"
     }
   },
-  "run_finished_at": "2026-11-21T22:19:36.362Z",
-  "run_started_at": "2026-11-21T22:14:11.975Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:19:00.515Z",
+  "run_finished_at": "2026-11-22T09:57:31.473Z",
+  "run_started_at": "2026-11-22T09:55:01.266Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:56:38.598Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "f40102a492707d4be163c35a5180d208cc61a661080788cde01b3fd2f2122b5d",
+  "target_spec_digest": "c82e886dd36f9785c1dc45d06f4d146351359d9a0c905f25c4ce3bdc189e1824",
   "timeout_seconds": null
 }

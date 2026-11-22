@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "c859fee423a18dcefc4cc470c539e2a00c64d7a3398cb07ed1a45aed625f29c6",
-  "duration_seconds": 0.6,
+  "action_type": "copy",
+  "bundle_sha256": "765b8a1a154422f0b79d9dc04583bb94765428dd9fbf21a0bcf42eaac3a1ba4b",
+  "duration_seconds": 0.092,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:18:36.728Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:56:34.444Z",
   "item": "examples-eight-corner-brackets-pybosl2",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "f34165d7bb6299b4450d8e0ed51b86538982c6e4942a39e4aceebacc9ca50d79"
+      "sha256": "9fa5275049a67b593b17393ab77793c14ff6083fd46c37e41286016cac6e5330"
     }
   },
-  "run_finished_at": "2026-11-21T22:19:36.362Z",
-  "run_started_at": "2026-11-21T22:14:11.975Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:18:36.666Z",
+  "run_finished_at": "2026-11-22T09:57:31.473Z",
+  "run_started_at": "2026-11-22T09:55:01.266Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:56:34.352Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "409d69d2f2e0e12fcadfe5271fb8066b92dced618bd43b05a9ddf831bc083164",
+  "target_spec_digest": "84bb2d5ca1633e702cb0a3c3c4c441ccf603e2e34602a5213b497949aa49a2be",
   "timeout_seconds": null
 }
