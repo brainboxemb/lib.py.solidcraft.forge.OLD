@@ -52,6 +52,14 @@ Forge performance evidence:
 The structural owner-layer contract remains authoritative. Timing values are
 diagnostic evidence and runner/image-pull variance remains material.
 
+## Repository-entrypoint correction
+
+Issue #649 is **P0 now** governance work. `AGENTS.md` is currently stale and
+contradicts the accepted runtime, CAD-CI, Pages and release state. Correct it
+before further implementation so a fresh handoff cannot restart from retired
+architecture. This correction does not wait for #355 because it changes only
+repository-wide instructions.
+
 ## Recently completed default-branch work
 
 - #574 / PR #618: complete Verification Technical test details / Raw test files
@@ -203,16 +211,22 @@ preempt current P1 blockers.
 | #568 Native sheet-metal flange/contour | `dev-cad` | WS1 | **P1 runtime-sensitive** | Qualify against immutable v0.3.4 contracts before exposing APIs. |
 | #570 Remove CADCraft from Verification diagrams | `dev-cad` | WS2 | **P2** | Replace explanatory diagram sources with deterministic Forge-owned sources. |
 | #642 Release Forge 0.11.0 | `main/release` | Release milestone | **P1 integration milestone** | After #355 is accepted/promoted or explicitly deferred, stabilize main, reconcile changelog, verify exact release SHA, create real `v0.11.0` tag + GitHub Release, then record released baseline. |
-| #647 Reconcile plan after jobs=2 promotion | `main governance` | WS0 | **P0 now** | Merge this plan-only state correction; then keep #355 as the active CAD gate for v0.11.0. |
+| #643 Correct Forge release documentation | `main governance` | Release milestone | **effectively complete but still open** | `docs/release.md` and this plan already contain the corrected contract; close after confirming merged state. |
+| #647 Reconcile plan after jobs=2 promotion | `main governance` | WS0 | **effectively complete but still open** | The accepted jobs=2 state is already recorded on main; close after confirming merged state. |
+| #649 Refresh AGENTS.md current architecture | `main governance` | Repository entrypoint | **P0 now** | Align AGENTS with runtime v0.3.4 / SolidCraft 0.45.0, CAD-CI 0.17.0/0.9.3 jobs=2, live Pages, `/merge` policy and the real release contract. |
 
 ## Immediate execution order
 
-1. [#647] Merge this plan reconciliation.
-2. [#355, dev-cad] Finish SolidCraft 0.45 parametric Slot native baseline and
+1. [#649, main governance] Correct `AGENTS.md` so new handoffs start from the
+   current architecture and cannot mistake source version `0.11.0` for a real
+   release.
+2. Close administratively complete governance issues such as #643/#647 after
+   verifying their merged state.
+3. [#355, dev-cad] Finish SolidCraft 0.45 parametric Slot native baseline and
    saved-design mutation qualification, update public API docs, merge to
    dev-cad, prove durable lane output, then promote to main.
-3. [#642] Release **Forge v0.11.0** from one exact green main SHA after #355 is
+4. [#642] Release **Forge v0.11.0** from one exact green main SHA after #355 is
    promoted, or explicitly defer #355 and keep it out of the 0.11.0 changelog.
-4. After v0.11.0, continue #261 image-pull/serial-tail investigation and proceed
+5. After v0.11.0, continue #261 image-pull/serial-tail investigation and proceed
    with #354/#567/#568 and focused #349 Revolve as priorities permit.
-5. Rewrite/retire #175 and #5 before treating them as implementation work.
+6. Rewrite/retire #175 and #5 before treating them as implementation work.
