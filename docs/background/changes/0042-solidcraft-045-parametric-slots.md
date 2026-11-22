@@ -71,6 +71,12 @@ origin.
 expression typed so component namespacing and replay dependency rewriting still
 see the underlying model parameters.
 
+The numeric seed owns the side of the sketch origin. Saved-design position
+mutation is therefore qualified only while that sign/side remains unchanged.
+Crossing an origin axis is deliberately not claimed by this change; SolidCraft's
+linear dimension is an unsigned distance and a future signed-placement contract
+would need separate qualification.
+
 These details are not inferred from the old 0.43 work. They come from the
 canonical 0.45 registry, pinned upstream source and native qualification.
 
