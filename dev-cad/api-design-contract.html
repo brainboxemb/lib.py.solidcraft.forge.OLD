@@ -752,6 +752,43 @@ A public API behaviour is not considered complete merely because one example
 renders correctly. It needs the appropriate Q1-Q6 evidence. A qualification
 fixture is evidence for this document; the fixture itself is never the API
 definition.
+
+### Sheet edge flange
+
+Add a native flange to one or more selected edges of an existing sheet body:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, -20, 2)],
+    height=20,
+    angle=90,
+)
+```
+
+Optional native placement controls are available without changing SolidCraft&#x27;s
+default when omitted:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, -20, 2)],
+    height=height,
+    angle=bend_angle,
+    height_from=&quot;inner&quot;,
+    position=&quot;material_outside&quot;,
+    flip=True,
+)
+```
+
+`edges` currently accepts a non-empty sequence of fixed finite XYZ points only.
+`height` may be parameterized and must stay positive. `angle` may be parameterized
+and must be non-zero with magnitude below 180°. `height_from` accepts `outer`,
+`inner` or `tangent`; `position` accepts `inside`, `outside`, `middle`,
+`material_outside` or `tangent`. Leave either as `None` to use SolidCraft&#x27;s
+native default.
+
+The sheet&#x27;s existing rule continues to own thickness, K-factor and bend radius.
+`flange()` does not expose per-edge segmentation, corner-relief overrides, chained
+bends or raw SolidCraft dictionaries in this initial API.
 </code></pre></section>
 </main>
 
