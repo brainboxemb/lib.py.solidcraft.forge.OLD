@@ -1283,6 +1283,67 @@ class Shape:
             raise ValueError("taper inset must be below half the footprint")
         return Shape("tapered_box", (self, from_z, inset))
 
+    def contour_flange(
+        self,
+        *,
+        distance,
+        thickness,
+        bend_radius,
+        k_factor=0.5,
+        rule_name="Forge Sheet",
+        flip=False,
+        reverse=False,
+    ):
+        """Create a native contour-flange sheet from an open Sketch chain.
+
+        The receiver must be the Shape returned by Sketch.chain(...).finish().
+        Material dimensions define the sheet rule used by the new body; the
+        contour feature itself receives only that rule name.
+        """
+        if self.kind != "sketch_open_chain":
+            raise ValueError(
+                "contour_flange() requires a finished open connected Sketch chain"
+            )
+
+        distance_value = _pv(distance)
+        if not isfinite(distance_value) or distance_value <= 0:
+            raise ValueError("contour flange distance must be positive")
+
+        thickness_value = _pv(thickness)
+        if not isfinite(thickness_value) or thickness_value <= 0:
+            raise ValueError("contour flange thickness must be positive")
+
+        radius_value = _pv(bend_radius)
+        if not isfinite(radius_value) or radius_value <= 0:
+            raise ValueError("contour flange bend_radius must be positive")
+
+        k_value = _pv(k_factor)
+        if not isfinite(k_value) or not 0 < k_value < 1:
+            raise ValueError(
+                "contour flange k_factor must be between 0 and 1"
+            )
+
+        if not isinstance(rule_name, str) or not rule_name.strip():
+            raise ValueError("contour flange rule_name must be non-empty")
+        if not isinstance(flip, bool):
+            raise TypeError("contour flange flip must be True or False")
+        if not isinstance(reverse, bool):
+            raise TypeError("contour flange reverse must be True or False")
+
+        return Shape(
+            "sheet_contour_flange",
+            (
+                self,
+                distance,
+                thickness,
+                bend_radius,
+                k_factor,
+                rule_name,
+                flip,
+                reverse,
+            ),
+        )
+
     def flange(
         self,
         *,

@@ -56,12 +56,12 @@ main.
 
 Current externally accepted stack:
 
-- `lib.py.cad.ci 0.10.0` @
-  `397fb04005b46de8d433cb18c091b1e73714b877`;
-- `tool.cad.ci 0.18.0` @
-  `b62f9d0b169aa201a3c66c3166f364396b2d71bc`;
-- `tool.cad.ci.test` #73 / PR #74 / acceptance run
-  `45010776155` — success.
+- `lib.py.cad.ci 0.11.0` @
+  `e621daf6e309bdd0e3f643a12007f1b66490696d`;
+- `tool.cad.ci 0.19.0` @
+  `5677c41a61929b32ab2cb07087a6505f7b9347d8`;
+- `tool.cad.ci.test` #80 / PR #81 / acceptance run
+  `45022699789` — success, including the released shared merge-policy contract.
 
 The released root composite action is the accepted long-lived durable path:
 
@@ -99,13 +99,14 @@ Short-lived branches target one lane and are squash-merged. Exact
 
 Primary lane: `dev-ci`. **Independent of this CAD lane.**
 
-- #661/#688 selective shared model batch qualification is complete and promoted
-  to `main`; the accepted 0.18.1/0.11.0 stack is proven for one-model, no-op
-  and explicit full-run cases.
-- #674 shared merge/lane policy extraction is the next generic governance item;
-  normative implementation is owned by `tool.cad.ci#103`, not by Forge-local
-  CI code.
-- CAD-library work below does not wait on #674.
+- #674 shared merge/lane policy adoption — **now**.
+- released `tool.cad.ci 0.19.0` is adopted by Forge;
+- PR #695 proved the thin consumer wrapper and green `dev-ci` integration;
+- #696 / PR #697 proved the live short-lived path: squash merge, allow-listed
+  temporary-head cleanup and dispatched `dev-ci` integration;
+- the remaining #674 proof is exact long-lived `dev-ci -> main` promotion:
+  normal merge commit, lane preservation and successful dispatched integration.
+- CAD-library work below does not wait on that independent promotion proof.
 
 ### WS2 — native sheet-metal work
 
@@ -116,10 +117,12 @@ treated #567's closed-profile builder as the contour foundation.
 Current 0.45 split:
 
 - #682 native `sheet.flange(type=edge)` — **complete**; merged and natively qualified;
-- #683 reusable open connected Sketch curve chains — **now**; generic Sketch capability;
-  Native qualification found that SolidCraft 0.45 `sketch.arc.tangent.end` accepts only a concrete `[x,y]`; update the documented initial contract and reject parameterized tangent endpoints before replay while keeping line endpoints parametric.
-  The follow-up native run proved replay itself succeeds, but Forge's producer unconditionally requested STEP export and SolidCraft rejected the intentional zero-body design (`nothing to export`). This is Forge-owned producer behavior, not a verification-library gap: classify the narrow parameter/sketch-only replay, save the editable `.sc` and results without `--out`, and omit body-dependent presentation preview for that case.
-- #684 native `sheet.flange(type=contour)` — **blocked on #683**;
+- #683 reusable open connected Sketch curve chains — **complete**;
+  PR #694 merged to `dev-cad` as `9b3b47aa97b49bcc3a08919572e6ddfd2ad28831`
+  after PR run `45025059775` proved the complete 39-model SolidCraft batch,
+  and policy-dispatched `dev-cad` integration run `45025329364` succeeded.
+- #684 native `sheet.flange(type=contour)` — **effectively complete but still open**; draft PR #698 is implemented as one focused native slice and PR run `45027053821` is green across unit/compiler contracts, save/reopen mutation, flat-pattern inspection and the complete SolidCraft model batch. Merge through `/merge`, then close only after the policy-dispatched `dev-cad` integration succeeds.
+  Native qualification shows that a tangent-arc contour flat pattern is recoverable but reports zero discrete `bends`; flat-pattern rule/thickness/K-factor and `bend_count=0` are qualified, while bend radius remains proven by the emitted sheet rule.
 
 #### #682 focused contract
 
@@ -180,12 +183,11 @@ and open-chain contour are different public API/compiler contracts.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #674 Shared merge/lane policy extraction | dev-ci / tool.cad.ci | **now in owner repo** | Complete tool.cad.ci #103 release + external acceptance, then qualify the released workflow in Forge. |
-| #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **tracking** | Coordinate #683 open chain and #684 contour flange; #682 is complete. |
-| #683 Reusable open connected Sketch curve chains | dev-cad | **now** | Define requirements/design/API from pinned SolidCraft 0.45 line/tangent-arc contracts, then implement one focused qualification. |
-| #684 Native contour flange | dev-cad | **blocked** | Implement only after #683 supplies the qualified open-chain contract. |
-| #679 Namespace repeated component-local feature names | dev-cad | **next** | Audit after the active #683 slice unless it becomes a downstream blocker first. |
-| #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #674 shared-governance extraction. |
+| #674 Shared merge/lane policy adoption | dev-ci | **now** | Short-lived policy path is proven; perform exact `dev-ci -> main` promotion through `/merge` and verify normal merge + lane preservation. |
+| #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **now** | Track the active #684 contour-flange child; #682 and #683 are complete. |
+| #684 Native contour flange | dev-cad | **effectively complete but still open** | PR #698 run `45027053821` is green; merge through `/merge`, then require successful dispatched `dev-cad` integration before closure. |
+| #679 Namespace repeated component-local feature names | dev-cad | **next** | Resume after #684 unless downstream HUB75 work makes it an immediate blocker. |
+| #659 Standardize build/verification/results terminology | cross-repo | **later** | Coordinate after current #674 governance proof so architecture and vocabulary do not move together. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
 | #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with actual sheet-metal workflow. |
@@ -196,10 +198,11 @@ and open-chain contour are different public API/compiler contracts.
 | #9 First-class Sketch/constraints/workplanes | dev-cad | **later** | Refresh epic and deliver focused slices. |
 | #8 Tube/RectTube/OvalTube | dev-cad | **later** | Reconcile intent with native shell/pipe/boolean histories. |
 | #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325, then close/rewrite. |
-| #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate remaining constraint scope from overlap with #9. |
+| #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate any remaining constraint scope from overlap with #9. |
 
 ## Recently completed
 
+- #683 reusable open connected Sketch chains — PR #694 merged to `dev-cad`; native batch `45025059775` and lane integration `45025329364` are green.
 - #682 native sheet edge flange — merged to `dev-cad` in PR #687 with native
   SolidCraft 0.45 history, saved-design height/angle mutation and flat-pattern
   qualification.

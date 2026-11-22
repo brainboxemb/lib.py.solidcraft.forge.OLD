@@ -1257,3 +1257,62 @@ Requirements:
 Qualification must prove a native line -> tangent arc -> line open chain,
 parameter mutation through the surrounding line endpoints, save/reopen stability
 and native Sketch geometry remaining open rather than becoming a closed profile.
+
+
+## Native sheet contour flange
+
+A reusable open connected Sketch-chain Shape can create one native SolidCraft
+contour-flange sheet body:
+
+```python
+with Sketch(name="Contour", plane="XZ") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((35, 0))
+    chain.tangent_arc_to((40, 5))
+    chain.line_to((40, 30))
+    contour = chain.finish()
+
+sheet = contour.contour_flange(
+    distance=50,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+    rule_name="Forge Sheet",
+    flip=False,
+    reverse=False,
+)
+```
+
+Requirements:
+
+- the receiver must be a qualified `Shape(kind="sketch_open_chain")`; ordinary
+  solids, closed profiles and arbitrary Sketch objects are rejected;
+- lowering uses SolidCraft 0.45 `sheet.flange(type=contour)`, never extrusion,
+  sweep, fused solids or another geometric approximation;
+- `distance` is positive and may remain a Forge Parameter/Expression in the
+  native command;
+- `thickness` and `bend_radius` are positive; `k_factor` is finite and
+  strictly between 0 and 1; `rule_name` is non-empty;
+- those material values exist only to create/update one
+  `sheet.manage_rules` entry, exactly as for `Sketch.sheet_metal()`;
+  `sheet.flange(type=contour)` receives only the rule name and must not repeat
+  thickness, K-factor or bend radius;
+- `flip` and `reverse` are booleans; false leaves the native field omitted,
+  true emits the corresponding native control;
+- the contour command receives the authored Sketch name and the exact ordered
+  native curve ids for the complete open chain;
+- line ids may remain compiler-owned deterministic ids, but curve ids returned
+  by commands such as `sketch.arc.tangent` must be captured through Forge's
+  existing replay-binding mechanism; callers never author or observe native ids;
+- runtime curve accumulation must preserve the authored segment order and must
+  not infer topology from coordinates;
+- the contour remains an independent sheet body, matching SolidCraft's native
+  contour-flange semantics;
+- the existing standalone open-chain lowering from #683 remains valid and is
+  not weakened merely to serve the sheet-metal consumer.
+
+Qualification must prove native `sheet.flange(type=contour)` history with a
+line/tangent-arc/line chain, save/reopen stability, mutation of `distance` and
+at least one parameterized line endpoint, one connected sheet body, and coherent
+flat-pattern evidence. The fixture must also prove that the command document uses
+replay bindings rather than guessed tangent-arc ids.
