@@ -6,20 +6,30 @@ This document summarizes repository-level responsibility boundaries. Historical/
 
 ## Main execution path
 
-Forge uses the exact released CAD-CI root action on both review and long-lived
-branch integration events:
+Forge uses the exact released CAD-CI root action on review and long-lived
+branch integration events.
 
 ```text
-GitHub workflow
-  -> pull request
-     -> read cad-ci.yml
-     -> execute selected SCons targets
-     -> no durable generated-state write
-  -> push main/dev-cad/dev-ci
-     -> execute selected SCons targets
-     -> reconcile/publish only that branch's complete build scope
-     -> publish only that branch's Pages root/subtree
+pull request / one PR job
+  -> cheap Forge policy classification
+  -> exact tool.cad.ci root action when CAD validation is required
+  -> one selected/full SCons graph
+  -> no durable generated-state write
+
+push main/dev-cad/dev-ci / one runner
+  -> exact tool.cad.ci 0.18.0 root action in durable mode
+       -> resolve prior durable scope/base
+       -> one selected/full SCons graph, jobs=2
+       -> prepare/update complete build scope
+       -> publish build scope
+       -> return prepared_scope + build_commit
+  -> Forge site/build.py on the same workspace
+  -> one generic cad_ci_tool publish pages call
 ```
+
+The push path deliberately stays inside one caller job. There is no artifact
+handoff, second publication runner, second tool/library bootstrap or second
+CAD-CI graph.
 
 Promotion pull requests from `dev-cad` or `dev-ci` to `main` request a
 complete processed run. The GitHub workflow does not understand runtime
@@ -235,7 +245,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.17.1` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.18.0` with one explicit
 bounded value:
 
 ```text
@@ -394,45 +404,45 @@ the released action with complete validation.
 Forge does not call the reusable PR publication workflow and does not prepare,
 publish or clean sparse PR scopes.
 
-### Push bootstrap versus update
+### Durable push action
 
-A development branch can exist before its generated complete scope.
+Forge no longer resolves durable build state in local workflow shell.
 
-For a normal push with an existing named scope, Forge reads the previous
-accepted source commit from `build/<lane>/build.json` and uses that SHA as the
-incremental selection/update base:
-
-```text
-build/<lane>/build.json.source_commit
-  -> CAD-CI base SHA
-  -> build fetch
-  -> update-named --named generated-build/<lane>
-  -> publish build --scope named --scope-name <lane>
-```
-
-This is deliberately not derived from `github.event.before`: a recreated
-long-lived branch produces a branch-create push whose before SHA is all zeroes,
-while the durable named scope still knows the exact previously accepted source
-commit.
-
-For the first publication of a lane, the push runs the complete processed graph
-and then:
+For `main`, `dev-cad` or `dev-ci`, the workflow passes the source SHA,
+source ref and durable scope to the released tool.cad.ci 0.18.0 root composite
+action:
 
 ```text
-prepare-named --name <lane>
-  -> publish build --scope named --scope-name <lane>
+tool.cad.ci@b62f9d0...
+  durable_scope=<main|dev-cad|dev-ci>
+  source_ref=<same branch>
+  source_sha=<exact push SHA>
+  jobs=2
 ```
 
-The workflow decides only whether the named directory exists and which
-long-lived source branch is running. It does not calculate item membership or
-copy generated item trees.
+The action owns the generic sequence already proven in
+`tool.cad.ci.test` #73 / PR #74:
 
-Main already has a complete baseline and continues to use `update-main`.
+1. fetch/inspect the generated `build` branch once;
+2. read the prior `<scope>/build.json.source_commit` when the scope exists;
+3. reject a missing stable `main` baseline;
+4. use a complete run only for the first named-scope publication;
+5. execute one CAD-CI/SCons graph;
+6. call the existing build-store update/prepare command for that scope;
+7. publish that complete durable build scope;
+8. return the exact prepared-scope path and published build commit.
+
+Forge must not repeat those mechanics in `.github/workflows/scpf.yml`.
+
+A recreated development branch remains safe because the action derives the
+incremental base from durable scope evidence rather than
+`github.event.before`.
 
 ### Site evidence scope
 
-Forge's site generator accepts the exact prepared complete build directory plus
-its logical scope name.
+Forge's site generator accepts the exact prepared complete build directory
+returned by the durable action plus its logical scope name and published build
+commit.
 
 The evidence loader validates:
 
@@ -1177,7 +1187,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.17.1`:
+`tool.cad.ci 0.18.0`:
 
 ```text
 push main
