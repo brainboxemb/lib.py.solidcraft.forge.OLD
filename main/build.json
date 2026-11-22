@@ -60,6 +60,16 @@
       ],
       "source_commit": "3300b962cc9073688fd3b5e0229f2ce781434b38"
     },
+    "ci/release-policy": {
+      "engine": "scons",
+      "engine_schema": 2,
+      "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
+      "final_step": "test_release_publisher",
+      "final_target_spec_digest": "b5a080b16663dd85ac85904b43e8e9880d433d75c0bf9643d98609943198abfd",
+      "item_id": "release-policy",
+      "outputs": [],
+      "source_commit": "1e8028d9ed028207df8d8c651e77e71232be29fa"
+    },
     "ci/site-source": {
       "engine": "scons",
       "engine_schema": 2,
@@ -2303,5 +2313,5 @@
   },
   "schema": 1,
   "scope": "main",
-  "source_commit": "92758bd34b8b83bcfe28180b8ae2d42c3338f215"
+  "source_commit": "1e8028d9ed028207df8d8c651e77e71232be29fa"
 }
