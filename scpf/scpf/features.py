@@ -15,6 +15,7 @@ from .core import (
     _DirectionSelector,
     _ProfileEdgeSelection,
     _dim_add,
+    _dim_abs,
     _dim_sub,
     _cylinder_base_from_anchor,
     half,
@@ -875,9 +876,14 @@ def _explicit_sketch_commands(
                         "a horizontal or vertical axis"
                     )
 
-                delta = _dim_sub(intent_b[axis], intent_a[axis])
-                if pv(delta) < 0:
-                    delta = -delta
+                delta = _dim_abs(
+                    _dim_sub(intent_b[axis], intent_a[axis])
+                )
+                if center_point:
+                    # SolidCraft 0.45 defines center-point Slot length as
+                    # the complete straight centre-line length, while authored
+                    # end is one half-length away from center.
+                    delta = delta * 2
 
                 middle = (
                     intent_a
@@ -923,13 +929,13 @@ def _explicit_sketch_commands(
                     "sketch.dimension",
                     entities=["origin", middle_point],
                     type="horizontal",
-                    value=command_value(middle[0]),
+                    value=command_value(_dim_abs(middle[0])),
                 ))
                 commands.append(_command(
                     "sketch.dimension",
                     entities=["origin", middle_point],
                     type="vertical",
-                    value=command_value(middle[1]),
+                    value=command_value(_dim_abs(middle[1])),
                 ))
 
             if profile.kind == "slot_center_to_center":
