@@ -240,7 +240,7 @@ class NativeSlotFamilyTests(unittest.TestCase):
                     if row["command"] == "parameters.add"
                     and row["params"]["name"] == "slot_width"
                 )
-                self.assertEqual(parameter["value"], 8)
+                self.assertEqual(float(parameter["expression"]), 8.0)
                 self.assertEqual(parameter["unit"], "mm")
 
     def _compile_dimensioned_slot(self, factory):
