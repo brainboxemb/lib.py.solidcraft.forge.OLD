@@ -127,6 +127,22 @@ the technical implementation issue in the actual owner
 
 Do not add a Forge- or consumer-local changed-path planner.
 
+### WS2a — #676 public catalog scope
+
+Primary lane: `dev-cad`. **Now; prerequisite for #567 qualification fixture.**
+
+`model.yml` is already the public Verification catalog/presentation membership
+source, while `role.yml` owns explicit non-public fixture roles. Align the
+remaining documentation loader and catalog guard tests with that contract:
+
+- discover public engineering documentation from `model.yml` membership;
+- allow explicit `regression-fixture` directories to own `ci.yml` and native
+  verification without becoming public Verification pages;
+- keep public-model process/visual/reference requirements unchanged;
+- no central catalog and no CI execution behavior change.
+
+Merge this focused correctness fix into `dev-cad` before completing #567.
+
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
 Primary lane: `dev-cad`. **Now, parallel with #661.**
@@ -182,7 +198,8 @@ Requirements/design/API contract must be written before implementation.
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
 | #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
+| #676 Scope public example catalog to `model.yml` | dev-cad | **now** | Align documentation discovery/tests with existing `model.yml` + `role.yml` contract; unblock #567 regression fixture. |
+| #567 Mixed line/arc closed Sketch profiles | dev-cad | **blocked** | Complete native connected-profile qualification after #676 merges; the fixture already passes SolidCraft verification. | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
