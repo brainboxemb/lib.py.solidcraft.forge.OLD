@@ -1746,3 +1746,36 @@ then consumes it.
 `sheet.manage_rules` remains the single source for thickness, K-factor and
 default bend radius. `sheet.flange(type=edge|contour)` inherits that rule rather
 than creating a second material definition.
+
+
+## Edge-flange lowering
+
+The first #682 slice is a Shape-level sheet feature, distinct from the open
+Sketch-chain work tracked by #683/#684.
+
+Object flow:
+
+```text
+existing sheet Shape
+  -> Shape.flange(edges=[XYZ...], height=..., angle=...)
+  -> Shape(kind="sheet_edge_flange", data=(source, ...))
+  -> compile source sheet history
+  -> append sheet.flange(type="edge", ...)
+```
+
+The compiler reuses the existing sheet history recursively, then appends one
+native `sheet.flange` command. The command identifies the existing body by
+the current compiled body name and passes only edge-flange geometry/placement
+inputs.
+
+The public edge selector is deliberately only a fixed XYZ pick list in this
+slice. SolidCraft 0.45 also accepts richer per-edge dictionaries, segmentation,
+relief overrides and chained bends, but Forge does not expose those until a
+real downstream requirement justifies a separate contract.
+
+Material properties remain owned by the existing sheet rule. No thickness,
+K-factor or bend-radius values are duplicated in the edge-flange Shape node or
+native command.
+
+This compiler path is separate from #683 open Sketch chains and #684 contour
+flanges. Do not generalize them into one catch-all flange abstraction.
