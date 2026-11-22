@@ -23,7 +23,7 @@
       "outputs": [
         "tool_verify"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "ci/forge-tests": {
       "engine": "scons",
@@ -33,19 +33,19 @@
       "final_target_spec_digest": "bfbaa3372768e542fa24ebd42696c315e38426643573d30e9a19efd0ffc85b76",
       "item_id": "forge-tests",
       "outputs": [],
-      "source_commit": "36b7e04009eb24bf7e9e345afb0a894dbf6f7edb"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "ci/model-verification-batch": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "8ba761feeffe2e2f6690cd5e23ef2c55020297d120f93226c9bb91d5bc733840",
+      "final_bundle_sha256": "fc9723ffdfd0432de0ca40ceba74d9426e851a1f18aba44b85de1635e97a3b79",
       "final_step": "verify_models",
       "final_target_spec_digest": "e94d1f1440e74627d9204f1b447faa1367ef0f4359c7e97a75b914117345f70a",
       "item_id": "model-verification-batch",
       "outputs": [
         "models"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "ci/reference-verification-batch": {
       "engine": "scons",
@@ -68,7 +68,7 @@
       "final_target_spec_digest": "84ad29740f5d1ccfa29cb0891025895db09a4c609aab731e1c1253d01a62f847",
       "item_id": "site-source",
       "outputs": [],
-      "source_commit": "36b7e04009eb24bf7e9e345afb0a894dbf6f7edb"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "ci/solidcraft-reference": {
       "engine": "scons",
@@ -95,7 +95,7 @@
     "examples/anchor-topology-mutation": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "13c44c231ad31da08c2caf15a5bd4986ad7b5225d5c46b56ae3cf1a097d1c724",
+      "final_bundle_sha256": "7fed1d591cdca775340f56230bd5db6674ae6724b6dd54ae5c082370e1f06bf1",
       "final_step": "model_verify",
       "final_target_spec_digest": "447c05a0284291e989c5403ee6f04bb234e25609395de77d3eacae4063a28621",
       "item_id": "anchor-topology-mutation",
@@ -103,7 +103,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/anchor-topology-mutation/build123d": {
       "engine": "scons",
@@ -156,7 +156,7 @@
     "examples/anchored-holes": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "9db0b9a3cc9b87a71c4873cd2610904d81de2c928546e3fc5073e19a719a9a7c",
+      "final_bundle_sha256": "b6f3237fd84502e667d2b9adf175815f47b9ef345587cc0672fd39e4a283465e",
       "final_step": "model_verify",
       "final_target_spec_digest": "4946b622ca266d1f647e0cd1821136f91f00a6476c02607fdd4caf4d0b1469ad",
       "item_id": "anchored-holes",
@@ -164,7 +164,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/anchored-holes/build123d": {
       "engine": "scons",
@@ -217,7 +217,7 @@
     "examples/as-built-attach": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "ad986a22931c430d7cd5282f696c936ad4d38c8b99d95953c3dc68cb26d330af",
+      "final_bundle_sha256": "580dc0cfd406ca1abfc5360ae31ee811158033f4c8e8cbf188eb427dbf1ed9d9",
       "final_step": "model_verify",
       "final_target_spec_digest": "87fb16b4e26c472d400d8ad2abec23d9c38642eae89277b5c2bdbdb4c006a79c",
       "item_id": "as-built-attach",
@@ -225,7 +225,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/as-built-attach/build123d": {
       "engine": "scons",
@@ -278,7 +278,7 @@
     "examples/assembly-decorator": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "56ea2d1c9c1d14a5e699f771c8114eb32b7695c1fdfaafe228ea772b6e5f2330",
+      "final_bundle_sha256": "1e09944f414a9d6af1fdfbeb5f7be42e9706ba4973b6585d6a2a9ca78826b661",
       "final_step": "model_verify",
       "final_target_spec_digest": "d2722db8d7e4b20b24be05a51d793a0539ae818dc2b81c84e5edea64f8b43f3b",
       "item_id": "assembly-decorator",
@@ -286,7 +286,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/assembly-decorator/build123d": {
       "engine": "scons",
@@ -339,7 +339,7 @@
     "examples/assembly-owned-anchor": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "24bef4828d2a98f83840e61bd6f2b7f3bbf3ad57288e7203fecaeacd313be7e3",
+      "final_bundle_sha256": "2d0a1350dd71d2c40f289adcda9bb66a7f39292178c157bb7d80e5537bea22bf",
       "final_step": "model_verify",
       "final_target_spec_digest": "af4b49fbd813b68c19877083665a37acf7ebed6b12a9c5ad51869ad63439ce56",
       "item_id": "assembly-owned-anchor",
@@ -347,7 +347,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/assembly-owned-anchor/build123d": {
       "engine": "scons",
@@ -400,7 +400,7 @@
     "examples/attach-angle": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "d512607c5264ed3a35c5873008ffc9a866cfeff4d9041a9b3b7772690f24255e",
+      "final_bundle_sha256": "74998d4a1037dacc157a29082ae274ffb8fc7843801b934ea08fdd556bbe1c5e",
       "final_step": "model_verify",
       "final_target_spec_digest": "bcaab17df1b271fd0acd931def6b2229d5708a50d10241d9b4c967c2aa4c3a3e",
       "item_id": "attach-angle",
@@ -408,7 +408,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/attach-angle/build123d": {
       "engine": "scons",
@@ -461,7 +461,7 @@
     "examples/bracket": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "6b6f4a6250b7c2b0d53c5a76fa7906cc4566f1faa4ffc950aaf8b7bc9655eee8",
+      "final_bundle_sha256": "2a4dd35c3b74695cf954e73da47251f99c6c6b456d12d1607affc1249f53a381",
       "final_step": "model_verify",
       "final_target_spec_digest": "d6e925124341d64e7dc04fa3dbc0734fd78b5ae25f5d93375d8198c1090506c2",
       "item_id": "bracket",
@@ -469,7 +469,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/bracket/build123d": {
       "engine": "scons",
@@ -522,7 +522,7 @@
     "examples/circle-negative-extrude": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "2f7a3effbe1f3dac1804a42be56bc07886afb302a29161fe957288a290af522e",
+      "final_bundle_sha256": "c8761b6eab306b201db3cc513989893415cc4b5c146de6e49963cbb746d09c2b",
       "final_step": "model_verify",
       "final_target_spec_digest": "c4a79343b476dc0f3c361bfc447e9500bca3dc53a02420abd06db41aa87c3938",
       "item_id": "circle-negative-extrude",
@@ -530,7 +530,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/circle-negative-extrude/build123d": {
       "engine": "scons",
@@ -583,7 +583,7 @@
     "examples/circular-feature-pattern": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "c134fceffd501ffdb75f3a9489842142ee8254741d7d7795cff8740b21f4d34a",
+      "final_bundle_sha256": "fb44a8a7b1f1186b7e064ad0a31c8b7196add62d74e940f38f9ef24306d681b3",
       "final_step": "model_verify",
       "final_target_spec_digest": "854b60fd3463d7fa41abaeb4831a82c2cb93f097ca0a8b1324e140af33dd364a",
       "item_id": "circular-feature-pattern",
@@ -591,7 +591,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/circular-feature-pattern/build123d": {
       "engine": "scons",
@@ -644,7 +644,7 @@
     "examples/components": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "cdc1119b7430019ff68dac2aee3edeb0b6ba6fd5d013ca78c7975d7987459172",
+      "final_bundle_sha256": "e53b2670b67aa54c21bc02e7549c002a70a5e59f82c136392415b84726995367",
       "final_step": "model_verify",
       "final_target_spec_digest": "0d4b130045d4d2b1ad4cc401722c9707596edda00eaf30631b5ca3377a000150",
       "item_id": "components",
@@ -652,7 +652,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/components/build123d": {
       "engine": "scons",
@@ -705,7 +705,7 @@
     "examples/corner-anchor": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "3a27aa482f71247d0d6c800b541cfef03d0e72dd2ab99dff8cfe07fd1868f7cc",
+      "final_bundle_sha256": "318d7a750a9a35d5064df4fc0772b2758f30829c0742cc3baee5f00a3a407c00",
       "final_step": "model_verify",
       "final_target_spec_digest": "788de2d99abbe7d63fa3b99af9241c29253eb338eef62d7c7cd5d4267f551ef8",
       "item_id": "corner-anchor",
@@ -713,7 +713,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/corner-anchor/build123d": {
       "engine": "scons",
@@ -766,7 +766,7 @@
     "examples/eight-corner-brackets": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "783071070703f87f86bd4355889f0cbc12aab90bcd079e048a4cf7d655f3ef3f",
+      "final_bundle_sha256": "4b8e99a00f89ff224f3c92d29818b127d0122c445cb635e79d25756435cae35a",
       "final_step": "model_verify",
       "final_target_spec_digest": "bb0b7c9295c134f8e5ba941a483a900fe1acba272c920ccc453b55c4e96245b1",
       "item_id": "eight-corner-brackets",
@@ -774,7 +774,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/eight-corner-brackets/build123d": {
       "engine": "scons",
@@ -827,7 +827,7 @@
     "examples/eight-flightcase-corners": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "a8ed47c37d08886b79887125b296c3f4a24feea0d505234eab62bc4106adb5c5",
+      "final_bundle_sha256": "7c348987978a433f30b6c4976d975fb36a7832da3c1aaa02a5f662ef49f16568",
       "final_step": "model_verify",
       "final_target_spec_digest": "19da5d053289ac4cb1fc68ccec6960c57a54580f548f1b91234221d8bd89e586",
       "item_id": "eight-flightcase-corners",
@@ -835,7 +835,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/eight-flightcase-corners/build123d": {
       "engine": "scons",
@@ -888,7 +888,7 @@
     "examples/four-corner-l": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "602b52dc3d0e26e7eb4ac691c8b6d0fbd4c9eb48668d690d3c86aac97758337d",
+      "final_bundle_sha256": "887f2633b32f67c107d2bccd0794939f6723158254a3cb5112be2180b953db1d",
       "final_step": "model_verify",
       "final_target_spec_digest": "d77425a5c7611953372e17fff888a83775d558d5a8b8be00778ffb95cc73f28b",
       "item_id": "four-corner-l",
@@ -896,7 +896,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/four-corner-l/build123d": {
       "engine": "scons",
@@ -949,7 +949,7 @@
     "examples/group-hierarchy": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "8796e0466d84cfbfa6c4415075facd85c1e6ca64eb44cb29e4f2bdf8c246e0d9",
+      "final_bundle_sha256": "e91ae85322efdfa1699ac416919f1cda17cef52a2bd09c9c9f9075cf42ee23cf",
       "final_step": "model_verify",
       "final_target_spec_digest": "e35dcbf9b27246644d1c4e590659158a9e9b4ffafed0b7e2dc4751391ea99080",
       "item_id": "group-hierarchy",
@@ -957,7 +957,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/group-hierarchy/build123d": {
       "engine": "scons",
@@ -1010,7 +1010,7 @@
     "examples/hole-family": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "92bf69e65a846cf597aac014b47307cad97bd2a7e0c1adabf7ca6eca7684c7cb",
+      "final_bundle_sha256": "01c55a1a21f3a645cbe9e74ae817ac08b1f00f703460e05af30f26b6f1683edb",
       "final_step": "model_verify",
       "final_target_spec_digest": "789b9d895d124b7c7aeda0f726d23312edb8673983365394618a231d241505bc",
       "item_id": "hole-family",
@@ -1018,7 +1018,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/hole-family/build123d": {
       "engine": "scons",
@@ -1071,7 +1071,7 @@
     "examples/parameter-scope": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "54290b2b656c53d1b6add0447f057ee5fcb9638adf3321844d01cb48375cd24b",
+      "final_bundle_sha256": "1768ffaa54ef844636f2360e399bd366dbcbcde08d1f6664b2767ec77a34e48c",
       "final_step": "model_verify",
       "final_target_spec_digest": "a0a942ed7d9a3120943bb8826d658a0d44c407a248eda07f27ad0bea30299c1a",
       "item_id": "parameter-scope",
@@ -1079,7 +1079,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parameter-scope/build123d": {
       "engine": "scons",
@@ -1132,7 +1132,7 @@
     "examples/parametric-anchor": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "0f8ab03551dbcddfaef0e5a97fcb59f06103e4e17483f119294cb891f2b4a516",
+      "final_bundle_sha256": "4f112137d490ca75efeeacf157b05eaf66c227e4ecfffb4d21f7a781384d739d",
       "final_step": "model_verify",
       "final_target_spec_digest": "cc8e6a52f35b79f5e3c6178bdb0e386e018f934c8a706f49c83fc343c2b48e92",
       "item_id": "parametric-anchor",
@@ -1140,7 +1140,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parametric-anchor/build123d": {
       "engine": "scons",
@@ -1193,7 +1193,7 @@
     "examples/parametric-attach": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "62ad991046b4173d0c1e1c7fd7773da998c75c3d9175d9c182aed8b5db3c5f73",
+      "final_bundle_sha256": "dca4fc5277600cd40713750976ba8b0e890ad1cb02bc6eeca1ed1a53ac4f8351",
       "final_step": "model_verify",
       "final_target_spec_digest": "516a19fd01533f87c5bfcf07a7cad3e984a86b2c1b889d94926fc679828bdd1d",
       "item_id": "parametric-attach",
@@ -1201,7 +1201,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parametric-attach/build123d": {
       "engine": "scons",
@@ -1254,7 +1254,7 @@
     "examples/parametric-move": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "6aa7b71898e8e9104c309e850c4fac430e1b0ce4f42e77c5fffc3db9b38bf5b9",
+      "final_bundle_sha256": "1ce8c0e856ad76640ff70acfab2afd9185d794f75a12c692347cc099985e00ea",
       "final_step": "model_verify",
       "final_target_spec_digest": "a05bbe350c75743ce2f8fd527b4b65909486fdef9a749c33d17ad3a758266030",
       "item_id": "parametric-move",
@@ -1262,7 +1262,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parametric-move/build123d": {
       "engine": "scons",
@@ -1315,7 +1315,7 @@
     "examples/parametric-offset": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "bf5df1d3803cc866055e1242d585906f3edf1728bbf9dbbf3eaa0ef4c9dfb2d1",
+      "final_bundle_sha256": "f0e87d22dbd9c9a01786f1e2667a6bd723cf24f826aae9d10bf7dc8b73054f94",
       "final_step": "model_verify",
       "final_target_spec_digest": "cab48226b5f47f1ff6d256692fca8eb310a1317ccb68b5b7314a0779b5729cc9",
       "item_id": "parametric-offset",
@@ -1323,7 +1323,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parametric-offset/build123d": {
       "engine": "scons",
@@ -1376,7 +1376,7 @@
     "examples/parametric-placement-pair": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "ef05e93970131729266c977e6e05890198c2f5165f19cc84689ee75f7509432c",
+      "final_bundle_sha256": "46531ae586a762c7e56400ff9380b7c1d10434bc32e2c6a3c35a8283836ad460",
       "final_step": "model_verify",
       "final_target_spec_digest": "f2c870991d7e9740bbc98c7f3a0856a30486bcc852b44aff8eb16051b58c57d7",
       "item_id": "parametric-placement-pair",
@@ -1384,7 +1384,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parametric-placement-pair/build123d": {
       "engine": "scons",
@@ -1437,7 +1437,7 @@
     "examples/parent-derived-child-size": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "8a3589b4c1edecd4750c1d00e3e94de5e40f560191386e2d5a6718af9804d867",
+      "final_bundle_sha256": "0bfaed9ad978eae51ffcc6c6c2700ff6956363368bd330b16476be3b15c031fa",
       "final_step": "model_verify",
       "final_target_spec_digest": "3cda043ad6680b8b8e838167a0194d267b0e80835307905440abd75d6fbfe50d",
       "item_id": "parent-derived-child-size",
@@ -1445,7 +1445,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/parent-derived-child-size/build123d": {
       "engine": "scons",
@@ -1498,7 +1498,7 @@
     "examples/primitive-csg": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "33f1d616ac950c613f93023cb04717f8550f0cde29a4c162d682b6969942b956",
+      "final_bundle_sha256": "3805e219486de1e5e57eb7a87332ef706cef17039dd84a912e89d43a45e9da5b",
       "final_step": "model_verify",
       "final_target_spec_digest": "5c48f77479862baee90d162ee1a2964eb3627734925d99648d2b5934dc06dbca",
       "item_id": "primitive-csg",
@@ -1506,7 +1506,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/primitive-csg/build123d": {
       "engine": "scons",
@@ -1559,7 +1559,7 @@
     "examples/rectangular-pattern": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "3b5343b1ac2157e90ffe2acb752807c942cfeaf0aef304bc2d6a9ff3fb7eeccc",
+      "final_bundle_sha256": "f2d5245d805baded0272ee53686935f7adeca6a2e699f48eabb324c398ef0861",
       "final_step": "model_verify",
       "final_target_spec_digest": "237958f0623664e7ca21a6c430c992fb3c3744b95a2fd57c4a0c1252870fb22f",
       "item_id": "rectangular-pattern",
@@ -1567,7 +1567,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/rectangular-pattern/build123d": {
       "engine": "scons",
@@ -1620,7 +1620,7 @@
     "examples/repeated-parent-attachments": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "bb448cc21595b01553d8add610de82906f5cce6231ec0893995b14a8fb17a951",
+      "final_bundle_sha256": "1ec5882138b135c3ebaa6d64477a6ee063fdfed683281ba2521a4a6e93a222e1",
       "final_step": "model_verify",
       "final_target_spec_digest": "7f21b7a11a76df41d81082e29cc22e1abdfc9ae9df7afd372d64b2c91339e502",
       "item_id": "repeated-parent-attachments",
@@ -1628,7 +1628,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/repeated-parent-attachments/build123d": {
       "engine": "scons",
@@ -1681,7 +1681,7 @@
     "examples/rotated-copy-placement": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "83d2df54271f9a04060fed8d935b4136ea6049d8e6d4c73d0613349f5ae9668e",
+      "final_bundle_sha256": "49d6aae70d26de5cca635bea5d3b897e15645f1631f53acbdda78568396a0f92",
       "final_step": "model_verify",
       "final_target_spec_digest": "5f48a487f73fe120322e8256b774833ab501d007278e06877b590033d2de6f4f",
       "item_id": "rotated-copy-placement",
@@ -1689,7 +1689,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/rotated-copy-placement/build123d": {
       "engine": "scons",
@@ -1742,7 +1742,7 @@
     "examples/round-top-sketch": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "41d046ee4b9d159af4930df3c245832dda4371e61da4e0a0810a8cb5b8ca2caf",
+      "final_bundle_sha256": "fbc94f7b370d81b732fb28c93d22e31d9b6d365dee308dd17a1771edcef129ee",
       "final_step": "model_verify",
       "final_target_spec_digest": "b280ccf33e6af84ab5345dfa543a03bb9718eba06d29eceb84ba8ff1a7d468e2",
       "item_id": "round-top-sketch",
@@ -1750,7 +1750,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/round-top-sketch/build123d": {
       "engine": "scons",
@@ -1803,7 +1803,7 @@
     "examples/rounded-rectangle-sketch": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "b36275e9533b6b279939022b29661f62e1b93c5c6ca89ac0fe2bf48fc0527116",
+      "final_bundle_sha256": "17f1ca0f6a0adc5dbe5c05e1c4afd04bf661714900ffcabf26c8aaf097e875c1",
       "final_step": "model_verify",
       "final_target_spec_digest": "be41a86324be4ac859a031dc529d52e9373595e6630aa536581ba7cb4e38f000",
       "item_id": "rounded-rectangle-sketch",
@@ -1811,7 +1811,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/rounded-rectangle-sketch/build123d": {
       "engine": "scons",
@@ -1864,7 +1864,7 @@
     "examples/selective-profile-extrude": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "197bfe8f693f506c9c0bfe688a18e9c64513773e804904489c971d251c8c3f2d",
+      "final_bundle_sha256": "c904181d8520e843bce9b9d49e1e40bccc25fcb6ff6c8c218698b388d443bf07",
       "final_step": "model_verify",
       "final_target_spec_digest": "d87c44c080064d8e7a928b6c6a7eb8adf8b3d6fcd9eee479ccdd475a23b02172",
       "item_id": "selective-profile-extrude",
@@ -1872,7 +1872,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/selective-profile-extrude/build123d": {
       "engine": "scons",
@@ -1925,7 +1925,7 @@
     "examples/sheet-fold": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "8b813576bc5d48e25a6d57e2417a4a207e1995e6f3750c0a9f6e68517651b226",
+      "final_bundle_sha256": "34fb4ce77fed42947059b8ada821b82a35864e03be874348cdfcfa3b805c6cfb",
       "final_step": "model_verify",
       "final_target_spec_digest": "7eb06e3ee8372eb58ddff2ada8141647fa835d5fad60dd72875604611bdce121",
       "item_id": "sheet-fold",
@@ -1933,7 +1933,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/sheet-fold/build123d": {
       "engine": "scons",
@@ -1986,7 +1986,7 @@
     "examples/simple-box": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "f7145dd8b66f98ea51bf73416a9c8bf34de2791aff8a278fe447f21d52655475",
+      "final_bundle_sha256": "d5dfc0b2a70ba86f7e366d2c321507769773c495224c7d8acee8c1c6f86a780f",
       "final_step": "model_verify",
       "final_target_spec_digest": "d7a40e770858fc965f24537a9145d0f2f5b96c4fa3d55b9b976d63ef65ec0d87",
       "item_id": "simple-box",
@@ -1994,7 +1994,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/simple-box/build123d": {
       "engine": "scons",
@@ -2047,7 +2047,7 @@
     "examples/sketch-pattern-mirror": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "769ecf4aba2b1f4baa41c85808ca3cdccfa2fea2c693b006468460e359195510",
+      "final_bundle_sha256": "e6825c068eac978281db1bc244e4d37ae82e5b87d1e40132b1bd9c088a3fa71d",
       "final_step": "model_verify",
       "final_target_spec_digest": "d66473ec3be3a4662aca8bb5057ba02f160fb0242da0f3396a39af4434d4cbb5",
       "item_id": "sketch-pattern-mirror",
@@ -2055,7 +2055,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/sketch-pattern-mirror/build123d": {
       "engine": "scons",
@@ -2108,15 +2108,15 @@
     "examples/slot-family": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "0cd583b07cea513c8d9a3069e56dcc5c51f1e8eed6053451ba2caacc266dc5a7",
+      "final_bundle_sha256": "a149499e41a1ce0390af1ebada7fccaab661ea261de8c5fefb59aa89b632796c",
       "final_step": "model_verify",
-      "final_target_spec_digest": "5f5cc6af9fc8a1fd96b08166e6a38cb817b45dadcd7d1968407f665571d78d47",
+      "final_target_spec_digest": "0b8a665470353feea5d0536efb49df9985c2f8e2156ef021e6949c63651181f5",
       "item_id": "slot-family",
       "outputs": [
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/slot-family/build123d": {
       "engine": "scons",
@@ -2169,7 +2169,7 @@
     "examples/top-sketch-after-chamfer": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "b312d573bf7b10be48cd729e104354a852628eea084c8249bb42a8d3d6f242ae",
+      "final_bundle_sha256": "ba75a15e3ca64c720f7e00b486d4b89a53486aa8792ad4a97343478327bd89d8",
       "final_step": "model_verify",
       "final_target_spec_digest": "5bd8f0c47e66bf49bdd6f6f068117e40d792bb4ad9e23b3ae050d40a6fa2ca85",
       "item_id": "top-sketch-after-chamfer",
@@ -2177,7 +2177,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/top-sketch-after-chamfer/build123d": {
       "engine": "scons",
@@ -2230,7 +2230,7 @@
     "examples/xz-anchor": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "799cc557c8cd881ef2e3b388c5afcedcb883ab8c949a19ec93bba7e618c30d93",
+      "final_bundle_sha256": "f4ead8c6da35571027192ee9370ad5597a04e5c2c250baa8de668b1f45d49d73",
       "final_step": "model_verify",
       "final_target_spec_digest": "50f4a4baeb2799c3271b439b63f38ed0c03b08fcd62af4f75dad09bf2ac64cde",
       "item_id": "xz-anchor",
@@ -2238,7 +2238,7 @@
         "model_verify",
         "solidcraft.json"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     },
     "examples/xz-anchor/build123d": {
       "engine": "scons",
@@ -2291,18 +2291,18 @@
     "scpf": {
       "engine": "scons",
       "engine_schema": 2,
-      "final_bundle_sha256": "477ff9279b2f2ea7f05b8991541d5dc6558a4c4e059017b44dfbb5d14eb57617",
+      "final_bundle_sha256": "1ee16ce775af4b634b514e75e50a51cbbb6a89e1cdc05fbf06cd5c535025e2f2",
       "final_step": "tool_build",
       "final_target_spec_digest": "9db81db23856dd89f09c9542f1cc987c01f7e2d8e470cf628dd86689a67e34e9",
       "item_id": "forge-package",
       "outputs": [
         "dist"
       ],
-      "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
     }
   },
   "name": "dev-cad",
   "schema": 1,
   "scope": "named",
-  "source_commit": "36b7e04009eb24bf7e9e345afb0a894dbf6f7edb"
+  "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
 }

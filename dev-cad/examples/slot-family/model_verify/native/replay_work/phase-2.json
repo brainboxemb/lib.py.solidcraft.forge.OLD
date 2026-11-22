@@ -17,94 +17,23 @@
       }
     },
     {
-      "command": "sketch.slot.center_to_center",
+      "command": "sketch.draw.dimensioned",
       "params": {
-        "p0": [
-          -60.0,
-          -35.0
-        ],
-        "p1": [
-          -40.0,
-          -35.0
-        ],
-        "width": 8.0
-      }
-    },
-    {
-      "command": "sketch.slot.overall",
-      "params": {
-        "p0": [
-          -10.0,
-          -35.0
-        ],
-        "p1": [
-          20.0,
-          -35.0
-        ],
-        "width": 8.0
-      }
-    },
-    {
-      "command": "sketch.slot.center_point",
-      "params": {
-        "center": [
-          55.0,
-          -35.0
-        ],
-        "end": [
-          65.0,
-          -35.0
-        ],
-        "width": 8.0
-      }
-    },
-    {
-      "command": "sketch.slot.arc_three_point",
-      "params": {
-        "start": [
-          -50.0,
-          25.0
-        ],
-        "through": [
-          -35.0,
-          38.0
-        ],
-        "end": [
-          -20.0,
-          25.0
-        ],
-        "width": 8.0
-      }
-    },
-    {
-      "command": "sketch.slot.arc_center",
-      "params": {
-        "center": [
-          40.0,
-          25.0
-        ],
-        "start": [
-          52.0,
-          25.0
-        ],
-        "width": 8.0,
-        "sweep": 120
-      }
-    },
-    {
-      "command": "sketch.finish",
-      "params": {}
-    },
-    {
-      "command": "solid.extrude",
-      "params": {
-        "operation": "cut",
-        "targets": [
-          "SlotFamily"
-        ],
-        "name": "Slot family",
-        "through_all": true,
-        "direction": "negative"
+        "command": "sketch.slot.center_to_center",
+        "params": {
+          "p0": [
+            -60.0,
+            -35.0
+          ],
+          "p1": [
+            -40.0,
+            -35.0
+          ],
+          "width": "slot_width"
+        },
+        "dimensions": {
+          "length": "abs(((c2c_end_x)) - ((c2c_start_x)))"
+        }
       }
     }
   ]
