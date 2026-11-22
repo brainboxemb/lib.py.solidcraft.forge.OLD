@@ -20,7 +20,7 @@ dev-ci
 
 Current stable `main` head:
 
-`014de6446bf73dfabb2661df25161131e44e1bef`
+`4b1af992a90359d8672d864bf3b5d9455d5027f7`
 
 Current accepted `dev-cad` head:
 
@@ -58,8 +58,10 @@ Shared tool policy now available and externally accepted:
 - accepted test-repository main commit
   `125e19b95c6cf4892f5d65aa6162cf71d4f89c57`.
 
-Forge still consumes 0.19.0 until #718 is merged. #718 is therefore the current
-repository gate.
+Forge now consumes exact tool.cad.ci 0.20.0. PR #719 merged through the shared
+policy as squash commit `4b1af992...`; dispatched main integration run
+`45032014292` succeeded and `build/main/build.json` resolves to that exact
+source commit.
 
 ## Lane and merge rule
 
@@ -76,18 +78,17 @@ repository gate.
 
 ## Active workstreams
 
-### WS1 — tool 0.20.0 adoption and branch reconciliation
+### WS1 — branch reconciliation and v0.12.0 promotion
 
 Status: **now**.
 
-1. #718 — adopt exact externally accepted tool.cad.ci 0.20.0 in the thin Forge
-   wrapper and contract test.
-2. #717 — after #718, perform the real history-preserving `main -> dev-cad`
-   synchronization and require durable lane integration.
-3. #716 / #714 — re-evaluate exact `dev-cad -> main` promotion; require fresh
+1. #717 — perform the real history-preserving `main -> dev-cad`
+   synchronization using the now-adopted 0.20.0 policy and require durable lane
+   integration.
+2. #716 / #714 — re-evaluate exact `dev-cad -> main` promotion; require fresh
    exact-head validation and merge only through `/merge`.
-4. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
-5. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
+3. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
+4. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
 
 PR #716 remains open and currently conflicted. Do not replace it with a
 temporary promotion branch or squash the long-lived lane.
@@ -117,8 +118,7 @@ temporary promotion branch or squash the long-lived lane.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #718 Adopt tool.cad.ci 0.20.0 | governance/main | **now** | Repin thin wrapper + contract to exact externally accepted release, then qualify and merge through current `/merge`. |
-| #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #718** | After adoption, execute history-preserving `main -> dev-cad` and require lane integration. |
+| #717 Reconcile main/dev-cad history | repository/dev-cad | **now** | Execute history-preserving `main -> dev-cad` with the adopted 0.20.0 policy; preserve all accepted CAD documentation/content and require lane integration. |
 | #714 Release Forge 0.12.0 | repository | **blocked on #717** | Resume #716 promotion, durable main/Pages verification, then explicit release preparation/publication. |
 | #713 Audit/reduce Forge scripts | repository / verification owner | **later** | Reassess after the release checkpoint; do not interrupt WS1. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately after the release checkpoint. |
@@ -136,6 +136,7 @@ temporary promotion branch or squash the long-lived lane.
 
 ## Recently completed
 
+- #718 tool.cad.ci 0.20.0 adoption — PR #719 exact-head run `45031935896` green; merged as `4b1af992...`; durable main/Pages integration run `45032014292` green with matching `build/main` provenance.
 - #679 component-local Sketch namespacing — exact-head PR run
   `45029824977`, merged to `dev-cad` as `35d0f558...`, durable lane run
   `45030057045` green.
@@ -150,5 +151,5 @@ temporary promotion branch or squash the long-lived lane.
 
 ## Next release checkpoint
 
-Finish #718 -> #717 -> #716/#714 in that order. Do not accumulate another
+Finish #717 -> #716/#714 in that order. Do not accumulate another
 CAD/API batch before v0.12.0 is either published or explicitly deferred.
