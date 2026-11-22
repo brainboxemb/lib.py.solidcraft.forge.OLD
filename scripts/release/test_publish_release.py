@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import unittest
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -32,6 +33,21 @@ class PublishReleaseTests(unittest.TestCase):
             with patch.object(publisher, "output", return_value="commit"):
                 with self.assertRaisesRegex(SystemExit, "not an annotated tag"):
                     publisher.verify_existing_tag("v0.11.0", TARGET)
+
+    def test_existing_release_without_tag_is_rejected(self):
+        with (
+            patch.object(publisher, "fetch_release_inputs"),
+            patch.object(publisher, "validate"),
+            patch.object(publisher, "release_url", return_value="https://example.invalid/release"),
+            patch.object(publisher, "verify_existing_tag", return_value=False),
+            tempfile.TemporaryDirectory() as _,
+        ):
+            with self.assertRaisesRegex(SystemExit, "without the expected annotated tag"):
+                publisher.publish(
+                    repository="brainboxemb/lib.py.solidcraft.forge",
+                    version="0.11.0",
+                    target_sha=TARGET,
+                )
 
     def test_matching_annotated_tag_is_accepted(self):
         with patch.object(publisher, "tag_target", return_value=TARGET):
