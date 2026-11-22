@@ -1435,6 +1435,14 @@ only validates already-published durable evidence. Generic build/Page
 publication remains owned by released CAD-CI; the release script only reads
 those scopes.
 
+The `forge-release` CAD-CI item treats release-candidate metadata as an
+execution input. In particular, a dated `CHANGELOG.md` release preparation
+must invalidate `tool_verify`. Sparse durable build reuse remains valid for
+unrelated items, but the release validator requires
+`build/main.items["ci/forge-release"].source_commit` to equal the exact release
+SHA. This prevents an otherwise-green main publication from presenting older
+package-release verification as evidence for a newer release candidate.
+
 Publication is idempotent only for the exact same version/SHA pair. A tag
 pointing elsewhere is a hard failure. If the tag exists at the requested SHA
 but the GitHub Release is absent, the workflow may complete the missing Release
