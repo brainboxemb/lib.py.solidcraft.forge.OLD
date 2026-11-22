@@ -1991,3 +1991,26 @@ also establishes that the sketch path is the sheet face away from the material
 and `distance` extends the contour along the sketch-plane normal. Forge does
 not reimplement those conventions; `flip` and `reverse` are passed through
 only when explicitly requested.
+
+
+## Assembly feature-name namespace
+
+`assembly._namespace_commands()` is the boundary between component-local Forge
+history and SolidCraft's document-global feature namespace. It already rewrites
+component-local parameter names and replay variables; it also owns native
+feature-name rewriting for component definitions.
+
+The lowering uses the existing deterministic component-definition prefix
+(`d<N>_<component>`). Feature declarations such as `sketch.create.name` and
+named native extrusion features are mapped to that prefix. Commands that refer
+to those features are rewritten only through explicit typed reference fields
+(for example `sketch` and `features`). The implementation must not run a
+recursive rewrite over arbitrary strings: material names, text contents, sheet
+rule names, labels and other user strings are semantically unrelated even when
+their spelling matches a feature name.
+
+A component definition is compiled and namespaced once, then reused by all of
+its occurrences. A second definition of the same Python component class, caused
+by different fixed build inputs, receives its own definition number and thus a
+separate native namespace. This preserves local authoring while satisfying the
+native document's uniqueness requirement.
