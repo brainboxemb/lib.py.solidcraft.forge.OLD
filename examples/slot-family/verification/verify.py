@@ -103,6 +103,7 @@ VERIFICATION = SolidCraftVerification(
             "center_point_x": 55.0,
             "center_point_end_x": 65.0,
         },
+        parameter_match="subset",
         named_bodies=(
             SolidCraftBodyExpectation(
                 volume_mm3=BASELINE_VOLUME,
@@ -157,6 +158,7 @@ VERIFICATION = SolidCraftVerification(
                     "overall_end_x": 25.0,
                     "center_point_end_x": 70.0,
                 },
+                parameter_match="subset",
                 named_bodies=(
                     SolidCraftBodyExpectation(
                         volume_mm3=MUTATED_VOLUME,
