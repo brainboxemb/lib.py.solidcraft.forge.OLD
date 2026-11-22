@@ -93,23 +93,6 @@ Short-lived branches target one lane and are squash-merged. Exact
 
 ## Active workstreams
 
-### WS0 — #670 document current CI and scripts
-
-Primary lane: `dev-ci`. **Now; documentation first.**
-
-Before further CI/architecture work:
-
-- add `ci/README.md` that explains every current repository-level CI item, its purpose, dependencies/consumers and owning scripts/docs;
-- add `scripts/README.md` that groups the current scripts by responsibility and records their callers/owners;
-- add only minimal navigation from existing top-level documentation;
-- record complexity/ownership concerns as observations only;
-- do not move files, change YAML, change scripts, alter discovery or redesign the architecture in this workstream.
-
-The first pass added central `ci/README.md` and `scripts/README.md`. #670 is reopened for local per-item documentation: every `ci/*/` directory must also have its own README and every `ci.yml` must have a short purpose/ownership header. Documentation only; no YAML semantics, scripts, discovery or structure change.
-
-After this local documentation pass is complete, resume the existing plan starting with #661 and the parallel `dev-cad` workstream.
-
-
 #### CI item audit — 2026-11-22
 
 All nine current `ci/*` items are present in durable `build/main` and `build/dev-ci`
@@ -218,7 +201,6 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #670 Document current CI items and scripts | dev-ci | **now** | Add `ci/README.md` and `scripts/README.md`; documentation only, then resume #661. |
 | #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0; move any generic requirement/change to the owning CAD-CI repository and qualify its release from Forge. |
 | #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
