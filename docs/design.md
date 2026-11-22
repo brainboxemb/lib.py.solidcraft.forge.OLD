@@ -489,8 +489,8 @@ short-lived PRs remain squash merges.
 
 Forge does not implement merge-method or branch-lifecycle mechanics locally.
 `.github/workflows/merge-policy.yml` is a thin owner-only `/merge` trigger
-that calls exact released `tool.cad.ci 0.20.0` at
-`d45cdcef33cf1035311bab9a88c3f99208ef3b29`, externally accepted in
+that calls exact released `tool.cad.ci 0.20.1` at
+`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, externally accepted in
 `tool.cad.ci.test` run `45031453651`.
 
 Forge supplies only consumer configuration:
@@ -506,6 +506,12 @@ integration_workflow = scpf.yml
 The released workflow owns current-head/check/status validation, merge-class
 selection, GitHub merge execution, allow-listed temporary-head cleanup and
 optional integration dispatch.
+
+For stable-to-lane synchronization the stable branch is also the PR head. The
+released 0.20.1 workflow therefore removes same-head `issue_comment`
+command-workflow checks from the validation set by Actions-run identity before
+latest-check evaluation. This prevents the merge command from validating
+itself while preserving normal PR-check and commit-status gates.
 
 For `lane -> main` promotion it preserves/advances the lane at the resulting
 stable merge commit. For `main -> lane` synchronization it performs no
