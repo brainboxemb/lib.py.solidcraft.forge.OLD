@@ -1703,3 +1703,46 @@ A focused generic example should contain a simple line/arc blank with at least:
 
 The verification must inspect native Sketch/profile/timeline state, not only
 mesh geometry.
+
+## SolidCraft 0.45 sheet-flange decomposition
+
+The current native contract has one `sheet.flange` command with three modes.
+Forge therefore models the remaining work as separate semantic slices rather
+than one catch-all sheet-metal API.
+
+```text
+closed Sketch profile
+  -> existing Sketch.sheet_metal()
+  -> sheet.flange(type=base)
+
+existing sheet body + edge pick(s)
+  -> #682 edge-flange API
+  -> sheet.flange(type=edge)
+
+open connected Sketch curve chain
+  -> #683 reusable open-chain API
+  -> #684 contour-flange API
+  -> sheet.flange(type=contour)
+```
+
+### Edge flange boundary
+
+The first edge-flange slice should reuse Forge's existing sheet-body history and
+explicit stable XYZ edge-pick vocabulary where possible. It does not require a
+new generic edge-selection framework merely to expose one native sheet feature.
+Advanced SolidCraft forms such as per-edge segment dictionaries, chained `then`
+bends and corner-relief overrides stay outside the first slice until required.
+
+### Contour boundary
+
+Contour flange is not built from a closed profile. SolidCraft 0.45 requires a
+Sketch plus an open chain of lines/tangent arcs. #567 intentionally enforces
+closed profile semantics, so contour must not weaken or overload that object.
+A reusable open-chain Sketch abstraction is qualified first under #683; #684
+then consumes it.
+
+### Rule ownership
+
+`sheet.manage_rules` remains the single source for thickness, K-factor and
+default bend radius. `sheet.flange(type=edge|contour)` inherits that rule rather
+than creating a second material definition.

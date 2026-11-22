@@ -127,10 +127,22 @@ the technical implementation issue in the actual owner
 
 Do not add a Forge- or consumer-local changed-path planner.
 
-### WS2 — next CAD-library work
+### WS2 — native sheet-metal work
 
-- #568 native sheet-metal flange/contour — **now**; #567 connected-profile foundation is merged and natively qualified.
+#568 is now a tracking parent for the actual SolidCraft 0.45 flange family.
+The previous wording assumed a separate `sheet.contour` command and incorrectly
+treated #567's closed-profile builder as the contour foundation.
+
+Current 0.45 split:
+
+- #682 native `sheet.flange(type=edge)` — **now**; first focused implementation;
+- #683 reusable open connected Sketch curve chains — **next**; generic Sketch capability;
+- #684 native `sheet.flange(type=contour)` — **blocked on #683**;
+- #568 parent — **tracking**, complete only when the required child slices are accepted;
 - #349 focused Revolve child first — **later**.
+
+Do not combine #682/#683/#684 back into one large sheet-metal PR. Edge flange
+and open-chain contour are different public API/compiler contracts.
 
 ### WS4 — cross-repository terminology and Verification/reference quality
 
@@ -156,7 +168,10 @@ Do not add a Forge- or consumer-local changed-path planner.
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
 | #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
-| #568 Native sheet-metal flange/contour | dev-cad | **now** | Resume native sheet-metal flange/contour qualification on the merged #567 connected-profile foundation. |
+| #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **tracking** | Coordinate #682 edge flange, #683 open curve chain and #684 contour flange; no direct implementation PR. |
+| #682 Native sheet edge flange | dev-cad | **now** | Write focused requirements/design/API contract for `sheet.flange(type=edge)`, then qualify the minimal edge-pick slice. |
+| #683 Reusable open connected Sketch curve chains | dev-cad | **next** | Design generic open line/tangent-arc chain after #682; do not reuse the closed-profile contract by accident. |
+| #684 Native contour flange | dev-cad | **blocked** | Implement `sheet.flange(type=contour)` only after #683 supplies the qualified open-chain contract. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
