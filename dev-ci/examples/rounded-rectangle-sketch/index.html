@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Explicit rounded-rectangle sketch pad · SCPF Python library</title>
+  <title>Rounded Sketch pad and standalone world-plane cut · SCPF Python library</title>
   <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
@@ -39,22 +39,22 @@
   </div>
 </div>
 <main class="wrap">
-  <div class="crumb"><a href="../../">← Examples</a> / Explicit rounded-rectangle sketch pad</div>
+  <div class="crumb"><a href="../../">← Examples</a> / Rounded Sketch pad and standalone world-plane cut</div>
   <section class="hero small">
     <p class="eyebrow">features</p>
-    <h1>Explicit rounded-rectangle sketch pad</h1>
-    <p class="guide-lead">RoundedRectangle2D remains true native rounded sketch geometry</p>
-    <p>A named face-attached Sketch uses RoundedRectangle2D to create a joined rounded pad with native straight and arc sketch geometry.</p>
-    <p class="meta"><span>80 × 60 × 5 mm base; 40 × 30 × 8 mm pad; 5 mm corner radius</span><span>13 generated SolidCraft commands</span></p>
+    <h1>Rounded Sketch pad and standalone world-plane cut</h1>
+    <p class="guide-lead">Attached and standalone Sketch extrusions remain native editable features</p>
+    <p>A named face-attached RoundedRectangle2D joins a pad to the base, then a second standalone YZ Sketch cuts an internal tunnel through the body with a symmetric native extrusion.</p>
+    <p class="meta"><span>80 × 60 × 5 mm base; 40 × 30 × 8 mm rounded pad; 10 × 2 mm world-plane cut; 100 mm symmetric cut extrusion</span><span>22 generated SolidCraft commands</span></p>
   </section>
   <figure class="example-image">
-    <img src="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/bcd4791ee7ef2471b7ee212cb897f3e59d0ffe81/dev-ci/examples/rounded-rectangle-sketch/model_verify/presentation/preview-iso.png" alt="Explicit rounded-rectangle sketch pad: Current deterministic presentation preview from durable build bcd4791ee7ef." loading="lazy">
-    <figcaption>Current deterministic presentation preview from durable build bcd4791ee7ef.</figcaption>
+    <img src="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/cddfa9636531e6a3caf1327dc3edb2dbcb49af98/dev-ci/examples/rounded-rectangle-sketch/model_verify/presentation/preview-iso.png" alt="Rounded Sketch pad and standalone world-plane cut: Current deterministic presentation preview from durable build cddfa9636531." loading="lazy">
+    <figcaption>Current deterministic presentation preview from durable build cddfa9636531.</figcaption>
   </figure>
   <div class="twocol">
     <section class="panel">
       <h2>Model stages</h2>
-      <ol><li>Create the native Box base</li><li>Create a named TOP-face rounded-rectangle Sketch</li><li>Join the rounded pad extrusion to the base</li></ol>
+      <ol><li>Create the native Box base</li><li>Create and join the TOP-face rounded-rectangle Sketch</li><li>Create an independent YZ world-plane Sketch</li><li>Cut that standalone Sketch through the existing body with one native symmetric extrusion</li></ol>
     </section>
     <section class="panel">
       <h2>Goal</h2>
@@ -81,7 +81,7 @@
   <div class="twocol">
     <section class="panel">
       <h2>Python source</h2>
-      <pre><code>&quot;&quot;&quot;Qualification: RoundedRectangle2D in an explicit named Sketch.&quot;&quot;&quot;
+      <pre><code>&quot;&quot;&quot;Qualification: attached rounded pad plus standalone world-plane cut.&quot;&quot;&quot;
 
 
 class RoundedRectangleSketch:
@@ -92,6 +92,11 @@ class RoundedRectangleSketch:
     pad_depth = 30.0
     radius = 5.0
     pad_height = 8.0
+    cut_width = 10.0
+    cut_height = 2.0
+    cut_y = 22.0
+    cut_z = 2.5
+    cut_length = 100.0
 
     def build(self):
         body = Box(
@@ -110,16 +115,24 @@ class RoundedRectangleSketch:
                 ),
             )
 
-        return body + pad.extrude(self.pad_height)
+        body = body + pad.extrude(self.pad_height)
+
+        with Sketch(name=&quot;World cut&quot;, plane=&quot;YZ&quot;) as cut:
+            cut.add(
+                Rectangle2D(self.cut_width, self.cut_height),
+                offset=(self.cut_y, self.cut_z),
+            )
+
+        return body - cut.extrude(self.cut_length, sym=True)
 
 
 RoundedRectangleSketch()
 </code></pre>
-      <p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/10bab23424aa9ac432c273ef079978d68c1e8ad7/examples/rounded-rectangle-sketch/scpf/model.py">Open the editable source in GitHub →</a></p>
+      <p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4/examples/rounded-rectangle-sketch/scpf/model.py">Open the editable source in GitHub →</a></p>
     </section>
     <section class="panel">
       <h2>Generated command sequence</h2>
-      <ol class="commands"><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>solid.box</code></li><li><code>model.faces</code></li><li><code>sketch.create</code></li><li><code>sketch.rectangle.rounded</code></li><li><code>sketch.finish</code></li><li><code>solid.extrude</code></li></ol>
+      <ol class="commands"><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>parameters.add</code></li><li><code>solid.box</code></li><li><code>model.faces</code></li><li><code>sketch.create</code></li><li><code>sketch.rectangle.rounded</code></li><li><code>sketch.finish</code></li><li><code>solid.extrude</code></li><li><code>sketch.create</code></li><li><code>sketch.rectangle.two_point</code></li><li><code>sketch.finish</code></li><li><code>solid.extrude</code></li></ol>
       <p><a class="button" href="commands.json">View command JSON →</a></p>
     </section>
   </div>

@@ -1,5 +1,5 @@
 {
-  "library_commit": "10bab23424aa9ac432c273ef079978d68c1e8ad7",
+  "library_commit": "6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4",
   "examples": {
     "anchor-topology-mutation": {
       "source": "examples/anchor-topology-mutation/model.py",
@@ -172,7 +172,7 @@
     "rounded-rectangle-sketch": {
       "source": "examples/rounded-rectangle-sketch/model.py",
       "commands": "examples/rounded-rectangle-sketch/commands.json",
-      "command_count": 13,
+      "command_count": 22,
       "preview_kind": "durable-presentation-preview"
     },
     "selective-profile-extrude": {
@@ -218,7 +218,7 @@
       "preview_kind": "durable-presentation-preview"
     }
   },
-  "build_commit": "bcd4791ee7ef2471b7ee212cb897f3e59d0ffe81",
+  "build_commit": "cddfa9636531e6a3caf1327dc3edb2dbcb49af98",
   "build_scope": "dev-ci",
-  "build_manifest_source_commit": "10bab23424aa9ac432c273ef079978d68c1e8ad7"
+  "build_manifest_source_commit": "6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4"
 }
