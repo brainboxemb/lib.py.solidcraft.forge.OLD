@@ -22,7 +22,12 @@ and supports explicit `targets=[body]` for Boolean application.
 
 ## Decision
 
-Reuse the standalone Sketch creation path and make only the extrusion
+First close the profile gap exposed by the original HUB75 repro: standalone
+Sketches support native `RoundedRectangle2D` through
+`sketch.rectangle.rounded`, with the same radius validation and semantic CENTER
+handling as the existing explicit Sketch path.
+
+Then reuse the standalone Sketch creation path and make only the extrusion
 application operation-sensitive:
 
 - root standalone extrusion -> `body_name=<name>`;
