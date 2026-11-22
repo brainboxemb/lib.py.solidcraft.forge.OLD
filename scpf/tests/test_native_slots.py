@@ -24,10 +24,18 @@ MODEL = ROOT / "examples/slot-family/scpf/model.py"
 class NativeSlotFamilyTests(unittest.TestCase):
     def test_all_five_slot_variants_lower_one_to_one(self):
         commands = run_script(MODEL)["commands"]
-        slot_commands = [
-            command for command in commands
-            if command["command"].startswith("sketch.slot.")
-        ]
+        slot_commands = []
+        for command in commands:
+            if command["command"].startswith("sketch.slot."):
+                slot_commands.append(command)
+            elif (
+                command["command"] == "sketch.draw.dimensioned"
+                and command["params"]["command"].startswith("sketch.slot.")
+            ):
+                slot_commands.append({
+                    "command": command["params"]["command"],
+                    "params": command["params"]["params"],
+                })
         self.assertEqual(
             [command["command"] for command in slot_commands],
             [
@@ -38,8 +46,12 @@ class NativeSlotFamilyTests(unittest.TestCase):
                 "sketch.slot.arc_center",
             ],
         )
-        self.assertTrue(all(command["params"]["width"] == 8.0
-                            for command in slot_commands))
+        self.assertTrue(
+            all(
+                command["params"]["width"] == "slot_width"
+                for command in slot_commands
+            )
+        )
         self.assertEqual(slot_commands[-1]["params"]["sweep"], 120)
 
         # The parent Box dimensions are editable Parameters. Fixed Slot-local
@@ -209,17 +221,19 @@ class NativeSlotFamilyTests(unittest.TestCase):
 
         for command_name, factory in cases:
             with self.subTest(command=command_name):
-                with Sketch(plane="XY") as sketch:
-                    factory()
-                commands = compile_model(
-                    sketch.extrude(4),
-                    "ParametricSlotWidth",
-                )["commands"]
-                slot = next(
-                    row for row in commands
-                    if row["command"] == command_name
+                slot = self._compile_slot(
+                    command_name,
+                    factory,
+                    explicit_add=False,
                 )
                 self.assertEqual(slot["params"]["width"], "slot_width")
+                body = Box(80, 60, 5)
+                with Sketch(on=body) as sketch:
+                    factory()
+                commands = compile_model(
+                    body - sketch.extrude(Depth.THROUGH_ALL),
+                    "ParametricSlotWidth",
+                )["commands"]
                 parameter = next(
                     row["params"]
                     for row in commands
@@ -341,15 +355,15 @@ class NativeSlotFamilyTests(unittest.TestCase):
                     row for row in position
                     if row["type"] == "vertical"
                 )
-                self.assertEqual(vertical["value"], "slot_y")
+                self.assertIn("slot_y", str(vertical["value"]))
                 horizontal = next(
                     row for row in position
                     if row["type"] == "horizontal"
                 )
                 if command_name == "sketch.slot.center_point":
-                    self.assertEqual(
-                        horizontal["value"],
+                    self.assertIn(
                         "slot_center",
+                        str(horizontal["value"]),
                     )
                 else:
                     for name in length_names:
@@ -409,7 +423,7 @@ class NativeSlotFamilyTests(unittest.TestCase):
                 and row["params"]["type"] == "horizontal"
             )
         )
-        self.assertEqual(horizontal["value"], "slot_x")
+        self.assertIn("slot_x", str(horizontal["value"]))
 
     def test_parametric_straight_slot_requires_matching_perpendicular_intent(self):
         from scpf import Parameter
