@@ -1163,7 +1163,7 @@ sheet = sheet.flange(
     height=20,
     angle=90,
     height_from="outer",
-    position="outside",
+    position=None,
     flip=False,
 )
 ```
@@ -1176,8 +1176,9 @@ Requirements:
 - `height` is a positive length and may remain a Forge Parameter/Expression;
 - `angle` is an editable angular value accepted by the native command;
 - `height_from` is one of `outer`, `inner` or `tangent`;
-- `position` is one of `inside`, `outside`, `middle`,
-  `material_outside` or `tangent`;
+- `position` is optional; when supplied it is one of `inside`, `outside`,
+  `middle`, `material_outside` or `tangent`; when omitted Forge leaves the
+  native SolidCraft default in control;
 - `flip` is boolean;
 - the existing sheet rule remains authoritative for thickness, K-factor and
   default bend radius; Forge does not duplicate those inputs on the flange API;
