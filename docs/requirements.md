@@ -1017,3 +1017,33 @@ Requirements:
   allowed;
 - qualification must prove generated commands, native 0.45 acceptance and
   saved-design parameter mutation/rebuild.
+
+
+## Shared-batch dependency-output projection
+
+Forge consumes only an exact externally accepted CAD-CI release pair for
+dependency-output projection.
+
+For model/reference shared batches:
+
+- expensive CAD/runtime work remains one Forge-owned shared producer action;
+- the producer writes each child result in the exact output shape owned by that
+  child item below an `items/<repository item path>/` projection root;
+- model projection roots contain `solidcraft.json` and `model_verify/`;
+- reference projection roots contain `references/`, including the child-scoped
+  `verification.json` report and the implementation result tree;
+- the shared diagram result remains `diagrams/`;
+- child model/reference/diagram items use released CAD-CI `copy:` actions;
+- child projection steps must not launch Forge materializer processes;
+- child copy actions must not materialize the complete dependency output;
+- real model-owned `contract_test` commands remain separate executable steps;
+- Forge does not implement bundle selection, projection, signatures, caching,
+  CURRENT decisions or jobs scheduling.
+
+The exact accepted dependency for this capability is tool.cad.ci 0.17.1 backed
+by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
+released-stack acceptance chain before Forge adoption.
+
+Performance evidence is diagnostic, not an SLA. #261 must compare the
+promotion-equivalent jobs=2 post-batch tail before and after migration, and must
+not increase jobs beyond 2 merely to hide projection overhead.
