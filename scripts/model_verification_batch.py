@@ -93,8 +93,8 @@ def write_manifest(batch_root: Path, wheel: Path) -> Path:
         rows.append(
             {
                 "slug": slug,
-                "input": f"/output/items/{slug}/solidcraft.json",
-                "output": f"/output/items/{slug}/model_verify",
+                "input": f"/output/items/examples/{slug}/solidcraft.json",
+                "output": f"/output/items/examples/{slug}/model_verify",
                 "compile_error": compile_error,
             }
         )
