@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
+
 import yaml
 
 from scpf.model_metadata import validate_model_metadata
@@ -11,6 +13,13 @@ from scpf.model_metadata import validate_model_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES_ROOT = ROOT / "examples"
+
+
+def _text(value: Any, label: str) -> str:
+    """Validate text used by the separate section-presentation config."""
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{label} must be a non-empty string")
+    return value.strip()
 
 
 @dataclass(frozen=True)
