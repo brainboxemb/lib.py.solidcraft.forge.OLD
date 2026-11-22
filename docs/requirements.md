@@ -941,6 +941,10 @@ Requirements:
 - Forge constrains the returned native `centre_line` horizontal/vertical and
   drives the returned native `middle` point from the sketch origin so authored
   position remains parameter-driven;
+- saved-design position mutation is qualified while the driven middle point
+  remains on its authored side of each sketch-origin axis; crossing an origin
+  axis is not supported in this release because SolidCraft 0.45 linear
+  dimensions are unsigned distances and the numeric seed owns the side;
 - the two perpendicular endpoint coordinate intents must be identical so a
   horizontal/vertical Slot cannot become skewed after parameter mutation;
 - diagonal straight Slots remain supported only when their authored points are
