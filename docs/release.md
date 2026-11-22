@@ -79,8 +79,17 @@ publication. It does not publish the release.
 
 ## Publishing a Forge release
 
-Publication is currently an explicit repository operation; there is no
-repository workflow that automatically creates the Forge tag/GitHub Release.
+Publication is an explicit repository-owner operation. It is not triggered by
+a successful CAD-CI run.
+
+The owner command is:
+
+```text
+/release vX.Y.Z <exact-40-character-main-sha>
+```
+
+The command is posted on the release tracking issue after the release-
+preparation PR has merged and durable main integration is complete.
 
 For an intentional release such as #642 / v0.11.0:
 
@@ -89,17 +98,24 @@ For an intentional release such as #642 / v0.11.0:
    - move only actually shipped entries from `[Unreleased]` into
      `[0.11.0] - YYYY-MM-DD`;
    - leave deferred work under a fresh `[Unreleased]` section;
-3. verify `scpf/pyproject.toml` contains the intended package version;
-4. run/confirm the complete release-candidate verification on that exact SHA;
-5. create immutable tag `v0.11.0` at that exact SHA;
-6. create the GitHub Release for `v0.11.0`;
-7. verify both the tag and GitHub Release exist and resolve to the intended
-   commit;
+3. verify `scpf/pyproject.toml` contains exactly `0.11.0`;
+4. require durable `build/main`, its `forge-release` evidence and stable
+   Pages provenance to resolve to that exact SHA;
+5. post `/release v0.11.0 <sha>` on #642;
+6. the owner-only release workflow validates metadata/evidence, creates or
+   verifies the annotated tag, and creates the GitHub Release from the dated
+   changelog section;
+7. verify both tag and GitHub Release resolve to the intended commit;
 8. update `docs/plan.md` with the released baseline before starting another
    large development wave.
 
-A release is complete only after steps 5-7 are proven. Source metadata alone is
-release preparation.
+The workflow may repair the narrow case where the correct annotated tag already
+exists at the validated SHA but the GitHub Release is missing. It never moves a
+conflicting tag.
+
+A release is complete only after tag and GitHub Release are proven. Source
+metadata, a changelog heading, a commit named “release” or a green verification
+run alone is release preparation.
 
 ## Related primary documents
 
