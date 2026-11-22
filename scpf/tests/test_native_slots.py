@@ -229,6 +229,254 @@ class NativeSlotFamilyTests(unittest.TestCase):
                 self.assertEqual(parameter["value"], 8)
                 self.assertEqual(parameter["unit"], "mm")
 
+    def _compile_dimensioned_slot(self, factory):
+        body = Box(100, 80, 5)
+        with Sketch(name="Parametric slot", on=body) as sketch:
+            factory()
+        return compile_model(
+            body - sketch.extrude(Depth.THROUGH_ALL),
+            "ParametricSlot",
+        )["commands"]
+
+    def test_parametric_straight_slots_use_native_dimensioned_creation(self):
+        from scpf import Parameter
+
+        y = Parameter("slot_y", -12)
+        width = Parameter("slot_width", 8)
+
+        cases = (
+            (
+                "sketch.slot.center_to_center",
+                lambda: SlotCenterToCenter2D(
+                    (Parameter("c2c_start", -25), y),
+                    (Parameter("c2c_end", 15), y),
+                    width,
+                ),
+                ("p0", "p1"),
+                ("c2c_start", "c2c_end"),
+            ),
+            (
+                "sketch.slot.overall",
+                lambda: SlotOverall2D(
+                    (Parameter("overall_start", -20), y),
+                    (Parameter("overall_end", 20), y),
+                    width,
+                ),
+                ("p0", "p1"),
+                ("overall_start", "overall_end"),
+            ),
+            (
+                "sketch.slot.center_point",
+                lambda: SlotCenterPoint2D(
+                    (Parameter("slot_center", 5), y),
+                    (Parameter("slot_end", 25), y),
+                    width,
+                ),
+                ("center", "end"),
+                ("slot_center", "slot_end"),
+            ),
+        )
+
+        for command_name, factory, point_keys, length_names in cases:
+            with self.subTest(command=command_name):
+                commands = self._compile_dimensioned_slot(factory)
+                dimensioned = next(
+                    row
+                    for row in commands
+                    if row["command"] == "sketch.draw.dimensioned"
+                )
+                self.assertEqual(
+                    dimensioned["params"]["command"],
+                    command_name,
+                )
+                params = dimensioned["params"]["params"]
+                for key in point_keys:
+                    self.assertTrue(
+                        all(isinstance(value, (int, float))
+                            for value in params[key]),
+                        (command_name, key, params[key]),
+                    )
+                self.assertEqual(params["width"], "slot_width")
+
+                length = str(
+                    dimensioned["params"]["dimensions"]["length"]
+                )
+                for name in length_names:
+                    self.assertIn(name, length)
+
+                bind = dimensioned["bind"]
+                centre_line = next(
+                    key for key, value in bind.items()
+                    if value == "centre_line"
+                )
+                middle = next(
+                    key for key, value in bind.items()
+                    if value == "middle"
+                )
+
+                orientation = next(
+                    row["params"]
+                    for row in commands
+                    if (
+                        row["command"]
+                        == "sketch.constraint.horizontal_vertical"
+                        and row["params"]["line"] == centre_line
+                    )
+                )
+                self.assertEqual(orientation["mode"], "horizontal")
+
+                position = [
+                    row["params"]
+                    for row in commands
+                    if (
+                        row["command"] == "sketch.dimension"
+                        and row["params"]["entities"] == ["origin", middle]
+                    )
+                ]
+                self.assertEqual(
+                    {row["type"] for row in position},
+                    {"horizontal", "vertical"},
+                )
+                vertical = next(
+                    row for row in position
+                    if row["type"] == "vertical"
+                )
+                self.assertEqual(vertical["value"], "slot_y")
+                horizontal = next(
+                    row for row in position
+                    if row["type"] == "horizontal"
+                )
+                if command_name == "sketch.slot.center_point":
+                    self.assertEqual(
+                        horizontal["value"],
+                        "slot_center",
+                    )
+                else:
+                    for name in length_names:
+                        self.assertIn(name, str(horizontal["value"]))
+
+                names = {
+                    row["params"]["name"]
+                    for row in commands
+                    if row["command"] == "parameters.add"
+                }
+                self.assertIn("slot_y", names)
+                self.assertIn("slot_width", names)
+                self.assertTrue(set(length_names).issubset(names))
+
+    def test_vertical_parametric_straight_slot_keeps_native_axis(self):
+        from scpf import Parameter
+
+        x = Parameter("slot_x", -9)
+        start = Parameter("slot_start_y", -20)
+        end = Parameter("slot_end_y", 20)
+        commands = self._compile_dimensioned_slot(
+            lambda: SlotCenterToCenter2D(
+                (x, start),
+                (x, end),
+                Parameter("slot_width", 6),
+            )
+        )
+
+        dimensioned = next(
+            row for row in commands
+            if row["command"] == "sketch.draw.dimensioned"
+        )
+        centre_line = next(
+            key for key, value in dimensioned["bind"].items()
+            if value == "centre_line"
+        )
+        orientation = next(
+            row["params"]
+            for row in commands
+            if (
+                row["command"] == "sketch.constraint.horizontal_vertical"
+                and row["params"]["line"] == centre_line
+            )
+        )
+        self.assertEqual(orientation["mode"], "vertical")
+
+        middle = next(
+            key for key, value in dimensioned["bind"].items()
+            if value == "middle"
+        )
+        horizontal = next(
+            row["params"]
+            for row in commands
+            if (
+                row["command"] == "sketch.dimension"
+                and row["params"]["entities"] == ["origin", middle]
+                and row["params"]["type"] == "horizontal"
+            )
+        )
+        self.assertEqual(horizontal["value"], "slot_x")
+
+    def test_parametric_straight_slot_requires_matching_perpendicular_intent(self):
+        from scpf import Parameter
+        from scpf.compiler import ModelError
+
+        y0 = Parameter("slot_y_a", 0)
+        y1 = Parameter("slot_y_b", 0)
+        with self.assertRaisesRegex(
+            ModelError,
+            "same y-coordinate intent",
+        ):
+            self._compile_dimensioned_slot(
+                lambda: SlotCenterToCenter2D(
+                    (Parameter("slot_start", -20), y0),
+                    (Parameter("slot_end", 20), y1),
+                    6,
+                )
+            )
+
+    def test_parametric_diagonal_straight_slot_is_rejected(self):
+        from scpf import Parameter
+        from scpf.compiler import ModelError
+
+        with self.assertRaisesRegex(
+            ModelError,
+            "horizontal or vertical axis",
+        ):
+            self._compile_dimensioned_slot(
+                lambda: SlotCenterToCenter2D(
+                    (
+                        Parameter("slot_x0", 0),
+                        Parameter("slot_y0", 0),
+                    ),
+                    (
+                        Parameter("slot_x1", 20),
+                        Parameter("slot_y1", 10),
+                    ),
+                    6,
+                )
+            )
+
+    def test_fixed_diagonal_straight_slot_stays_direct_native(self):
+        commands = self._compile_dimensioned_slot(
+            lambda: SlotCenterToCenter2D((0, 0), (20, 10), 6)
+        )
+        self.assertEqual(
+            [row["command"] for row in commands].count(
+                "sketch.slot.center_to_center"
+            ),
+            1,
+        )
+        self.assertNotIn(
+            "sketch.draw.dimensioned",
+            [row["command"] for row in commands],
+        )
+
+    def test_arc_slot_authored_points_remain_fixed(self):
+        from scpf import Parameter
+
+        with self.assertRaisesRegex(TypeError, "fixed numeric coordinates"):
+            SlotArcThreePoint2D(
+                (Parameter("arc_x", -10), 0),
+                (0, 10),
+                (10, 0),
+                6,
+            )
+
     def test_symbolic_slot_width_still_requires_positive_current_value(self):
         from scpf import Parameter
 
