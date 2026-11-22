@@ -1114,3 +1114,37 @@ contract rather than guessing runtime ids.
 Saved-design qualification must prove that editing at least one straight
 endpoint dependency and one arc dependency preserves one closed native profile
 and one valid resulting body after save/reopen.
+
+## SolidCraft 0.45 sheet flange family
+
+Forge's remaining sheet-metal coverage follows the pinned SolidCraft 0.45
+command registry, not the earlier 0.42 mental model.
+
+SolidCraft 0.45 exposes one `sheet.flange` feature family:
+
+- `type=base` creates sheet material from a closed Sketch profile and is already
+  consumed by `Sketch.sheet_metal()`;
+- `type=edge` creates flange material from selected edge(s) of an existing sheet body;
+- `type=contour` creates sheet material from an **open** Sketch curve chain and a distance.
+
+There is no standalone `sheet.contour` command in the current supported registry.
+
+Shared material properties remain rule-owned:
+
+- sheet thickness;
+- K-factor;
+- default bend radius.
+
+Forge must not expose those again as per-flange material overrides where the
+native command refuses them.
+
+The remaining work is deliberately split:
+
+- edge flange is one focused Shape/sheet feature contract;
+- open connected curve-chain authoring is a reusable Sketch contract, distinct
+  from #567's closed profile builder;
+- contour flange consumes that open-chain contract only after it is independently
+  qualified.
+
+No child may fall back to extruded/fused solid approximations or caller-authored
+raw SolidCraft command dictionaries.
