@@ -99,6 +99,29 @@ def _rewrite_value(value, mapping):
         }
     return value
 
+_FEATURE_NAME_COMMANDS = {
+    "sketch.create",
+    "solid.extrude",
+    "solid.cylinder",
+}
+_FEATURE_REFERENCE_FIELDS = {
+    "feature",
+    "features",
+    "sketch",
+}
+
+
+def _rewrite_feature_reference(value, mapping):
+    """Rewrite typed native feature references without touching opaque strings."""
+    if isinstance(value, str):
+        return mapping.get(value, value)
+    if isinstance(value, list):
+        return [_rewrite_feature_reference(item, mapping) for item in value]
+    if isinstance(value, tuple):
+        return [_rewrite_feature_reference(item, mapping) for item in value]
+    return value
+
+
 def _rewrite_replay_value(value, mapping):
     """Rewrite exact replay-variable strings without touching normal text."""
     if isinstance(value, str):
@@ -133,6 +156,17 @@ def _namespace_commands(
     prefix = f"d{definition_number}_{_component_slug(component_name)}"
     mapping = {name: f"{prefix}_{name}" for name in local_names}
 
+    feature_names = {
+        command["params"]["name"]
+        for command in commands
+        if command["command"] in _FEATURE_NAME_COMMANDS
+        and isinstance(command.get("params", {}).get("name"), str)
+    }
+    feature_mapping = {
+        feature_name: f"{prefix}_{_component_slug(feature_name)}"
+        for feature_name in feature_names
+    }
+
     replay_names = {
         variable
         for command in commands
@@ -151,6 +185,19 @@ def _namespace_commands(
                 params["name"] = mapping[params["name"]]
         else:
             params = _rewrite_value(params, mapping)
+
+        if (
+            command["command"] in _FEATURE_NAME_COMMANDS
+            and params.get("name") in feature_mapping
+        ):
+            params["name"] = feature_mapping[params["name"]]
+        for field in _FEATURE_REFERENCE_FIELDS:
+            if field in params:
+                params[field] = _rewrite_feature_reference(
+                    params[field],
+                    feature_mapping,
+                )
+
         params = _rewrite_replay_value(params, replay_mapping)
 
         namespaced = {
