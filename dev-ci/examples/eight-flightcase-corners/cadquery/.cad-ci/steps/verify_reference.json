@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "ce42961b195803802ca5d74ec3602da6cce903dacbdcd689cc17fab0f098e77a",
-  "duration_seconds": 0.294,
+  "action_type": "copy",
+  "bundle_sha256": "b7cd8be648592fa1b997920bbf634112d3ef3e47c0a95747efbaa4cfc2e121e6",
+  "duration_seconds": 0.18,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:06:14.459Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:48:06.908Z",
   "item": "examples-eight-flightcase-corners-cadquery",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "b90674daf3bfc849494ff490ec815da178090e915d78139263ddf6aa22ab02ef"
+      "sha256": "52fe955fc581f2c68020601aae9a2109d9bc0d893605461d49bd80f94b06947e"
     }
   },
-  "run_finished_at": "2026-11-21T22:06:43.349Z",
-  "run_started_at": "2026-11-21T22:03:22.620Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:06:14.416Z",
+  "run_finished_at": "2026-11-22T09:48:17.412Z",
+  "run_started_at": "2026-11-22T09:46:13.185Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:48:06.728Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "1dd277c4a3e279624a541f648538e09a698338be02b1d468c1049feaa55b7c8a",
+  "target_spec_digest": "7ecd4825dfe567f697dc938182647cf20da5961711301baef202062e0ca3c7e9",
   "timeout_seconds": null
 }

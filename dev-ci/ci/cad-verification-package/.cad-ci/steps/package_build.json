@@ -1,12 +1,13 @@
 {
   "action_executed": true,
-  "bundle_sha256": "40cff76df866284951e8cd9b8a57890b2dfc840fdd6f76a9e52eae14f1bdb0a4",
-  "duration_seconds": 2.29,
+  "action_type": "command",
+  "bundle_sha256": "187e1e57d6c69e4549c24f5bca1173cba5fc8a211d39bed01ac5c9a426734323",
+  "duration_seconds": 2.745,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-21T22:03:41.569Z",
+  "finished_at": "2026-11-22T09:46:23.110Z",
   "item": "cad-verification-package",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,20 +15,20 @@
     "dist": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "4441373597b054b2733ece95831bfcb7d62ba9a8ab54c52ed2a342af3728cb0f"
+      "sha256": "e0a57ca58bc7572dc634b71a8f5060359530b5dd1e302e44685a64466ec96ca0"
     },
     "provenance.json": {
       "kind": "file",
       "mode": 420,
-      "sha256": "1d08822d5bc942731627aad7342eab1f310a3932e86cd98156f66d4e1ebe3e6b"
+      "sha256": "40a2ffc989a591140ce5c639e60dbc386eac77f6d84e59d2e6e99c072ae5f37d"
     }
   },
-  "run_finished_at": "2026-11-21T22:06:43.349Z",
-  "run_started_at": "2026-11-21T22:03:22.620Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:03:39.279Z",
+  "run_finished_at": "2026-11-22T09:48:17.412Z",
+  "run_started_at": "2026-11-22T09:46:13.185Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:46:20.364Z",
   "status": "pass",
   "step": "package_build",
-  "target_spec_digest": "6faf2864f4a53dbc40ef3f19a78e09ea5d04acbf2b85644f96a24b5de8799654",
+  "target_spec_digest": "041c1a82a6890564dd710994d563c536c239cd61b0dbacc221c0e3ded821cc1b",
   "timeout_seconds": null
 }

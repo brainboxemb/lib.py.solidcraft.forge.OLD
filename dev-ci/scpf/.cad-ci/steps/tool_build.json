@@ -1,12 +1,13 @@
 {
   "action_executed": true,
-  "bundle_sha256": "4f88116d8b0920dccd480fbef20a18d9a67b21391472ccafe7d5ac0741be8659",
-  "duration_seconds": 2.695,
+  "action_type": "command",
+  "bundle_sha256": "5d09f3b876261472e33864475fe69c1fd902e3aeee716c54b6b8abc63d0abd09",
+  "duration_seconds": 2.696,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-22T09:24:18.144Z",
+  "finished_at": "2026-11-22T09:46:23.059Z",
   "item": "forge-package",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -14,15 +15,15 @@
     "dist": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "63e7ed018c444d0bedf444d4dc0205f6b00947c340e51462ed682eacd0c89175"
+      "sha256": "51ca50f8ee879486afaffc60f38d31d1805212999487d5da751410ff11006603"
     }
   },
-  "run_finished_at": "2026-11-22T09:26:16.747Z",
-  "run_started_at": "2026-11-22T09:24:12.244Z",
-  "schema": 3,
-  "started_at": "2026-11-22T09:24:15.450Z",
+  "run_finished_at": "2026-11-22T09:48:17.412Z",
+  "run_started_at": "2026-11-22T09:46:13.185Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:46:20.363Z",
   "status": "pass",
   "step": "tool_build",
-  "target_spec_digest": "9db81db23856dd89f09c9542f1cc987c01f7e2d8e470cf628dd86689a67e34e9",
+  "target_spec_digest": "7dc8797bea697dbfb5d34aba2c0c62a2e155009590876d1b7aa385b2fef853dc",
   "timeout_seconds": null
 }

@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "b9d184e89e48d5882fa4ea6a65b596c28d300d0cd61e2c0e7d29a64c28cec151",
-  "duration_seconds": 0.285,
+  "action_type": "copy",
+  "bundle_sha256": "e7337805b0cbd30bbbb7fcac094c7f485c61bae8caf4b836c83382fe5e4aaa22",
+  "duration_seconds": 0.187,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:06:36.175Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T09:48:13.952Z",
   "item": "examples-sheet-fold-pybosl2",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "c239af8361d968d43e6c069b9153161a4f39363e3a6db3e1145f30989ec17d9e"
+      "sha256": "72fc99f2a9e0d9a3d14640447ce4b39be9f09ea796c2cb4bd660512d52e70853"
     }
   },
-  "run_finished_at": "2026-11-21T22:06:43.349Z",
-  "run_started_at": "2026-11-21T22:03:22.620Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:06:36.133Z",
+  "run_finished_at": "2026-11-22T09:48:17.412Z",
+  "run_started_at": "2026-11-22T09:46:13.185Z",
+  "schema": 4,
+  "started_at": "2026-11-22T09:48:13.765Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "84573ce4bc31fd951acc5133b2c46ac159eca726d25cf93e36ee89f7f8090553",
+  "target_spec_digest": "21b6732605b7e06fcaf37ff3659723f9d489cafd1367360ea7dc20992b924c32",
   "timeout_seconds": null
 }
