@@ -77,8 +77,8 @@ def compile_standalone_sketch(
         sketch_params["offset"] = command_value(plane_offset)
     sketch = [_command("sketch.create", **sketch_params)]
 
-    if profile.kind == "rectangle":
-        width, depth = profile.data
+    if profile.kind in ("rectangle", "rounded_rectangle"):
+        width, depth = profile.data[:2]
         _require_positive(width, "rectangle width")
         _require_positive(depth, "rectangle depth")
         if profile_anchor is Anchor.CENTER:
@@ -90,13 +90,24 @@ def compile_standalone_sketch(
             x0, y0 = ox, oy
             x1 = _combine_dimension(ox, width)
             y1 = _combine_dimension(oy, depth)
-        sketch.append(_command(
-            "sketch.rectangle.two_point",
+        rectangle = dict(
             p0=[command_value(x0), command_value(y0)],
             p1=[command_value(x1), command_value(y1)],
-        ))
+        )
+        if profile.kind == "rounded_rectangle":
+            radius = profile.data[2]
+            _require_positive(radius, "rounded rectangle radius")
+            if pv(radius) * 2 >= min(pv(width), pv(depth)):
+                raise ModelError(
+                    "rounded rectangle radius exceeds half the shorter side"
+                )
+            rectangle["radius"] = command_value(radius)
+            command = "sketch.rectangle.rounded"
+        else:
+            command = "sketch.rectangle.two_point"
+        sketch.append(_command(command, **rectangle))
         meta = {
-            "profile": "rectangle",
+            "profile": profile.kind,
             "width": width,
             "depth": depth,
             "origin": (x0, y0, 0),
@@ -146,7 +157,7 @@ def compile_standalone_sketch(
         }
     else:
         raise ModelError(
-            "standalone Sketch supports Rectangle2D, Circle2D and Polygon2D"
+            "standalone Sketch supports Rectangle2D, RoundedRectangle2D, Circle2D and Polygon2D"
         )
 
     sketch.append(_command("sketch.finish"))
