@@ -278,11 +278,14 @@ that applies equally to both lanes may use a short-lived branch directly against
 `main`.
 
 Do not select a PR merge method manually. Use the repository `/merge`
-policy workflow.
+wrapper, which delegates the mechanical policy to the exact externally
+accepted tool.cad.ci reusable merge-policy workflow.
 
-The policy is mechanical:
+The released policy is mechanical:
 - base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge commit;
-- every other PR -> squash merge.
+- every other PR -> squash merge;
+- Forge supplies branch names, permanent refs, cleanup prefixes and `scpf.yml`
+  integration dispatch only; it does not implement the decision/API calls locally.
 
 Temporary `promote/*` heads are not part of the supported promotion flow.
 Merged short-lived branches are removed only through the policy cleanup
@@ -304,7 +307,7 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The active stack is exact externally accepted `tool.cad.ci 0.18.1` backed by
+The active stack is exact externally accepted `tool.cad.ci 0.19.0` backed by
 `lib.py.cad.ci 0.11.0`, with Forge explicitly using `jobs=2`. The released
 same-runner durable action owns scope/base resolution plus complete build-scope
 preparation/publication. The same caller-owned runner then builds the Forge site

@@ -53,9 +53,11 @@ that every script is a stable public API.
 
 ## Repository governance
 
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `merge_policy.py` | Pure decision helper for merge method, long-lived lanes and explicit temporary-branch cleanup policy. It makes no GitHub API calls. | Merge-policy workflow and Forge tests. |
+Forge owns no merge-policy implementation script. The repository's thin
+`.github/workflows/merge-policy.yml` wrapper consumes the exact released
+tool.cad.ci reusable merge-policy workflow. Merge-method decisions, current-head
+checks, branch lifecycle and allow-listed post-merge cleanup therefore remain in
+the shared tool owner rather than in this scripts directory.
 
 ## Release publication
 

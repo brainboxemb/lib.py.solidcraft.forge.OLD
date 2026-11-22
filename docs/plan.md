@@ -56,10 +56,10 @@ Current externally accepted stack:
 
 - `lib.py.cad.ci 0.11.0` @
   `e621daf6e309bdd0e3f643a12007f1b66490696d`;
-- `tool.cad.ci 0.18.1` @
-  `e29d3127d5d3f9310f3cab4e27430a64a61c21cc`;
-- `tool.cad.ci.test` #77 / PR #78 / acceptance run
-  `45019713862` — success.
+- `tool.cad.ci 0.19.0` @
+  `5677c41a61929b32ab2cb07087a6505f7b9347d8`;
+- `tool.cad.ci.test` #80 / PR #81 / acceptance run
+  `45022699789` — success for tool 0.19.0, including the released merge-policy contract.
 
 The released root composite action is the accepted long-lived durable path:
 
@@ -104,7 +104,7 @@ as obsolete.
 | `cad-verification-package` | **current** | Prepares the exact released verification-library dependency once for model/reference consumers. |
 | `forge-tests` | **current** | Tests the exact built Forge package; separate from release verification. |
 | `forge-release` | **current** | Exact-candidate release evidence consumed by the release validator. |
-| `model-verification-batch` | **current; improvement active** | Shared SolidCraft runtime remains desired; #661 addresses coarse internal selected-model granularity. |
+| `model-verification-batch` | **current; selective context accepted** | #661/#688 proved one-model, no-op and explicit full-run behavior on the released active-dependent contract. |
 | `reference-verification-batch` | **current** | Shared heavy reference runtime for independent CAD implementations and diagram production. |
 | `release-policy` | **current** | Tests release validator/publisher without CAD runtimes and is an explicit release gate. |
 | `site-source` | **current** | Keeps presentation/source validation independent from CAD execution. |
@@ -115,67 +115,46 @@ Do not remove or combine an item merely to reduce directory count. Any future
 structural simplification needs a separate requirements/design decision after
 the current responsibilities and consumers remain preserved.
 
-### WS1 — #661 / #688 selective shared model batch qualification
+### WS1 — #674 shared merge/lane policy adoption
 
-Primary lane: `dev-ci`. **Now; implementation merged, qualification active.**
+Primary lane: `dev-ci`. **Now.**
 
-#681 merged the accepted `selection_context: direct_dependents` consumer
-implementation to `dev-ci` at `601fcd7fef7b17610fbdef32e8c5352bf7ba6788`.
+Owner work is complete:
 
-Remaining proof is tracked by #688:
+- `tool.cad.ci` #103 / PR #104 released 0.19.0 at
+  `5677c41a61929b32ab2cb07087a6505f7b9347d8`;
+- `tool.cad.ci.test` #80 / PR #81 / run `45022699789` externally accepted
+  that exact release;
+- `lib.py.cad.ci` remains 0.11.0 at
+  `e621daf6e309bdd0e3f643a12007f1b66490696d`.
 
-1. one-model `simple-box` source probe on the merged implementation;
-2. remove that probe before merge;
-3. durable `dev-ci` no-model run after the plan/evidence merge;
-4. explicit complete run through the normal `dev-ci -> main` promotion path.
+Forge consumer adoption status:
 
-For each run record top-level targets, `active_dependents`, models actually
-executed, container starts and duration. The temporary model probe must never
-land on `dev-ci`.
+1. **complete** — PR #695 adopted the thin released policy wrapper; dispatched
+   `dev-ci` integration `45024685131` and Pages deployment are green;
+2. **complete** — #696 / PR #697 proved the live short-lived path:
+   pre-merge run `45025122643`, policy run `45025195431`, squash result
+   `027513809f24115e0ea94727a12276833c74df64`, allow-listed temporary-head
+   cleanup, dispatched `dev-ci` integration `45025211322` and Pages
+   deployment `45025267221`;
+3. **effectively complete but still open — #699** — plan reconciliation is merged and lane integration `45026629675` is green; close the child after this final status-only reconciliation;
+4. **now/final #674 proof** — exact `dev-ci -> main` through repository
+   `/merge`: normal merge commit, permanent `dev-ci` preservation and
+   successful dispatched integration;
+5. close #674 only after that direct-promotion evidence is recorded### WS2 — active CAD-library lane
 
-Measurement 1 is complete:
+Primary lane: `dev-cad`. **Independent of #674.**
 
-- PR #690 / run `45021440751` selected six top-level targets;
-- shared batch received only `simple-box`;
-- one SolidCraft container processed only `simple-box=pass`;
-- batch timing: pull 8.481 s, container/process 3.705 s, total 12.336 s;
-- pre-fix comparison: run `45014107995` processed all 36 models with ~63.198 s container/process.
-
-The temporary `simple-box` probe is removed before merge.
-
-Close #661 only after the remaining no-model durable run and explicit full
-promotion run are recorded. Reference-batch sparse selection remains outside
-this work.
-### WS2 — #567 mixed line/arc closed Sketch profiles
-
-Primary lane: `dev-cad`. **Now, parallel with #661.**
-
-Pinned SolidCraft 0.45 native commands already provide the required low-level
-building blocks:
-
-- `sketch.line`;
-- `sketch.arc.center_point`;
-- `sketch.arc.three_point`;
-- `sketch.arc.tangent`;
-- stable created curve/point ids;
-- `sketch.loose_ends` / tie diagnostics.
-
-Next action is a focused Forge connected-curve profile API that:
-
-- preserves authored line/arc intent;
-- produces a genuinely closed native profile;
-- works for ordinary extrusion;
-- provides the foundation needed by the sheet-metal contour/flange work;
-- does not fall back to Polygon2D approximation or raw caller command
-  dictionaries.
-
-Requirements/design/API contract must be written before implementation.
-
-### WS3 — next CAD-library work
-
-- #568 native sheet-metal flange/contour — **next** after #567 profile
-  foundation.
-- #349 focused Revolve child first — **later**.
+- #567 mixed line/arc closed Sketch profiles — **complete**.
+- #682 native `sheet.flange(type=edge)` — **complete**.
+- #683 reusable open connected Sketch chains — **complete**; PR #694 merged to
+  `dev-cad`, native batch `45025059775` and lane integration `45025329364`
+  are green.
+- #684 native `sheet.flange(type=contour)` — **now** in the independent
+  `dev-cad` lane / draft PR #698.
+- #568 remains the tracking parent for the SolidCraft 0.45 flange family.
+- #679 component-local feature-name namespacing — **next** after #684 unless
+  downstream CAD makes it the immediate blocker.
 
 ### WS4 — cross-repository terminology and Verification/reference quality
 
@@ -200,14 +179,15 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **blocked on #688 proof** | Implementation merged in #681; close after one-model/no-op/full qualification is recorded. |
-| #688 Qualify selective Forge model batch | dev-ci | **now** | Run temporary one-model probe, remove it before merge, then record no-op durable and promotion full-run evidence. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
-| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
-| #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
+| #674 Shared merge/lane policy adoption | dev-ci | **now** | After #699, promote exact `dev-ci -> main` through `/merge`; verify normal merge commit, permanent-lane preservation and dispatched integration. |
+| #699 Prepare dev-ci plan for final promotion proof | dev-ci | **effectively complete but still open** | Reconciliation is merged and integration `45026629675` is green; close after this final status-only plan update. |
+| #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **now** | Track active #684; #682 and #683 are complete. |
+| #684 Native contour flange | dev-cad | **now** | Complete draft PR #698 native qualification independently of the CI promotion lane. |
+| #679 Namespace repeated component-local feature names | dev-cad | **next** | Resume after #684 unless downstream HUB75 work makes it the immediate blocker. |
+| #659 Standardize build/verification/results terminology | cross-repo | **later** | Coordinate after #674 so governance architecture and vocabulary do not move together. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
-| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with actual sheet-metal workflow. |
+| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace the solid approximation with actual sheet-metal workflow. |
 | #347 Patterns accept any applied Shape feature | dev-cad | **later** | Generalize seed validation by native feature identity. |
 | #325 AnchorFrame regression root cause | dev-cad | **later** | Resume only when it becomes an active dependency. |
 | #81 Inline rotated AnchorFrame references | dev-cad | **later** | Investigate occurrence-local frames with #325. |
@@ -216,6 +196,17 @@ Requirements/design/API contract must be written before implementation.
 | #8 Tube/RectTube/OvalTube | dev-cad | **later** | Reconcile intent with native shell/pipe/boolean histories. |
 | #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325, then close/rewrite. |
 | #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate remaining constraint scope from overlap with #9. |
+
+## Recently completed
+
+- #696 / PR #697 shared-policy short-lived canary — squash, temporary-head cleanup and dispatched `dev-ci` integration proven.
+- #683 reusable open connected Sketch chains — merged and natively qualified on `dev-cad`.
+- #567 connected mixed line/arc profiles — merged and qualified on `dev-cad`.
+- #682 native sheet edge flange — merged and qualified on `dev-cad`.
+- #661/#688 selective shared model batch — complete; one-model, no-op and
+  full-promotion evidence accepted and promoted to main.
+- tool.cad.ci 0.19.0 merge-policy owner/release acceptance — complete; Forge
+  #674 is the consumer adoption gate.
 
 ## Next release checkpoint
 
