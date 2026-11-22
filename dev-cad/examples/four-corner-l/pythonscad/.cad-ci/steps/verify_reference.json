@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "690a9d4a593e474a146d8f9fcfb9bac759b09f3d78daeab80129e98b87ffdd75",
-  "duration_seconds": 0.57,
+  "action_type": "copy",
+  "bundle_sha256": "096098e2d38ce2040681a97d645a63a180da08bba6ae3e532d178404e0ea30c2",
+  "duration_seconds": 0.097,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:33:17.750Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T10:28:57.781Z",
   "item": "examples-four-corner-l-pythonscad",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "10c037813b39b15a80a06ff229c965a3bc979af57460fce34695a4b3f77592ed"
+      "sha256": "54369a3c742ad2061a5688e90ee2b2a77583ff7b47d3207b4e555484d2a6abde"
     }
   },
-  "run_finished_at": "2026-11-21T22:34:10.794Z",
-  "run_started_at": "2026-11-21T22:28:53.662Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:33:17.685Z",
+  "run_finished_at": "2026-11-22T10:29:59.442Z",
+  "run_started_at": "2026-11-22T10:23:48.919Z",
+  "schema": 4,
+  "started_at": "2026-11-22T10:28:57.684Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "3d393bd94dfb5e2c54d9d82e1b9fd970946fe75bd45a4259d3f04e8e089744bd",
+  "target_spec_digest": "33e7280089c91fe1c274760e226e6555bceda220f488babaaa2f3a2801a1af44",
   "timeout_seconds": null
 }

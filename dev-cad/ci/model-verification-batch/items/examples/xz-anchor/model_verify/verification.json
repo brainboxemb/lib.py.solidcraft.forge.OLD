@@ -1,0 +1,404 @@
+{
+  "checks": [
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "baseline/measurements.json",
+          "sha256": "28b95f9ee35b52fa7df6d1e68fb66b7fb786e5a434cc8c707cc1e6c910ec1d54",
+          "size": 3757
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_envelopes": {
+          "actual_count": 3,
+          "expected_count": 3,
+          "kind": "body_envelopes",
+          "matched_pairs": [
+            {
+              "actual": {
+                "label": "Board",
+                "max": [
+                  20.0,
+                  12.0,
+                  20.0
+                ],
+                "min": [
+                  -20.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  20.0,
+                  12.0,
+                  20.0
+                ],
+                "min": [
+                  -20.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "RightMarker",
+                "max": [
+                  20.0,
+                  0.0,
+                  20.0
+                ],
+                "min": [
+                  10.0,
+                  -10.0,
+                  10.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  20.0,
+                  0.0,
+                  20.0
+                ],
+                "min": [
+                  10.0,
+                  -10.0,
+                  10.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "LeftMarker",
+                "max": [
+                  -10.0,
+                  0.0,
+                  20.0
+                ],
+                "min": [
+                  -20.0,
+                  -10.0,
+                  10.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  -10.0,
+                  0.0,
+                  20.0
+                ],
+                "min": [
+                  -20.0,
+                  -10.0,
+                  10.0
+                ]
+              },
+              "max_delta": 0.0
+            }
+          ],
+          "pass": true,
+          "tolerance": 0.001,
+          "unmatched_actual": [],
+          "unmatched_expected": []
+        },
+        "named_bodies": [
+          {
+            "body_name": "RightMarker",
+            "bounds": {
+              "actual_max": [
+                20.0,
+                0.0,
+                20.0
+              ],
+              "actual_min": [
+                10.0,
+                -10.0,
+                10.0
+              ],
+              "deltas": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "expected_max": [
+                20.0,
+                0.0,
+                20.0
+              ],
+              "expected_min": [
+                10.0,
+                -10.0,
+                10.0
+              ],
+              "kind": "bounds",
+              "label": "RightMarker bounds",
+              "max_delta": 0.0,
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "name_prefix": "RightMarker"
+          },
+          {
+            "body_name": "LeftMarker",
+            "bounds": {
+              "actual_max": [
+                -10.0,
+                0.0,
+                20.0
+              ],
+              "actual_min": [
+                -20.0,
+                -10.0,
+                10.0
+              ],
+              "deltas": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "expected_max": [
+                -10.0,
+                0.0,
+                20.0
+              ],
+              "expected_min": [
+                -20.0,
+                -10.0,
+                10.0
+              ],
+              "kind": "bounds",
+              "label": "LeftMarker bounds",
+              "max_delta": 0.0,
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "name_prefix": "LeftMarker"
+          }
+        ]
+      },
+      "id": "baseline",
+      "reason": null,
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "saved_designs/size_80x40/model.sc",
+          "sha256": "b2cdec778ef34f5e54c39fc3ac740f8c915fa860eda93ba1706a597be461979c",
+          "size": 9334
+        },
+        {
+          "kind": "file",
+          "path": "saved_designs/size_80x40/measurements.json",
+          "sha256": "714b16e7fdbe90ea9283bc0066f854eb583c6d4332dbbc58468d8f42abeba5cd",
+          "size": 3754
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_envelopes": {
+          "actual_count": 3,
+          "expected_count": 3,
+          "kind": "body_envelopes",
+          "matched_pairs": [
+            {
+              "actual": {
+                "label": "Board",
+                "max": [
+                  40.0,
+                  12.0,
+                  40.0
+                ],
+                "min": [
+                  -40.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  40.0,
+                  12.0,
+                  40.0
+                ],
+                "min": [
+                  -40.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "RightMarker",
+                "max": [
+                  40.0,
+                  0.0,
+                  40.0
+                ],
+                "min": [
+                  30.0,
+                  -10.0,
+                  30.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  40.0,
+                  0.0,
+                  40.0
+                ],
+                "min": [
+                  30.0,
+                  -10.0,
+                  30.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "LeftMarker",
+                "max": [
+                  -30.0,
+                  0.0,
+                  40.0
+                ],
+                "min": [
+                  -40.0,
+                  -10.0,
+                  30.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  -30.0,
+                  0.0,
+                  40.0
+                ],
+                "min": [
+                  -40.0,
+                  -10.0,
+                  30.0
+                ]
+              },
+              "max_delta": 0.0
+            }
+          ],
+          "pass": true,
+          "tolerance": 0.001,
+          "unmatched_actual": [],
+          "unmatched_expected": []
+        },
+        "named_bodies": [
+          {
+            "body_name": "RightMarker",
+            "bounds": {
+              "actual_max": [
+                40.0,
+                0.0,
+                40.0
+              ],
+              "actual_min": [
+                30.0,
+                -10.0,
+                30.0
+              ],
+              "deltas": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "expected_max": [
+                40.0,
+                0.0,
+                40.0
+              ],
+              "expected_min": [
+                30.0,
+                -10.0,
+                30.0
+              ],
+              "kind": "bounds",
+              "label": "RightMarker bounds",
+              "max_delta": 0.0,
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "name_prefix": "RightMarker"
+          },
+          {
+            "body_name": "LeftMarker",
+            "bounds": {
+              "actual_max": [
+                -30.0,
+                0.0,
+                40.0
+              ],
+              "actual_min": [
+                -40.0,
+                -10.0,
+                30.0
+              ],
+              "deltas": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "expected_max": [
+                -30.0,
+                0.0,
+                40.0
+              ],
+              "expected_min": [
+                -40.0,
+                -10.0,
+                30.0
+              ],
+              "kind": "bounds",
+              "label": "LeftMarker bounds",
+              "max_delta": 0.0,
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "name_prefix": "LeftMarker"
+          }
+        ]
+      },
+      "id": "saved_design_size_80x40",
+      "reason": null,
+      "status": "pass"
+    }
+  ],
+  "input": "/output/items/examples/xz-anchor/model_verify/native/model.sc",
+  "metadata": {},
+  "schema": "cad-verification",
+  "schema_version": 1,
+  "status": "pass",
+  "verification_id": "xz-anchor"
+}

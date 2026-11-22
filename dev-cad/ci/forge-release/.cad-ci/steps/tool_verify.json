@@ -1,12 +1,13 @@
 {
   "action_executed": true,
+  "action_type": "command",
   "bundle_sha256": "ff111949a1d54d98aa2270eb7cd9ee1ba50487699ee22ef94c2d235cf97ec367",
-  "duration_seconds": 0.963,
+  "duration_seconds": 0.916,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-22T09:07:28.814Z",
+  "finished_at": "2026-11-22T10:27:38.620Z",
   "item": "forge-release",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -17,12 +18,12 @@
       "sha256": "3d7ea248305944a41606627c5e05dc860c80e4609fdfdc483ab6bbc3dd60465e"
     }
   },
-  "run_finished_at": "2026-11-22T09:09:56.027Z",
-  "run_started_at": "2026-11-22T09:07:18.530Z",
-  "schema": 3,
-  "started_at": "2026-11-22T09:07:27.853Z",
+  "run_finished_at": "2026-11-22T10:29:59.442Z",
+  "run_started_at": "2026-11-22T10:23:48.919Z",
+  "schema": 4,
+  "started_at": "2026-11-22T10:27:37.708Z",
   "status": "pass",
   "step": "tool_verify",
-  "target_spec_digest": "52b11c6e061c2723dd758093596a518f22973be122d2d3d2b2a66cdd5cea5416",
+  "target_spec_digest": "3b2d178bf335cd92b9048bf41409c306487e4f109c9c2fa506f13a71f2fe593d",
   "timeout_seconds": null
 }

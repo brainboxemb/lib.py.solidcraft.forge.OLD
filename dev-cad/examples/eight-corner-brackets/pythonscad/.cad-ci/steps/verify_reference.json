@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "a1359c467cc46ddf58db29ecbf51cf0534c4bd2f55ddcb744b5107214d743abd",
-  "duration_seconds": 0.575,
+  "action_type": "copy",
+  "bundle_sha256": "baafcd71bcf50d6f2cda3d06450df3e007dc7397cf5821b1822905e32a4f4b80",
+  "duration_seconds": 0.093,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:33:13.056Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T10:28:57.012Z",
   "item": "examples-eight-corner-brackets-pythonscad",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "76828df527de5ef16a6834eea4ff85680932b615f4eb2dc89ecb1b5ebaaff775"
+      "sha256": "22236b37ec95de9f38f6694d34bda836fd40fc720c533b4bbe4ce800191e9adb"
     }
   },
-  "run_finished_at": "2026-11-21T22:34:10.794Z",
-  "run_started_at": "2026-11-21T22:28:53.662Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:33:12.990Z",
+  "run_finished_at": "2026-11-22T10:29:59.442Z",
+  "run_started_at": "2026-11-22T10:23:48.919Z",
+  "schema": 4,
+  "started_at": "2026-11-22T10:28:56.919Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "e34b28340ebf4d5600b67a69976aee11176afe55c970924bfec14fad2a296601",
+  "target_spec_digest": "d9e4b1e582844ab2fbb5342cf9bfee865036bc89d6854da47d99552936103b6f",
   "timeout_seconds": null
 }

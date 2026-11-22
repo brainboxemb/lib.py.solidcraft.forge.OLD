@@ -1,28 +1,29 @@
 {
   "action_executed": true,
-  "bundle_sha256": "8ac21e513dca9f29cab9ec46352391765111b4994b11159f2e1e54f32527fbd3",
-  "duration_seconds": 0.58,
+  "action_type": "copy",
+  "bundle_sha256": "44c0bf883eedc4e470296b34c991926b362e82b55d2fa8b74734dc49737a78fa",
+  "duration_seconds": 0.212,
   "engine": "scons",
-  "engine_schema": 2,
+  "engine_schema": 3,
   "error": null,
-  "exit_code": 0,
-  "finished_at": "2026-11-21T22:34:06.708Z",
+  "exit_code": null,
+  "finished_at": "2026-11-22T10:29:06.820Z",
   "item": "examples-top-sketch-after-chamfer-pythonscad",
   "outcome": "BUILT",
-  "output_state": "UNCHANGED",
+  "output_state": "RESTORED",
   "outputs": {
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "57152e897a2ed83592c0fdeb31624fa84a9c28444df6afcc5b78e7da7cf8f3d4"
+      "sha256": "9a28f115942271cdac9c05cf833cc0e276fa884b5488ee126bbf9c5a8eecc3a7"
     }
   },
-  "run_finished_at": "2026-11-21T22:34:10.794Z",
-  "run_started_at": "2026-11-21T22:28:53.662Z",
-  "schema": 3,
-  "started_at": "2026-11-21T22:34:06.642Z",
+  "run_finished_at": "2026-11-22T10:29:59.442Z",
+  "run_started_at": "2026-11-22T10:23:48.919Z",
+  "schema": 4,
+  "started_at": "2026-11-22T10:29:06.608Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "99bfcc06897e3aa2edcee79fa3d1f676cc4ed658dfe07df885954c2220f7b311",
+  "target_spec_digest": "d41abb05ebb729aeda42ac77416bf67a433cebb5210322de187cc30c45baaed7",
   "timeout_seconds": null
 }
