@@ -66,9 +66,13 @@ class VerificationBatchContractTests(unittest.TestCase):
         self.assertIn("continue so every case gets a result", text)
         self.assertIn("return 1 if failed else 0", text)
 
-    def test_model_batch_writes_child_owned_paths_directly(self):
+    def test_model_batch_writes_selected_child_owned_paths_directly(self):
         text = MODEL_BATCH.read_text(encoding="utf-8")
-        self.assertIn("for slug in processed_declarative_slugs()", text)
+        ci_text = MODEL_BATCH_CI.read_text(encoding="utf-8")
+        self.assertIn("selection_context: direct_dependents", ci_text)
+        self.assertIn("def active_declarative_slugs(", text)
+        self.assertIn('os.environ.get("CAD_CI_ACTIVE_DEPENDENTS_JSON")', text)
+        self.assertIn("for slug in slugs:", text)
         self.assertIn(
             'case_root = batch_root / "examples" / slug',
             text,
