@@ -176,10 +176,68 @@ class NativeSlotFamilyTests(unittest.TestCase):
                         profile = factory()
                         sketch.add(profile, anchor=CENTER)
 
-    def test_symbolic_width_is_rejected_by_direct_native_slot_creator(self):
-        from scpf import Parameter, SlotCenterToCenter2D
-        with self.assertRaisesRegex(TypeError, "sketch.draw.dimensioned"):
-            SlotCenterToCenter2D((0, 0), (20, 0), Parameter("width", 8))
+    def test_symbolic_width_stays_native_for_all_slot_creators(self):
+        from scpf import Parameter
+
+        width = Parameter("slot_width", 8)
+        cases = (
+            (
+                "sketch.slot.center_to_center",
+                lambda: SlotCenterToCenter2D((0, 0), (20, 0), width),
+            ),
+            (
+                "sketch.slot.overall",
+                lambda: SlotOverall2D((-15, 0), (15, 0), width),
+            ),
+            (
+                "sketch.slot.center_point",
+                lambda: SlotCenterPoint2D((0, 0), (10, 0), width),
+            ),
+            (
+                "sketch.slot.arc_three_point",
+                lambda: SlotArcThreePoint2D(
+                    (-15, 0), (0, 10), (15, 0), width
+                ),
+            ),
+            (
+                "sketch.slot.arc_center",
+                lambda: SlotArcCenter2D(
+                    (0, 0), (12, 0), width, sweep=120
+                ),
+            ),
+        )
+
+        for command_name, factory in cases:
+            with self.subTest(command=command_name):
+                with Sketch(plane="XY") as sketch:
+                    factory()
+                commands = compile_model(
+                    sketch.extrude(4),
+                    "ParametricSlotWidth",
+                )["commands"]
+                slot = next(
+                    row for row in commands
+                    if row["command"] == command_name
+                )
+                self.assertEqual(slot["params"]["width"], "slot_width")
+                parameter = next(
+                    row["params"]
+                    for row in commands
+                    if row["command"] == "parameters.add"
+                    and row["params"]["name"] == "slot_width"
+                )
+                self.assertEqual(parameter["value"], 8)
+                self.assertEqual(parameter["unit"], "mm")
+
+    def test_symbolic_slot_width_still_requires_positive_current_value(self):
+        from scpf import Parameter
+
+        with self.assertRaisesRegex(ValueError, "positive finite"):
+            SlotCenterToCenter2D(
+                (0, 0),
+                (20, 0),
+                Parameter("slot_width", 0),
+            )
 
     def test_arc_center_requires_one_end_definition(self):
         from scpf import SlotArcCenter2D
