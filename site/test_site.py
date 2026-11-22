@@ -399,12 +399,13 @@ class SiteSourceTests(unittest.TestCase):
             ROOT / ".github" / "workflows" / "scpf.yml"
         ).read_text(encoding="utf-8")
         tool_revision = (
-            "59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9"
+            "d88d6e189c12edb5a30158c068145c099c17a019"
         )
         self.assertIn(
             f"brainboxemb/tool.cad.ci@{tool_revision}",
             workflow,
         )
+        self.assertEqual(workflow.count('jobs: "2"'), 2)
         self.assertNotIn("reusable-pr.yml", workflow)
         self.assertNotIn("build prepare-pr", workflow)
         self.assertNotIn("build-cleanup", workflow)
