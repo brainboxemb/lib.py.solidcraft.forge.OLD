@@ -31,6 +31,15 @@ class VerificationBatchContractTests(unittest.TestCase):
         self.assertEqual(text.count("source: items/{item_path}"), 3)
         self.assertNotIn("materialize]", text)
 
+    def test_no_model_item_overrides_copy_with_materializer(self):
+        for path in sorted((ROOT / "examples").glob("*/ci.yml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn(
+                "model_verification_batch.py, materialize",
+                text,
+                path.as_posix(),
+            )
+
     def test_batch_items_publish_item_projection_roots(self):
         model = MODEL_BATCH_CI.read_text(encoding="utf-8")
         reference = REFERENCE_BATCH_CI.read_text(encoding="utf-8")
