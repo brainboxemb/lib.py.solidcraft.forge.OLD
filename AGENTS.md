@@ -350,9 +350,10 @@ the immutable Git tag and GitHub Release are both created and verified against
 the intended green `main` SHA. The authoritative procedure is
 `docs/release.md`.
 
-The current workflow verifies candidates and publishes durable build/Page
-state, but does not itself create the Forge tag or GitHub Release. Issue #366 is
-complete and is not a release blocker.
+Normal Forge CI verifies candidates and publishes durable build/Page state; it
+never creates a release automatically. Publication is the separate owner-only
+`/release vX.Y.Z <exact-main-sha>` path documented in `docs/release.md`.
+Issue #366 is complete and is not a release blocker.
 
 ## Historical documents
 
