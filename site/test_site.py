@@ -399,7 +399,7 @@ class SiteSourceTests(unittest.TestCase):
             ROOT / ".github" / "workflows" / "scpf.yml"
         ).read_text(encoding="utf-8")
         tool_revision = (
-            "5677c41a61929b32ab2cb07087a6505f7b9347d8"
+            "b1474f6be66dc0236f2a5c2555af07a100447255"
         )
         self.assertIn(
             f"brainboxemb/tool.cad.ci@{tool_revision}",
