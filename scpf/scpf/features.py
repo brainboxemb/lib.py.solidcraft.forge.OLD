@@ -81,6 +81,7 @@ def _is_feature_tree(shape):
         "tapered_box",
         "sketch_base_extrusion",
         "sheet_base",
+        "sheet_edge_flange",
         "sheet_fold",
     ):
         return True
@@ -1226,6 +1227,14 @@ def _non_count_parameter_names(node, found=None):
                 found,
             )
             return found
+        if node.kind == "sheet_edge_flange":
+            original, edges, height, _angle, height_from, position, flip = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names(
+                (edges, height, height_from, position, flip),
+                found,
+            )
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1259,6 +1268,11 @@ def _pattern_angle_parameter_names(node, found=None):
     if found is None:
         found = set()
     if isinstance(node, Shape):
+        if node.kind == "sheet_edge_flange":
+            original, _edges, _height, angle, _height_from, _position, _flip = node.data
+            found.update(param.name for param in parameters_in(angle))
+            _pattern_angle_parameter_names(original, found)
+            return found
         if node.kind == "sheet_fold":
             original, _line, angle, _fixed, _position, _flip = node.data
             found.update(param.name for param in parameters_in(angle))
@@ -1369,6 +1383,37 @@ def _to_commands(shape, name):
             }
         )
         return [rule, *sketch, base], meta
+
+    if shape.kind == "sheet_edge_flange":
+        (
+            original,
+            edges,
+            height,
+            angle,
+            height_from,
+            position,
+            flip,
+        ) = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError("sheet flange requires existing sheet material")
+        params = {
+            "type": "edge",
+            "edges": [
+                [command_value(value) for value in point]
+                for point in edges
+            ],
+            "height": command_value(height),
+            "angle": command_value(angle),
+            "body": name,
+        }
+        if height_from is not None:
+            params["height_from"] = height_from
+        if position is not None:
+            params["position"] = position
+        if flip:
+            params["flip"] = True
+        return steps + [_command("sheet.flange", **params)], base
 
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data

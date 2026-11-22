@@ -136,6 +136,37 @@ treated #567's closed-profile builder as the contour foundation.
 Current 0.45 split:
 
 - #682 native `sheet.flange(type=edge)` — **now**; first focused implementation;
+
+#### #682 focused contract
+
+Public API:
+
+```python
+sheet.flange(
+    edges=[(40, -20, 2)],
+    height=20,
+    angle=90,
+    height_from=None,
+    position=None,
+    flip=False,
+)
+```
+
+Initial scope:
+
+- explicit fixed XYZ edge-pick points only;
+- positive parameter-capable flange `height`;
+- parameter-capable `angle`, default 90°;
+- optional exact SolidCraft 0.45 `height_from`: `outer|inner|tangent`;
+- optional exact SolidCraft 0.45 `position`: `inside|outside|middle|material_outside|tangent`;
+- `flip` boolean;
+- existing sheet rule owns thickness, K-factor and bend radius.
+
+Out of scope for #682: per-edge dictionaries/segments, radius override, corner
+relief override, chained `then` bends, new generic edge-selector architecture.
+
+Qualification must prove native edge-flange history, flat-pattern continuity and
+saved-design height/angle mutation.
 - #683 reusable open connected Sketch curve chains — **next**; generic Sketch capability;
 - #684 native `sheet.flange(type=contour)` — **blocked on #683**;
 - #568 parent — **tracking**, complete only when the required child slices are accepted;

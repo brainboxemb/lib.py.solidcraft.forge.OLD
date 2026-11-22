@@ -1746,3 +1746,45 @@ then consumes it.
 `sheet.manage_rules` remains the single source for thickness, K-factor and
 default bend radius. `sheet.flange(type=edge|contour)` inherits that rule rather
 than creating a second material definition.
+
+## Native edge-flange lowering
+
+`Shape.flange()` is an existing-sheet operation. It records a feature node that
+wraps the prior sheet history rather than constructing a second body.
+
+```text
+sheet_base / later sheet history
+  -> Shape(kind="sheet_edge_flange", ...)
+  -> recurse existing history
+  -> require base metadata sheet=True
+  -> sheet.flange(
+       type="edge",
+       edges=[[x,y,z], ...],
+       height=<expression>,
+       angle=<expression>,
+       body=<current body name>,
+       height_from?=<explicit value>,
+       position?=<explicit value>,
+       flip?=true
+     )
+```
+
+### Selection boundary
+
+The first slice deliberately accepts only explicit XYZ pick points. Forge already
+has richer edge-selection machinery for fillet/chamfer, but importing that whole
+selector surface into sheet metal would broaden #682 without a demonstrated need.
+Later requirements may add a generic sheet-edge selector deliberately.
+
+### Material-rule boundary
+
+The recursive sheet base metadata records sheet intent/rule properties. The edge
+flange compiler checks that sheet metadata exists, but does not restate thickness,
+K-factor or bend radius in `sheet.flange`: SolidCraft 0.45 inherits those from the
+active sheet rule and refuses per-flange material fields.
+
+### Parameter ownership
+
+Height and angle stay as authored Forge Parameter/Expression values and lower via
+`command_value()`. XYZ selection points are fixed finite pick coordinates because
+they identify topology rather than drive geometry.
