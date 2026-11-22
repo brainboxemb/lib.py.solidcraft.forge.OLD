@@ -8,6 +8,8 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+- Adopt externally accepted `tool.cad.ci 0.20.0` for the shared `/merge` policy, adding history-preserving `main -> dev-cad|dev-ci` synchronization while retaining normal lane-to-main promotion and squash for ordinary PRs (#718).
+
 ### Changed
 
 - Forge long-lived branch integration now consumes the externally accepted
