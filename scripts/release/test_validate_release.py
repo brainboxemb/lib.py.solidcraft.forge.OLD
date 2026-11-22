@@ -77,6 +77,21 @@ class ReleaseValidatorTests(unittest.TestCase):
         self.assertIn("## [0.11.0] - 2026-11-22", notes)
         self.assertNotIn("## [0.10.0]", notes)
 
+    def test_rejects_main_sha_mismatch(self):
+        with tempfile.TemporaryDirectory() as temp:
+            notes = Path(temp) / "notes.md"
+            with patch.object(validator, "git", return_value="b" * 40):
+                with self.assertRaisesRegex(SystemExit, "current main HEAD"):
+                    validator.validate("0.11.0", TARGET, notes)
+
+    def test_rejects_package_version_mismatch(self):
+        docs = documents()
+        docs[(TARGET, "scpf/pyproject.toml")] = (
+            '[project]\nname = "scpf"\nversion = "0.10.0"\n'
+        )
+        with self.assertRaisesRegex(SystemExit, "package version mismatch"):
+            self.run_validate(docs)
+
     def test_rejects_active_release_blocker(self):
         docs = documents()
         docs[(TARGET, validator.BLOCKERS_PATH)] = "# comment\nowner issue still open\n"
@@ -111,7 +126,9 @@ class ReleaseValidatorTests(unittest.TestCase):
         self.assertIn("issue_comment:", workflow)
         self.assertIn("github.actor == github.repository_owner", workflow)
         self.assertIn("/release ", workflow)
-        self.assertIn("scripts/release/validate_release.py", workflow)
+        self.assertIn("scripts/release/publish_release.py", workflow)
+        self.assertNotIn("gh release create", workflow)
+        self.assertNotIn("git tag -a", workflow)
         self.assertNotIn("workflow_run:", workflow)
 
 
