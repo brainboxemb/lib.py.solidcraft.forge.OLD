@@ -16,6 +16,7 @@ strategy:
   reuse: true
 steps:
   - id: verify_models
+    selection_context: direct_dependents
     inputs:
       - examples/*/ci.yml
       - examples/*/scpf/**

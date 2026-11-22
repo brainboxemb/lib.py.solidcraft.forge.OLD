@@ -54,12 +54,12 @@ main.
 
 Current externally accepted stack:
 
-- `lib.py.cad.ci 0.10.0` @
-  `397fb04005b46de8d433cb18c091b1e73714b877`;
-- `tool.cad.ci 0.18.0` @
-  `b62f9d0b169aa201a3c66c3166f364396b2d71bc`;
-- `tool.cad.ci.test` #73 / PR #74 / acceptance run
-  `45010776155` — success.
+- `lib.py.cad.ci 0.11.0` @
+  `e621daf6e309bdd0e3f643a12007f1b66490696d`;
+- `tool.cad.ci 0.18.1` @
+  `e29d3127d5d3f9310f3cab4e27430a64a61c21cc`;
+- `tool.cad.ci.test` #77 / PR #78 / acceptance run
+  `45019713862` — success.
 
 The released root composite action is the accepted long-lived durable path:
 
@@ -115,37 +115,44 @@ Do not remove or combine an item merely to reduce directory count. Any future
 structural simplification needs a separate requirements/design decision after
 the current responsibilities and consumers remain preserved.
 
-### WS1 — #661 Forge consumer validation of shared batch/selectivity
+### WS1 — #661 Forge consumer adoption of selective shared model batch
 
 Primary lane: `dev-ci`. **Now.**
 
-The shared batch/copy pattern is working and the durable workflow structure is
-now stable. The remaining ecosystem question is whether a one-model change can
-restrict the shared model-build batch itself, rather than merely selecting the
-top-level CAD-CI graph correctly.
+Measured released-stack evidence established the original problem:
 
-Required evidence on the current released stack:
+- one-model run `45014107995`: top-level graph selected only six targets, but
+  `model-verification-batch` still executed all 36 active Forge models;
+- no-model durable run `45014447149`: no model/reference batch started;
+- explicit full run `45011709878`: full catalog execution is correct.
 
-1. one-model edit;
-2. no-op run;
-3. explicit complete run.
+The generic gap is now fixed and externally accepted by its owners:
 
-For each, capture:
+- `lib.py.cad.ci 0.11.0` adds signature-safe
+  `selection_context: direct_dependents`;
+- `tool.cad.ci 0.18.1` pins that exact release;
+- `tool.cad.ci.test` #77 / PR #78 / run `45019713862` proves the released
+  behavior end-to-end.
 
-- selected top-level SCons items;
-- models actually executed by the shared batch;
-- reused/current results;
-- runtime image pulls/container starts;
-- total batch duration and provenance.
+Forge consumer work is therefore limited to:
 
-If Forge already meets the required selectivity contract, close #661 with
-evidence and let downstream CAD consumers adopt the same pattern.
+1. pin the exact accepted `tool.cad.ci 0.18.1` revision;
+2. opt only `model-verification-batch:verify_models` into
+   `selection_context: direct_dependents`;
+3. read `CAD_CI_ACTIVE_DEPENDENTS_JSON`, validate those ids against Forge's
+   existing processed declarative model ids, and compile/verify only that
+   selected subset;
+4. keep an explicit empty direct-dependent selection runtime-free;
+5. rerun the one-model, no-op and explicit-full evidence and compare actual
+   model count/container starts/duration.
 
-If a generic gap is demonstrated, record the Forge consumer requirement and evidence here,
-then move the normative generic requirement and implementation to the actual owner
-(`lib.py.cad.ci`, `tool.cad.ci` or verification). Forge validates the released result; it does not govern the generic CI architecture.
+Forge must not re-run Git selection, infer changed paths or add a second
+planner. The exact active-dependent list, target signature, cache identity and
+public evidence remain generic CAD-CI responsibilities.
 
-Do not add a Forge- or consumer-local changed-path planner.
+The independent-reference batch is explicitly outside #661. Its nested
+model/engine sparse-selection problem is different and must not be redesigned
+inside this model-batch fix.
 
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
@@ -201,7 +208,7 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0; move any generic requirement/change to the owning CAD-CI repository and qualify its release from Forge. |
+| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Adopt accepted tool 0.18.1/lib 0.11.0 in the model batch only, then remeasure one-model/no-op/full execution. |
 | #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |

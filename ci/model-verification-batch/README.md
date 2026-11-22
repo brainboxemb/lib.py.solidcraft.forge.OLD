@@ -28,3 +28,21 @@ verification mechanics stay in the released `lib.py.cad.verification`
 dependency. Generic selection/scheduling stays in CAD-CI.
 
 See the repository-level [CI map](../README.md).
+
+## Selection context
+
+The `verify_models` command opts into released CAD-CI
+`selection_context: direct_dependents`.
+
+CAD-CI derives the already-active direct model consumers from the SCons graph
+and supplies their item ids through `CAD_CI_ACTIVE_DEPENDENTS_JSON`. The
+Forge batch validates those ids against its existing processed declarative
+models and puts only that ordered subset into the SolidCraft runtime manifest.
+
+Forge does **not** run its own Git/path selector. A full CAD-CI run naturally
+supplies the complete processed model set; an empty direct-dependent set starts
+no SolidCraft container.
+
+The exact list is part of the generic CAD-CI target signature/cache identity
+and public step evidence. That behavior is owned by released
+`lib.py.cad.ci 0.11.0` / `tool.cad.ci 0.18.1`.
