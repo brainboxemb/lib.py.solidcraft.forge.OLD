@@ -10,6 +10,8 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Changed
 
+- Assembly lowering now namespaces component-local native Sketch and named feature identities per reusable component definition, so independent or parameterized components may safely reuse authored names such as `Profile` without SolidCraft document-level collisions (#679).
+
 - Forge long-lived branch integration now consumes the externally accepted
   `tool.cad.ci 0.18.0` durable same-runner action. Generic durable scope/base
   resolution and complete build-scope preparation/publication are no longer
