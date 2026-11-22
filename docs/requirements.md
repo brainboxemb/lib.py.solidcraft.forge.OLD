@@ -346,7 +346,7 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.17.1` /
+Forge uses the exact externally accepted `tool.cad.ci 0.18.0` /
 `lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
@@ -417,6 +417,16 @@ For each push:
 The same runner that executes CAD-CI continues through build preparation,
 publication and Forge-owned site generation. There is no Actions artifact
 handoff and no second tool/library bootstrap.
+
+For long-lived branch integration, Forge must use the released tool.cad.ci
+0.18.0 root composite action in durable mode. That action owns generic durable
+scope discovery, incremental-base resolution, the single CAD-CI/SCons run,
+complete build-scope preparation and durable build publication.
+
+Forge workflow YAML must not duplicate those generic phases locally. Forge
+retains only repository policy (supported source lanes and PR docs-only/full
+promotion policy), Forge-owned site generation, and the final generic Pages
+publication call that publishes the already-built site content.
 
 ## Lane Pages publication
 
@@ -1040,7 +1050,7 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.17.1 backed
+The exact accepted dependency for this capability is tool.cad.ci 0.18.0 backed
 by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
