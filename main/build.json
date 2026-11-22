@@ -30,10 +30,10 @@
       "engine_schema": 4,
       "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
       "final_step": "tool_test",
-      "final_target_spec_digest": "59578c399c216b458953e2dffdea00c815eabd6f0626a30582d43a7cd2933505",
+      "final_target_spec_digest": "5ecf8c928263ff55d5d0862a7a6346bd74cc8689df9f5bf8bc9381dd2086d7eb",
       "item_id": "forge-tests",
       "outputs": [],
-      "source_commit": "8ab5594335449cb57b020b34238d1ca0ba67491e"
+      "source_commit": "4f5ab5e403602d534c5044f38365cb1437709a74"
     },
     "ci/model-verification-batch": {
       "engine": "scons",
@@ -78,7 +78,7 @@
       "final_target_spec_digest": "68f86cb4c9078f48ef61ddf035fe50d89e6278bf22cfdb7ec064a9ab98193d70",
       "item_id": "site-source",
       "outputs": [],
-      "source_commit": "8ab5594335449cb57b020b34238d1ca0ba67491e"
+      "source_commit": "4f5ab5e403602d534c5044f38365cb1437709a74"
     },
     "ci/solidcraft-reference": {
       "engine": "scons",
@@ -2313,5 +2313,5 @@
   },
   "schema": 1,
   "scope": "main",
-  "source_commit": "8ab5594335449cb57b020b34238d1ca0ba67491e"
+  "source_commit": "4f5ab5e403602d534c5044f38365cb1437709a74"
 }
