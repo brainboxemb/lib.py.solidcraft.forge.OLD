@@ -118,6 +118,14 @@ class ReleaseValidatorTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "no dated"):
             self.run_validate(docs)
 
+    def test_forge_release_item_watches_release_candidate_metadata(self):
+        root = Path(__file__).resolve().parents[2]
+        contract = (root / "ci/forge-release/ci.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("ci/forge-release/ci.yml", contract)
+        self.assertIn("CHANGELOG.md", contract)
+
     def test_workflow_is_explicit_owner_trigger_not_automatic(self):
         root = Path(__file__).resolve().parents[2]
         workflow = (root / ".github/workflows/release.yml").read_text(
