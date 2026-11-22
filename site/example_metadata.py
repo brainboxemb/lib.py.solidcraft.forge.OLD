@@ -8,19 +8,18 @@ from typing import Any
 
 import yaml
 
+from scpf.model_metadata import validate_model_metadata
+
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES_ROOT = ROOT / "examples"
 
-_REQUIRED_TEXT = (
-    "section",
-    "title",
-    "tagline",
-    "description",
-    "parameters",
-)
-_REQUIRED_LISTS = ("stages",)
 
+def _text(value: Any, label: str) -> str:
+    """Validate text used by the separate section-presentation config."""
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{label} must be a non-empty string")
+    return value.strip()
 
 
 @dataclass(frozen=True)
@@ -35,12 +34,6 @@ class ExampleMetadata:
     description: str
     parameters: str
     stages: tuple[str, ...]
-
-
-def _text(value: Any, label: str) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise ValueError(f"{label} must be a non-empty string")
-    return value.strip()
 
 
 
@@ -94,21 +87,6 @@ def section_presentation(section: str) -> tuple[int, str, str]:
         raise ValueError(f"unknown example section: {section}") from exc
 
 
-def _positive_int(value: Any, label: str) -> int:
-    if not isinstance(value, int) or value < 1:
-        raise ValueError(f"{label} must be a positive integer")
-    return value
-
-
-def _text_list(value: Any, label: str) -> tuple[str, ...]:
-    if not isinstance(value, list) or not value:
-        raise ValueError(f"{label} must be a non-empty list")
-    return tuple(
-        _text(item, f"{label}[{index}]")
-        for index, item in enumerate(value)
-    )
-
-
 def load_example_metadata(path: Path) -> ExampleMetadata:
     """Load one example model.yml presentation contract."""
 
@@ -118,29 +96,16 @@ def load_example_metadata(path: Path) -> ExampleMetadata:
         raise ValueError(f"{path}: model.yml must contain one mapping")
 
     slug = path.parent.name
-    values = {
-        key: _text(data.get(key), f"{slug}.{key}")
-        for key in _REQUIRED_TEXT
-    }
-    lists = {
-        key: _text_list(data.get(key), f"{slug}.{key}")
-        for key in _REQUIRED_LISTS
-    }
-    priority = _positive_int(data.get("priority"), f"{slug}.priority")
-
-    allowed = set(_REQUIRED_TEXT) | set(_REQUIRED_LISTS) | {"priority"}
-    unexpected = sorted(set(data) - allowed)
-    if unexpected:
-        raise ValueError(
-            f"{slug}.model.yml contains unsupported fields: "
-            + ", ".join(unexpected)
-        )
-
+    metadata = validate_model_metadata(data, label=f"{slug}.model.yml")
     return ExampleMetadata(
         slug=slug,
-        priority=priority,
-        **values,
-        **lists,
+        section=metadata.section,
+        priority=metadata.priority,
+        title=metadata.title,
+        tagline=metadata.tagline,
+        description=metadata.description,
+        parameters=metadata.parameters,
+        stages=metadata.stages,
     )
 
 

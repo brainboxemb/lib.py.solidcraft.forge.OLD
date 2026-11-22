@@ -10,6 +10,10 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Changed
 
+- Forge now owns one canonical reusable `model.yml` contract in `scpf.model_metadata`, with an exact seven-field template and shared mapping validator for Forge and CAD consumers. YAML parsing stays outside the CAD library and consumer-specific extensions are rejected (#703).
+
+### Changed
+
 - Forge long-lived branch integration now consumes the externally accepted
   `tool.cad.ci 0.18.0` durable same-runner action. Generic durable scope/base
   resolution and complete build-scope preparation/publication are no longer
