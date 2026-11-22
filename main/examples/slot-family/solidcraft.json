@@ -27,6 +27,70 @@
       }
     },
     {
+      "command": "parameters.add",
+      "params": {
+        "name": "c2c_start_x",
+        "expression": "-60",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "straight_y",
+        "expression": "-35",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "c2c_end_x",
+        "expression": "-40",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "slot_width",
+        "expression": "8",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "overall_start_x",
+        "expression": "-10",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "overall_end_x",
+        "expression": "20",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "center_point_x",
+        "expression": "55",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "center_point_end_x",
+        "expression": "65",
+        "unit": "mm"
+      }
+    },
+    {
       "command": "solid.box",
       "params": {
         "length": "width",
@@ -85,45 +149,162 @@
       }
     },
     {
-      "command": "sketch.slot.center_to_center",
+      "command": "sketch.draw.dimensioned",
       "params": {
-        "p0": [
-          -60.0,
-          -35.0
-        ],
-        "p1": [
-          -40.0,
-          -35.0
-        ],
-        "width": 8.0
+        "command": "sketch.slot.center_to_center",
+        "params": {
+          "p0": [
+            -60.0,
+            -35.0
+          ],
+          "p1": [
+            -40.0,
+            -35.0
+          ],
+          "width": "slot_width"
+        },
+        "dimensions": {
+          "length": "abs(((c2c_end_x)) - ((c2c_start_x)))"
+        }
+      },
+      "bind": {
+        "$sketch_1_slot_1_centre_line": "centre_line",
+        "$sketch_1_slot_1_middle": "middle"
       }
     },
     {
-      "command": "sketch.slot.overall",
+      "command": "sketch.constraint.horizontal_vertical",
       "params": {
-        "p0": [
-          -10.0,
-          -35.0
-        ],
-        "p1": [
-          20.0,
-          -35.0
-        ],
-        "width": 8.0
+        "line": "$sketch_1_slot_1_centre_line",
+        "mode": "horizontal"
       }
     },
     {
-      "command": "sketch.slot.center_point",
+      "command": "sketch.dimension",
       "params": {
-        "center": [
-          55.0,
-          -35.0
+        "entities": [
+          "origin",
+          "$sketch_1_slot_1_middle"
         ],
-        "end": [
-          65.0,
-          -35.0
+        "type": "horizontal",
+        "value": "abs((((c2c_start_x)) + ((c2c_end_x))) / 2)"
+      }
+    },
+    {
+      "command": "sketch.dimension",
+      "params": {
+        "entities": [
+          "origin",
+          "$sketch_1_slot_1_middle"
         ],
-        "width": 8.0
+        "type": "vertical",
+        "value": "abs((((straight_y)) + ((straight_y))) / 2)"
+      }
+    },
+    {
+      "command": "sketch.draw.dimensioned",
+      "params": {
+        "command": "sketch.slot.overall",
+        "params": {
+          "p0": [
+            -10.0,
+            -35.0
+          ],
+          "p1": [
+            20.0,
+            -35.0
+          ],
+          "width": "slot_width"
+        },
+        "dimensions": {
+          "length": "abs(((overall_end_x)) - ((overall_start_x)))"
+        }
+      },
+      "bind": {
+        "$sketch_1_slot_2_centre_line": "centre_line",
+        "$sketch_1_slot_2_middle": "middle"
+      }
+    },
+    {
+      "command": "sketch.constraint.horizontal_vertical",
+      "params": {
+        "line": "$sketch_1_slot_2_centre_line",
+        "mode": "horizontal"
+      }
+    },
+    {
+      "command": "sketch.dimension",
+      "params": {
+        "entities": [
+          "origin",
+          "$sketch_1_slot_2_middle"
+        ],
+        "type": "horizontal",
+        "value": "abs((((overall_start_x)) + ((overall_end_x))) / 2)"
+      }
+    },
+    {
+      "command": "sketch.dimension",
+      "params": {
+        "entities": [
+          "origin",
+          "$sketch_1_slot_2_middle"
+        ],
+        "type": "vertical",
+        "value": "abs((((straight_y)) + ((straight_y))) / 2)"
+      }
+    },
+    {
+      "command": "sketch.draw.dimensioned",
+      "params": {
+        "command": "sketch.slot.center_point",
+        "params": {
+          "center": [
+            55.0,
+            -35.0
+          ],
+          "end": [
+            65.0,
+            -35.0
+          ],
+          "width": "slot_width"
+        },
+        "dimensions": {
+          "length": "(abs(((center_point_end_x)) - ((center_point_x)))) * 2"
+        }
+      },
+      "bind": {
+        "$sketch_1_slot_3_centre_line": "centre_line",
+        "$sketch_1_slot_3_middle": "middle"
+      }
+    },
+    {
+      "command": "sketch.constraint.horizontal_vertical",
+      "params": {
+        "line": "$sketch_1_slot_3_centre_line",
+        "mode": "horizontal"
+      }
+    },
+    {
+      "command": "sketch.dimension",
+      "params": {
+        "entities": [
+          "origin",
+          "$sketch_1_slot_3_middle"
+        ],
+        "type": "horizontal",
+        "value": "abs((center_point_x))"
+      }
+    },
+    {
+      "command": "sketch.dimension",
+      "params": {
+        "entities": [
+          "origin",
+          "$sketch_1_slot_3_middle"
+        ],
+        "type": "vertical",
+        "value": "abs((straight_y))"
       }
     },
     {
@@ -141,7 +322,7 @@
           -20.0,
           25.0
         ],
-        "width": 8.0
+        "width": "slot_width"
       }
     },
     {
@@ -155,7 +336,7 @@
           52.0,
           25.0
         ],
-        "width": 8.0,
+        "width": "slot_width",
         "sweep": 120
       }
     },
