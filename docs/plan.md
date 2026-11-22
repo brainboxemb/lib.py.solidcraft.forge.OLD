@@ -105,7 +105,9 @@ Before further CI/architecture work:
 - record complexity/ownership concerns as observations only;
 - do not move files, change YAML, change scripts, alter discovery or redesign the architecture in this workstream.
 
-After #670 is complete, resume the existing plan starting with #661 and the parallel `dev-cad` workstream.
+The first pass added central `ci/README.md` and `scripts/README.md`. #670 is reopened for local per-item documentation: every `ci/*/` directory must also have its own README and every `ci.yml` must have a short purpose/ownership header. Documentation only; no YAML semantics, scripts, discovery or structure change.
+
+After this local documentation pass is complete, resume the existing plan starting with #661 and the parallel `dev-cad` workstream.
 
 
 ### WS1 — #661 Forge consumer validation of shared batch/selectivity
