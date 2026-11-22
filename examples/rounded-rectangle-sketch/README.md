@@ -40,3 +40,19 @@ A sharp rectangular pad can share the same envelope. Rounded-pad volume and a co
 
 - **SolidCraft** — Native rounded sketch rectangles preserve true arc geometry and remain inspectable in the saved sketch.
 - **PythonSCAD** — The explicit Sketch scope keeps 2D profile authoring separate from the subsequent 3D extrusion.
+
+
+## Current extension — issue #354
+
+The original qualification above remains intact. The current model adds one
+second Sketch specifically for the standalone-Boolean contract:
+
+- `Sketch(name="World cut", plane="YZ")` is independent of the body;
+- its centered rectangle is displaced in Y/Z so it cuts only the base plate;
+- `cut.extrude(..., sym=True)` is subtracted from the already joined body;
+- Forge lowers that operation directly to native
+  `solid.extrude(operation="cut", targets=[...])`;
+- no temporary cutter body or later combine feature is created.
+
+The native verification now requires both Sketches and both extrusion history
+features, while preserving the original rounded-pad geometry evidence.
