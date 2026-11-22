@@ -78,9 +78,9 @@ diagnostic evidence and runner/image-pull variance remains material.
 - #649 / #650: repository handoff/AGENTS corrected to describe both the CAD
   library and CI/integration responsibilities.
 - #355 / #646 / #651: SolidCraft 0.45 parametric native Slot support accepted
-  on `dev-cad` and promoted to `main` by normal merge commit
-  `92758bd34b8b83bcfe28180b8ae2d42c3338f215`. The post-merge durable
-  `main` integration is the final administrative close gate.
+  on `dev-cad`, promoted to `main` by normal merge commit
+  `92758bd34b8b83bcfe28180b8ae2d42c3338f215`, and proven by green durable
+  main build + stable Pages on that exact SHA.
 
 ## Lane rule
 
@@ -119,8 +119,7 @@ carries `0.11.0`, but that is release preparation only.
 
 The two pre-release integration gates are resolved at source level:
 
-- #355 is promoted to `main` through #651; only post-merge durable main
-  integration/publication still needs to finish before #355 is closed;
+- #355 is complete on main with matching durable build/Page evidence;
 - the jobs=2 CI experiment is resolved: main uses accepted tool.cad.ci 0.17.0 /
   lib.py.cad.ci 0.9.3 with jobs=2.
 
@@ -218,7 +217,6 @@ secondary to the disposition: `now`, `next`, `later`, `blocked`,
 | #347 Patterns accept any applied Shape feature | `dev-cad` | **later** | Base source validation on native history-feature identity. |
 | #349 Remaining SOLID › CREATE coverage | `dev-cad` | **next** | Split focused Revolve child for the latch; leave broad inventory for later. |
 | #354 Standalone Sketch extrusion boolean operand | `dev-cad` | **next** | Generalize boolean operand lowering for `sketch_base_extrusion`. |
-| #355 SolidCraft 0.45 parametric native Slot dimensions | `dev-cad` | **effectively complete but still open** | #646/#651 are merged; close after post-merge durable main build + Pages are green at `92758bd...`. |
 | #567 Mixed line/arc closed Sketch profiles | `dev-cad` | **next** | Deliver focused connected-curve profile API after the release gate. |
 | #568 Native sheet-metal flange/contour | `dev-cad` | **next** | Qualify immutable v0.3.4 native contracts before exposing APIs. |
 | #570 Remove CADCraft from Verification diagrams | `dev-cad` | **later** | Replace explanatory diagram sources without moving generic verification rendering into Forge. |
@@ -226,13 +224,11 @@ secondary to the disposition: `now`, `next`, `later`, `blocked`,
 
 ## Immediate execution order
 
-1. [#355] Wait only for the already-running post-merge `main` durable
-   integration; close #355 when build and Pages point at the #651 merge SHA.
-2. [#642] Reconcile the release changelog against all public changes since
+1. [#642] Reconcile the release changelog against all public changes since
    `v0.10.0`; do not mistake the historical source-only “Release SCPF 0.11.0”
    commit for a real release.
-3. [#642] Publish **Forge v0.11.0** only from one exact green `main` SHA with
+2. [#642] Publish **Forge v0.11.0** only from one exact green `main` SHA with
    matching durable build/Page evidence, immutable tag and GitHub Release.
-4. After v0.11.0, run #261 on `dev-ci` and #354/#567/#568/focused #349 on
+3. After v0.11.0, run #261 on `dev-ci` and #354/#567/#568/focused #349 on
    `dev-cad` independently where dependencies permit.
-5. Rewrite/retire #175 and #5 before treating them as implementation work.
+4. Rewrite/retire #175 and #5 before treating them as implementation work.
