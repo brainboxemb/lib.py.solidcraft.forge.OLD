@@ -8,6 +8,14 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Added
+
+- Standalone `Sketch(...).extrude(...)` can now be used directly as a Boolean
+  operand with `+`, `-` and `&`. Forge keeps the independent Sketch on its
+  authored plane and lowers the extrusion directly to native SolidCraft
+  `join`, `cut` or `intersect` against the existing body instead of requiring
+  an attached Sketch or temporary cutter body (issue #354).
+
 ## [0.11.0] - 2026-11-22
 
 ### Added
