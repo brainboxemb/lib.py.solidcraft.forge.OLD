@@ -133,8 +133,19 @@ For each run record top-level targets, `active_dependents`, models actually
 executed, container starts and duration. The temporary model probe must never
 land on `dev-ci`.
 
-Close #661 only after all three execution modes are recorded. Reference-batch
-sparse selection remains outside this work.
+Measurement 1 is complete:
+
+- PR #690 / run `45021440751` selected six top-level targets;
+- shared batch received only `simple-box`;
+- one SolidCraft container processed only `simple-box=pass`;
+- batch timing: pull 8.481 s, container/process 3.705 s, total 12.336 s;
+- pre-fix comparison: run `45014107995` processed all 36 models with ~63.198 s container/process.
+
+The temporary `simple-box` probe is removed before merge.
+
+Close #661 only after the remaining no-model durable run and explicit full
+promotion run are recorded. Reference-batch sparse selection remains outside
+this work.
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
 Primary lane: `dev-cad`. **Now, parallel with #661.**
