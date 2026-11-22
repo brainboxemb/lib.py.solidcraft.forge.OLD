@@ -84,7 +84,7 @@ def _is_feature_tree(shape):
     ):
         return True
     if shape.kind in (
-        "fillet", "chamfer", "shell", "union", "difference",
+        "fillet", "chamfer", "shell", "union", "difference", "intersection",
         "material_assignment", "rectangular_pattern", "circular_pattern",
     ):
         return True
@@ -1461,7 +1461,7 @@ def _to_commands(shape, name):
         steps, base = _to_commands(original, name)
         resolved = _resolve_feature_edges(base, edges)
         return steps + [_chamfer_command(distance, resolved, name)], base
-    if shape.kind in ("union", "difference"):
+    if shape.kind in ("union", "difference", "intersection"):
         original, added = shape.data
         steps, base = _to_commands(original, name)
         feature_name = None
@@ -1470,6 +1470,18 @@ def _to_commands(shape, name):
         if added.kind == "anchored":
             return steps + _attached_commands(
                 shape, original, added, name, feature_name=feature_name), base
+        if added.kind == "sketch_base_extrusion":
+            operation = {
+                "union": "join",
+                "difference": "cut",
+                "intersection": "intersect",
+            }[shape.kind]
+            added_steps, _ = compile_base(
+                added,
+                name,
+                operation=operation,
+            )
+            return steps + added_steps, base
         if added.kind == "explicit_sketch_extrusion":
             face_query_index = 1 + sum(
                 command["command"] == "model.faces"

@@ -1447,3 +1447,49 @@ Publication is idempotent only for the exact same version/SHA pair. A tag
 pointing elsewhere is a hard failure. If the tag exists at the requested SHA
 but the GitHub Release is absent, the workflow may complete the missing Release
 after validation; it never moves or recreates an existing conflicting tag.
+
+
+## Standalone Sketch extrusion Boolean lowering
+
+Standalone Sketch extrusion already has a native base-body path:
+
+```text
+sketch.create
+  -> native profile commands
+  -> sketch.finish
+  -> solid.extrude(body_name=..., operation=new implicitly)
+```
+
+The Boolean case reuses that exact Sketch production and changes only the
+native extrusion application:
+
+```text
+existing target body
+  + standalone Sketch extrusion
+      -> solid.extrude(operation=join, targets=[target])
+
+existing target body
+  - standalone Sketch extrusion
+      -> solid.extrude(operation=cut, targets=[target])
+
+existing target body
+  & standalone Sketch extrusion
+      -> solid.extrude(operation=intersect, targets=[target])
+```
+
+Do not materialize a temporary body followed by `solid.combine`. SolidCraft
+0.45 already owns the associative Boolean semantics on `solid.extrude`.
+
+Implementation boundary:
+
+- `compile_base()` remains the single standalone-Sketch extrusion builder and
+  accepts an internal native operation for the extrusion step;
+- `new` uses `body_name`; join/cut/intersect use `targets=[name]`;
+- feature-tree dispatch includes `intersection` when the expression is not a
+  pure primitive CSG tree;
+- `_to_commands()` maps Forge `union|difference|intersection` to native
+  `join|cut|intersect` only for the standalone Sketch-extrusion operand;
+- attached Sketch extrusion keeps the existing face-attached compiler path.
+
+This preserves one editable native Sketch + Extrude history and keeps authored
+Sketch coordinates/parameters unchanged.

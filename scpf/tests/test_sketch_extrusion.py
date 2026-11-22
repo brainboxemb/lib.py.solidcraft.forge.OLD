@@ -6,6 +6,7 @@ from scpf import (
     Box,
     CENTER,
     Rectangle2D,
+    RoundedRectangle2D,
     Circle2D,
     Depth,
     Edges,
@@ -79,6 +80,64 @@ class SketchExtrusionTests(unittest.TestCase):
             [{"point": [-15.0, 0.0]}],
         )
         self.assertTrue(attached_extrude["exact_regions"])
+
+
+    def test_standalone_sketch_extrusion_is_native_boolean_operand(self):
+        base = Box(120, 100, 40)
+
+        with Sketch(name="Rear recess", plane="YZ") as sketch:
+            sketch.add(
+                RoundedRectangle2D(70, 80, 10),
+                offset=(5, 0),
+            )
+        operand = sketch.extrude(14, sym=True)
+
+        for expression, expected_operation in (
+            (base + operand, "join"),
+            (base - operand, "cut"),
+            (base & operand, "intersect"),
+        ):
+            with self.subTest(operation=expected_operation):
+                commands = compile_model(
+                    expression,
+                    f"Standalone_{expected_operation}",
+                )["commands"]
+                extrude = [
+                    row for row in commands
+                    if row["command"] == "solid.extrude"
+                ][-1]
+                self.assertEqual(
+                    extrude["params"]["operation"],
+                    expected_operation,
+                )
+                self.assertEqual(
+                    extrude["params"]["targets"],
+                    [f"Standalone_{expected_operation}"],
+                )
+                self.assertEqual(
+                    extrude["params"]["direction"],
+                    "symmetric",
+                )
+                self.assertEqual(extrude["params"]["distance"], 14)
+                self.assertNotIn("body_name", extrude["params"])
+
+                sketch_create = next(
+                    row for row in commands
+                    if row["command"] == "sketch.create"
+                )
+                self.assertEqual(
+                    sketch_create["params"]["plane"],
+                    "YZ",
+                )
+
+    def test_root_standalone_sketch_extrusion_remains_new_body(self):
+        with Sketch(name="Standalone", plane="XY") as sketch:
+            Rectangle2D(20, 10)
+        commands = compile_model(sketch.extrude(5), "Standalone")["commands"]
+        extrude = commands[-1]["params"]
+        self.assertEqual(extrude["body_name"], "Standalone")
+        self.assertNotIn("operation", extrude)
+        self.assertNotIn("targets", extrude)
 
     def test_sketch_extrude_default_keeps_all_profiles(self):
         with Sketch(plane="XY") as sketch:

@@ -1,8 +1,4 @@
-"""PythonSCAD reference for the centered rounded pad qualification intent.
-
-No manual half-width/half-depth placement correction is needed: the 2D profile
-is centered by construction.
-"""
+"""PythonSCAD reference for rounded pad plus world-plane Boolean cut."""
 
 from pythonscad import *
 
@@ -13,6 +9,11 @@ pad_width = 40.0
 pad_depth = 30.0
 radius = 5.0
 pad_height = 8.0
+cut_width = 10.0
+cut_height = 2.0
+cut_y = 22.0
+cut_z = 2.5
+cut_length = 100.0
 
 base = cube([base_width, base_depth, base_height], center=True).up(base_height / 2)
 profile = square(
@@ -20,5 +21,8 @@ profile = square(
     center=True,
 ).offset(r=radius)
 pad = profile.linear_extrude(height=pad_height).up(base_height)
+cut = cube([cut_length, cut_width, cut_height], center=True).translate(
+    [0, cut_y, cut_z]
+)
 
-model = base | pad
+model = (base | pad) - cut
