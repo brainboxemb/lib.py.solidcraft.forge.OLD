@@ -154,18 +154,23 @@ Requirements/design/API contract must be written before implementation.
 
 #### #567 branch status
 
-Requirements, design and public API text are written on `issue/567-connected-curve-profile`.
-The builder records `connected_profile` intent and validates authoring/closure, but the current branch does not yet lower that profile kind in either standalone or attached Sketch compilation.
+Requirements, design and public API text are written. The branch now implements
+one shared native lowering path for connected `line`, `arc.three_point` and
+`arc.center_point` segments with `connect=true`, reused by standalone extrusion,
+attached Sketch extrusion and `sheet_metal()`.
 
-Next implementation order:
+Focused unit/command-contract coverage is present. The native
+`examples/connected-profile-sheet` regression fixture also proves the saved
+SolidCraft design after changing both `half_span` and `radius`.
 
-1. add one shared connected-profile lowering helper for native `sketch.line`, `sketch.arc.three_point` and `sketch.arc.center_point` with `connect=true`;
-2. use it from standalone Sketch compilation so ordinary extrusion and `sheet_metal()` share exactly one lowering path;
-3. use the same helper from attached Sketch lowering where the existing profile contract permits it;
-4. add focused unit/command-contract coverage before adding the native qualification example;
-5. add the small native saved-design qualification case required by #567, then measure it on the immutable SolidCraft 0.45 runtime.
+Native run `45018359496` reported `connected-profile-sheet=pass`, including
+baseline and saved-design verification. The enclosing run failed only because
+the pre-existing public-catalog guards treated the non-public regression fixture
+as a public Verification case; #676 fixed that boundary and is now merged to
+`dev-cad`.
 
-No polygon approximation, raw caller command dictionaries or second sheet-metal-only profile compiler.
+Current next action: rerun #672 on the reconciled `dev-cad` base. If green,
+merge #567. No further API or qualification scope is required.
 
 Qualification implementation:
 
@@ -175,6 +180,7 @@ Qualification implementation:
 - it intentionally has no `model.yml`, independent reference engines or visual baseline because it is not a public Verification model;
 - saved-design mutation changes both `half_span` and `radius`, proving straight-segment and arc geometry rebuild while retaining one solved closed profile and one closed sheet-metal body.
 
+No polygon approximation, raw caller command dictionaries or second sheet-metal-only profile compiler.
 
 ### WS3 — next CAD-library work
 
@@ -206,7 +212,7 @@ Qualification implementation:
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
 | #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
+| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Rerun #672 on the reconciled `dev-cad` base; native baseline and saved-design qualification already pass. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
