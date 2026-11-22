@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.17.0` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.17.1` with one explicit
 bounded value:
 
 ```text
@@ -704,7 +704,7 @@ verification/diagrams/sources/*.cadcraft.json
            -> render SVG (DXF may remain as historical/internal CADCraft evidence)
            -> copy source JSON into output
            -> write provenance.json
-     -> verification-diagrams materializes its diagram output
+     -> verification-diagrams projects its diagram output with released CAD-CI copy
 ```
 
 The historical sources are restored byte-identically from the last green
@@ -833,7 +833,7 @@ ci/model-verification-batch
         |
         v
 selected examples/<case>/model_verify
-  -> copy only that case result into the existing item output
+  -> released CAD-CI copy projects only that case result into the existing item output
 ```
 
 The independent-reference path is equivalent:
@@ -852,7 +852,7 @@ ci/reference-verification-batch
         |
         v
 selected reference child
-  -> copy only its own result into the existing item output
+  -> released CAD-CI copy projects only its own result into the existing item output
 ```
 
 Batch inputs include the case membership/configuration files and all source
@@ -1177,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.17.0`:
+`tool.cad.ci 0.17.1`:
 
 ```text
 push main
