@@ -5,11 +5,28 @@ describe earlier architecture.
 
 ## Repository role
 
-`lib.py.solidcraft.forge` contains the reusable Python Forge API, command
-compiler/runners, unit tests, release-verification examples and model
-verification fixtures.
+`lib.py.solidcraft.forge` has two primary responsibility areas.
 
-Product CAD models are maintained in `2026-011-02.cad.solidcraft`.
+### 1. Forge CAD library
+
+This repository owns the reusable Python Forge API, modelling semantics,
+compiler/lowering, runners, unit tests, examples, native qualification and
+model-specific verification fixtures.
+
+Product CAD models are maintained in `2026-011-02.cad.solidcraft`, but missing
+generic modelling capability discovered there belongs back in Forge when it is
+part of the reusable CAD API/compiler contract.
+
+### 2. CI and verification integration around Forge
+
+This repository also owns how Forge consumes the released generic CAD-CI,
+verification and SolidCraft runtime layers, plus its durable build/Page scopes
+and Forge release integration.
+
+Generic CI behavior itself belongs in `lib.py.cad.ci` / `tool.cad.ci`; generic
+verification behavior belongs in `lib.py.cad.verification`; runtime packaging
+belongs in `docker.cad.solidcraft`. Forge integrates those released owner-layer
+capabilities but must not reimplement them locally.
 
 ## Current CI files
 
@@ -199,7 +216,9 @@ Historical documentation-architecture discussion is preserved under
 ## Current work and handoff protocol
 
 A handoff is only an entrypoint. Never treat copied handoff text as fresher than
-GitHub or the repository plan.
+GitHub or the repository plan. A handoff must also keep both active repository
+areas visible: CAD-library work and CI/infrastructure work. Do not describe the
+repository as if it were only a CI project.
 
 For every work session:
 
