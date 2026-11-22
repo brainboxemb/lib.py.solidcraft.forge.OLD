@@ -3,13 +3,11 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Forge has two independent responsibility areas:
-
-1. the CAD library itself — public API, compiler/lowering, modelling semantics,
-   examples, native qualification and model-specific Verification;
-2. CI/runtime/Verification integration around that library — exact released
-   generic CAD-CI consumption, immutable runtime consumption, durable build/Page
-   publication and release mechanics.
+Forge is first and foremost the central CAD library: public API, compiler/lowering,
+modelling semantics, reusable CAD capabilities, examples and Forge-owned verification
+expectations. CI/runtime/Verification integration is supporting infrastructure around
+that library and must remain delegated to its generic owner repositories where the
+behavior is not Forge-specific.
 
 `dev-cad` and `dev-ci` advance independently unless they share a real owner
 release or architecture gate.
@@ -56,12 +54,12 @@ main.
 
 Current externally accepted stack:
 
-- `lib.py.cad.ci 0.10.0` @
-  `397fb04005b46de8d433cb18c091b1e73714b877`;
-- `tool.cad.ci 0.18.0` @
-  `b62f9d0b169aa201a3c66c3166f364396b2d71bc`;
-- `tool.cad.ci.test` #73 / PR #74 / acceptance run
-  `45010776155` — success.
+- `lib.py.cad.ci 0.11.0` @
+  `e621daf6e309bdd0e3f643a12007f1b66490696d`;
+- `tool.cad.ci 0.18.1` @
+  `e29d3127d5d3f9310f3cab4e27430a64a61c21cc`;
+- `tool.cad.ci.test` #77 / PR #78 / acceptance run
+  `45019713862` — success.
 
 The released root composite action is the accepted long-lived durable path:
 
@@ -95,38 +93,59 @@ Short-lived branches target one lane and are squash-merged. Exact
 
 ## Active workstreams
 
-### WS1 — #661 shared CAD-CI batch/selectivity governance
+#### CI item audit — 2026-11-22
 
-Primary lane: `dev-ci`. **Now.**
+All nine current `ci/*` items are present in durable `build/main` and `build/dev-ci`
+and still have a distinct current responsibility. None is currently classified
+as obsolete.
 
-The shared batch/copy pattern is working and the durable workflow structure is
-now stable. The remaining ecosystem question is whether a one-model change can
-restrict the shared model-build batch itself, rather than merely selecting the
-top-level CAD-CI graph correctly.
+| CI item | Status | Note |
+| --- | --- | --- |
+| `cad-verification-package` | **current** | Prepares the exact released verification-library dependency once for model/reference consumers. |
+| `forge-tests` | **current** | Tests the exact built Forge package; separate from release verification. |
+| `forge-release` | **current** | Exact-candidate release evidence consumed by the release validator. |
+| `model-verification-batch` | **current; improvement active** | Shared SolidCraft runtime remains desired; #661 addresses coarse internal selected-model granularity. |
+| `reference-verification-batch` | **current** | Shared heavy reference runtime for independent CAD implementations and diagram production. |
+| `release-policy` | **current** | Tests release validator/publisher without CAD runtimes and is an explicit release gate. |
+| `site-source` | **current** | Keeps presentation/source validation independent from CAD execution. |
+| `solidcraft-reference` | **current; low-frequency guard** | Verifies the checked SolidCraft command registry against the immutable runtime. |
+| `verification-diagrams` | **current; implementation transition planned** | Public/site diagram evidence is still consumed; #570 removes CADCraft while preserving the diagram responsibility. |
 
-Required evidence on the current released stack:
+Do not remove or combine an item merely to reduce directory count. Any future
+structural simplification needs a separate requirements/design decision after
+the current responsibilities and consumers remain preserved.
 
-1. one-model edit;
-2. no-op run;
-3. explicit complete run.
+### WS1 — #661 / #688 selective shared model batch qualification
 
-For each, capture:
+Primary lane: `dev-ci`. **Now; implementation merged, qualification active.**
 
-- selected top-level SCons items;
-- models actually executed by the shared batch;
-- reused/current results;
-- runtime image pulls/container starts;
-- total batch duration and provenance.
+#681 merged the accepted `selection_context: direct_dependents` consumer
+implementation to `dev-ci` at `601fcd7fef7b17610fbdef32e8c5352bf7ba6788`.
 
-If Forge already meets the required selectivity contract, close #661 with
-evidence and let downstream CAD consumers adopt the same pattern.
+Remaining proof is tracked by #688:
 
-If a generic gap is demonstrated, define the missing requirement here and open
-the technical implementation issue in the actual owner
-(`lib.py.cad.ci`, `tool.cad.ci` or verification) before any consumer change.
+1. one-model `simple-box` source probe on the merged implementation;
+2. remove that probe before merge;
+3. durable `dev-ci` no-model run after the plan/evidence merge;
+4. explicit complete run through the normal `dev-ci -> main` promotion path.
 
-Do not add a Forge- or consumer-local changed-path planner.
+For each run record top-level targets, `active_dependents`, models actually
+executed, container starts and duration. The temporary model probe must never
+land on `dev-ci`.
 
+Measurement 1 is complete:
+
+- PR #690 / run `45021440751` selected six top-level targets;
+- shared batch received only `simple-box`;
+- one SolidCraft container processed only `simple-box=pass`;
+- batch timing: pull 8.481 s, container/process 3.705 s, total 12.336 s;
+- pre-fix comparison: run `45014107995` processed all 36 models with ~63.198 s container/process.
+
+The temporary `simple-box` probe is removed before merge.
+
+Close #661 only after the remaining no-model durable run and explicit full
+promotion run are recorded. Reference-batch sparse selection remains outside
+this work.
 ### WS2 — #567 mixed line/arc closed Sketch profiles
 
 Primary lane: `dev-cad`. **Now, parallel with #661.**
@@ -181,7 +200,8 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
+| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **blocked on #688 proof** | Implementation merged in #681; close after one-model/no-op/full qualification is recorded. |
+| #688 Qualify selective Forge model batch | dev-ci | **now** | Run temporary one-model probe, remove it before merge, then record no-op durable and promotion full-run evidence. |
 | #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |

@@ -74,7 +74,7 @@ jobs:
 
       - name: Run exact released CAD CI stack
         if: steps.classify.outputs.run_cad == 'true'
-        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
+        uses: brainboxemb/tool.cad.ci@e29d3127d5d3f9310f3cab4e27430a64a61c21cc
         with:
           source_sha: ${{ github.event.pull_request.head.sha }}
           base_sha: ${{ github.event.pull_request.base.sha }}
@@ -106,7 +106,7 @@ jobs:
 
       - name: Run and publish durable CAD CI scope
         id: cad_ci
-        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
+        uses: brainboxemb/tool.cad.ci@e29d3127d5d3f9310f3cab4e27430a64a61c21cc
         with:
           source_sha: ${{ github.sha }}
           durable_scope: ${{ github.ref_name }}

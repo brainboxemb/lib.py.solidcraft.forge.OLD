@@ -1,4 +1,6 @@
-# Release-verify the exact built Forge package with representative examples.
+# Forge repository CI item: release-verify the exact built Forge package.
+# This is verification only; publication policy is documented separately in docs/release.md.
+# Local documentation: README.md
 id: forge-release
 kind: verification
 needs:

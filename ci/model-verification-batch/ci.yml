@@ -1,4 +1,6 @@
-# Produce all active declarative SolidCraft verification in one runtime.
+# Forge repository CI item: produce active native SolidCraft model verification in one shared runtime batch.
+# Forge owns model expectations; generic verification remains in lib.py.cad.verification.
+# Local documentation: README.md
 id: model-verification-batch
 process: true
 kind: verification
@@ -14,6 +16,7 @@ strategy:
   reuse: true
 steps:
   - id: verify_models
+    selection_context: direct_dependents
     inputs:
       - examples/*/ci.yml
       - examples/*/scpf/**

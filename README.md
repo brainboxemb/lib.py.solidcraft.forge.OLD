@@ -59,13 +59,15 @@ The detailed API-oriented developer documentation is in `scpf/README.md`.
 The normal Forge workflow is `.github/workflows/scpf.yml`. Planning and
 execution are delegated to released `tool.cad.ci`.
 
-Repository-specific CI items are declared by `cad-ci.yml` from:
+Repository-specific CI items are declared/discovered by `cad-ci.yml` from:
 
-- `scpf/ci.yml` — `forge-package`;
-- `ci/forge-tests/ci.yml` — `forge-tests`;
-- `ci/forge-release/ci.yml` — `forge-release`;
-- `examples/<model>/ci.yml` — model verification;
-- `verification/references/ci.yml` — independent reference verification.
+- `scpf/ci.yml` — the Forge package item;
+- `ci/*/ci.yml` — repository-level package/test/verification/release/site items;
+- `examples/<model>/ci.yml` — Forge model verification items;
+- `examples/<model>/<reference>/ci.yml` — independent reference child items.
+
+See [`ci/README.md`](ci/README.md) for the repository-level CI item map and
+[`scripts/README.md`](scripts/README.md) for the scripts those items call.
 
 The Forge package graph is:
 

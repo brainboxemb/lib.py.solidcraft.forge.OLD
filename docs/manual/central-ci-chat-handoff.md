@@ -1,13 +1,13 @@
-# Central CI chat handoff
+# Forge CAD-library ecosystem handoff
 
-Copy the text block below into a new chat when continuing the Forge/CAD-CI work.
+Copy the text block below into a new chat when continuing work on Forge and its supporting ecosystem.
 
 ~~~text
-Je werkt verder aan de centrale CI-structuur rond Forge.
+Je werkt verder aan Forge als centrale CAD-library en aan de repositories die die library ondersteunen en consumeren.
 
 Belangrijkste repositories:
 
-- `lib.py.solidcraft.forge` — Forge consumer en modeldefinities
+- `lib.py.solidcraft.forge` — centrale Forge CAD-library: publieke API, compiler/lowering, modellering en Forge-eigen verificatievoorbeelden
 - `lib.py.cad.ci` — generieke CAD-CI-logica
 - `tool.cad.ci` — dunne CLI/reusable workflows
 - `tool.cad.ci.test` — externe test van released CAD-CI
@@ -65,14 +65,13 @@ Repositorygrenzen:
 - Generieke CAD/model-verificatie hoort in `lib.py.cad.verification`.
 - De SolidCraft runtime, dependency-pins en containerrelease horen in
   `docker.cad.solidcraft`; consumers gebruiken alleen een immutable image tag.
-- Forge bezit Forge-compilatie, modellen en model-specifieke verwachtingen,
-  maar geen generieke CI-, verificatie- of runtime-packaginglogica.
+- Forge bezit de herbruikbare CAD-API, compiler/lowering, modellering, Forge-eigen voorbeelden en model-specifieke verwachtingen.
+- Product-CAD repositories bezitten hun eigen productmodellen, modelregistratie/catalogus, varianten, dependencies en presentatie-metadata.
+- Generieke CAD-CI-, verificatie- en runtime-infrastructuur ondersteunt Forge en andere consumers, maar vormt niet het architecturale middelpunt.
 - Gewone Python-library CI hoort in `tool.py.lib.ci`; externe acceptatie
   daarvan in `tool.py.lib.ci.test`.
 
-Als Forge een ontbrekende generieke CAD-CI-, verificatie- of runtimefunctie
-blootlegt, los die dan eerst op in de eigenaar-repository, test en release die
-daar, en pas daarna Forge aan. Maak geen Forge-lokale workaround.
+Als Forge of een andere consumer een ontbrekende generieke CAD-CI-, verificatie- of runtimefunctie blootlegt, leg de behoefte bij de juiste eigenaar neer, test en release die daar, en adopteer daarna de release. Maak geen consumer-lokale workaround.
 
 Begin nu met `lib.py.solidcraft.forge`: inspecteer de actuele toestand en lees
 `AGENTS.md` en `docs/plan.md`. Volg daarna de actuele werkvolgorde uit het

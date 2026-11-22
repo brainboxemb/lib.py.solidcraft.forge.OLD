@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.18.0` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.18.1` with one explicit
 bounded value:
 
 ```text
@@ -1177,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.18.0`:
+`tool.cad.ci 0.18.1`:
 
 ```text
 push main
@@ -1510,8 +1510,19 @@ ci/model-verification-batch
        model_verify/...
 ```
 
-The batch compiles/verifies all active declarative models exactly as before.
-Its internal runtime manifest points at those item-shaped paths directly.
+`model-verification-batch:verify_models` opts into released CAD-CI
+`selection_context: direct_dependents`. CAD-CI derives the active direct model
+consumer ids from the already-selected SCons target closure and injects them as
+`CAD_CI_ACTIVE_DEPENDENTS_JSON`.
+
+The Forge batch validates those ids against its existing processed declarative
+model catalog and compiles/verifies only that ordered subset. It does not run a
+Git diff or infer selection from paths. An explicit full run supplies all
+processed model consumers; an empty direct-dependent set skips the SolidCraft
+runtime entirely.
+
+The internal runtime manifest still points at the same item-shaped paths for
+the selected models.
 
 Each model item keeps its real `contract_test` step, then uses:
 
@@ -1566,9 +1577,11 @@ The reference batch continues producing `diagrams/`. The
 
 ### Ownership and timing
 
-`lib.py.cad.ci 0.10.0` owns direct bundle-member projection, target signatures,
-SCons ordering, CacheDir reuse, CURRENT/CACHE_RESTORED evidence and parallel
-safety. Forge does not duplicate those mechanics.
+`lib.py.cad.ci 0.11.0` owns direct bundle-member projection, active-dependent
+selection context, target signatures, SCons ordering, CacheDir reuse,
+CURRENT/CACHE_RESTORED evidence and parallel safety. `tool.cad.ci 0.18.1`
+exposes that exact released library and was externally accepted by
+`tool.cad.ci.test` run `45019713862`. Forge does not duplicate those mechanics.
 
 Forge timing comparisons use structured CAD-CI target evidence plus the existing
 batch timing diagnostics. The expected improvement is specifically the removal
@@ -1578,13 +1591,13 @@ after the shared batches finish.
 
 ## Durable lane workflow cut-over
 
-Long-lived Forge integration uses the externally accepted tool.cad.ci 0.18.0
+Long-lived Forge integration uses the externally accepted tool.cad.ci 0.18.1
 root composite action as one same-runner execution boundary:
 
 ```text
 Forge workflow job
   -> validate supported lane policy (main/dev-cad/dev-ci)
-  -> tool.cad.ci@0.18.0 durable action
+  -> tool.cad.ci@0.18.1 durable action
        -> checkout/bootstrap exact tool + pinned library once
        -> resolve prior durable scope/base
        -> one CAD-CI/SCons graph

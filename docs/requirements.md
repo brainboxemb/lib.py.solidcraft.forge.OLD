@@ -346,8 +346,8 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.18.0` /
-`lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
+Forge uses the exact externally accepted `tool.cad.ci 0.18.1` /
+`lib.py.cad.ci 0.11.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
 Forge explicitly requests `jobs=2` from the released tool on both pull-request
@@ -748,7 +748,9 @@ those logical item boundaries.
 
 Forge verification therefore batches expensive runtime work:
 
-- one SolidCraft runtime processes the current declarative model list;
+- one SolidCraft runtime processes the **selected active declarative model
+  dependents** of the shared model batch; an explicit full run naturally
+  supplies the complete processed model set;
 - one reference runtime processes the current independent-reference list;
 - build123d uses one isolated interpreter/import for its complete case list;
 - CadQuery, PythonSCAD and pyBOSL2 process their complete lists in the shared
@@ -756,15 +758,39 @@ Forge verification therefore batches expensive runtime work:
 - CADCraft processes the complete diagram source list inside the same heavy
   reference runtime batch.
 
-Per-case verification state remains isolated. Each model/reference has its own
-input, output directory and structured result. A failure in one case must not
-prevent later cases in the same batch from running. After the complete list is
-processed, the batch returns failure when one or more cases failed.
+`model-verification-batch:verify_models` opts in to released CAD-CI
+`selection_context: direct_dependents`. Forge reads the reserved
+`CAD_CI_ACTIVE_DEPENDENTS_JSON` value and uses those ids only to choose which
+already-processed Forge model definitions enter the SolidCraft manifest.
+
+Requirements:
+
+- Forge validates every supplied id against its existing processed declarative
+  model ids and rejects unexpected dependents;
+- Forge preserves CAD-CI order and does not derive a second selection from Git,
+  changed paths, timestamps or model source inspection;
+- an empty active-dependent list starts no SolidCraft runtime and produces an
+  empty producer output root successfully;
+- one selected model starts one shared SolidCraft runtime containing only that
+  model;
+- an explicit full run receives every processed direct model dependent;
+- CAD-CI remains the sole owner of the active list, its target signature/cache
+  identity and public `active_dependents` evidence;
+- changing the active-dependent set must not be made CURRENT by Forge-local
+  state or caching.
+
+Per-case verification state remains isolated. Each selected model/reference has
+its own input, output directory and structured result. A failure in one case
+must not prevent later cases in the same batch from running. After the selected
+list is processed, the batch returns failure when one or more cases failed.
+
+The independent-reference batch is not changed by #661. Sparse selection across
+nested model/engine reference children is a separate concern.
 
 CAD-CI continues to own logical selection, dependencies, SCons state, caching
 and durable publication. Forge owns only the batch runtime invocation and the
 mapping from batch results back to existing per-case outputs. No generic worker
-pool or batch scheduler is added to lib.py.cad.ci.
+pool, changed-path planner or batch scheduler is added in Forge.
 
 
 ## Example documentation preservation
@@ -1050,8 +1076,8 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.18.0 backed
-by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
+The exact accepted dependency for this capability is tool.cad.ci 0.18.1 backed
+by lib.py.cad.ci 0.11.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
 Performance evidence is diagnostic, not an SLA. #261 must compare the
