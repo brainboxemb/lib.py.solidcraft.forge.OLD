@@ -345,18 +345,25 @@ must not be treated as an active publication gate.
 The package version is stored in `scpf/pyproject.toml`, but source metadata is
 not release evidence.
 
-The latest actual Forge release is `v0.10.0`. Source metadata currently carries
-`0.11.0` as preparation for the next release; post-0.10 changes remain under
-`[Unreleased]` until an intentional release candidate is chosen.
+The latest actual Forge release is **`v0.11.0`**, published from exact source
+commit `9258d54079981604b6dd777a4c4face897c190fe`. The annotated tag and
+GitHub Release both resolve to that commit. Source package version `0.11.0` is
+therefore the released baseline; new user-visible work remains under the fresh
+`[Unreleased]` changelog section.
 
-Issue #642 owns the real `v0.11.0` release. A Forge release exists only after
-the immutable Git tag and GitHub Release are both created and verified against
-the intended green `main` SHA. The authoritative procedure is
+Issue #642 is complete. The authoritative procedure for future releases is
 `docs/release.md`.
 
 Normal Forge CI verifies candidates and publishes durable build/Page state; it
 never creates a release automatically. Publication is the separate owner-only
 `/release vX.Y.Z <exact-main-sha>` path documented in `docs/release.md`.
+A release exists only after the immutable annotated tag and GitHub Release are
+both verified against the intended green `main` SHA.
+
+The next planned release checkpoint is v0.12.0 after the first coherent
+post-v0.11 CAD/CI batch; do not bump source metadata or create its dated
+changelog section before an explicit release issue/gate exists.
+
 Issue #366 is complete and is not a release blocker.
 
 ## Historical documents
