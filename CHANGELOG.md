@@ -8,44 +8,73 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-11-22
+
 ### Added
 
 - Native `Slot*2D` profiles now keep editable SolidCraft 0.45 dimensions:
   all five Slot creators accept parameterized width, while the three straight
   Slot creators support parameterized horizontal/vertical length and position
   through native dimensioned-sketch constraints. The `slot-family`
-  qualification mutates width, straight length and position in the saved
+  verification mutates width, straight length and position in the saved
   SolidCraft design without rerunning Forge Python (issue #355).
 
 - Added the first native sheet-metal workflow: `Sketch.sheet_metal(...)`
   creates a rule-backed flat sheet from one closed XY Sketch and
   `Shape.fold(...)` bends existing sheet material with native
-  `sheet.fold` history. The `sheet-fold` qualification verifies one
-  through hole before the bend, formed geometry and recovery of the original
-  80 × 40 × 2 mm flat pattern with its Ø6 cutout (issue #305).
+  `sheet.fold` history. The `sheet-fold` verification proves the formed
+  geometry and recovered 80 × 40 × 2 mm flat pattern with its Ø6 cutout
+  (issue #305).
+
+- Added `Cone(d=..., top_d=..., h=...)` as a native `solid.cone`
+  primitive. `top_d=0` creates a cone and a non-zero top diameter creates a
+  tapered cylinder/frustum, with the same principal-axis and axial-anchor
+  conventions as the other Forge primitives (PR #310).
+
+- Added `python -m scpf --version`, concise default CLI errors with source
+  locations, and `--debug` for the original traceback plus exact checkout
+  identity when available. Package identity remains separate from the tested
+  SolidCraft version (issue #356, PR #601).
 
 ### Changed
 
-- Qualification now runs in a version-pinned reusable container and exposes
-  each case as independently rerunnable stages. A failed stage can be rerun
-  without rebuilding earlier native evidence.
+- Forge is now qualified against SolidCraft 0.45.0 from immutable
+  `docker.cad.solidcraft v0.3.4`. The checked-in SolidCraft 0.45 command
+  reference is captured from that immutable runtime rather than maintained as a
+  hand-authored subset.
+
+- Verification and publication now use the released generic CAD-CI and
+  verification layers, with exact `tool.cad.ci 0.17.0` /
+  `lib.py.cad.ci 0.9.3`, explicit `jobs=2`, immutable runtime-role images,
+  durable `main`/`dev-cad`/`dev-ci` build scopes and matching generated
+  Pages. Forge no longer owns a second generic CI, verification or runtime
+  packaging implementation.
+
+- Forge release publication is explicit rather than an automatic consequence
+  of a green CI run. A release candidate must have matching durable main build,
+  `forge-release` verification and stable Pages evidence before its annotated
+  tag and GitHub Release can be created.
 
 ### Removed
 
 - Removed the obsolete `Shape.repeat_linear()` / `linear_repeat` Forge-side
   repetition path. Repeated history features use native rectangular or circular
-  patterns instead. The `anchored-holes` qualification now proves one
+  patterns instead. The `anchored-holes` verification proves one
   face-attached source cut plus one native rectangular pattern (issue #256).
+
+- Removed the remaining legacy Qualification orchestration and duplicate
+  runtime/verification ownership after the migration to declarative model
+  verification and released owner-layer dependencies.
 
 ### Fixed
 
-- Removed remaining legacy qualification infrastructure and refreshed active
-  repository documentation for the current CAD-CI, `tool_verify`,
-  `model_verify`, and `solidcraft_runtime` architecture.
+- `Sketch.add(slot)` and automatic Slot registration now preserve the authored
+  sketch-local coordinates of all five native Slot profile kinds instead of
+  applying an implicit semantic-center anchor (issue #357, PR #597).
 
-- Presentation-only main changes now reuse the existing complete `build/main`
-  technical baseline without recalculating every qualification case input hash.
-  Technical changes still require the normal qualification/promotion path
+- Presentation-only main changes reuse the existing complete `build/main`
+  technical baseline without recalculating every model/reference input.
+  Technical changes still require the normal verification and promotion path
   (issue #320).
 
 
