@@ -1410,20 +1410,20 @@ repository owner comment
             v
 .github/workflows/release.yml
   -> parse exact version + SHA
-  -> checkout current repository policy
-  -> fetch main/build/gh-pages/tags
-  -> scripts/release/validate_release.py
-       * requested SHA == current origin/main
-       * pyproject version == requested version
-       * dated changelog section exists
-       * no active foundational blocker
-       * build/main source == requested SHA
-       * forge-release evidence source == requested SHA
-       * stable Pages source/build-manifest source == requested SHA
-       * extract release notes from that changelog section
-  -> create/verify annotated vX.Y.Z tag at requested SHA
-  -> create GitHub Release from extracted notes
-  -> verify tag + GitHub Release
+  -> checkout exact requested candidate
+  -> scripts/release/publish_release.py
+       -> fetch main/build/gh-pages/tags
+       -> scripts/release/validate_release.py
+            * requested SHA == current origin/main
+            * pyproject version == requested version
+            * dated changelog section exists
+            * no active foundational blocker
+            * build/main source == requested SHA
+            * forge-release evidence source == requested SHA
+            * stable Pages source/build-manifest source == requested SHA
+            * extract release notes from that changelog section
+       -> create/verify annotated vX.Y.Z tag at requested SHA
+       -> create/verify GitHub Release from extracted notes
   -> comment immutable result on the tracking issue
 ```
 
