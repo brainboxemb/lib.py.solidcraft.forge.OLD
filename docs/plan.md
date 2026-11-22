@@ -28,7 +28,7 @@ Current stable integration commit on `main`:
 
 Current `dev-cad` head:
 
-`8fbfe0b2c0a7e5655b80ef20a4f2c21ec3780955`
+`45b0f52b51f0f6e27fd9cb366d4c3a09e9ef9e09`
 
 Accepted post-v0.11 integration includes the released shared merge/lane policy on
 `main`; the active CAD lane additionally contains the completed native SolidCraft
@@ -88,10 +88,9 @@ Primary lane: `dev-cad`.
   evidence already shows repeated reusable component feature names collide at
   SolidCraft document scope. Preserve component-local authoring semantics while
   lowering deterministic document-global identities.
-- #703 canonical reusable `model.yml` contract — **now (parallel)**. #679 is
-  waiting on exact-head verification; #703 is independent. Define the exact
-  human-facing contract in the Forge package, keep YAML parsing outside the
-  library, and let consumers reuse the validator instead of copying it.
+- #703 canonical reusable `model.yml` contract — **complete**; PR #711 merged to
+  `dev-cad` as `45b0f52b...` after exact-head run `45029270620` succeeded.
+  Forge now owns the exact seven-field human-facing contract and reusable validator.
 
 ### WS2 — cross-repository terminology and Verification/reference quality
 
@@ -117,8 +116,8 @@ Primary lane: `dev-cad`.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #679 Namespace repeated component-local feature names | dev-cad | **now** | PR #710 carries the focused Sketch-identity implementation; require fresh exact-head qualification before `/merge`. |
-| #703 Canonical reusable model.yml contract | dev-cad | **now** | Implement one exact seven-field mapping contract + template in Forge; no `model.yml` extensions, YAML parsing or consumer-local copied field list. |
+| #679 Namespace repeated component-local feature names | dev-cad | **now** | PR #712 carries the focused Sketch-identity implementation; reconcile against the new lane head and require fresh exact-head qualification before `/merge`. |
+| #703 Canonical reusable model.yml contract | dev-cad | **complete** | PR #711 merged to `dev-cad`; CAD consumer adoption remains tracked separately in `2026-011-02.cad.solidcraft#205`. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately from active CAD/compiler changes. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child when required. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Preserve diagram responsibility while replacing CADCraft sources. |
@@ -134,6 +133,7 @@ Primary lane: `dev-cad`.
 
 ## Recently completed
 
+- #703 canonical reusable `model.yml` contract — merged to `dev-cad` in PR #711 after exact-head run `45029270620` succeeded.
 - #684 native contour flange and #568 SolidCraft 0.45 flange tracking parent — complete after exact-head `dev-cad` integration run `45027571753` succeeded.
 - #674 shared merge/lane policy adoption — released owner workflow adopted and
   live short-lived plus permanent-lane paths qualified.

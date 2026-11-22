@@ -2011,3 +2011,99 @@ inside `model.yml`: allowing arbitrary consumer fields would recreate the schema
 drift that #703 is intended to remove. A consumer-specific presentation setting
 must use a separately named presentation source; CI/source/verification/generated
 state remains in its existing owner layer.
+
+## Component-local Sketch feature namespacing
+
+#679 extends the existing assembly definition namespace; it does not introduce a
+new public naming API.
+
+### Existing namespace
+
+`assembly._namespace_commands()` already owns the lowering boundary for one
+reusable component definition. It assigns:
+
+```text
+prefix = d{definition_number}_{component_slug}
+```
+
+and currently uses that prefix for component-local parameters and replay
+variables.
+
+The same boundary now also owns native Sketch feature identity.
+
+### Feature map
+
+For each compiled component definition, collect every
+`sketch.create.params.name`. Each unique local Sketch name maps to:
+
+```text
+{prefix}__{local_sketch_name}
+```
+
+Example:
+
+```text
+GlassStrip definition 1:
+  Profile -> d1_GlassStrip__Profile
+
+Hub75PanelBasic definition 2:
+  Profile -> d2_Hub75PanelBasic__Profile
+```
+
+The local name is kept verbatim after the deterministic prefix. Forge does not
+slug or hash the local portion; this avoids creating a second collision policy
+for valid SolidCraft names such as `Top cut`.
+
+If one component definition emits two different `sketch.create` commands with
+the same local name, lowering raises `ModelError` rather than inventing order-
+dependent suffixes.
+
+### Semantic reference rewrite
+
+Feature mapping is deliberately field-aware. A recursive helper rewrites only
+values whose dictionary key semantically identifies a Sketch:
+
+```text
+sketch
+path_sketch
+```
+
+Because it recurses through lists/dicts, this also covers:
+
+```text
+sections=[{sketch: ...}]
+rails=[{sketch: ...}]
+axis={sketch: ..., curve: ...}
+```
+
+The helper does not rewrite arbitrary strings or generic `name`,
+`body_name`, `rule`, `text`, `font`, `material` or component fields.
+
+`sketch.create.params.name` is the one definition site and is rewritten
+explicitly. Parameter expressions continue through `_rewrite_value()`;
+replay variables continue through `_rewrite_replay_value()`. The three
+namespace classes remain separate so a local parameter named `Profile` cannot
+accidentally rename a Sketch and vice versa.
+
+### Definition identity and occurrences
+
+Namespacing uses the existing `definition_number`, not occurrence order.
+Therefore:
+
+- repeated occurrences/copies of one definition reuse the same namespaced
+  features;
+- independent fixed/parameter variants receive separate prefixes;
+- first-occurrence definition ordering remains the deterministic document
+  ordering already used by assembly lowering.
+
+Standalone compilation bypasses `_namespace_commands()`, so normal
+single-model Sketch display names remain exactly as authored.
+
+### Scope
+
+This slice addresses native Sketch timeline features because they are the
+reproduced SolidCraft 0.45 document-global collision and because Forge currently
+emits explicit local Sketch names plus name-based downstream references.
+Other timeline-feature kinds should only join this namespace when Forge emits a
+reproduced component-local collision and their definition/reference fields are
+specified explicitly. Do not generalize by rewriting every `name` field.

@@ -12,6 +12,8 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 - Forge now owns one canonical reusable `model.yml` contract in `scpf.model_metadata`, with an exact seven-field template and shared mapping validator for Forge and CAD consumers. YAML parsing stays outside the CAD library and consumer-specific extensions are rejected (#703).
 
+- Assembly lowering now gives component-local Sketch features deterministic document-global native identities. Independent reusable component definitions and parameterized variants may reuse authored names such as `Profile` without requiring assembly-global naming in consumer code (#679).
+
 ### Changed
 
 - Forge long-lived branch integration now consumes the externally accepted

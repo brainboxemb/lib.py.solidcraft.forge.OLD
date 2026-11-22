@@ -541,6 +541,211 @@ class ComponentDefinitionTests(unittest.TestCase):
             {"$d2_Part_face_point_1": "faces"},
         )
 
+    def test_component_namespacing_rewrites_only_semantic_sketch_references(self):
+        from scpf.assembly import _namespace_commands
+
+        commands = [
+            {
+                "command": "sketch.create",
+                "params": {"plane": "XY", "name": "Profile"},
+            },
+            {
+                "command": "solid.extrude",
+                "params": {
+                    "sketch": "Profile",
+                    "name": "Profile",
+                    "body_name": "Profile",
+                    "distance": 5,
+                },
+            },
+            {
+                "command": "solid.sweep",
+                "params": {
+                    "sketch": "Profile",
+                    "path_sketch": "Path",
+                    "rails": [
+                        {"sketch": "Profile", "curves": ["a"]},
+                    ],
+                    "name": "Profile",
+                },
+            },
+            {
+                "command": "sketch.text",
+                "params": {
+                    "text": "Profile",
+                    "font": "Profile",
+                    "name": "Profile label",
+                },
+            },
+        ]
+
+        namespaced = _namespace_commands(
+            commands,
+            "Panel",
+            definition_number=1,
+        )
+
+        self.assertEqual(
+            namespaced[0]["params"]["name"],
+            "d1_Panel__Profile",
+        )
+        extrude = namespaced[1]["params"]
+        self.assertEqual(extrude["sketch"], "d1_Panel__Profile")
+        self.assertEqual(extrude["name"], "Profile")
+        self.assertEqual(extrude["body_name"], "Profile")
+        sweep = namespaced[2]["params"]
+        self.assertEqual(sweep["sketch"], "d1_Panel__Profile")
+        self.assertEqual(sweep["path_sketch"], "Path")
+        self.assertEqual(
+            sweep["rails"][0]["sketch"],
+            "d1_Panel__Profile",
+        )
+        self.assertEqual(sweep["name"], "Profile")
+        self.assertEqual(namespaced[3]["params"]["text"], "Profile")
+        self.assertEqual(namespaced[3]["params"]["font"], "Profile")
+        self.assertEqual(namespaced[3]["params"]["name"], "Profile label")
+
+    def test_component_sketch_namespaces_are_distinct_per_definition(self):
+        from scpf.assembly import _namespace_commands
+
+        commands = [
+            {
+                "command": "sketch.create",
+                "params": {"plane": "XY", "name": "Profile"},
+            },
+            {
+                "command": "sheet.flange",
+                "params": {
+                    "type": "base",
+                    "sketch": "Profile",
+                    "rule": "Sheet",
+                    "body_name": "Part",
+                },
+            },
+        ]
+
+        first = _namespace_commands(
+            commands,
+            "GlassStrip",
+            definition_number=1,
+        )
+        second = _namespace_commands(
+            commands,
+            "Hub75PanelBasic",
+            definition_number=2,
+        )
+
+        self.assertEqual(
+            first[0]["params"]["name"],
+            "d1_GlassStrip__Profile",
+        )
+        self.assertEqual(
+            second[0]["params"]["name"],
+            "d2_Hub75PanelBasic__Profile",
+        )
+        self.assertEqual(
+            first[1]["params"]["sketch"],
+            "d1_GlassStrip__Profile",
+        )
+        self.assertEqual(
+            second[1]["params"]["sketch"],
+            "d2_Hub75PanelBasic__Profile",
+        )
+
+    def test_component_rejects_duplicate_local_sketch_feature_names(self):
+        from scpf.assembly import _namespace_commands
+        from scpf.compiler import ModelError
+
+        commands = [
+            {
+                "command": "sketch.create",
+                "params": {"plane": "XY", "name": "Profile"},
+            },
+            {
+                "command": "sketch.finish",
+                "params": {},
+            },
+            {
+                "command": "sketch.create",
+                "params": {"plane": "XZ", "name": "Profile"},
+            },
+        ]
+
+        with self.assertRaisesRegex(
+            ModelError,
+            "duplicate local Sketch feature name.*Profile",
+        ):
+            _namespace_commands(
+                commands,
+                "Ambiguous",
+                definition_number=1,
+            )
+
+    def test_two_components_may_reuse_profile_as_local_sketch_name(self):
+        from scpf import Box, Rectangle2D, Sketch, component
+        from scpf.assembly import compile_assembly
+
+        @component
+        class LeftPart:
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(20, 10)
+                return sketch.extrude(5)
+
+        @component
+        class RightPart:
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(30, 10)
+                return sketch.extrude(5)
+
+        document = compile_assembly(
+            LeftPart() + RightPart(),
+            "Display",
+        )
+        sketch_names = [
+            row["params"]["name"]
+            for row in document["commands"]
+            if row["command"] == "sketch.create"
+        ]
+        self.assertEqual(
+            sketch_names,
+            [
+                "d1_LeftPart__Profile",
+                "d2_RightPart__Profile",
+            ],
+        )
+
+    def test_component_variants_get_distinct_local_sketch_namespaces(self):
+        from scpf import Rectangle2D, Sketch, component
+        from scpf.assembly import compile_assembly
+
+        class Plate:
+            width = 20.0
+
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(self.width, 10)
+                return sketch.extrude(2)
+
+        PlatePart = component(Plate)
+        document = compile_assembly(
+            PlatePart(width=20) + PlatePart(width=30),
+            "Plates",
+        )
+        sketch_names = [
+            row["params"]["name"]
+            for row in document["commands"]
+            if row["command"] == "sketch.create"
+        ]
+        self.assertEqual(
+            sketch_names,
+            [
+                "d1_Plate__Profile",
+                "d2_Plate_2__Profile",
+            ],
+        )
+
     def test_attached_sketch_component_assembly_is_valid_replay(self):
         from scpf import Anchor, Box, Circle2D, Depth, Sketch, component
         from scpf.assembly import compile_assembly
@@ -577,7 +782,7 @@ class ComponentDefinitionTests(unittest.TestCase):
             command
             for command in document["commands"]
             if command["command"] == "sketch.create"
-            and command["params"].get("name") == "Top cut"
+            and command["params"].get("name") == "d1_FaceCut__Top cut"
         )
         self.assertEqual(
             sketch["params"]["plane"]["face"],
@@ -640,7 +845,7 @@ class ComponentDefinitionTests(unittest.TestCase):
         self.assertEqual(text["height"], "d1_Label_height / 2")
         self.assertEqual(text["text"], "height")
         self.assertEqual(text["font"], "height")
-        self.assertEqual(sketch["name"], "height")
+        self.assertEqual(sketch["name"], "d1_Label__height")
         self.assertEqual(extrude["name"], "height")
 
         def assert_plain_json_strings(value):
