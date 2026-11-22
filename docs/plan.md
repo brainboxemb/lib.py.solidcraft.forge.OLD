@@ -3,10 +3,10 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Permanent requirements/design/API/release contracts belong in the primary
-documents in `docs/`. Issues keep implementation detail and history.
+Permanent requirements, design, API and release contracts belong in the normal
+documents under `docs/`. Issues keep implementation detail and history.
 
-## Current repository state
+## Current accepted baseline
 
 Permanent source lanes:
 
@@ -16,23 +16,11 @@ dev-cad
 dev-ci
 ```
 
-The lanes intentionally diverge while work is active. Do not record one
-hard-coded global baseline SHA here. Use the live branch heads and durable
-`build/<lane>/build.json.source_commit` manifests for exact identity.
+Use the live branch heads and durable
+`build/<lane>/build.json.source_commit` manifests for exact identity. Do not
+record one hard-coded global baseline SHA here.
 
-The current accepted generic CI stack is:
-
-- `lib.py.cad.ci 0.9.3` @
-  `74486c441f1f2b170ff3dc06e0edcaf662fbec6b`;
-- `tool.cad.ci 0.16.2` @
-  `59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9`;
-- external black-box acceptance: `tool.cad.ci.test` #62 / PR #63.
-
-Forge consumer evidence measured the pre-target interval dropping from
-26.507 s on tool 0.16.1 / lib 0.9.2 to 1.375 s on 0.16.2 / 0.9.3. The
-structural owner-layer contract, not that timing number, remains authoritative.
-
-The current immutable CAD runtime is:
+Current immutable CAD runtime:
 
 - `docker.cad.solidcraft v0.3.4`;
 - exact runtime source commit
@@ -41,87 +29,106 @@ The current immutable CAD runtime is:
 - immutable roles `cad-solidcraft:v0.3.4` and
   `cad-reference:v0.3.4`.
 
-Runtime v0.3.3 / SolidCraft 0.43.0 remains historical immutable evidence only.
+Current Forge-consumed generic CI stack:
 
-Generated durable scopes remain:
+- `lib.py.cad.ci 0.9.3` @
+  `74486c441f1f2b170ff3dc06e0edcaf662fbec6b`;
+- `tool.cad.ci 0.16.2` @
+  `59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9`;
+- external black-box acceptance: `tool.cad.ci.test` #62 / PR #63.
 
-```text
-build/main/
-build/dev-cad/
-build/dev-ci/
-```
+Newer externally accepted tool surface available for an explicit consumer
+experiment:
 
-Generated Pages uses the matching stable root, `/dev-cad/` and `/dev-ci/`.
-Public Pages has already been cut over to generated `gh-pages`; #366 is
-complete and is not an active decision gate.
+- `tool.cad.ci 0.17.0` @
+  `d88d6e189c12edb5a30158c068145c099c17a019`;
+- same `lib.py.cad.ci 0.9.3`;
+- external jobs=2 acceptance: `tool.cad.ci.test` #66 / PR #67;
+- public evidence proved real overlapping SCons actions through jobs=2.
 
-Repository cleanup safety is complete under #481: automatic cleanup requires
-current-SHA integration proof or an exact merged-PR-head SHA. Closed issue state
-and `backup/*` are not general deletion evidence.
+Forge selective-startup evidence:
+
+- old tool 0.16.1 / lib 0.9.2 pre-target interval: 26.507 s;
+- current tool 0.16.2 / lib 0.9.3 pre-target interval: 1.375 s.
+
+The structural owner-layer contract remains authoritative; timing values are
+diagnostic evidence.
+
+## Recently completed default-branch work
+
+- #574 / PR #618: complete Verification Technical test details / Raw test files
+  hierarchy. Direct dev-cad promotion #638 put it on main; post-merge durable
+  build and Pages publication are green.
+- #617 / PR #634: canonical SolidCraft 0.45 reference from immutable runtime
+  v0.3.4. The raw registry contains 819 commands, exact-matches runtime output,
+  and generated Markdown is lockstep-tested against raw JSON. The hand-authored
+  0.43 reference tree is removed.
+- #340: closed as superseded by permanent lanes and normal two-parent
+  promotions.
+- #481: conservative evidence-only branch cleanup completed.
 
 ## Lane rule
 
-A dependency handoff does not move work between lanes.
-
-- `dev-ci` owns Forge CI/infrastructure/runtime-consumer/publication work.
 - `dev-cad` owns Forge API/compiler/model/reference/Verification work.
-- Generic CAD-CI behavior is fixed/released in its owner repository first.
+- `dev-ci` owns Forge CI/infrastructure/runtime-consumer/publication work.
+- Generic CAD-CI behavior is fixed and released in its owner repository first.
 - Runtime construction/release is fixed in `docker.cad.solidcraft` first.
-- Blocked CAD work remains CAD work.
+- A blocked CAD issue remains CAD work; dependency handoffs do not move lanes.
 
-Short-lived feature/fix PRs target one dev lane and are squash-merged.
+Short-lived feature/fix PRs target one development lane and are squash-merged.
 
-Direct promotion is only:
+Exact permanent-lane promotions:
 
 ```text
 dev-cad -> main
 dev-ci  -> main
 ```
 
-Those exact permanent-lane promotions use a normal merge commit through the
-repository `/merge` policy. Every other PR to `main` is squash-merged.
+use normal merge commits through the repository `/merge` policy. Every other
+PR to `main` is squash-merged.
 
-## Current workstreams
+## Active workstreams
 
-### WS0 — CI and repository integration
+### WS0 — CI performance and integration
 
 Primary lane: `dev-ci`.
 
-No Forge CI migration is currently blocking CAD work. The accepted
-0.16.2 / 0.9.3 stack and runtime v0.3.4 are already on `main`.
+1. #637 measure full Forge integration with exact externally accepted
+   tool.cad.ci 0.17.0 and explicit `jobs=2`.
+2. #261 use that evidence to decide the next performance step on the current
+   SCons/runtime architecture.
 
-Central tool work may continue independently:
-- `tool.cad.ci` #76 is exposing already library-owned bounded SCons jobs;
-- Forge must not consume that surface until an exact released tool revision has
-  passed `tool.cad.ci.test`;
-- default serial behavior remains `jobs=1` until a consumer explicitly opts in.
+Rules for #637:
 
-Forge #261 is retained as a performance goal but must be rewritten against the
-current SCons/runtime architecture before implementation.
+- no Forge-local scheduler, worker pool or target loop;
+- runtime stays v0.3.4;
+- library stays 0.9.3;
+- tool pin changes only to exact released 0.17.0;
+- jobs=2 is an explicit Forge consumer value, not a hidden global default;
+- compare against full promotion #636 baseline before promoting.
 
 ### WS1 — active CAD blockers
 
 Primary lane: `dev-cad`.
 
-1. #617 canonical SolidCraft 0.45 reference — active now.
-2. #355 parametric native Slot API — next after #617 canonical evidence.
-3. #354 standalone Sketch extrusion as boolean operand.
-4. #567 mixed line/arc closed Sketch profiles.
-5. #568 native sheet-metal flange/contour features.
-6. #349 focused Revolve child first; remaining SOLID › CREATE inventory later.
+1. #355 qualify and expose SolidCraft 0.45 parametric native Slot dimensions.
+2. #354 standalone Sketch extrusion as boolean operand.
+3. #567 mixed line/arc closed Sketch profiles.
+4. #568 native sheet-metal flange/contour features.
+5. #349 focused Revolve child first; remaining SOLID › CREATE inventory later.
 
-### WS2 — Verification and reference truth
+#355 now has an accepted 0.45 evidence baseline. Direct authored Slot point
+fields remain numeric; symbolic width is natively supported; straight-Slot
+length/position must be qualified through native dimension/constraint mechanisms
+rather than expression-valued point fields.
+
+### WS2 — Verification/reference quality
 
 Primary lane: `dev-cad`.
 
-- #574 is accepted on `dev-cad`: #618 restored the complete Technical test
-  details / Raw test files hierarchy. It remains open until promoted to the
-  default branch and stable Pages is verified.
-- #617 removes the noncanonical 0.43 reference and captures the canonical 0.45
-  registry directly from immutable runtime v0.3.4.
-- #570 removes the remaining CADCraft dependency from explanatory Verification
-  diagrams without moving generic rendering into Forge.
-- #335 updates the sheet-fold independent build123d reference.
+- #570 remove CADCraft from explanatory Verification diagrams without moving
+  generic rendering into Forge.
+- #335 update the sheet-fold independent build123d reference.
 
 ### WS3 — API coverage roadmap
 
@@ -144,41 +151,36 @@ Primary lane: `dev-cad`.
 Production HUB75 work currently uses explicit Placement, so WS4 does not
 preempt current P1 blockers.
 
-## Open issue assignment — 2026-11-21
+## Open issue assignment — 2026-11-22
 
 | Issue | Lane | Workstream | Disposition | Next action |
 | --- | --- | --- | --- | --- |
-| #5 Generic anchors and parametric constraints | `dev-cad` | WS3/WS4 | **Retire/rewrite** | Separate delivered anchor behavior from remaining constraint/associativity work; consolidate overlap with #9. |
+| #5 Generic anchors and parametric constraints | `dev-cad` | WS3/WS4 | **Retire/rewrite** | Separate delivered anchor behavior from remaining constraint/associativity scope; consolidate overlap with #9. |
 | #8 Tube/RectTube/OvalTube | `dev-cad` | WS3 | **P3** | Reconcile intent with native pipe/shell/boolean histories. |
 | #9 First-class Sketch objects, constraints and face workplanes | `dev-cad` | WS3 | **P2 epic** | Refresh scope and deliver focused child slices. |
 | #81 Inline AnchorFrame references for rotated occurrences | `dev-cad` | WS4 | **P3** | Investigate occurrence-local frames later. |
 | #82 Joints folder visibility | `dev-cad` | WS4 | **P3** | Decide interaction/export policy after higher-impact defects. |
 | #175 HUB75-like AnchorFrame diagnostic | `dev-cad` | WS4 | **Retire/consolidate** | Move useful evidence to #325/background docs. |
-| #261 Reduce full qualification time | `dev-ci` | WS0 | **Retire/rewrite → P2** | Rewrite against current SCons/runtime architecture and measured promotion profiles. |
+| #261 Full Forge integration runtime | `dev-ci` | WS0 | **P2 measurement-driven** | Use #637 jobs=2 result to identify the next real critical path; do not revive the old Qualification-image/matrix design. |
 | #325 AnchorFrame regression root cause | `dev-cad` | WS4 | **P3 research** | Resume only when AnchorFrame becomes active. |
 | #335 build123d Sheet Metal reference | `dev-cad` | WS2 | **P2** | Replace solid approximation with current sheet-metal workflow. |
-| #340 Reuse qualification after identical squash merge | `dev-ci` | WS0 | **Retire** | Close with superseded-architecture note. |
 | #347 Patterns accept any applied Shape feature | `dev-cad` | WS3 | **P2** | Base source validation on native history-feature identity. |
 | #349 Remaining SOLID › CREATE coverage | `dev-cad` | WS1/WS3 | **P1 Revolve / P2 rest** | Split focused Revolve child for latch. |
-| #354 Standalone Sketch extrusion boolean operand | `dev-cad` | WS1 | **P1** | Generalize boolean operand lowering. |
-| #355 Parametric native Slot API | `dev-cad` | WS1 | **P1 next** | Re-derive from canonical #617 SolidCraft 0.45 evidence; do not reuse 0.43 assumptions. |
+| #354 Standalone Sketch extrusion boolean operand | `dev-cad` | WS1 | **P1** | Generalize boolean operand lowering for `sketch_base_extrusion`. |
+| #355 SolidCraft 0.45 parametric native Slot dimensions | `dev-cad` | WS1 | **P1 now** | Re-derive width/length/position lowering from canonical 0.45 evidence and prove saved-design mutation. |
 | #567 Mixed line/arc closed Sketch profiles | `dev-cad` | WS1 | **P1** | Deliver focused connected-curve profile API. |
 | #568 Native sheet-metal flange/contour | `dev-cad` | WS1 | **P1 runtime-sensitive** | Qualify against immutable v0.3.4 contracts before exposing APIs. |
 | #570 Remove CADCraft from Verification diagrams | `dev-cad` | WS2 | **P2** | Replace explanatory diagram sources with deterministic Forge-owned sources. |
-| #574 Technical details / complete Raw test files | `dev-cad` | WS2 | **P1 promotion pending** | #618 is accepted on dev-cad; retain it through lane sync, then promote and verify stable Pages. |
-| #617 Canonical SolidCraft 0.45 reference | `dev-cad` | WS1/WS2 | **P1 now** | Revalidate PR #634 after this main→dev-cad synchronization, merge to dev-cad, then durable proof. |
-
-Every open issue has one primary lane and current disposition. Closed issues are
-not kept in the active table.
+| #637 Forge integration jobs=2 experiment | `dev-ci` | WS0 | **P1 now** | Adopt exact tool 0.17.0, set explicit jobs=2, measure full promotion against #636, then keep/revert based on evidence. |
+| #639 Reconcile plan after #638 promotion | `main governance` | WS0 | **P0 now** | Merge this plan-only correction, then synchronize both permanent lanes before starting #355/#637 branches. |
 
 ## Immediate execution order
 
-1. [#617, dev-cad] Revalidate canonical 0.45 runtime-derived evidence on the
-   synchronized lane, then merge and prove durable dev-cad output.
-2. [#355, dev-cad] Re-derive Slot qualification from the accepted 0.45 evidence.
-3. [#574, dev-cad] Keep the already accepted Verification evidence layout intact
-   and promote it with the next suitable dev-cad → main promotion.
-4. [central CI, parallel] Finish/release/externally accept tool #76 bounded jobs
-   before any Forge jobs>1 experiment.
-5. Continue #354/#567/#568 and focused #349 Revolve work as dependencies permit.
-6. Rewrite/retire #261/#340/#175/#5 before treating them as implementation.
+1. [#639] Merge this plan reconciliation and synchronize `dev-cad` and
+   `dev-ci` to the new main baseline.
+2. [#355, dev-cad] Start the SolidCraft 0.45 parametric Slot qualification.
+3. [#637, dev-ci] In parallel, run the exact tool 0.17.0 / jobs=2 Forge
+   integration experiment.
+4. Use #637 results to update #261 with the measured next bottleneck.
+5. Continue #354/#567/#568 and focused #349 Revolve as dependencies permit.
+6. Rewrite/retire #175 and #5 before treating them as implementation work.
