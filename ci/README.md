@@ -13,6 +13,23 @@ This README documents the **current layout only**. It is not a decision that
 this directory structure is ideal or permanent. Structural changes require a
 separate issue/design decision.
 
+## Current item status
+
+As of 2026-11-22 all nine repository-level items below are still present in
+durable `build/main` / `build/dev-ci` and have a current responsibility.
+None is classified as obsolete.
+
+- `model-verification-batch` remains current, but #661 tracks finer internal
+  selected-model granularity.
+- `verification-diagrams` remains current as a site/evidence responsibility;
+  #570 replaces its CADCraft implementation without removing the responsibility.
+- `solidcraft-reference` is intentionally a low-frequency compatibility guard,
+  not a dependency of normal model verification.
+
+Directory count is therefore not, by itself, evidence that an item can be
+removed. Structural simplification must preserve these responsibilities and
+their durable consumers.
+
 ## Item map
 
 | Item | Purpose | Depends on | Primary implementation / consumer |
