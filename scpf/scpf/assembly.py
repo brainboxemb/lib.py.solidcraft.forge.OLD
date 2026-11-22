@@ -114,6 +114,26 @@ def _rewrite_replay_value(value, mapping):
         }
     return value
 
+def _rewrite_feature_references(value, mapping):
+    """Rewrite only fields that semantically reference a native Sketch."""
+
+    if isinstance(value, list):
+        return [_rewrite_feature_references(item, mapping) for item in value]
+    if isinstance(value, tuple):
+        return [_rewrite_feature_references(item, mapping) for item in value]
+    if isinstance(value, dict):
+        rewritten = {}
+        for key, item in value.items():
+            if (
+                key in ("sketch", "path_sketch")
+                and isinstance(item, str)
+            ):
+                rewritten[key] = mapping.get(item, item)
+            else:
+                rewritten[key] = _rewrite_feature_references(item, mapping)
+        return rewritten
+    return value
+
 
 def _namespace_commands(
     commands,
@@ -122,16 +142,42 @@ def _namespace_commands(
     definition_number,
     external_names=(),
 ):
-    """Namespace component-local parameters and replay variables."""
+    """Namespace component-local parameters, Sketch features and replay variables."""
+
     external_names = set(external_names)
-    local_names = [
+    prefix = f"d{definition_number}_{_component_slug(component_name)}"
+
+    local_parameter_names = [
         command["params"]["name"]
         for command in commands
         if command["command"] == "parameters.add"
         and command["params"]["name"] not in external_names
     ]
-    prefix = f"d{definition_number}_{_component_slug(component_name)}"
-    mapping = {name: f"{prefix}_{name}" for name in local_names}
+    parameter_mapping = {
+        name: f"{prefix}_{name}"
+        for name in local_parameter_names
+    }
+
+    local_sketch_names = [
+        command["params"]["name"]
+        for command in commands
+        if command["command"] == "sketch.create"
+    ]
+    duplicate_sketch_names = sorted({
+        name
+        for name in local_sketch_names
+        if local_sketch_names.count(name) > 1
+    })
+    if duplicate_sketch_names:
+        joined = ", ".join(repr(name) for name in duplicate_sketch_names)
+        raise ModelError(
+            f"component {component_name!r} defines duplicate local Sketch "
+            f"feature name(s): {joined}"
+        )
+    feature_mapping = {
+        name: f"{prefix}__{name}"
+        for name in local_sketch_names
+    }
 
     replay_names = {
         variable
@@ -147,10 +193,14 @@ def _namespace_commands(
     for command in commands:
         params = dict(command["params"])
         if command["command"] == "parameters.add":
-            if params["name"] in mapping:
-                params["name"] = mapping[params["name"]]
+            if params["name"] in parameter_mapping:
+                params["name"] = parameter_mapping[params["name"]]
         else:
-            params = _rewrite_value(params, mapping)
+            params = _rewrite_value(params, parameter_mapping)
+
+        if command["command"] == "sketch.create":
+            params["name"] = feature_mapping[params["name"]]
+        params = _rewrite_feature_references(params, feature_mapping)
         params = _rewrite_replay_value(params, replay_mapping)
 
         namespaced = {
@@ -173,7 +223,6 @@ def _namespace_commands(
                 )
         result.append(namespaced)
     return result
-
 
 def _as_assembly(value):
     if isinstance(value, ModelInstance):
