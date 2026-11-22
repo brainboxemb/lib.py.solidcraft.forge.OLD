@@ -1148,3 +1148,46 @@ The remaining work is deliberately split:
 
 No child may fall back to extruded/fused solid approximations or caller-authored
 raw SolidCraft command dictionaries.
+
+## Native sheet edge flange
+
+An existing Forge sheet body supports one focused native edge-flange operation:
+
+```python
+sheet.flange(
+    edges=[(40, -20, 2)],
+    height=20,
+    angle=90,
+    height_from=None,
+    position=None,
+    flip=False,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.flange(type=edge)`;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ points selecting
+  top/bottom sheet edges;
+- this first slice does not accept `Edges.*`, direction selectors, named profile
+  edges or native per-edge dictionaries;
+- `height` is positive and may remain a Forge Parameter/Expression in the native
+  command;
+- `angle` is finite, non-zero, below 180 degrees in magnitude and may remain a
+  Forge Parameter/Expression;
+- `height_from=None` omits the native field; otherwise it is exactly one of
+  `outer`, `inner`, `tangent`;
+- `position=None` omits the native field; otherwise it is exactly one of
+  `inside`, `outside`, `middle`, `material_outside`, `tangent`;
+- `flip` is boolean and is emitted only when true;
+- Forge supplies the current sheet body name; callers do not pass native `body`
+  or `body_name` fields;
+- thickness, K-factor and bend radius remain inherited from the existing sheet
+  rule and are not accepted as flange arguments;
+- the operation is valid only on feature history known by Forge to be sheet
+  material; applying it to an ordinary solid is a compiler error;
+- no extruded/fused-solid approximation is permitted.
+
+Qualification must include a native sheet base plus edge flange, saved-design
+mutation of both flange height and angle, save/reopen verification and native
+flat-pattern evidence proving one connected sheet body remains.
