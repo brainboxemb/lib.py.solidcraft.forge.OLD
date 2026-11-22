@@ -110,6 +110,28 @@ The first pass added central `ci/README.md` and `scripts/README.md`. #670 is reo
 After this local documentation pass is complete, resume the existing plan starting with #661 and the parallel `dev-cad` workstream.
 
 
+#### CI item audit — 2026-11-22
+
+All nine current `ci/*` items are present in durable `build/main` and `build/dev-ci`
+and still have a distinct current responsibility. None is currently classified
+as obsolete.
+
+| CI item | Status | Note |
+| --- | --- | --- |
+| `cad-verification-package` | **current** | Prepares the exact released verification-library dependency once for model/reference consumers. |
+| `forge-tests` | **current** | Tests the exact built Forge package; separate from release verification. |
+| `forge-release` | **current** | Exact-candidate release evidence consumed by the release validator. |
+| `model-verification-batch` | **current; improvement active** | Shared SolidCraft runtime remains desired; #661 addresses coarse internal selected-model granularity. |
+| `reference-verification-batch` | **current** | Shared heavy reference runtime for independent CAD implementations and diagram production. |
+| `release-policy` | **current** | Tests release validator/publisher without CAD runtimes and is an explicit release gate. |
+| `site-source` | **current** | Keeps presentation/source validation independent from CAD execution. |
+| `solidcraft-reference` | **current; low-frequency guard** | Verifies the checked SolidCraft command registry against the immutable runtime. |
+| `verification-diagrams` | **current; implementation transition planned** | Public/site diagram evidence is still consumed; #570 removes CADCraft while preserving the diagram responsibility. |
+
+Do not remove or combine an item merely to reduce directory count. Any future
+structural simplification needs a separate requirements/design decision after
+the current responsibilities and consumers remain preserved.
+
 ### WS1 — #661 Forge consumer validation of shared batch/selectivity
 
 Primary lane: `dev-ci`. **Now.**
