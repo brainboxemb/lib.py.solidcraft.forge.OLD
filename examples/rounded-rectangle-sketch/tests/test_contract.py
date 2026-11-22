@@ -45,6 +45,35 @@ class RoundedRectangleSketchCommandTests(unittest.TestCase):
         self.assertEqual(extrude["direction"], "positive")
         self.assertEqual(extrude["operation"], "join")
 
+        world_sketch = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.create"
+            and row["params"].get("name") == "World cut"
+        )
+        self.assertEqual(world_sketch["plane"], "YZ")
+
+        rectangle = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.rectangle.two_point"
+        )
+        self.assertIn("cut_y", str(rectangle["p0"][0]))
+        self.assertIn("cut_width", str(rectangle["p0"][0]))
+        self.assertIn("cut_z", str(rectangle["p0"][1]))
+        self.assertIn("cut_height", str(rectangle["p0"][1]))
+
+        cut = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.extrude"
+            and row["params"].get("operation") == "cut"
+        )
+        self.assertEqual(cut["distance"], "cut_length")
+        self.assertEqual(cut["direction"], "symmetric")
+        self.assertEqual(len(cut["targets"]), 1)
+        self.assertNotIn("body_name", cut)
+
 
 if __name__ == "__main__":
     unittest.main()

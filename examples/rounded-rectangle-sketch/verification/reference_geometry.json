@@ -11,7 +11,7 @@
     13
   ],
   "bounds_tolerance_mm": 0.5,
-  "volume_mm3": 33428.31853071796,
+  "volume_mm3": 31828.31853071796,
   "volume_tolerance_mm3": 60,
   "watertight": true,
   "bounds_sufficient": false,
@@ -24,6 +24,16 @@
         9
       ],
       "distance_mm": 2.0710678118654755,
+      "tolerance_mm": 0.3
+    },
+    {
+      "label": "standalone world-plane tunnel",
+      "point": [
+        0,
+        22,
+        2.5
+      ],
+      "distance_mm": 1,
       "tolerance_mm": 0.3
     }
   ]

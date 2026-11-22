@@ -1,4 +1,4 @@
-"""Qualification: RoundedRectangle2D in an explicit named Sketch."""
+"""Qualification: attached rounded pad plus standalone world-plane cut."""
 
 
 class RoundedRectangleSketch:
@@ -9,6 +9,11 @@ class RoundedRectangleSketch:
     pad_depth = 30.0
     radius = 5.0
     pad_height = 8.0
+    cut_width = 10.0
+    cut_height = 2.0
+    cut_y = 22.0
+    cut_z = 2.5
+    cut_length = 100.0
 
     def build(self):
         body = Box(
@@ -27,7 +32,15 @@ class RoundedRectangleSketch:
                 ),
             )
 
-        return body + pad.extrude(self.pad_height)
+        body = body + pad.extrude(self.pad_height)
+
+        with Sketch(name="World cut", plane="YZ") as cut:
+            cut.add(
+                Rectangle2D(self.cut_width, self.cut_height),
+                offset=(self.cut_y, self.cut_z),
+            )
+
+        return body - cut.extrude(self.cut_length, sym=True)
 
 
 RoundedRectangleSketch()
