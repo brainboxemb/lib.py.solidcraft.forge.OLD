@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/component-local-sketch-names/verification/verify.py
+reason: >
+  Issue #679 requires focused native SolidCraft evidence that independent
+  reusable component definitions may reuse one local Sketch name without a
+  document-global feature-name collision. This is Forge assembly-lowering
+  regression evidence, not a public CAD example.

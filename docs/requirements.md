@@ -1316,3 +1316,67 @@ line/tangent-arc/line chain, save/reopen stability, mutation of `distance` and
 at least one parameterized line endpoint, one connected sheet body, and coherent
 flat-pattern evidence. The fixture must also prove that the command document uses
 replay bindings rather than guessed tangent-arc ids.
+
+
+## Component-local native Sketch feature identity
+
+Reusable component definitions may author the same local Sketch feature name
+without knowing which other components will share the final SolidCraft document:
+
+```python
+@component
+class GlassStrip:
+    def build(self):
+        with Sketch(name="Profile", plane="XZ") as sketch:
+            ...
+
+@component
+class Hub75Panel:
+    def build(self):
+        with Sketch(name="Profile", plane="XY") as sketch:
+            ...
+```
+
+Forge assembly lowering must preserve that local authoring contract while
+satisfying SolidCraft 0.45's document-global native feature-name uniqueness.
+
+Requirements for #679:
+
+- every `sketch.create.name` emitted inside a reusable component definition is
+  treated as a component-local native feature identity;
+- the lowered SolidCraft name is deterministic per component definition and
+  includes the already-stable definition number/component namespace;
+- two different component definitions may both author `Profile` and must lower
+  to distinct native Sketch names;
+- repeated occurrences of the same reusable definition continue to share one
+  component definition and therefore one native Sketch identity;
+- two parameterized/fixed-input variants that become independent component
+  definitions receive independent native Sketch identities;
+- all semantic Sketch references emitted by Forge are rewritten to the matching
+  native identity, including direct `sketch` / `path_sketch` fields and
+  nested Sketch references such as loft sections, rails and
+  `{sketch, curve}` references;
+- ordinary strings, text/font values, material names, body names, rule names,
+  component names and parameter names are not rewritten merely because their
+  text happens to equal a local Sketch name;
+- parameter namespacing and replay-variable namespacing keep their existing
+  contracts and remain independent from feature-name mapping;
+- duplicate local Sketch names inside one single component definition remain an
+  authored ambiguity/conflict; #679 does not silently number two distinct local
+  features that have the same local name;
+- standalone/non-component model output keeps the user's authored Sketch name;
+  namespacing is an assembly-definition lowering concern, not a global public
+  API rename.
+
+Qualification must cover:
+
+1. two different component definitions, both using
+   `Sketch(name="Profile")`, in one assembly;
+2. one component class emitted as two independent parameter/fixed-input
+   definitions that both use the same local Sketch name;
+3. at least one generated command that references the Sketch by name after
+   creation, proving definition and references are rewritten together;
+4. unchanged literal strings/body names and existing parameter/replay-variable
+   namespace behavior;
+5. successful SolidCraft 0.45 replay/save for the focused multi-component
+   regression fixture.
