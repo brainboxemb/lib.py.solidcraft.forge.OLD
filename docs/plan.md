@@ -167,6 +167,15 @@ Next implementation order:
 
 No polygon approximation, raw caller command dictionaries or second sheet-metal-only profile compiler.
 
+Qualification implementation:
+
+- `examples/connected-profile-sheet` is a deliberate `regression-fixture`, not a public Verification catalog entry;
+- its normal `forge-model-declarative` CI item participates in the shared native model batch;
+- it owns focused command-contract and declarative native/saved-design verification;
+- it intentionally has no `model.yml`, independent reference engines or visual baseline because it is not a public Verification model;
+- saved-design mutation changes both `half_span` and `radius`, proving straight-segment and arc geometry rebuild while retaining one solved closed profile and one closed sheet-metal body.
+
+
 ### WS3 — next CAD-library work
 
 - #568 native sheet-metal flange/contour — **next** after #567 profile
