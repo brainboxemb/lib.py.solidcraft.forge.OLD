@@ -1,7 +1,7 @@
 {
   "bodies": [
     {
-      "area_mm2": 12051.327412287179,
+      "area_mm2": 13931.327412287179,
       "bbox": {
         "max": [
           40.0,
@@ -15,31 +15,31 @@
         ]
       },
       "center_of_mass": [
-        -2.55549964421068e-16,
-        -3.999232278376713e-15,
-        4.333298028237692
+        -2.404910955033198e-16,
+        -1.1059333833808442,
+        4.425457368742889
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 36,
+      "edges": 48,
       "face_types": {
         "cylinder": 4,
-        "plane": 11
+        "plane": 15
       },
-      "faces": 15,
+      "faces": 19,
       "kernel": {
-        "edges": 36,
-        "faces": 15,
+        "edges": 48,
+        "faces": 19,
         "shells": 1,
-        "vertices": 24
+        "vertices": 32
       },
-      "mass_g": 43.12253090462617,
+      "mass_g": 41.05853090462617,
       "material": "Default",
       "measured_by": "smlib",
       "name": "RoundedRectangleSketch",
       "notes": [],
-      "vertices": 24,
-      "volume_mm3": 33428.31853071796
+      "vertices": 32,
+      "volume_mm3": 31828.31853071796
     }
   ],
   "body_count": 1,
@@ -110,6 +110,51 @@
     {
       "comment": "",
       "error": null,
+      "expression": "10",
+      "model": false,
+      "name": "cut_width",
+      "unit": "mm",
+      "value": 10.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "2",
+      "model": false,
+      "name": "cut_height",
+      "unit": "mm",
+      "value": 2.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "22",
+      "model": false,
+      "name": "cut_y",
+      "unit": "mm",
+      "value": 22.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "2.5",
+      "model": false,
+      "name": "cut_z",
+      "unit": "mm",
+      "value": 2.5
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "100",
+      "model": false,
+      "name": "cut_length",
+      "unit": "mm",
+      "value": 100.0
+    },
+    {
+      "comment": "",
+      "error": null,
       "expression": "radius",
       "model": true,
       "name": "d4",
@@ -127,13 +172,23 @@
       "status": "solved",
       "visible": false,
       "wires_ok": true
+    },
+    {
+      "curves": 4,
+      "dof": 0,
+      "id": 4,
+      "name": "World cut",
+      "profiles": 1,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
     }
   ],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 2.3799799999999998,
+      "ms": 2.563838,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -143,7 +198,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.43647800000000003,
+      "ms": 0.6265179999999999,
       "name": "Rounded pad",
       "rolled_back": false,
       "suppressed": false,
@@ -153,8 +208,28 @@
     {
       "error": null,
       "id": 3,
-      "ms": 15.590127,
+      "ms": 18.794223,
       "name": "Rounded pad",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "ExtrudeFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 4,
+      "ms": 0.181479,
+      "name": "World cut",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 5,
+      "ms": 18.253057,
+      "name": "Extrude1",
       "rolled_back": false,
       "suppressed": false,
       "type": "ExtrudeFeature",
@@ -162,12 +237,12 @@
     }
   ],
   "total": {
-    "area_mm2": 12051.327412287179,
-    "edges": 36,
-    "faces": 15,
-    "mass_g": 43.12253090462617,
+    "area_mm2": 13931.327412287179,
+    "edges": 48,
+    "faces": 19,
+    "mass_g": 41.05853090462617,
     "open_bodies_skipped": 0,
-    "vertices": 24,
-    "volume_mm3": 33428.31853071796
+    "vertices": 32,
+    "volume_mm3": 31828.31853071796
   }
 }

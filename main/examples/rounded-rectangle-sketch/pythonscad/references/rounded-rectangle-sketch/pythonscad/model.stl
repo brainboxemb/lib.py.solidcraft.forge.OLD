@@ -58,15 +58,57 @@ solid PythonSCAD_Model
   facet normal -1 0 0
     outer loop
       vertex -40 -30 0
-      vertex -40 30 5
+      vertex -40 17 1.5
       vertex -40 30 0
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 -30 0
+      vertex -40 17 3.5
+      vertex -40 17 1.5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 -30 0
+      vertex -40 30 5
+      vertex -40 17 3.5
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
-      vertex -40 30 5
       vertex -20 -10 5
       vertex -20 10 5
+      vertex -40 30 5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 30 0
+      vertex -40 17 1.5
+      vertex -40 27 1.5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 30 0
+      vertex -40 27 1.5
+      vertex -40 27 3.5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 30 0
+      vertex -40 27 3.5
+      vertex -40 30 5
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex -40 30 5
+      vertex -40 27 3.5
+      vertex -40 17 3.5
     endloop
   endfacet
   facet normal 0 0 1
@@ -127,9 +169,9 @@ solid PythonSCAD_Model
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex -15 -15 5
       vertex 40 -30 5
       vertex 15 -15 5
-      vertex -15 -15 5
     endloop
   endfacet
   facet normal 0 0 -1
@@ -141,30 +183,30 @@ solid PythonSCAD_Model
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex 15 -15 5
       vertex 40 -30 5
       vertex 16.913417160511017 -14.619397662580013 5
-      vertex 15 -15 5
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex 16.913417160511017 -14.619397662580013 5
       vertex 40 -30 5
       vertex 18.535533905029297 -13.535533905029297 5
-      vertex 16.913417160511017 -14.619397662580013 5
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex 18.535533905029297 -13.535533905029297 5
       vertex 40 -30 5
       vertex 19.619397662580013 -11.913417160511017 5
-      vertex 18.535533905029297 -13.535533905029297 5
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex 19.619397662580013 -11.913417160511017 5
       vertex 40 -30 5
       vertex 20 -10 5
-      vertex 19.619397662580013 -11.913417160511017 5
     endloop
   endfacet
   facet normal 1 0 0
@@ -195,109 +237,151 @@ solid PythonSCAD_Model
       vertex 40 30 0
     endloop
   endfacet
-  facet normal 0 0 1
-    outer loop
-      vertex 40 -30 5
-      vertex 40 30 5
-      vertex 20 10 5
-    endloop
-  endfacet
   facet normal 1 0 0
     outer loop
       vertex 40 -30 5
       vertex 40 30 0
-      vertex 40 30 5
+      vertex 40 17 1.5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 -30 5
+      vertex 40 17 1.5
+      vertex 40 17 3.5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 -30 5
+      vertex 40 17 3.5
+      vertex 40 27 3.5
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
+      vertex 40 -30 5
       vertex 40 30 5
-      vertex 15 15 5
-      vertex 16.913417160511017 14.619397662580013 5
-    endloop
-  endfacet
-  facet normal 0 0 1
-    outer loop
-      vertex 40 30 5
-      vertex 18.535533905029297 13.535533905029297 5
-      vertex 19.619397662580013 11.913417160511017 5
-    endloop
-  endfacet
-  facet normal 0 0 1
-    outer loop
-      vertex 40 30 5
-      vertex 19.619397662580013 11.913417160511017 5
       vertex 20 10 5
     endloop
   endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 -30 5
+      vertex 40 27 3.5
+      vertex 40 30 5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 30 0
+      vertex 40 27 1.5
+      vertex 40 17 1.5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 30 0
+      vertex 40 30 5
+      vertex 40 27 1.5
+    endloop
+  endfacet
   facet normal 0 0 1
     outer loop
+      vertex 16.913417160511017 14.619397662580013 5
       vertex 40 30 5
+      vertex 15 15 5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 19.619397662580013 11.913417160511017 5
+      vertex 40 30 5
+      vertex 18.535533905029297 13.535533905029297 5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex 19.619397662580013 11.913417160511017 5
+      vertex 20 10 5
+      vertex 40 30 5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
       vertex 16.913417160511017 14.619397662580013 5
       vertex 18.535533905029297 13.535533905029297 5
+      vertex 40 30 5
+    endloop
+  endfacet
+  facet normal 1 0 0
+    outer loop
+      vertex 40 30 5
+      vertex 40 27 3.5
+      vertex 40 27 1.5
     endloop
   endfacet
   facet normal -0.5555702332507949 -0.8314696121480671 0
     outer loop
-      vertex -18.535533905029297 -13.535533905029297 13
       vertex -18.535533905029297 -13.535533905029297 5
       vertex -16.913417160511017 -14.619397662580013 5
+      vertex -18.535533905029297 -13.535533905029297 13
     endloop
   endfacet
   facet normal -0.8314696121480671 -0.5555702332507949 0
     outer loop
+      vertex -18.535533905029297 -13.535533905029297 5
       vertex -19.619397662580013 -11.913417160511017 13
       vertex -19.619397662580013 -11.913417160511017 5
-      vertex -18.535533905029297 -13.535533905029297 5
     endloop
   endfacet
   facet normal -0.19509032213341937 -0.9807852803798998 0
     outer loop
-      vertex -16.913417160511017 -14.619397662580013 13
       vertex -16.913417160511017 -14.619397662580013 5
       vertex -15 -15 5
+      vertex -16.913417160511017 -14.619397662580013 13
     endloop
   endfacet
   facet normal -0.9807852803798998 -0.19509032213341937 0
     outer loop
+      vertex -19.619397662580013 -11.913417160511017 5
       vertex -20 -10 13
       vertex -20 -10 5
-      vertex -19.619397662580013 -11.913417160511017 5
     endloop
   endfacet
   facet normal 0 -1 0
     outer loop
-      vertex -15 -15 13
       vertex -15 -15 5
       vertex 15 -15 5
+      vertex -15 -15 13
     endloop
   endfacet
   facet normal -0.8314696121480671 -0.5555702332507949 0
     outer loop
+      vertex -18.535533905029297 -13.535533905029297 5
       vertex -18.535533905029297 -13.535533905029297 13
       vertex -19.619397662580013 -11.913417160511017 13
-      vertex -18.535533905029297 -13.535533905029297 5
     endloop
   endfacet
   facet normal -0.9807852803798998 -0.19509032213341937 0
     outer loop
+      vertex -19.619397662580013 -11.913417160511017 5
       vertex -19.619397662580013 -11.913417160511017 13
       vertex -20 -10 13
-      vertex -19.619397662580013 -11.913417160511017 5
     endloop
   endfacet
   facet normal -0.5555702332507949 -0.8314696121480671 0
     outer loop
-      vertex -18.535533905029297 -13.535533905029297 13
       vertex -16.913417160511017 -14.619397662580013 5
       vertex -16.913417160511017 -14.619397662580013 13
+      vertex -18.535533905029297 -13.535533905029297 13
     endloop
   endfacet
   facet normal -0.19509032213341937 -0.9807852803798998 0
     outer loop
-      vertex -16.913417160511017 -14.619397662580013 13
       vertex -15 -15 5
       vertex -15 -15 13
+      vertex -16.913417160511017 -14.619397662580013 13
     endloop
   endfacet
   facet normal 0 0 1
@@ -323,9 +407,9 @@ solid PythonSCAD_Model
   endfacet
   facet normal -1 0 0
     outer loop
+      vertex -20 -10 5
       vertex -20 -10 13
       vertex -20 10 13
-      vertex -20 -10 5
     endloop
   endfacet
   facet normal 0 0 1
@@ -344,37 +428,37 @@ solid PythonSCAD_Model
   endfacet
   facet normal -1 0 0
     outer loop
+      vertex -20 -10 5
       vertex -20 10 13
       vertex -20 10 5
-      vertex -20 -10 5
     endloop
   endfacet
   facet normal -0.9807852803798998 0.19509032213341937 0
     outer loop
+      vertex -20 10 5
       vertex -19.619397662580013 11.913417160511017 13
       vertex -19.619397662580013 11.913417160511017 5
-      vertex -20 10 5
     endloop
   endfacet
   facet normal -0.8314696121480671 0.5555702332507949 0
     outer loop
+      vertex -19.619397662580013 11.913417160511017 5
       vertex -18.535533905029297 13.535533905029297 13
       vertex -18.535533905029297 13.535533905029297 5
-      vertex -19.619397662580013 11.913417160511017 5
     endloop
   endfacet
   facet normal -0.5555702332507949 0.8314696121480671 0
     outer loop
+      vertex -18.535533905029297 13.535533905029297 5
       vertex -16.913417160511017 14.619397662580013 13
       vertex -16.913417160511017 14.619397662580013 5
-      vertex -18.535533905029297 13.535533905029297 5
     endloop
   endfacet
   facet normal -0.19509032213341937 0.9807852803798998 0
     outer loop
+      vertex -16.913417160511017 14.619397662580013 5
       vertex -15 15 13
       vertex -15 15 5
-      vertex -16.913417160511017 14.619397662580013 5
     endloop
   endfacet
   facet normal 0 0 1
@@ -386,30 +470,30 @@ solid PythonSCAD_Model
   endfacet
   facet normal -0.9807852803798998 0.19509032213341937 0
     outer loop
+      vertex -20 10 5
       vertex -20 10 13
       vertex -19.619397662580013 11.913417160511017 13
-      vertex -20 10 5
     endloop
   endfacet
   facet normal -0.8314696121480671 0.5555702332507949 0
     outer loop
+      vertex -19.619397662580013 11.913417160511017 5
       vertex -19.619397662580013 11.913417160511017 13
       vertex -18.535533905029297 13.535533905029297 13
-      vertex -19.619397662580013 11.913417160511017 5
     endloop
   endfacet
   facet normal -0.5555702332507949 0.8314696121480671 0
     outer loop
+      vertex -18.535533905029297 13.535533905029297 5
       vertex -18.535533905029297 13.535533905029297 13
       vertex -16.913417160511017 14.619397662580013 13
-      vertex -18.535533905029297 13.535533905029297 5
     endloop
   endfacet
   facet normal -0.19509032213341937 0.9807852803798998 0
     outer loop
+      vertex -16.913417160511017 14.619397662580013 5
       vertex -16.913417160511017 14.619397662580013 13
       vertex -15 15 13
-      vertex -16.913417160511017 14.619397662580013 5
     endloop
   endfacet
   facet normal 0 0 1
@@ -435,37 +519,37 @@ solid PythonSCAD_Model
   endfacet
   facet normal 0 1 0
     outer loop
+      vertex -15 15 5
       vertex -15 15 13
       vertex 15 15 13
-      vertex -15 15 5
     endloop
   endfacet
   facet normal 0.19509032213341937 -0.9807852803798998 0
     outer loop
-      vertex 15 -15 13
       vertex 15 -15 5
       vertex 16.913417160511017 -14.619397662580013 5
+      vertex 15 -15 13
     endloop
   endfacet
   facet normal 0.5555702332507949 -0.8314696121480671 0
     outer loop
-      vertex 16.913417160511017 -14.619397662580013 13
       vertex 16.913417160511017 -14.619397662580013 5
       vertex 18.535533905029297 -13.535533905029297 5
+      vertex 16.913417160511017 -14.619397662580013 13
     endloop
   endfacet
   facet normal 0.8314696121480671 -0.5555702332507949 0
     outer loop
-      vertex 18.535533905029297 -13.535533905029297 13
       vertex 18.535533905029297 -13.535533905029297 5
       vertex 19.619397662580013 -11.913417160511017 5
+      vertex 18.535533905029297 -13.535533905029297 13
     endloop
   endfacet
   facet normal 0.9807852803798998 -0.19509032213341937 0
     outer loop
-      vertex 19.619397662580013 -11.913417160511017 13
       vertex 19.619397662580013 -11.913417160511017 5
       vertex 20 -10 5
+      vertex 19.619397662580013 -11.913417160511017 13
     endloop
   endfacet
   facet normal 0 -1 0
@@ -477,30 +561,30 @@ solid PythonSCAD_Model
   endfacet
   facet normal 0.19509032213341937 -0.9807852803798998 0
     outer loop
-      vertex 15 -15 13
       vertex 16.913417160511017 -14.619397662580013 5
       vertex 16.913417160511017 -14.619397662580013 13
+      vertex 15 -15 13
     endloop
   endfacet
   facet normal 0.5555702332507949 -0.8314696121480671 0
     outer loop
-      vertex 16.913417160511017 -14.619397662580013 13
       vertex 18.535533905029297 -13.535533905029297 5
       vertex 18.535533905029297 -13.535533905029297 13
+      vertex 16.913417160511017 -14.619397662580013 13
     endloop
   endfacet
   facet normal 0.8314696121480671 -0.5555702332507949 0
     outer loop
-      vertex 18.535533905029297 -13.535533905029297 13
       vertex 19.619397662580013 -11.913417160511017 5
       vertex 19.619397662580013 -11.913417160511017 13
+      vertex 18.535533905029297 -13.535533905029297 13
     endloop
   endfacet
   facet normal 0.9807852803798998 -0.19509032213341937 0
     outer loop
-      vertex 19.619397662580013 -11.913417160511017 13
       vertex 20 -10 5
       vertex 20 -10 13
+      vertex 19.619397662580013 -11.913417160511017 13
     endloop
   endfacet
   facet normal 0 0 1
@@ -533,37 +617,37 @@ solid PythonSCAD_Model
   endfacet
   facet normal 1 0 0
     outer loop
-      vertex 20 -10 13
       vertex 20 -10 5
       vertex 20 10 5
+      vertex 20 -10 13
     endloop
   endfacet
   facet normal 0.9807852803798998 0.19509032213341937 0
     outer loop
+      vertex 19.619397662580013 11.913417160511017 5
       vertex 20 10 13
       vertex 20 10 5
-      vertex 19.619397662580013 11.913417160511017 5
     endloop
   endfacet
   facet normal 0.19509032213341937 0.9807852803798998 0
     outer loop
-      vertex 16.913417160511017 14.619397662580013 13
       vertex 16.913417160511017 14.619397662580013 5
       vertex 15 15 5
+      vertex 16.913417160511017 14.619397662580013 13
     endloop
   endfacet
   facet normal 0.8314696121480671 0.5555702332507949 0
     outer loop
-      vertex 19.619397662580013 11.913417160511017 13
       vertex 19.619397662580013 11.913417160511017 5
       vertex 18.535533905029297 13.535533905029297 5
+      vertex 19.619397662580013 11.913417160511017 13
     endloop
   endfacet
   facet normal 0.5555702332507949 0.8314696121480671 0
     outer loop
+      vertex 16.913417160511017 14.619397662580013 5
       vertex 18.535533905029297 13.535533905029297 13
       vertex 18.535533905029297 13.535533905029297 5
-      vertex 16.913417160511017 14.619397662580013 5
     endloop
   endfacet
   facet normal 0 0 1
@@ -582,58 +666,58 @@ solid PythonSCAD_Model
   endfacet
   facet normal 0.19509032213341937 0.9807852803798998 0
     outer loop
+      vertex 15 15 5
       vertex 15 15 13
       vertex 16.913417160511017 14.619397662580013 13
-      vertex 15 15 5
     endloop
   endfacet
   facet normal 0.5555702332507949 0.8314696121480671 0
     outer loop
+      vertex 16.913417160511017 14.619397662580013 5
       vertex 16.913417160511017 14.619397662580013 13
       vertex 18.535533905029297 13.535533905029297 13
-      vertex 16.913417160511017 14.619397662580013 5
     endloop
   endfacet
   facet normal 0.9807852803798998 0.19509032213341937 0
     outer loop
-      vertex 20 10 13
       vertex 19.619397662580013 11.913417160511017 5
       vertex 19.619397662580013 11.913417160511017 13
+      vertex 20 10 13
     endloop
   endfacet
   facet normal 0.8314696121480671 0.5555702332507949 0
     outer loop
-      vertex 19.619397662580013 11.913417160511017 13
       vertex 18.535533905029297 13.535533905029297 5
       vertex 18.535533905029297 13.535533905029297 13
+      vertex 19.619397662580013 11.913417160511017 13
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
-      vertex 15 15 13
-      vertex 18.535533905029297 13.535533905029297 13
       vertex 16.913417160511017 14.619397662580013 13
+      vertex 15 15 13
+      vertex 18.535533905029297 13.535533905029297 13
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
-      vertex 20 10 13
       vertex 18.535533905029297 13.535533905029297 13
       vertex 15 15 13
+      vertex 20 10 13
     endloop
   endfacet
   facet normal 0 0 1
     outer loop
-      vertex 20 10 13
       vertex 19.619397662580013 11.913417160511017 13
       vertex 18.535533905029297 13.535533905029297 13
+      vertex 20 10 13
     endloop
   endfacet
   facet normal 0 1 0
     outer loop
+      vertex -15 15 5
       vertex 15 15 13
       vertex 15 15 5
-      vertex -15 15 5
     endloop
   endfacet
   facet normal 1 0 0
@@ -641,6 +725,62 @@ solid PythonSCAD_Model
       vertex 20 -10 13
       vertex 20 10 5
       vertex 20 10 13
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex -40 17 1.5
+      vertex 40 17 1.5
+      vertex -40 27 1.5
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex -40 17 1.5
+      vertex -40 17 3.5
+      vertex 40 17 3.5
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -40 27 1.5
+      vertex 40 27 1.5
+      vertex -40 27 3.5
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex -40 17 3.5
+      vertex -40 27 3.5
+      vertex 40 27 3.5
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex -40 17 1.5
+      vertex 40 17 3.5
+      vertex 40 17 1.5
+    endloop
+  endfacet
+  facet normal 0 0 1
+    outer loop
+      vertex -40 27 1.5
+      vertex 40 17 1.5
+      vertex 40 27 1.5
+    endloop
+  endfacet
+  facet normal 0 -1 0
+    outer loop
+      vertex -40 27 3.5
+      vertex 40 27 1.5
+      vertex 40 27 3.5
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex -40 17 3.5
+      vertex 40 27 3.5
+      vertex 40 17 3.5
     endloop
   endfacet
 endsolid PythonSCAD_Model

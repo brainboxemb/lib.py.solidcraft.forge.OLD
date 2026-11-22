@@ -129,8 +129,89 @@
     ],
     "created_bodies": [],
     "feature": 3,
-    "ms": 15.901787,
+    "ms": 16.305947,
     "name": "Rounded pad",
+    "removed_bodies": [],
+    "warning": null
+  },
+  {
+    "attachment": "fixed",
+    "created": {
+      "constraints": [],
+      "curves": [],
+      "dimensions": [],
+      "points": []
+    },
+    "name": "World cut",
+    "projected": null,
+    "sketch": 4
+  },
+  {
+    "constraints": [
+      "k1",
+      "k2",
+      "k3",
+      "k4"
+    ],
+    "corners": {
+      "bottom_left": "p1",
+      "bottom_right": "p2",
+      "top_left": "p4",
+      "top_right": "p3"
+    },
+    "created": {
+      "constraints": [
+        "k1",
+        "k2",
+        "k3",
+        "k4"
+      ],
+      "curves": [
+        "l1",
+        "l2",
+        "l3",
+        "l4"
+      ],
+      "dimensions": [],
+      "points": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ]
+    },
+    "curves": [
+      "l1",
+      "l2",
+      "l3",
+      "l4"
+    ],
+    "sides": {
+      "bottom": "l1",
+      "left": "l4",
+      "right": "l2",
+      "top": "l3"
+    },
+    "sketch": {
+      "dof": 0,
+      "solved": true
+    }
+  },
+  {
+    "profiles": 1,
+    "sketch": 4
+  },
+  {
+    "bodies": [
+      "RoundedRectangleSketch"
+    ],
+    "changed_bodies": [
+      "RoundedRectangleSketch"
+    ],
+    "created_bodies": [],
+    "feature": 5,
+    "ms": 13.582187000000001,
+    "name": "Extrude1",
     "removed_bodies": [],
     "warning": null
   }
