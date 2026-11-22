@@ -1,5 +1,7 @@
 # Native sketch Slot family
 
+> Documentation provenance: the original case description traces to the last canonical `qualification/cases.py` source before its removal, commit `be40b09e7454a90e87d83768a9e7453c52ba5d76`. The SolidCraft 0.45 parametric additions in this revision are derived from the canonical runtime registry in [`docs/reference/solidcraft/0.45.0/`](../../docs/reference/solidcraft/0.45.0/) and are proven by [`verification/verify.py`](verification/verify.py) plus the saved-design mutation [`verification/change_size.json`](verification/change_size.json).
+
 **Legacy group:** `features`
 
 **Saved-design required:** `true`
@@ -83,6 +85,8 @@ straight lengths and position. The body envelope stays the same while the
 through-cut volume changes deterministically.
 
 ## Geometry evidence
+
+> Geometry-rationale provenance: the unchanged baseline envelope/volume contract descends from `qualification/geometry_contracts.py` at commit `be40b09e7454a90e87d83768a9e7453c52ba5d76`; the new mutated-volume expectation is derived directly from the five native Slot dimensions declared in this case.
 
 **Bounds sufficient:** `false`
 
