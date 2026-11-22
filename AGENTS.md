@@ -219,6 +219,9 @@ Historical documentation-architecture discussion is preserved under
 
 ## Current work and handoff protocol
 
+The canonical session handoff is `docs/handoff.md`, following the shared
+`brainboxemb/meta.cad.solidcraft/templates/docs/handoff.md` structure.
+
 A handoff is only an entrypoint. Never treat copied handoff text as fresher than
 GitHub or the repository plan. A handoff must also keep both active repository
 areas visible: CAD-library work and CI/infrastructure work. Do not describe the
