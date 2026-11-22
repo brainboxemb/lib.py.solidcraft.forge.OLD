@@ -1,0 +1,162 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "7b790614bb42a8fbf0198b4f1e01a13b6b5960bf694cfc22a87b4cf281240e69",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "half_span",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "radius",
+        "expression": "20",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 3,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 4,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "index": 5,
+      "command": "sheet.manage_rules",
+      "resolved_params": {
+        "name": "Connected Profile Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "index": 6,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "Connected blank"
+      }
+    },
+    {
+      "index": 7,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            "-(half_span)",
+            "-(radius)"
+          ],
+          [
+            "half_span",
+            "-(radius)"
+          ]
+        ],
+        "connect": true
+      }
+    },
+    {
+      "index": 8,
+      "command": "sketch.arc.center_point",
+      "resolved_params": {
+        "center": [
+          "half_span",
+          0
+        ],
+        "start": [
+          "half_span",
+          "-(radius)"
+        ],
+        "end": [
+          "half_span",
+          "radius"
+        ],
+        "clockwise": false,
+        "connect": true
+      }
+    },
+    {
+      "index": 9,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            "half_span",
+            "radius"
+          ],
+          [
+            "-(half_span)",
+            "radius"
+          ]
+        ],
+        "connect": true
+      }
+    },
+    {
+      "index": 10,
+      "command": "sketch.arc.center_point",
+      "resolved_params": {
+        "center": [
+          "-(half_span)",
+          0
+        ],
+        "start": [
+          "-(half_span)",
+          "radius"
+        ],
+        "end": [
+          "-(half_span)",
+          "-(radius)"
+        ],
+        "clockwise": false,
+        "connect": true
+      }
+    },
+    {
+      "index": 11,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 12,
+      "command": "sheet.flange",
+      "resolved_params": {
+        "type": "base",
+        "sketch": "Connected blank",
+        "rule": "Connected Profile Rule",
+        "body_name": "ConnectedProfileSheet"
+      }
+    }
+  ],
+  "completed": 13
+}
