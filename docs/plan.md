@@ -79,14 +79,11 @@ and therefore receive normal merge commits.
 
 Primary lane: `dev-cad`.
 
-- #684 native `sheet.flange(type=contour)` — **effectively complete but still
-  open**. PR #698 is merged to `dev-cad` as `2fc5cc8c...`; native PR
-  qualification was green. Close only after the policy-dispatched `dev-cad`
-  integration for that exact head succeeds.
-- #568 SolidCraft 0.45 sheet-flange tracking parent — **effectively complete but
-  still open**. #682, #683 and #684 cover the currently identified flange-family
-  scope; close after #684's lane integration is accepted unless a concrete
-  missing child is identified.
+- #684 native `sheet.flange(type=contour)` — **complete**; PR #698 merged to
+  `dev-cad` as `2fc5cc8c...` and exact-head lane integration run
+  `45027571753` succeeded.
+- #568 SolidCraft 0.45 sheet-flange tracking parent — **complete**; #682, #683
+  and #684 cover the identified flange-family scope.
 - #679 component-local feature-name namespacing — **now**. Downstream shared-batch
   evidence already shows repeated reusable component feature names collide at
   SolidCraft document scope. Preserve component-local authoring semantics while
@@ -119,8 +116,6 @@ Primary lane: `dev-cad`.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #684 Native contour flange | dev-cad | **effectively complete but still open** | Accept the exact-head `dev-cad` integration, then close. |
-| #568 SolidCraft 0.45 sheet flange parent | dev-cad | **effectively complete but still open** | Close after #684 if no missing concrete child remains. |
 | #679 Namespace repeated component-local feature names | dev-cad | **now** | Update requirements/design for local-vs-document identity, then implement one focused lowering slice and qualification. |
 | #703 Canonical reusable model.yml contract | dev-cad | **next** | Define the reusable human-facing metadata schema/template in Forge and an adoption contract for CAD consumers. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately from active CAD/compiler changes. |
@@ -138,6 +133,7 @@ Primary lane: `dev-cad`.
 
 ## Recently completed
 
+- #684 native contour flange and #568 SolidCraft 0.45 flange tracking parent — complete after exact-head `dev-cad` integration run `45027571753` succeeded.
 - #674 shared merge/lane policy adoption — released owner workflow adopted and
   live short-lived plus permanent-lane paths qualified.
 - #683 reusable open connected Sketch chains — merged and natively qualified on
