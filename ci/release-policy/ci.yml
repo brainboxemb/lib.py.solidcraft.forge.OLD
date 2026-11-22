@@ -4,6 +4,7 @@ process: true
 kind: test
 watch:
   - .github/workflows/release.yml
+  - ci/forge-release/ci.yml
   - scripts/release/**
   - docs/release.md
 strategy:
@@ -12,6 +13,7 @@ steps:
   - id: test_release_validator
     inputs:
       - .github/workflows/release.yml
+      - ci/forge-release/ci.yml
       - scripts/release/**
       - docs/release.md
     run: [python, ../../scripts/release/test_validate_release.py]
