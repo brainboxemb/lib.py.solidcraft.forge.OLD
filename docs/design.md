@@ -233,6 +233,31 @@ implementation changes.
 SCons execution order/parallelism remains generic CAD-CI behavior; this Forge
 change only makes the dependency graph semantically correct.
 
+## Forge bounded SCons jobs policy
+
+Forge consumes externally accepted `tool.cad.ci 0.17.0` with one explicit
+bounded value:
+
+```text
+Forge workflow
+  -> tool.cad.ci action jobs=2
+  -> lib.py.cad.ci
+  -> one SCons graph with -j 2
+```
+
+This is a consumer concurrency choice, not Forge-owned execution logic.
+
+- both review and long-lived integration use the same explicit value;
+- default behavior of the tool itself remains jobs=1;
+- Forge does not partition targets or create a second worker pool;
+- dependency ordering, dirty/current decisions, cache reuse and evidence stay
+  inside the released library/SCons engine;
+- changing the Forge bound requires measured promotion evidence.
+
+The jobs=2 surface was externally black-box accepted before Forge adoption.
+Two independent consumer actions overlapped in public step evidence under
+`tool.cad.ci.test` #66 / PR #67.
+
 ## CI selection and evidence
 
 The current flow separates repository participation, Git selection and build
@@ -1152,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.16.2`:
+`tool.cad.ci 0.17.0`:
 
 ```text
 push main
