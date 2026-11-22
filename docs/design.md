@@ -1608,3 +1608,98 @@ validation. It does not implement CAD selection itself.
 This cut-over deliberately does not use a reusable workflow job for the durable
 push path: site generation must continue immediately after CAD/build publication
 in the same workspace without artifact transport or a second bootstrap.
+
+
+## Connected-profile builder
+
+### Public object model
+
+Connected mixed line/arc geometry remains a **profile**, not a collection of
+independent open Sketch profiles.
+
+`Sketch.profile(start=...)` returns an internal/public builder bound to the
+active Sketch. The builder stores authored segment descriptors until
+`close()`:
+
+```text
+start point
+  -> line(end)
+  -> arc_three_point(end, through)
+  -> arc_center_point(end, center, clockwise)
+  -> ...
+  -> final endpoint == start point
+  -> close()
+  -> one Shape(kind="connected_profile", data=(start, segments))
+  -> Sketch._profiles
+```
+
+This keeps the existing `Sketch.extrude()` and `Sketch.sheet_metal()`
+interfaces unchanged: both continue to consume complete profiles from
+`Sketch._profiles`.
+
+### Why a builder instead of Line2D/Arc2D profile primitives
+
+A standalone line or arc is not a closed selectable profile and would violate
+the current `Sketch.add(profile)` abstraction. A builder makes connectivity
+and closure explicit while preserving the established "Sketch stores complete
+profiles" model.
+
+The builder is not a runtime command proxy. It records declarative authored
+intent only.
+
+### Native lowering
+
+A connected profile lowers inside one native Sketch:
+
+```text
+sketch.create
+sketch.line(points=[start, end], connect=true)
+sketch.arc.three_point(start=<same authored endpoint>, end=..., through=..., connect=true)
+sketch.arc.center_point(center=..., start=<same authored endpoint>, end=..., clockwise=..., connect=true)
+...
+sketch.finish
+```
+
+Forge supplies authored coordinates/expressions to each command and sets native
+`connect=true`. It does not consume the command's returned generated ids.
+
+The current endpoint of every descriptor is reused verbatim as the next
+descriptor's start. This means the same authored Parameter/Expression object is
+present in both commands; native connect adds the persistent coincident
+relationship at creation.
+
+`close()` compares the current endpoint and initial endpoint by authored/current
+value and requires them to represent the same closing point. It does not append
+a hidden closing segment. Callers explicitly author the final line/arc back to
+the start so design intent is visible in source.
+
+### Compiler ownership
+
+Profile lowering belongs in one shared helper used by:
+
+- standalone Sketch extrusion;
+- native sheet-metal base creation;
+- attached Sketch extrusion where the same profile form is otherwise valid.
+
+Do not fork a second connected-profile compiler for sheet metal.
+
+Metadata records `profile="connected"` and the authored segment descriptors.
+Do not pretend it is a polygon: polygon-only named-edge selection continues to
+require Polygon2D until a curve-aware selector contract is designed.
+
+### Native qualification
+
+A focused generic example should contain a simple line/arc blank with at least:
+
+- two straight segments;
+- one three-point arc;
+- one center-point arc;
+- Parameter/Expression-driven line endpoint;
+- Parameter/Expression-driven arc point/center;
+- ordinary extrusion evidence;
+- sheet-metal base evidence in the same API contract or a paired qualification
+  variant;
+- save/reopen mutation proving the profile remains closed and native.
+
+The verification must inspect native Sketch/profile/timeline state, not only
+mesh geometry.

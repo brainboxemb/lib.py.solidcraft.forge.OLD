@@ -224,6 +224,56 @@ Sketch coordinates rather than parameter expressions.
 A direct 3D primitive such as `Box` remains a native primitive; Forge must not
 synthesize an unnecessary Sketch merely to construct it.
 
+
+
+#### Connected mixed line/arc profiles
+
+Use a connected profile builder when one closed Sketch region mixes straight
+segments and true circular arcs:
+
+```python
+with Sketch(name="Blank", plane="XY") as blank:
+    contour = blank.profile(start=(0, 0))
+    contour.line_to((40, 0))
+    contour.arc_through_to((40, 20), through=(50, 10))
+    contour.line_to((0, 20))
+    contour.line_to((0, 0))
+    contour.close()
+
+solid = blank.extrude(8)
+```
+
+The same closed profile can start a native sheet-metal body:
+
+```python
+sheet = blank.sheet_metal(
+    thickness=2,
+    bend_radius=2,
+)
+```
+
+Available initial segment methods:
+
+```python
+contour.line_to(end)
+contour.arc_through_to(end, *, through)
+contour.arc_center_to(end, *, center, clockwise=False)
+contour.close()
+```
+
+All coordinates are sketch-local. Parameter/Expression values remain editable
+native point expressions. Forge lowers arcs to native SolidCraft arc commands;
+it never replaces them with short polygon edges.
+
+Each call starts at the previous segment's endpoint. Author the final segment
+back to the original start point, then call `close()`. `close()` validates
+closure but does not invent geometry.
+
+Tangent-arc authoring is deliberately not part of this first slice because the
+native command addresses a previous curve entity. Forge will not expose or
+guess generated SolidCraft ids merely to add syntactic sugar.
+
+
 #### Native Sketch pattern and mirror operations
 
 A profile already authored in the active Sketch can seed an associative native

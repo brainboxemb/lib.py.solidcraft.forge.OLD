@@ -1057,3 +1057,60 @@ released-stack acceptance chain before Forge adoption.
 Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
+
+
+## Connected mixed-curve Sketch profiles
+
+Forge supports one authored closed Sketch profile made from connected straight
+line and circular-arc segments without approximating arcs as polygon edges.
+
+Public authoring contract:
+
+```python
+with Sketch(name="Blank", plane="XY") as sketch:
+    contour = sketch.profile(start=(0, 0))
+    contour.line_to((40, 0))
+    contour.arc_through_to((40, 20), through=(50, 10))
+    contour.line_to((0, 20))
+    contour.line_to((0, 0))
+    contour.close()
+```
+
+Requirements:
+
+- `Sketch.profile(start=...)` creates one connected-profile builder owned by
+  that active Sketch;
+- `line_to(end)` authors one straight native segment from the builder's
+  current endpoint;
+- `arc_through_to(end, through=...)` authors one native three-point circular
+  arc from the current endpoint;
+- `arc_center_to(end, center=..., clockwise=False)` authors one native
+  center-point circular arc from the current endpoint;
+- segment point coordinates may contain the same Forge Parameter/Expression
+  values accepted by native Sketch point fields and must remain expressions in
+  the emitted SolidCraft design;
+- each segment's start is the previous segment's authored endpoint; callers do
+  not pass raw native curve/point ids or command dictionaries;
+- lowering uses SolidCraft `connect=true` so coincident connectivity is native
+  and survives parameter edits;
+- `close()` validates a closed authored loop and registers exactly one profile
+  in the owning Sketch; it must not silently invent a line or arc;
+- an unclosed builder is an authoring error when the Sketch scope exits;
+- zero-length lines, degenerate arcs and non-finite authored geometry are
+  rejected before replay;
+- the connected profile is accepted anywhere the existing one-profile
+  standalone Sketch contract is accepted, including ordinary
+  `Sketch.extrude()` and `Sketch.sheet_metal()`;
+- existing Rectangle2D/RoundedRectangle2D/Circle2D/Polygon2D/Slot APIs remain
+  unchanged convenience profiles;
+- no polygon approximation is permitted for an authored arc;
+- no raw SolidCraft dictionaries or generated curve ids become public API.
+
+The initial slice does not expose tangent-arc authoring. SolidCraft 0.45 has a
+native tangent-arc command, but that form depends on a previous native curve
+reference. Add it only after Forge has a deliberate public entity-reference
+contract rather than guessing runtime ids.
+
+Saved-design qualification must prove that editing at least one straight
+endpoint dependency and one arc dependency preserves one closed native profile
+and one valid resulting body after save/reopen.
