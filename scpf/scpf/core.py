@@ -1824,18 +1824,32 @@ def RoundedRectangle2D(width, depth, radius):
     return register_profile(Shape("rounded_rectangle", (width, depth, radius)))
 
 
-def _slot_point(name, value):
+def _slot_point(name, value, *, allow_symbolic=False):
     if not isinstance(value, (tuple, list)) or len(value) != 2:
         raise ValueError(f"{name} must be an (x, y) point")
     point = tuple(value)
     concrete = tuple(_pv(coordinate) for coordinate in point)
     if not all(isfinite(coordinate) for coordinate in concrete):
         raise ValueError(f"{name} must contain finite coordinates")
-    # SolidCraft's native Slot creators take authored sketch points. Keep
-    # those positions fixed; dimensions such as width remain symbolic.
-    if any(isinstance(coordinate, (Parameter, Expression)) for coordinate in point):
+    # SolidCraft 0.45 direct Slot point fields are numeric PlainPoint values.
+    # Straight-Slot constructors may retain symbolic authored intent here so
+    # feature lowering can emit numeric seed points plus native dimensions and
+    # constraints. Arc-Slot point fields remain direct/fixed in this slice.
+    if (
+        not allow_symbolic
+        and any(
+            isinstance(coordinate, (Parameter, Expression))
+            for coordinate in point
+        )
+    ):
         raise TypeError(f"{name} currently requires fixed numeric coordinates")
     return point
+
+
+def _slot_points_equal(left, right):
+    """Compare current Slot point values without discarding symbolic intent."""
+
+    return all(_pv(a) == _pv(b) for a, b in zip(left, right))
 
 
 def _slot_width(width):
@@ -1867,9 +1881,9 @@ def SlotCenterToCenter2D(p0, p1, width):
     Example:
         SlotCenterToCenter2D((-10, 0), (10, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
-    if p0 == p1:
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
+    if _slot_points_equal(p0, p1):
         raise ValueError("center-to-center Slot endpoints must differ")
     from .explicit_sketch import register_profile
     return register_profile(
@@ -1892,10 +1906,10 @@ def SlotOverall2D(p0, p1, width):
     Example:
         SlotOverall2D((-15, 0), (15, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
     width = _slot_width(width)
-    length = sum((b - a) ** 2 for a, b in zip(p0, p1)) ** 0.5
+    length = sum((_pv(b) - _pv(a)) ** 2 for a, b in zip(p0, p1)) ** 0.5
     if length <= _pv(width):
         raise ValueError("overall Slot length must be larger than its width")
     from .explicit_sketch import register_profile
@@ -1917,9 +1931,9 @@ def SlotCenterPoint2D(center, end, width):
     Example:
         SlotCenterPoint2D((0, 0), (10, 0), 6)
     """
-    center = _slot_point("center", center)
-    end = _slot_point("end", end)
-    if center == end:
+    center = _slot_point("center", center, allow_symbolic=True)
+    end = _slot_point("end", end, allow_symbolic=True)
+    if _slot_points_equal(center, end):
         raise ValueError("center-point Slot end must differ from its centre")
     from .explicit_sketch import register_profile
     return register_profile(
