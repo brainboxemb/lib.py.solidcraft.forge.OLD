@@ -1316,3 +1316,29 @@ line/tangent-arc/line chain, save/reopen stability, mutation of `distance` and
 at least one parameterized line endpoint, one connected sheet body, and coherent
 flat-pattern evidence. The fixture must also prove that the command document uses
 replay bindings rather than guessed tangent-arc ids.
+
+
+## Canonical model.yml metadata contract
+
+Forge owns the reusable human-facing `model.yml` contract used by Forge examples
+and CAD consumer repositories.
+
+The canonical document contains exactly these seven fields:
+
+- `section`: non-empty string;
+- `priority`: positive integer;
+- `title`: non-empty string;
+- `tagline`: non-empty string;
+- `description`: non-empty string;
+- `parameters`: non-empty string;
+- `stages`: non-empty list of non-empty strings.
+
+The contract is exact: `model.yml` has no consumer-specific extension mechanism.
+Operational build/source inputs, dependency declarations, verification
+expectations, generated facts and consumer-only presentation controls must live
+in their owning files rather than extending `model.yml`.
+
+The reusable Forge library validates an already-parsed mapping and must not
+depend on a YAML implementation. Consumers remain free to choose their YAML
+loader but must call the same Forge validator instead of copying field/type
+rules.
