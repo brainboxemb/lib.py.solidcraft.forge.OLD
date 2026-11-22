@@ -1,4 +1,6 @@
-# Produce all active independent CAD references in one runtime.
+# Forge repository CI item: produce active independent CAD references in one shared reference-runtime batch.
+# Runtime packaging and generic verification remain in their owner repositories.
+# Local documentation: README.md
 id: reference-verification-batch
 process: true
 kind: verification
