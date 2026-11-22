@@ -20,18 +20,22 @@ dev-ci
 
 Current stable `main` head:
 
-`156a4bfd316dbe711932f58990328e5711385751`
+`1689ddbc478a80f0b036da7868d29b15d6aef8e3`
 
 Current accepted `dev-cad` head:
 
-`3c692f3ce73d253892d1befee7ffb635b3169863`
+`8ee6c3f4df624ba437c8c370a565bd92b62ef8fa`
 
 Current `dev-ci` head:
 
 `4f5ab5e403602d534c5044f38365cb1437709a74`
 
-`dev-ci` has no unique source work relative to current `main`. The coherent
-post-v0.11 CAD-library batch is on `dev-cad`.
+`dev-ci` has no unique source work relative to current `main`.
+
+`dev-cad` is intentionally in a temporary merge-neutral documentation state
+under #722. The complete pre-neutralization CAD documentation is preserved at
+`f4440ec2c1f2e80e084f0bd94fd51afc1d452271` and must be restored after the
+history synchronization succeeds.
 
 ### Forge release
 
@@ -40,7 +44,8 @@ Current real package release: **v0.11.0** at
 
 Issue #714 is the explicit v0.12.0 release gate. No package version or dated
 0.12.0 changelog section is prepared until the accepted CAD batch reaches
-`main` and durable main/Pages provenance is green.
+`main`, durable main/Pages provenance is green, and #722 documentation
+restoration is complete.
 
 ### Generic CAD-CI/merge stack
 
@@ -49,19 +54,17 @@ Library:
 - `lib.py.cad.ci 0.11.0` @
   `e621daf6e309bdd0e3f643a12007f1b66490696d`.
 
-Shared tool policy now available and externally accepted:
+Current released and externally accepted merge tool:
 
-- `tool.cad.ci 0.20.0` @
-  `d45cdcef33cf1035311bab9a88c3f99208ef3b29`;
-- `tool.cad.ci.test` #82 / PR #83;
-- external acceptance run `45031453651` — complete success;
+- `tool.cad.ci 0.20.1` @
+  `eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`;
+- `tool.cad.ci.test` #84 / PR #85;
+- full external acceptance run `45033890474` — success;
 - accepted test-repository main commit
-  `125e19b95c6cf4892f5d65aa6162cf71d4f89c57`.
+  `d01153ceed336ab76d4385ddc1f4a2d462c73103`.
 
-Forge now consumes exact tool.cad.ci 0.20.0. PR #719 merged through the shared
-policy as squash commit `4b1af992...`; dispatched main integration run
-`45032014292` succeeded and `build/main/build.json` resolves to that exact
-source commit.
+Forge still consumes 0.20.0 until #726 is merged. #726 is therefore the active
+owner-release adoption gate.
 
 ## Lane and merge rule
 
@@ -73,26 +76,46 @@ source commit.
 - Exact `main -> dev-cad|dev-ci`: normal merge synchronization.
 - Both permanent-direction operations use only the exact released shared
   `/merge` policy and preserve permanent refs.
+- Same-head `issue_comment` command workflows are not PR validation checks;
+  tool.cad.ci 0.20.1 filters those command checks by Actions-run identity while
+  still requiring normal validation/status gates.
 - Generic CI/verification/runtime behavior is fixed/released in its owner repo
   before Forge adopts it.
 
 ## Active workstreams
 
-### WS1 — branch reconciliation and v0.12.0 promotion
+### WS1 — finish history reconciliation and v0.12.0 promotion
 
-Status: **now**, with exact sync PR #721 blocked only by five shared-document conflicts tracked in #722.
+Status: **now**.
 
-1. #722 — normalize only `AGENTS.md`, `CHANGELOG.md`, `docs/design.md`, `docs/plan.md` and `docs/requirements.md` on `dev-cad` so accepted main governance and pending CAD-library documentation coexist without merge conflicts.
-2. #717 / PR #721 — then perform the real history-preserving `main -> dev-cad`
-   synchronization using the adopted 0.20.0 policy and require durable lane
+Current evidence:
+
+- exact sync PR #721 (`main -> dev-cad`) is clean/mergeable;
+- full exact-head validation run `45032993674` succeeded;
+- the 0.20.0 `/merge` attempt was refused only because the command workflow
+  saw its own `merge / merge=in_progress` check on the stable head;
+- generic fix #108 is released as tool.cad.ci 0.20.1 and externally accepted.
+
+Required order:
+
+1. #726 — adopt exact externally accepted tool.cad.ci 0.20.1 in Forge.
+2. Refresh #721 against the resulting main head and mirror only any newly
+   changed shared plan/changelog text to the temporary merge-neutral
+   `dev-cad` state if needed.
+3. Require fresh exact-head validation for #721 and merge it through `/merge`;
+   verify a real normal two-parent stable-to-lane merge, unchanged `main` and
+   successful durable `dev-cad` integration.
+4. #722 — restore dev-cad-only CAD documentation from exact snapshot
+   `f4440ec2...`, reconcile the plan, qualify, merge and require durable lane
    integration.
-3. #716 / #714 — re-evaluate exact `dev-cad -> main` promotion; require fresh
+5. Close #722 and #717 only after that restoration is accepted.
+6. #716 / #714 — refresh exact `dev-cad -> main` promotion, require fresh
    exact-head validation and merge only through `/merge`.
-4. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
-5. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
+7. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
+8. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
 
-PR #716 remains open and currently conflicted. Do not replace it with a
-temporary promotion branch or squash the long-lived lane.
+PR #716 remains open. Do not replace either permanent-direction PR with a
+temporary promotion/synchronization branch.
 
 ### WS2 — deferred repository/verification cleanup
 
@@ -119,8 +142,9 @@ temporary promotion branch or squash the long-lived lane.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #722 Normalize five shared documents before sync | dev-cad | **now** | Reconcile only the five known overlapping documents; preserve dev-cad CAD content and current main governance so PR #721 becomes mergeable. |
-| #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #722** | Keep PR #721 exact `main -> dev-cad`; after #722, require fresh validation and merge through the 0.20.0 normal synchronization path. |
+| #726 Adopt tool.cad.ci 0.20.1 | governance/main | **now** | Repin only the thin wrapper/test to the exact externally accepted patch release; qualify and merge through shared policy. |
+| #722 Normalize/restore shared documents around sync | dev-cad | **blocked on #721** | Temporary merge-neutral state is complete; after successful sync, restore CAD documentation from exact `f4440ec2...`. |
+| #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #726** | Refresh and retry exact PR #721 with 0.20.1, then require durable lane integration and #722 restoration. |
 | #714 Release Forge 0.12.0 | repository | **blocked on #717** | Resume #716 promotion, durable main/Pages verification, then explicit release preparation/publication. |
 | #713 Audit/reduce Forge scripts | repository / verification owner | **later** | Reassess after the release checkpoint; do not interrupt WS1. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately after the release checkpoint. |
@@ -138,20 +162,24 @@ temporary promotion branch or squash the long-lived lane.
 
 ## Recently completed
 
-- #718 tool.cad.ci 0.20.0 adoption — PR #719 exact-head run `45031935896` green; merged as `4b1af992...`; durable main/Pages integration run `45032014292` green with matching `build/main` provenance.
+- tool.cad.ci #108 — 0.20.1 released at `eb64a46b...`; external acceptance
+  run `45033890474` succeeded.
+- #722 pre-sync conflict neutralization — dev-cad now at `8ee6c3f4...`; all
+  five known conflict documents were made merge-neutral for #721.
+- #718 tool.cad.ci 0.20.0 adoption — PR #719 run `45031935896` green; merged
+  as `4b1af992...`; durable main/Pages run `45032014292` green.
 - #679 component-local Sketch namespacing — exact-head PR run
   `45029824977`, merged to `dev-cad` as `35d0f558...`, durable lane run
   `45030057045` green.
 - #703 canonical reusable `model.yml` contract — PR #711 merged to
   `dev-cad` as `45b0f52b...`.
 - #684 native contour flange and #568 SolidCraft 0.45 flange parent — complete.
-- #674 initial shared merge/lane policy adoption — tool 0.19.0 accepted and both
-  short-lived squash and lane-to-main promotion paths qualified.
 - #683 reusable open connected Sketch chains — merged and natively qualified.
 - #682 native sheet edge flange — merged and natively qualified.
 - #567 mixed line/arc profiles — merged and qualified.
 
 ## Next release checkpoint
 
-Finish #722 -> #717/#721 -> #716/#714 in that order. Do not accumulate another
-CAD/API batch before v0.12.0 is either published or explicitly deferred.
+Finish #726 -> #721/#717 -> #722 restoration -> #716/#714 in that order. Do not
+accumulate another CAD/API batch before v0.12.0 is either published or explicitly
+deferred.

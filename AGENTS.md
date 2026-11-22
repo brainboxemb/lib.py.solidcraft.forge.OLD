@@ -295,6 +295,9 @@ The released policy has three explicit classes:
 Forge supplies branch names, permanent refs, cleanup prefixes and `scpf.yml`
 integration dispatch only; it does not implement the decision/API calls locally.
 Both permanent-direction operations require a same-repository head.
+Same-head GitHub Actions runs triggered by `issue_comment` are command workflows,
+not PR validation checks; the released policy filters them by Actions-run identity
+while keeping normal validation checks and commit statuses mandatory.
 
 Temporary `promote/*` heads are not part of the supported promotion flow.
 Merged short-lived branches are removed only through the policy cleanup
@@ -316,8 +319,8 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The accepted owner stack is exact `tool.cad.ci 0.20.0` at
-`d45cdcef33cf1035311bab9a88c3f99208ef3b29`, externally accepted by
+The accepted owner stack is exact `tool.cad.ci 0.20.1` at
+`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, externally accepted by
 `tool.cad.ci.test` run `45031453651`, backed by `lib.py.cad.ci 0.11.0`.
 Forge explicitly uses `jobs=2`. The released same-runner durable action owns
 scope/base resolution plus complete build-scope preparation/publication. The
