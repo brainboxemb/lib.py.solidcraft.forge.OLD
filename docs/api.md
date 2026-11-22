@@ -303,7 +303,9 @@ rerunning Forge Python.
 For a parameterized horizontal Slot, both authored Y coordinates must represent
 the same symbolic intent; the equivalent rule applies to X for a vertical Slot.
 Parameterized diagonal straight Slots are not supported. Fixed numeric diagonal
-Slots continue to use the direct native creator.
+Slots continue to use the direct native creator. Saved-design position changes
+may move a parameterized straight Slot on its authored side of the sketch
+origin; crossing an origin axis is not supported in this release.
 
 The two arc-Slot constructors keep fixed numeric authored points in this
 release, while their width may be parameterized.
