@@ -75,7 +75,34 @@ def load_definition(path: Path):
     return definition
 
 
-def produce_native_model(input_path: Path, output_dir: Path) -> Path:
+def _is_sketch_only_document(document: dict) -> bool:
+    """Return whether replay can intentionally produce no exportable body.
+
+    Keep the classifier narrow: #683 needs only parameter declarations and
+    native Sketch commands. Any other command keeps the established body-export
+    path rather than guessing whether it can create a body.
+    """
+
+    commands = document.get("commands")
+    if not isinstance(commands, list) or not commands:
+        return False
+
+    for row in commands:
+        if not isinstance(row, dict):
+            return False
+        command = row.get("command")
+        if command == "parameters.add":
+            continue
+        if isinstance(command, str) and command.startswith("sketch."):
+            continue
+        return False
+    return True
+
+
+def produce_native_model(
+    input_path: Path,
+    output_dir: Path,
+) -> tuple[Path, bool]:
     """Replay Forge output into the initial editable SolidCraft model."""
 
     from scpf.headless import run_document
@@ -86,6 +113,7 @@ def produce_native_model(input_path: Path, output_dir: Path) -> Path:
             f"Forge command document must contain one object: {input_path}"
         )
 
+    sketch_only = _is_sketch_only_document(value)
     native = output_dir / "native"
     native.mkdir(parents=True, exist_ok=True)
     model = native / "model.sc"
@@ -93,12 +121,12 @@ def produce_native_model(input_path: Path, output_dir: Path) -> Path:
     run_document(
         value,
         save=model,
-        export=native / "model.step",
+        export=None if sketch_only else native / "model.step",
         results_out=native / "results.json",
         replay_log_out=native / "replay-log.json",
         work_dir=native / "replay_work",
     )
-    return model
+    return model, sketch_only
 
 
 def run_inside_runtime(
@@ -141,7 +169,10 @@ def run_inside_runtime(
     )
 
     native_started = time.perf_counter()
-    model = produce_native_model(input_path.resolve(), output_dir.resolve())
+    model, sketch_only = produce_native_model(
+        input_path.resolve(),
+        output_dir.resolve(),
+    )
     print(
         "FORGE TIMING "
         f"native_model_s={time.perf_counter() - native_started:.3f}",
@@ -179,19 +210,20 @@ def run_inside_runtime(
             flush=True,
         )
 
-    from model_visual import write_presentation_preview
+    if not sketch_only:
+        from model_visual import write_presentation_preview
 
-    preview_started = time.perf_counter()
-    write_presentation_preview(
-        model,
-        measurements,
-        output_dir.resolve(),
-    )
-    print(
-        "FORGE TIMING "
-        f"presentation_preview_s={time.perf_counter() - preview_started:.3f}",
-        flush=True,
-    )
+        preview_started = time.perf_counter()
+        write_presentation_preview(
+            model,
+            measurements,
+            output_dir.resolve(),
+        )
+        print(
+            "FORGE TIMING "
+            f"presentation_preview_s={time.perf_counter() - preview_started:.3f}",
+            flush=True,
+        )
 
     print(
         "FORGE TIMING "

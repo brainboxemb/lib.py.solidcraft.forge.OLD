@@ -335,6 +335,28 @@ A thin Forge-owned model contract-test command resolves `CAD_CI_ITEM` and the
 exact `forge-package` dependency wheel, then delegates execution mechanics to
 `forge_example.run_contract_tests()`. It contains no model expectations.
 
+For native production, the launcher makes one narrow Forge-owned classification
+from the compiled replay document before invoking `scpf.headless.run_document`:
+
+```text
+all commands are parameters.add or sketch.*
+  -> sketch-only producer
+  -> save model.sc + results/replay log
+  -> export=None
+  -> no body-dependent presentation preview
+
+any other native command
+  -> existing producer path
+  -> save model.sc + model.step + results/replay log
+  -> existing presentation preview
+```
+
+This is deliberately conservative. It recognizes only the standalone
+parameter/sketch command family needed by #683; it does not maintain a list of
+all body-producing commands and it does not inspect `SolidCraftModelExpectation`
+fields. Shared measurement/mutation/schema checks remain entirely in the
+released verification library.
+
 Keeping Q2 as its own CAD-CI step makes its pass/fail and timing visible in
 normal structured CAD-CI evidence instead of hiding it inside native
 verification.
@@ -1788,3 +1810,83 @@ active sheet rule and refuses per-flange material fields.
 Height and angle stay as authored Forge Parameter/Expression values and lower via
 `command_value()`. XYZ selection points are fixed finite pick coordinates because
 they identify topology rather than drive geometry.
+
+
+## Open connected Sketch-chain design
+
+#683 deliberately does not reuse `connected_profile`. A closed selectable
+profile and an open contour path have different native semantics and different
+consumers.
+
+### Object model
+
+```text
+Sketch.chain(start)
+  -> _ConnectedChainBuilder
+       -> line_to(end)
+       -> tangent_arc_to(end)
+       -> line_to(end)
+       -> finish()
+  -> Shape(kind="sketch_open_chain", ...)
+```
+
+The finished Shape contains the owning Sketch name/plane/origin/offset plus the
+authored ordered segment descriptors. The Sketch keeps the finished chain only
+to validate context exit. It is not inserted into `Sketch._profiles`.
+
+That Shape can be compiled directly as a standalone native Sketch, which gives
+#683 its own generic qualification target. #684 may later consume the same
+Shape as its contour input without reconstructing or parsing Sketch internals.
+
+### Stable internal tangent reference
+
+SolidCraft 0.45 `sketch.arc.tangent` requires the start to identify the end of
+an existing line/arc. Forge already uses native `sketch.line(..., ids=[...])`
+for deterministic curve ids in Polygon2D lowering.
+
+For the initial open-chain slice, every authored line receives a deterministic
+compiler-owned id:
+
+```text
+$public source intent
+  line_to(...)
+      -> sketch.line(..., ids=["chain_1_line_1"], connect=true)
+  tangent_arc_to(...)
+      -> sketch.arc.tangent(
+           start="chain_1_line_1.end",
+           curve="chain_1_line_1",
+           end=<fixed numeric endpoint>
+         )
+```
+
+The id is generated solely from compilation order inside the Sketch. It is not
+stored in the public Shape data and is never accepted from user code.
+
+A tangent arc may therefore follow a line in this first slice. A second tangent
+arc immediately after an arc is intentionally rejected rather than adding new
+replay-result binding semantics speculatively.
+
+### Lowering
+
+Standalone chain lowering emits:
+
+```text
+sketch.create
+sketch.line(... connect=true, ids=[internal line id])
+sketch.arc.tangent(start=<internal line>.end, curve=<internal line>, end=...)
+sketch.line(... connect=true, ids=[next internal line id])
+sketch.finish
+```
+
+`sketch.line` endpoints remain numeric/parameter authored intent. The pinned
+SolidCraft 0.45 command contract accepts only a concrete point for
+`sketch.arc.tangent.end`, so the initial Forge tangent endpoint is validated as
+fixed finite numeric geometry before lowering. Forge does not approximate the
+tangent arc with a polyline.
+
+### Separation from contour flange
+
+#683 owns only reusable Sketch geometry and its standalone native qualification.
+It emits no `sheet.flange` command. #684 owns the later mapping from this
+qualified `sketch_open_chain` Shape to
+`sheet.flange(type="contour", sketch=..., curves=..., distance=...)`.

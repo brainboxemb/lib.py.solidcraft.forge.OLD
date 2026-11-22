@@ -212,6 +212,19 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         self.assertNotIn("dependency_output_root", text)
         self.assertNotIn("materialize_case", text)
 
+    def test_shared_launcher_supports_narrow_sketch_only_production(self):
+        """Sketch-only replay skips only body-dependent producer artifacts."""
+
+        text = LAUNCHER.read_text(encoding="utf-8")
+        self.assertIn("def _is_sketch_only_document", text)
+        self.assertIn('command == "parameters.add"', text)
+        self.assertIn('command.startswith("sketch.")', text)
+        self.assertIn(
+            'export=None if sketch_only else native / "model.step"',
+            text,
+        )
+        self.assertIn("if not sketch_only:", text)
+
     def test_shared_launcher_only_produces_and_hands_off(self):
         """Forge launcher may replay Forge output but not check SolidCraft data."""
 

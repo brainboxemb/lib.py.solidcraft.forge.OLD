@@ -37,6 +37,7 @@ from .placement import (
 from .sketches import (
     compile_base,
     compile_connected_profile,
+    compile_open_chain,
     compile_standalone_sketch,
     _extrude_profile_params,
 )
@@ -80,6 +81,7 @@ def _is_feature_tree(shape):
         "placed_box",
         "tapered_box",
         "sketch_base_extrusion",
+        "sketch_open_chain",
         "sheet_base",
         "sheet_edge_flange",
         "sheet_fold",
@@ -1331,6 +1333,9 @@ def _native_feature_name(feature):
 
 
 def _to_commands(shape, name):
+    if shape.kind == "sketch_open_chain":
+        return compile_open_chain(shape)
+
     if shape.kind == "sheet_base":
         (
             sketch_name,

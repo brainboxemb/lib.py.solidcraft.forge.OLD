@@ -185,6 +185,21 @@ Shared SolidCraft evaluation, mutation, inspection, schema interpretation,
 comparison and report construction are responsibilities of released
 `lib.py.cad.verification`.
 
+The Forge-owned producer must also support intentional standalone sketch-only
+models:
+
+- a replay document containing only parameter declarations and native
+  `sketch.*` commands is treated as sketch-only producer input;
+- Forge still saves the editable native `.sc` model, replay results and replay
+  log;
+- Forge must not request STEP/body export for that sketch-only replay because
+  SolidCraft correctly reports `nothing to export` when no body exists;
+- body-producing model replays keep the existing STEP export unchanged;
+- body-dependent presentation preview is omitted for sketch-only producer input;
+- this producer classification must not inspect verification expectations such
+  as `body_count` and must not move SolidCraft result checking out of
+  `lib.py.cad.verification`.
+
 Model migrations are proven in reviewable batches after the representative
 simple-box proof.
 
@@ -1191,3 +1206,54 @@ Requirements:
 Qualification must include a native sheet base plus edge flange, saved-design
 mutation of both flange height and angle, save/reopen verification and native
 flat-pattern evidence proving one connected sheet body remains.
+
+
+## Reusable open connected Sketch chains
+
+Forge supports a standalone open Sketch chain as a distinct authoring concept
+from a closed Sketch profile.
+
+Public authoring contract:
+
+```python
+with Sketch(name="Contour", plane="XY") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((40, 0))
+    chain.tangent_arc_to((50, 10))
+    chain.line_to((50, 30))
+    contour = chain.finish()
+```
+
+Requirements:
+
+- `Sketch.chain(start=...)` starts one open connected chain owned by the active
+  Sketch;
+- the initial open chain requires a standalone XY/XZ/YZ Sketch; plane offset is
+  supported, while attached `on=` and explicit 3D `origin=` are outside this slice;
+- `line_to(end)` authors one native connected line segment;
+- `tangent_arc_to(end)` authors one native `sketch.arc.tangent` segment and
+  requires the immediately previous segment to be a line in this first slice;
+- Forge gives authored line segments deterministic internal native ids and uses
+  the previous line's `<id>.end` reference for tangent-arc creation;
+- those internal ids are compiler plumbing only and never become public API;
+- line endpoints preserve Forge Parameter/Expression values accepted by native
+  `sketch.line` point fields;
+- the initial `tangent_arc_to(end)` endpoint is fixed finite numeric geometry:
+  SolidCraft 0.45 rejects expressions in `sketch.arc.tangent.end`, so Forge
+  rejects parameterized tangent endpoints before replay;
+- `finish()` registers and returns one reusable open-chain Shape; it does not
+  close the geometry or register a closed profile;
+- leaving the Sketch with an unfinished chain is an authoring error;
+- an open-chain Sketch is valid without also containing a closed profile;
+- the returned chain can compile as a standalone native Sketch for generic
+  qualification and is the future input contract for #684 contour flange;
+- no raw SolidCraft command dictionaries or caller-authored curve ids are
+  accepted;
+- no hidden closing line is created;
+- arc-to-arc tangent continuation is outside this initial slice. Add it only
+  when a downstream requirement justifies additional internal curve-reference
+  plumbing.
+
+Qualification must prove a native line -> tangent arc -> line open chain,
+parameter mutation through the surrounding line endpoints, save/reopen stability
+and native Sketch geometry remaining open rather than becoming a closed profile.

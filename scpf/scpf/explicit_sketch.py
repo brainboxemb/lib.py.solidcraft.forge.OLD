@@ -218,6 +218,83 @@ class _ConnectedProfileBuilder:
         return profile
 
 
+class _ConnectedChainBuilder:
+    """Record one open connected line/tangent-arc chain in an active Sketch."""
+
+    def __init__(self, sketch, start):
+        self._sketch = sketch
+        self._start = _connected_point(start, "open chain start")
+        self._current = self._start
+        self._segments = []
+        self._finished = False
+        self._shape = None
+
+    def _require_active(self):
+        if self._finished:
+            raise ValueError("open connected chain is already finished")
+        if (
+            self._sketch._closed
+            or self._sketch._token is None
+            or _ACTIVE_SKETCH.get() is not self._sketch
+        ):
+            raise ValueError(
+                "open connected chain must be authored inside its Sketch scope"
+            )
+
+    def line_to(self, end):
+        """Add one connected straight segment."""
+
+        self._require_active()
+        end = _connected_point(end, "open chain line endpoint")
+        if _connected_point_values(end) == _connected_point_values(self._current):
+            raise ValueError("open chain line must have non-zero length")
+        self._segments.append(("line", self._current, end))
+        self._current = end
+        return self
+
+    def tangent_arc_to(self, end):
+        """Add one native tangent arc after an authored line segment."""
+
+        self._require_active()
+        if not self._segments or self._segments[-1][0] != "line":
+            raise ValueError(
+                "open chain tangent arc currently requires a preceding line"
+            )
+        end = _connected_point(end, "open chain tangent arc endpoint")
+        if any(isinstance(command_value(value), str) for value in end):
+            raise ValueError(
+                "open chain tangent arc endpoint must be fixed numeric geometry"
+            )
+        if _connected_point_values(end) == _connected_point_values(self._current):
+            raise ValueError("open chain tangent arc must have non-zero extent")
+        self._segments.append(("arc_tangent", self._current, end))
+        self._current = end
+        return self
+
+    def finish(self):
+        """Register and return one reusable open Sketch-chain Shape."""
+
+        self._require_active()
+        if not self._segments:
+            raise ValueError("open connected chain requires at least one segment")
+        if _same_authored_point(self._current, self._start):
+            raise ValueError("open connected chain must remain open")
+        shape = Shape(
+            "sketch_open_chain",
+            (
+                self._sketch.name,
+                self._sketch.plane,
+                self._sketch.offset,
+                self._start,
+                tuple(self._segments),
+            ),
+        )
+        self._sketch._chains.append(shape)
+        self._finished = True
+        self._shape = shape
+        return shape
+
+
 class Sketch:
     """Create an explicit named 2D sketch scope.
 
@@ -279,6 +356,8 @@ class Sketch:
         self._profiles = []
         self._operations = []
         self._profile_builders = []
+        self._chain_builders = []
+        self._chains = []
         self._closed = False
         self._token = None
 
@@ -299,10 +378,42 @@ class Sketch:
                 raise ValueError(
                     "connected profile must be closed before leaving the Sketch"
                 )
-            if not self._profiles:
-                raise ValueError("Sketch must contain at least one profile")
+            if any(
+                not builder._finished
+                for builder in self._chain_builders
+            ):
+                raise ValueError(
+                    "open connected chain must be finished before leaving the Sketch"
+                )
+            if not self._profiles and not self._chains:
+                raise ValueError(
+                    "Sketch must contain at least one profile or open chain"
+                )
             self._closed = True
         return False
+
+    def chain(self, *, start):
+        """Start one reusable open connected line/tangent-arc chain."""
+
+        if (
+            self._closed
+            or self._token is None
+            or _ACTIVE_SKETCH.get() is not self
+        ):
+            raise ValueError(
+                "open connected chain must be started inside the Sketch scope"
+            )
+        if self.on is not None:
+            raise ValueError(
+                "open connected chain currently requires a standalone Sketch"
+            )
+        if self.origin is not None:
+            raise ValueError(
+                "open connected chain does not yet support explicit Sketch origin"
+            )
+        builder = _ConnectedChainBuilder(self, start)
+        self._chain_builders.append(builder)
+        return builder
 
     def profile(self, *, start):
         """Start one connected mixed line/arc profile in this Sketch."""

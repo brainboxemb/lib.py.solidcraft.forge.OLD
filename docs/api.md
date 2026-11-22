@@ -742,3 +742,45 @@ native default.
 The sheet's existing rule continues to own thickness, K-factor and bend radius.
 `flange()` does not expose per-edge segmentation, corner-relief overrides, chained
 bends or raw SolidCraft dictionaries in this initial API.
+
+
+#### Open connected Sketch chains
+
+Use an open chain when downstream native behavior needs a connected Sketch path
+rather than a closed profile:
+
+```python
+with Sketch(name="Contour", plane="XY") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((40, 0))
+    chain.tangent_arc_to((50, 10))
+    chain.line_to((50, 30))
+    contour = chain.finish()
+```
+
+Initial builder methods:
+
+```python
+chain.line_to(end)
+chain.tangent_arc_to(end)
+chain.finish()
+```
+
+`finish()` returns a reusable open-chain Shape. It does not close the chain
+and does not make it a selectable closed profile.
+
+The initial form requires a standalone Sketch on XY/XZ/YZ. A plane `offset=` is
+supported; attached `on=` and explicit 3D `origin=` chains are not part of this
+slice.
+
+The initial tangent-arc form must immediately follow a line segment. Forge uses
+a private deterministic native line id to satisfy SolidCraft's tangent
+reference; callers never pass or receive native curve ids. A line may follow
+the tangent arc, so normal line/tangent/line contour paths are supported.
+
+Coordinates are sketch-local. `line_to()` endpoints may use Forge
+Parameter/Expression values. The initial `tangent_arc_to()` endpoint must be a
+fixed finite numeric point because SolidCraft 0.45 rejects expressions in
+`sketch.arc.tangent.end`; Forge reports that at authoring time instead of
+emitting an invalid replay command. Arc-to-arc tangent continuation is not part
+of this first API slice.
