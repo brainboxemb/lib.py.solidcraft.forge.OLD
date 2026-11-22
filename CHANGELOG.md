@@ -10,6 +10,13 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Added
 
+- Native `Slot*2D` profiles now keep editable SolidCraft 0.45 dimensions:
+  all five Slot creators accept parameterized width, while the three straight
+  Slot creators support parameterized horizontal/vertical length and position
+  through native dimensioned-sketch constraints. The `slot-family`
+  qualification mutates width, straight length and position in the saved
+  SolidCraft design without rerunning Forge Python (issue #355).
+
 - Added the first native sheet-metal workflow: `Sketch.sheet_metal(...)`
   creates a rule-backed flat sheet from one closed XY Sketch and
   `Shape.fold(...)` bends existing sheet material with native

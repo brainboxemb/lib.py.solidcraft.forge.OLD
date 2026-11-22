@@ -1321,3 +1321,71 @@ The `qualification/` output tree is compatibility-only. It contains redirect
 HTML, a byte-identical alias of the current Verification manifest, and the six
 legacy local CadCraft JSON aliases. It is generated from current membership and
 does not become an executable or human-authored catalog.
+
+## Native Slot parameter lowering on SolidCraft 0.45
+
+The canonical runtime/source contract is:
+
+```text
+direct sketch.slot.* point fields -> numeric PlainPoint only
+direct sketch.slot.* width        -> number or expression
+sketch.draw.dimensioned           -> straight Slot roles: length, width
+straight Slot result              -> centre_line, middle
+```
+
+Forge therefore keeps two straight-Slot lowering paths.
+
+### Direct native path
+
+When authored points contain no Forge parameters, Forge emits the native
+`sketch.slot.*` creator directly. Width is passed through `command_value()`,
+so a symbolic width remains a SolidCraft-native driving expression.
+
+This path keeps existing numeric diagonal Slots unchanged.
+
+### Dimensioned native path
+
+When a straight Slot's authored point intent is symbolic:
+
+1. evaluate the current endpoints to numeric seed points;
+2. require the current seed axis to be horizontal or vertical;
+3. require equal perpendicular coordinate intent, not merely equal current
+   numeric values;
+4. emit `sketch.draw.dimensioned` around the same native Slot creator;
+5. drive canonical `length` and `width` roles from Forge expressions;
+6. bind the returned `centre_line` and `middle`;
+7. constrain `centre_line` to the authored horizontal/vertical orientation;
+8. drive the `middle` point's horizontal and vertical position from the sketch
+   origin using native `sketch.dimension` / axis coincidence as appropriate.
+
+The authored endpoint expressions are never passed into SolidCraft's numeric
+Slot point fields.
+
+`slot.center_to_center`, `slot.overall` and `slot.center_point` all use
+the same `length` role, but SolidCraft 0.45 interprets that role according to
+the creator:
+
+- center-to-center uses the authored end-centre distance;
+- overall uses the authored outer-end distance;
+- center-point uses the **complete** straight centre-line length, so Forge drives
+  it with twice the authored center-to-end distance.
+
+Native horizontal/vertical position dimensions are positive distances. Forge
+therefore drives each middle-position dimension with `abs(expression)`, while
+the numeric seed point preserves which side of the sketch origin was authored.
+`abs()` is part of SolidCraft 0.45's expression language and the typed Forge
+expression retains the original parameter dependencies for namespacing/replay.
+
+The seed therefore owns the sign/side while the dimension owns the editable
+distance. A saved-design mutation may move the Slot toward or away from the
+origin on that same side, including to zero, but sign-crossing through the
+origin is not qualified in this release. Supporting that requires a native
+signed-placement relation rather than pretending an unsigned linear dimension
+carries side information.
+
+Arc Slot points stay on the direct numeric path until their native parametric
+placement/radius contracts are qualified separately.
+
+Replay bindings for `centre_line` / `middle` must be merged with any
+profile-curve binding required by sketch pattern/mirror consumers; one binding
+must never overwrite the other.
