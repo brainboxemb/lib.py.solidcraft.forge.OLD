@@ -1316,3 +1316,28 @@ line/tangent-arc/line chain, save/reopen stability, mutation of `distance` and
 at least one parameterized line endpoint, one connected sheet body, and coherent
 flat-pattern evidence. The fixture must also prove that the command document uses
 replay bindings rather than guessed tangent-arc ids.
+
+
+## Component-local native feature names
+
+Reusable component source owns a local feature-name namespace. Two independent
+component definitions may therefore use the same authored Sketch or native
+feature name without requiring assembly-global prefixes in user code.
+
+Requirements:
+
+- authored feature names remain unchanged in Python model objects and public API;
+- assembly lowering assigns deterministic document-global native names where
+  SolidCraft requires uniqueness;
+- the native name is derived from the component-definition namespace, not from
+  occurrence order or predicted SolidCraft browser numbering;
+- references to renamed native features are rewritten only in typed command
+  fields that carry feature identity;
+- ordinary string payloads such as text, material names, rule names and other
+  opaque user data are never rewritten because they happen to equal a feature
+  name;
+- repeated occurrences of one reusable definition share the same namespaced
+  native feature history, while distinct parameterized definitions receive
+  distinct namespaces;
+- single-component/root compilation keeps its existing authored names because
+  document-global namespacing is an assembly-lowering concern.
