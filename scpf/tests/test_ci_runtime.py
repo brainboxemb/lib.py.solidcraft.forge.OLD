@@ -13,7 +13,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "scpf.yml"
 MODEL_VERIFY = ROOT / "scripts" / "model_verify_declarative.py"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
-TOOL_COMMIT = "59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9"
+TOOL_COMMIT = "d88d6e189c12edb5a30158c068145c099c17a019"
 
 
 def configured_variable(name: str) -> str:
@@ -129,6 +129,7 @@ class CiRuntimeContractTests(unittest.TestCase):
         self.assertNotIn("contents: write", pr)
         self.assertIn("packages: read", pr)
         self.assertIn("pull-requests: read", pr)
+        self.assertIn('jobs: "2"', pr)
         self.assertIn(
             "Classify pull request before CAD CI bootstrap",
             pr,
@@ -192,6 +193,7 @@ class CiRuntimeContractTests(unittest.TestCase):
         )
         self.assertIn("cancel-in-progress: true", push)
         self.assertIn("contents: write", push)
+        self.assertIn('jobs: "2"', push)
         self.assertIn("main|dev-cad|dev-ci", push)
         self.assertIn("scope_exists=false", push)
         self.assertIn("full_run=true", push)
