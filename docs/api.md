@@ -705,3 +705,40 @@ A public API behaviour is not considered complete merely because one example
 renders correctly. It needs the appropriate Q1-Q6 evidence. A qualification
 fixture is evidence for this document; the fixture itself is never the API
 definition.
+
+
+### Sheet edge flange
+
+Use `Shape.flange()` to add a native edge flange to an existing Forge sheet
+body:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, 0, 2)],
+    height=20,
+    angle=90,
+    height_from="outer",
+    position="outside",
+    flip=False,
+)
+```
+
+```python
+sheet.flange(
+    *,
+    edges,
+    height,
+    angle=90,
+    height_from="outer",
+    position="outside",
+    flip=False,
+)
+```
+
+`edges` is a non-empty sequence of fixed finite XYZ pick points on existing
+sheet top/bottom edges. `height` and `angle` may use Forge parameters or
+expressions where supported by SolidCraft. The sheet's existing rule supplies
+thickness, K-factor and default bend radius.
+
+The initial API does not expose per-edge dictionaries, segmented flanges,
+corner-relief overrides or chained bends.
