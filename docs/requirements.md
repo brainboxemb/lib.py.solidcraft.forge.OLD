@@ -346,7 +346,7 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.18.1` /
+Forge uses the exact externally accepted `tool.cad.ci 0.19.0` /
 `lib.py.cad.ci 0.11.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
@@ -478,23 +478,31 @@ Merge method selection must be machine-controlled:
 - base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge commit;
 - every other PR -> squash merge.
 
-Repository automation must use the policy-controlled merge workflow rather than
-calling the merge API with a chosen method.
+Repository automation must use the exact externally accepted reusable merge-policy
+workflow from tool.cad.ci 0.19.0 rather than calling the merge API or deciding
+the merge method in Forge-local code.
 
-The policy workflow must reject draft, unmergeable or non-green PR heads. After
-a successful merge into a durable source ref (`main`, `dev-cad` or
-`dev-ci`) it must explicitly dispatch the Forge integration workflow on that
-ref, because merges performed with the repository `GITHUB_TOKEN` do not
-generate a second workflow run from their resulting push event.
+Forge keeps only a thin `issue_comment` wrapper that supplies repository policy:
 
-After a direct lane promotion it must ensure that the promoted long-lived lane
-exists and points at the resulting main merge commit, including while repository
-`delete_branch_on_merge` is still enabled, and dispatch Forge integration for
-both `main` and the restored promoted lane.
+- stable ref `main`;
+- long-lived lanes `dev-cad` and `dev-ci`;
+- permanent generated refs `build` and `gh-pages`;
+- the conservative temporary-prefix allow-list;
+- Forge integration workflow `scpf.yml`.
+
+The released shared workflow must reject draft, unmergeable or non-green PR
+heads, verify the immutable current head SHA, derive the merge method, preserve
+promoted long-lived lanes and dispatch configured consumer integration.
 
 Merged source-branch cleanup is allow-list based. Only explicitly temporary
 prefixes may be deleted automatically. `main`, `dev-cad`, `dev-ci`,
 generated branches and backup refs are never cleanup targets.
+
+Forge no longer owns a general `/cleanup-branches` maintenance implementation.
+The final local cleanup audit retained only active or unique/unmerged historical
+heads. Those are not generic cleanup candidates; deliberate retirement requires
+a separately reviewed exact-SHA decision. Future ordinary merged temporary heads
+are cleaned by the released shared merge workflow.
 
 After promotion the other dev lane incorporates main separately; unpromoted
 work in that lane must never be overwritten.
@@ -1076,7 +1084,7 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.18.1 backed
+The exact accepted dependency for this capability is tool.cad.ci 0.19.0 backed
 by lib.py.cad.ci 0.11.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
