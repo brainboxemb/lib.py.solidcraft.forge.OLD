@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.18.0` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.19.0` with one explicit
 bounded value:
 
 ```text
@@ -498,44 +498,56 @@ dev-cad -> PR main
 dev-ci  -> PR main
 ```
 
-The promotion PR requests complete validation.
-
-Merge execution is centralized in `.github/workflows/merge-policy.yml`.
-A repository-owner `/merge` comment triggers the workflow. The workflow reads
-the current PR metadata and delegates the base/head decision to
-`scripts/merge_policy.py`.
-
-The policy returns:
+History synchronization uses the stable branch itself as PR head:
 
 ```text
-main + dev-cad -> merge
-main + dev-ci  -> merge
-everything else -> squash
+main -> PR dev-cad
+main -> PR dev-ci
 ```
 
-Before merging, the workflow requires the current head to be open, non-draft,
-mergeable and green across current check-runs/status contexts. It supplies the
-immutable head SHA to GitHub's merge API.
+Both permanent-direction PRs use normal merge commits. Promotion is the
+lane-to-stable class; synchronization is the stable-to-lane class. Ordinary
+short-lived PRs remain squash merges.
 
-A successful GitHub-API merge made with `GITHUB_TOKEN` does not trigger the
-normal `push` workflow. Therefore the merge workflow explicitly dispatches
-`scpf.yml` on the merged destination ref after GitHub returns the immutable
-merge SHA. The dispatched Forge workflow runs the same branch-integration job as
-a normal push.
+Forge does not implement merge-method or branch-lifecycle mechanics locally.
+`.github/workflows/merge-policy.yml` is a thin owner-only `/merge` trigger
+that calls exact released `tool.cad.ci 0.20.0` at
+`d45cdcef33cf1035311bab9a88c3f99208ef3b29`, externally accepted in
+`tool.cad.ci.test` run `45031453651`.
 
-Repository `delete_branch_on_merge` currently remains enabled. After a direct
-long-lived-lane promotion the policy workflow therefore verifies the promoted
-lane ref and recreates or advances it to the resulting main merge commit when
-needed, then also dispatches `scpf.yml` on that promoted lane. Stable
-`main` and the promoted named lane therefore both advance their durable
-build/Page scopes to the same merge commit.
+Forge supplies only consumer configuration:
 
-For other merged PRs, branch cleanup is limited to explicit temporary prefixes.
-Permanent/generated/backup refs are never deleted by the merge workflow.
+```text
+stable_ref = main
+lane_refs = [dev-cad, dev-ci]
+permanent_refs = [build, gh-pages]
+temporary_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
+integration_workflow = scpf.yml
+```
+
+The released workflow owns current-head/check/status validation, merge-class
+selection, GitHub merge execution, allow-listed temporary-head cleanup and
+optional integration dispatch.
+
+For `lane -> main` promotion it preserves/advances the lane at the resulting
+stable merge commit. For `main -> lane` synchronization it performs no
+source-ref lifecycle mutation; the normal merge itself updates the lane and
+preserves both histories. Both permanent-direction classes require the head to
+belong to the same repository.
+
+The consumer wrapper contains no GitHub API calls and no Python merge-policy
+helper. Generic merge mechanics remain owned and released by `tool.cad.ci`.
+
+The historical `/cleanup-branches` bulk maintenance job is retired rather than
+moved into shared tooling. Its final audit deleted the one integrated temporary
+head and retained only active or unique/unmerged historical refs. Those retained
+refs require explicit exact-SHA retirement decisions and must not become broader
+generic cleanup exceptions.
 
 After promotion, main publishes stable output from main itself. The other
-development lane incorporates main separately. A development preview is never
-promoted by copying its generated build/Page scope into stable output.
+development lane incorporates main through the same history-preserving
+stable-to-lane policy when needed. A development preview is never promoted by
+copying its generated build/Page scope into stable output.
 
 ## Nested reference-item migration
 
@@ -1199,7 +1211,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.18.0`:
+`tool.cad.ci 0.19.0`:
 
 ```text
 push main
@@ -1532,8 +1544,19 @@ ci/model-verification-batch
        model_verify/...
 ```
 
-The batch compiles/verifies all active declarative models exactly as before.
-Its internal runtime manifest points at those item-shaped paths directly.
+`model-verification-batch:verify_models` opts into released CAD-CI
+`selection_context: direct_dependents`. CAD-CI derives the active direct model
+consumer ids from the already-selected SCons target closure and injects them as
+`CAD_CI_ACTIVE_DEPENDENTS_JSON`.
+
+The Forge batch validates those ids against its existing processed declarative
+model catalog and compiles/verifies only that ordered subset. It does not run a
+Git diff or infer selection from paths. An explicit full run supplies all
+processed model consumers; an empty direct-dependent set skips the SolidCraft
+runtime entirely.
+
+The internal runtime manifest still points at the same item-shaped paths for
+the selected models.
 
 Each model item keeps its real `contract_test` step, then uses:
 
@@ -1588,9 +1611,11 @@ The reference batch continues producing `diagrams/`. The
 
 ### Ownership and timing
 
-`lib.py.cad.ci 0.10.0` owns direct bundle-member projection, target signatures,
-SCons ordering, CacheDir reuse, CURRENT/CACHE_RESTORED evidence and parallel
-safety. Forge does not duplicate those mechanics.
+`lib.py.cad.ci 0.11.0` owns direct bundle-member projection, active-dependent
+selection context, target signatures, SCons ordering, CacheDir reuse,
+CURRENT/CACHE_RESTORED evidence and parallel safety. `tool.cad.ci 0.19.0`
+exposes that exact released library and was externally accepted by
+`tool.cad.ci.test` run `45019713862`. Forge does not duplicate those mechanics.
 
 Forge timing comparisons use structured CAD-CI target evidence plus the existing
 batch timing diagnostics. The expected improvement is specifically the removal
@@ -1600,13 +1625,13 @@ after the shared batches finish.
 
 ## Durable lane workflow cut-over
 
-Long-lived Forge integration uses the externally accepted tool.cad.ci 0.18.0
+Long-lived Forge integration uses the externally accepted tool.cad.ci 0.19.0
 root composite action as one same-runner execution boundary:
 
 ```text
 Forge workflow job
   -> validate supported lane policy (main/dev-cad/dev-ci)
-  -> tool.cad.ci@0.18.0 durable action
+  -> tool.cad.ci@0.18.1 durable action
        -> checkout/bootstrap exact tool + pinned library once
        -> resolve prior durable scope/base
        -> one CAD-CI/SCons graph
@@ -1630,7 +1655,6 @@ validation. It does not implement CAD selection itself.
 This cut-over deliberately does not use a reusable workflow job for the durable
 push path: site generation must continue immediately after CAD/build publication
 in the same workspace without artifact transport or a second bootstrap.
-
 
 ## Connected-profile builder
 
