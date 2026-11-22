@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.18.0` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.18.1` with one explicit
 bounded value:
 
 ```text
@@ -1177,7 +1177,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.18.0`:
+`tool.cad.ci 0.18.1`:
 
 ```text
 push main
@@ -1597,7 +1597,7 @@ root composite action as one same-runner execution boundary:
 ```text
 Forge workflow job
   -> validate supported lane policy (main/dev-cad/dev-ci)
-  -> tool.cad.ci@0.18.0 durable action
+  -> tool.cad.ci@0.18.1 durable action
        -> checkout/bootstrap exact tool + pinned library once
        -> resolve prior durable scope/base
        -> one CAD-CI/SCons graph
