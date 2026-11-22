@@ -831,6 +831,57 @@ fixed finite numeric point because SolidCraft 0.45 rejects expressions in
 `sketch.arc.tangent.end`; Forge reports that at authoring time instead of
 emitting an invalid replay command. Arc-to-arc tangent continuation is not part
 of this first API slice.
+
+
+### Sheet contour flange
+
+Turn a finished reusable open Sketch chain into a native contour-flange sheet:
+
+```python
+with Sketch(name=&quot;Contour&quot;, plane=&quot;XZ&quot;) as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((35, 0))
+    chain.tangent_arc_to((40, 5))
+    chain.line_to((40, 30))
+    contour = chain.finish()
+
+sheet = contour.contour_flange(
+    distance=50,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+)
+```
+
+Optional controls:
+
+```python
+sheet = contour.contour_flange(
+    distance=width,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+    rule_name=&quot;Bracket sheet&quot;,
+    flip=True,
+    reverse=True,
+)
+```
+
+`distance` may be a Forge Parameter/Expression and must stay positive.
+`thickness`, `bend_radius`, `k_factor` and `rule_name` define the native
+sheet rule used for the new body, using the same semantics as
+`Sketch.sheet_metal()`. They are not duplicated into the native contour-flange
+feature.
+
+The receiver must be the Shape returned by `chain.finish()`. Forge compiles its
+full ordered line/tangent-arc chain, captures any SolidCraft-generated curve ids
+through replay bindings and supplies that exact list to
+`sheet.flange(type=&quot;contour&quot;)`. Native curve ids are not part of the public
+API.
+
+`flip` and `reverse` default to false and are emitted only when true.
+Contour flange creates its own sheet body; use `Shape.flange(edges=...)` for
+an edge flange on sheet material that already exists.
 </code></pre></section>
 </main>
 
