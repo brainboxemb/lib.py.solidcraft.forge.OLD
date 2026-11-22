@@ -128,18 +128,19 @@ Owner work is complete:
 - lib.py.cad.ci remains 0.11.0 at
   `e621daf6e309bdd0e3f643a12007f1b66490696d`.
 
-Forge consumer adoption now:
+Forge consumer adoption status:
 
-1. replace the repository-local merge implementation with one thin
-   `issue_comment` wrapper calling the exact released reusable workflow;
-2. remove `scripts/merge_policy.py` and local policy-decision tests;
-3. retire the legacy bulk `/cleanup-branches` job after its final conservative
-   audit; unique/unmerged historical refs remain explicit-review items;
-4. run a normal short-lived PR through the released workflow to prove squash,
-   cleanup and integration dispatch;
-5. run the next direct lane promotion through the same released workflow to
-   prove normal merge + long-lived-lane preservation;
-6. close #674 only after released equivalence is recorded.
+1. **complete** — Forge now uses one thin `issue_comment` wrapper pinned to the
+   exact released reusable workflow;
+2. **complete** — `scripts/merge_policy.py`, local policy-decision tests and
+   the legacy bulk `/cleanup-branches` path are removed;
+3. **complete** — PR #695 merged to `dev-ci` through `/merge`; integration run
+   `45024685131` and the resulting Pages deployment are green;
+4. **now — #696** — use one normal docs-only short-lived PR to prove shared
+   squash selection, explicit temporary-head cleanup and integration dispatch;
+5. **next** — run the next direct lane promotion through the same released
+   workflow to prove normal merge + long-lived-lane preservation;
+6. close #674 only after both live policy paths are recorded.
 
 Do not add a Forge-local fallback.
 
