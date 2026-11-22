@@ -47,6 +47,7 @@ The active CI structure is defined by:
 - `scripts/model_verification_batch.py`
 - `scripts/model_verify_declarative.py`
 - `scripts/release/validate_release.py`
+- `scripts/release/publish_release.py`
 
 The generic planner/executor is `tool.cad.ci`.
 
