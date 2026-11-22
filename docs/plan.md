@@ -20,7 +20,7 @@ dev-ci
 
 Current stable `main` head:
 
-`4b1af992a90359d8672d864bf3b5d9455d5027f7`
+`156a4bfd316dbe711932f58990328e5711385751`
 
 Current accepted `dev-cad` head:
 
@@ -80,15 +80,16 @@ source commit.
 
 ### WS1 — branch reconciliation and v0.12.0 promotion
 
-Status: **now**.
+Status: **now**, with exact sync PR #721 blocked only by five shared-document conflicts tracked in #722.
 
-1. #717 — perform the real history-preserving `main -> dev-cad`
-   synchronization using the now-adopted 0.20.0 policy and require durable lane
+1. #722 — normalize only `AGENTS.md`, `CHANGELOG.md`, `docs/design.md`, `docs/plan.md` and `docs/requirements.md` on `dev-cad` so accepted main governance and pending CAD-library documentation coexist without merge conflicts.
+2. #717 / PR #721 — then perform the real history-preserving `main -> dev-cad`
+   synchronization using the adopted 0.20.0 policy and require durable lane
    integration.
-2. #716 / #714 — re-evaluate exact `dev-cad -> main` promotion; require fresh
+3. #716 / #714 — re-evaluate exact `dev-cad -> main` promotion; require fresh
    exact-head validation and merge only through `/merge`.
-3. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
-4. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
+4. Verify durable `build/main` and stable Pages at the exact promoted main SHA.
+5. Prepare and publish Forge v0.12.0 only through #714's explicit release gate.
 
 PR #716 remains open and currently conflicted. Do not replace it with a
 temporary promotion branch or squash the long-lived lane.
@@ -118,7 +119,8 @@ temporary promotion branch or squash the long-lived lane.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #717 Reconcile main/dev-cad history | repository/dev-cad | **now** | Execute history-preserving `main -> dev-cad` with the adopted 0.20.0 policy; preserve all accepted CAD documentation/content and require lane integration. |
+| #722 Normalize five shared documents before sync | dev-cad | **now** | Reconcile only the five known overlapping documents; preserve dev-cad CAD content and current main governance so PR #721 becomes mergeable. |
+| #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #722** | Keep PR #721 exact `main -> dev-cad`; after #722, require fresh validation and merge through the 0.20.0 normal synchronization path. |
 | #714 Release Forge 0.12.0 | repository | **blocked on #717** | Resume #716 promotion, durable main/Pages verification, then explicit release preparation/publication. |
 | #713 Audit/reduce Forge scripts | repository / verification owner | **later** | Reassess after the release checkpoint; do not interrupt WS1. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately after the release checkpoint. |
@@ -151,5 +153,5 @@ temporary promotion branch or squash the long-lived lane.
 
 ## Next release checkpoint
 
-Finish #717 -> #716/#714 in that order. Do not accumulate another
+Finish #722 -> #717/#721 -> #716/#714 in that order. Do not accumulate another
 CAD/API batch before v0.12.0 is either published or explicitly deferred.
