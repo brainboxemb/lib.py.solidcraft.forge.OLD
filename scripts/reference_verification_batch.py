@@ -84,6 +84,11 @@ def processed_reference_slugs() -> tuple[str, ...]:
 def run_inside_runtime(cases: str, commit: str) -> int:
     """Run preview tests, references and CADCraft diagrams in one runtime."""
 
+    for name in ("references", "diagrams"):
+        path = Path("/output") / name
+        if path.exists():
+            shutil.rmtree(path)
+
     preview_tests = subprocess.run(
         [
             "python",
@@ -237,10 +242,9 @@ def run_batch() -> int:
     """Run all active heavy-reference work and build child projection outputs."""
 
     output = output_root()
-    for name in ("references", "diagrams", "items"):
-        path = output / name
-        if path.exists():
-            shutil.rmtree(path)
+    items = output / "items"
+    if items.exists():
+        shutil.rmtree(items)
 
     wheel = dependency_wheel(
         "cad-verification-package",
@@ -312,9 +316,6 @@ def run_batch() -> int:
         f"projection_s={time.perf_counter() - projection_started:.3f}",
         flush=True,
     )
-    if projection_status == 0:
-        shutil.rmtree(output / "references")
-
     print(
         "REFERENCE BATCH TIMING "
         f"total_s={time.perf_counter() - batch_started:.3f}",
