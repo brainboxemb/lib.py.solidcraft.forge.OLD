@@ -293,6 +293,32 @@ These durations are diagnostics only. They must not affect selection, execution,
 pass/fail decisions or structured CAD-CI evidence. Verification semantics must
 not be weakened to improve timing.
 
+## Standalone Sketch extrusion Boolean operands
+
+A standalone `Sketch(...).extrude(...)` is a solid-producing native feature and
+must be composable as a Boolean operand without first attaching the Sketch to
+the target body.
+
+Requirements:
+
+- `body + sketch.extrude(...)` lowers the standalone native
+  `solid.extrude` with `operation=join` and the existing body as its target;
+- `body - sketch.extrude(...)` lowers it with `operation=cut`;
+- `body & sketch.extrude(...)` lowers it with `operation=intersect`;
+- the Sketch keeps its authored plane, plane offset, profiles, profile picks,
+  exact-region selection, signed/symmetric extrusion direction and editable
+  parameter expressions;
+- Boolean lowering must not create a temporary second body and then combine it;
+  use SolidCraft's native extrusion operation/target contract directly;
+- root standalone Sketch extrusion remains `operation=new` / `body_name`;
+- attached `Sketch(on=...)` extrusion keeps its existing
+  `explicit_sketch_extrusion` lowering;
+- primitive-only CSG remains on the primitive CSG compiler.
+
+SolidCraft 0.45 explicitly supports `new|join|cut|intersect|auto` on
+`solid.extrude.operation`; Forge only exposes the deterministic operations
+required by the public Boolean operators.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
