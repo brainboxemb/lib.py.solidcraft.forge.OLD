@@ -1231,6 +1231,22 @@ def _non_count_parameter_names(node, found=None):
             _non_count_parameter_names(original, found)
             _non_count_parameter_names((line, fixed, position, flip), found)
             return found
+        if node.kind == "sheet_edge_flange":
+            (
+                original,
+                edges,
+                height,
+                _angle,
+                height_from,
+                position,
+                flip,
+            ) = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names(
+                (edges, height, height_from, position, flip),
+                found,
+            )
+            return found
         if node.kind == "sketch_pattern_rectangular":
             (
                 source, _count1, spacing1, dir1,
@@ -1261,6 +1277,19 @@ def _pattern_angle_parameter_names(node, found=None):
     if isinstance(node, Shape):
         if node.kind == "sheet_fold":
             original, _line, angle, _fixed, _position, _flip = node.data
+            found.update(param.name for param in parameters_in(angle))
+            _pattern_angle_parameter_names(original, found)
+            return found
+        if node.kind == "sheet_edge_flange":
+            (
+                original,
+                _edges,
+                _height,
+                angle,
+                _height_from,
+                _position,
+                _flip,
+            ) = node.data
             found.update(param.name for param in parameters_in(angle))
             _pattern_angle_parameter_names(original, found)
             return found
@@ -1386,6 +1415,35 @@ def _to_commands(shape, name):
         if fixed is not None:
             params["fixed"] = [command_value(v) for v in fixed]
         return steps + [_command("sheet.fold", **params)], base
+
+    if shape.kind == "sheet_edge_flange":
+        (
+            original,
+            edges,
+            height,
+            angle,
+            height_from,
+            position,
+            flip,
+        ) = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError("flange() requires an existing sheet body")
+        params = {
+            "type": "edge",
+            "edges": [
+                [command_value(value) for value in point]
+                for point in edges
+            ],
+            "height": command_value(height),
+            "angle": command_value(angle),
+            "height_from": height_from,
+            "flip": flip,
+            "body": name,
+        }
+        if position is not None:
+            params["position"] = position
+        return steps + [_command("sheet.flange", **params)], base
 
     if shape.kind in ("box", "placed_box", "tapered_box", "sketch_base_extrusion"):
         return compile_base(shape, name)
