@@ -10,8 +10,41 @@ signatures/defaults remain implementation/docstring-owned.
 - Forge owns Forge compilation, model definitions and model-specific
   expectation data.
 - Shared verification behavior comes from released
-  `lib.py.cad.verfication`, including CAD-tool-specific adapters such as the
+  `lib.py.cad.verification`, including CAD-tool-specific adapters such as the
   SolidCraft adapter.
+
+## Forge release publication
+
+Forge release verification and Forge release publication are separate actions.
+
+Requirements:
+
+- a green CAD-CI run must never publish a Forge release automatically;
+- publication is an explicit repository-owner operation;
+- the publication request names both the semantic version and one exact
+  40-character `main` commit SHA;
+- that SHA must still be the current `main` head when publication executes;
+- package metadata, the dated changelog section and
+  `TESTED_SOLIDCRAFT_VERSION` are read from that exact SHA;
+- `docs/background/design/release-blockers.txt` must contain no active
+  non-comment blocker;
+- durable `build/main/build.json` must name that SHA as its source commit and
+  its `ci/forge-release` item must have been produced from that same SHA;
+- stable `gh-pages/provenance.json` must name that SHA as both site source and
+  build-manifest source;
+- publication creates an annotated `vX.Y.Z` Git tag and a GitHub Release only
+  after all of those checks pass;
+- an existing tag may only be reused when it resolves to the exact requested
+  SHA; a conflicting tag or existing mismatched release is a hard failure;
+- the release workflow is a thin owner-only trigger; validation and release-note
+  extraction live in repository code under `scripts/release/`;
+- publication must not modify `main`, `dev-cad`, `dev-ci`, `build` or
+  `gh-pages`.
+
+A package-version literal, changelog heading, successful verification run or
+commit message containing the word “release” is not release evidence by itself.
+A release is complete only when the immutable tag and GitHub Release both exist
+for the validated SHA.
 
 ## SolidCraft runtime ownership
 
@@ -150,7 +183,7 @@ verification:
 
 Shared SolidCraft evaluation, mutation, inspection, schema interpretation,
 comparison and report construction are responsibilities of released
-`lib.py.cad.verfication`.
+`lib.py.cad.verification`.
 
 Model migrations are proven in reviewable batches after the representative
 simple-box proof.
@@ -468,7 +501,7 @@ Requirements:
 - model-specific geometry expectations remain only in the model-local contract;
 - shared Forge scripts may derive model/reference identity from generic
   `CAD_CI_ITEM_PATH` context, but must not contain a model-name registry;
-- released `lib.py.cad.verfication` remains the owner of generic geometry
+- released `lib.py.cad.verification` remains the owner of generic geometry
   validation behavior.
 
 During staged migration, a temporary aggregate reference item may cover active

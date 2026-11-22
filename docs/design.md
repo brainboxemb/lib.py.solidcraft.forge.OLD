@@ -1389,3 +1389,53 @@ placement/radius contracts are qualified separately.
 Replay bindings for `centre_line` / `middle` must be merged with any
 profile-curve binding required by sketch pattern/mirror consumers; one binding
 must never overwrite the other.
+
+
+## Explicit Forge release publication
+
+Release publication is deliberately separate from the normal Forge CAD-CI
+integration workflow.
+
+The historical publisher listened automatically to completion of a workflow
+named `SCPF Python package qualification`. That workflow disappeared during
+the CAD-CI migration, so source metadata could advance without an immutable
+release being created. The current design removes that implicit coupling.
+
+The release path is:
+
+```text
+repository owner comment
+  /release vX.Y.Z <exact-main-sha>
+            |
+            v
+.github/workflows/release.yml
+  -> parse exact version + SHA
+  -> checkout exact requested candidate
+  -> scripts/release/publish_release.py
+       -> fetch main/build/gh-pages/tags
+       -> scripts/release/validate_release.py
+            * requested SHA == current origin/main
+            * pyproject version == requested version
+            * dated changelog section exists
+            * no active foundational blocker
+            * build/main source == requested SHA
+            * forge-release evidence source == requested SHA
+            * stable Pages source/build-manifest source == requested SHA
+            * extract release notes from that changelog section
+       -> create/verify annotated vX.Y.Z tag at requested SHA
+       -> create/verify GitHub Release from extracted notes
+  -> comment immutable result on the tracking issue
+```
+
+The trigger is owner-only and explicit. A successful Forge run never invokes
+release publication on its own.
+
+The validator is deterministic repository code and owns no CAD execution. It
+only validates already-published durable evidence. Generic build/Page
+publication remains owned by released CAD-CI; the release script only reads
+those scopes.
+
+Publication is idempotent only for the exact same version/SHA pair. A tag
+pointing elsewhere is a hard failure. If the tag exists at the requested SHA
+but the GitHub Release is absent, the workflow may complete the missing Release
+after validation; it never moves or recreates an existing conflicting tag.

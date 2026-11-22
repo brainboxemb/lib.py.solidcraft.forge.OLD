@@ -33,10 +33,12 @@ capabilities but must not reimplement them locally.
 The active CI structure is defined by:
 
 - `.github/workflows/scpf.yml`
+- `.github/workflows/release.yml` — explicit owner-controlled package publication only
 - `cad-ci.yml`
 - `scpf/ci.yml`
 - `ci/forge-tests/ci.yml`
 - `ci/forge-release/ci.yml`
+- `ci/release-policy/ci.yml` — tests release validation/publication policy without CAD runtimes
 - `ci/cad-verification-package/ci.yml`
 - migrated `examples/<model>/ci.yml` files
 - `scripts/tool_ci.py`
@@ -44,6 +46,8 @@ The active CI structure is defined by:
 - `scripts/forge_example.py`
 - `scripts/model_verification_batch.py`
 - `scripts/model_verify_declarative.py`
+- `scripts/release/validate_release.py`
+- `scripts/release/publish_release.py`
 
 The generic planner/executor is `tool.cad.ci`.
 
@@ -350,9 +354,10 @@ the immutable Git tag and GitHub Release are both created and verified against
 the intended green `main` SHA. The authoritative procedure is
 `docs/release.md`.
 
-The current workflow verifies candidates and publishes durable build/Page
-state, but does not itself create the Forge tag or GitHub Release. Issue #366 is
-complete and is not a release blocker.
+Normal Forge CI verifies candidates and publishes durable build/Page state; it
+never creates a release automatically. Publication is the separate owner-only
+`/release vX.Y.Z <exact-main-sha>` path documented in `docs/release.md`.
+Issue #366 is complete and is not a release blocker.
 
 ## Historical documents
 

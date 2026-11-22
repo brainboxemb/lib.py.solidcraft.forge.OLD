@@ -1,0 +1,23 @@
+# Validate the explicit Forge release-publication policy without CAD runtimes.
+id: release-policy
+process: true
+kind: test
+watch:
+  - .github/workflows/release.yml
+  - scripts/release/**
+  - docs/release.md
+strategy:
+  reuse: true
+steps:
+  - id: test_release_validator
+    inputs:
+      - .github/workflows/release.yml
+      - scripts/release/**
+      - docs/release.md
+    run: [python, ../../scripts/release/test_validate_release.py]
+  - id: test_release_publisher
+    inputs:
+      - .github/workflows/release.yml
+      - scripts/release/**
+      - docs/release.md
+    run: [python, ../../scripts/release/test_publish_release.py]
