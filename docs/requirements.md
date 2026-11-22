@@ -489,8 +489,8 @@ Merge method selection must be machine-controlled:
 - every other supported PR -> squash merge.
 
 Repository automation must use exact externally accepted
-`tool.cad.ci 0.20.0` at
-`d45cdcef33cf1035311bab9a88c3f99208ef3b29`, accepted in
+`tool.cad.ci 0.20.1` at
+`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, accepted in
 `tool.cad.ci.test` run `45031453651`, rather than calling the merge API or
 deciding the merge method in Forge-local code.
 
