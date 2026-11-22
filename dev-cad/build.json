@@ -18,12 +18,12 @@
       "engine_schema": 2,
       "final_bundle_sha256": "ff111949a1d54d98aa2270eb7cd9ee1ba50487699ee22ef94c2d235cf97ec367",
       "final_step": "tool_verify",
-      "final_target_spec_digest": "995fe66916b8275c3f18fe869d4d45a64926037bd1ba78990d3a4fe1ab986742",
+      "final_target_spec_digest": "52b11c6e061c2723dd758093596a518f22973be122d2d3d2b2a66cdd5cea5416",
       "item_id": "forge-release",
       "outputs": [
         "tool_verify"
       ],
-      "source_commit": "ebe4a02f5a6d79813cdfce0643ca70ddb3e8b00b"
+      "source_commit": "10bab23424aa9ac432c273ef079978d68c1e8ad7"
     },
     "ci/forge-tests": {
       "engine": "scons",
@@ -59,6 +59,16 @@
         "references"
       ],
       "source_commit": "9cf54254c82b8a677a6ee7e9eca5877a31c25f44"
+    },
+    "ci/release-policy": {
+      "engine": "scons",
+      "engine_schema": 2,
+      "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
+      "final_step": "test_release_publisher",
+      "final_target_spec_digest": "b5a080b16663dd85ac85904b43e8e9880d433d75c0bf9643d98609943198abfd",
+      "item_id": "release-policy",
+      "outputs": [],
+      "source_commit": "10bab23424aa9ac432c273ef079978d68c1e8ad7"
     },
     "ci/site-source": {
       "engine": "scons",
@@ -2304,5 +2314,5 @@
   "name": "dev-cad",
   "schema": 1,
   "scope": "named",
-  "source_commit": "92758bd34b8b83bcfe28180b8ae2d42c3338f215"
+  "source_commit": "10bab23424aa9ac432c273ef079978d68c1e8ad7"
 }
