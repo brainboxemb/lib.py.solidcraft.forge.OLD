@@ -217,6 +217,9 @@ separate CAD-CI items.
   wheel and runs the reusable Forge unit suite.
 - `forge-release` depends on `forge-package`, uses that exact dependency
   wheel and runs the fixed release-verification example set.
+- release-candidate identity inputs, including `CHANGELOG.md`, must invalidate
+  `forge-release` so the durable release-verification evidence is produced
+  from the exact candidate SHA rather than reused from an older source commit.
 - model verification items depend on `forge-package` and
   `cad-verification-package` only.
 
