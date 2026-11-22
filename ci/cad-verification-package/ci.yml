@@ -1,3 +1,6 @@
+# Forge repository CI item: prepare the exact released CAD-verification package.
+# Owner boundary: Forge pins/transports the dependency; generic verification lives in lib.py.cad.verification.
+# Local documentation: README.md
 id: cad-verification-package
 kind: tool
 watch:
