@@ -142,7 +142,6 @@ temporary promotion/synchronization branch.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #733 Align handoff markup with shared template | governance/main | **now** | Add the explicit handoff-message section/copy instruction required by the accepted meta template. |
 | #726 Adopt tool.cad.ci 0.20.1 | governance/main | **now** | Repin only the thin wrapper/test to the exact externally accepted patch release; qualify and merge through shared policy. |
 | #722 Normalize/restore shared documents around sync | dev-cad | **blocked on #721** | Temporary merge-neutral state is complete; after successful sync, restore CAD documentation from exact `f4440ec2...`. |
 | #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #726** | Refresh and retry exact PR #721 with 0.20.1, then require durable lane integration and #722 restoration. |
@@ -163,6 +162,7 @@ temporary promotion/synchronization branch.
 
 ## Recently completed
 
+- #733 aligned `docs/handoff.md` exactly with the accepted shared handoff-document structure, including the explicit copyable-message heading and instruction.
 - #729 moved the canonical Forge session handoff to `docs/handoff.md`, retired the old manual copy and aligned the document with the shared meta handoff template.
 - tool.cad.ci #108 — 0.20.1 released at `eb64a46b...`; external acceptance
   run `45033890474` succeeded.
