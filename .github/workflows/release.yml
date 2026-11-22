@@ -29,8 +29,11 @@ jobs:
         run: |
           set -euo pipefail
           read -r verb tag sha extra <<<"$COMMAND"
-          [ "$verb" = "/release" ] || { echo "invalid release command" >&2; exit 2; }
-          [ -z "${extra:-}" ] || { echo "release command has extra arguments" >&2; exit 2; }
+          [ "$verb" = "/release" ] || exit 2
+          [ -z "${extra:-}" ] || {
+            echo "usage: /release vX.Y.Z <40-character-main-sha>" >&2
+            exit 2
+          }
           [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
             echo "release tag must be vX.Y.Z" >&2
             exit 2
@@ -39,7 +42,6 @@ jobs:
             echo "release SHA must contain exactly 40 lowercase hex characters" >&2
             exit 2
           }
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
@@ -49,112 +51,21 @@ jobs:
           ref: ${{ steps.command.outputs.sha }}
           fetch-depth: 0
 
-      - name: Fetch durable release evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch --no-tags origin             "+refs/heads/main:refs/remotes/origin/main"             "+refs/heads/build:refs/remotes/origin/build"             "+refs/heads/gh-pages:refs/remotes/origin/gh-pages"
-          git fetch origin --tags
-
-      - name: Validate exact release candidate
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/release/validate_release.py             --version "${{ steps.command.outputs.version }}"             --target-sha "${{ steps.command.outputs.sha }}"             --notes-out release-notes.md
-
-      - name: Validate existing tag and release state
-        id: existing
+      - name: Publish validated release
+        id: publish
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.command.outputs.tag }}
-          TARGET_SHA: ${{ steps.command.outputs.sha }}
-        shell: bash
         run: |
-          set -euo pipefail
-          tag_exists=false
-          if git show-ref --verify --quiet "refs/tags/$TAG"; then
-            tag_exists=true
-            [ "$(git cat-file -t "$TAG")" = "tag" ] || {
-              echo "$TAG exists but is not an annotated tag" >&2
-              exit 1
-            }
-            existing="$(git rev-list -n 1 "$TAG")"
-            [ "$existing" = "$TARGET_SHA" ] || {
-              echo "$TAG points to $existing, not $TARGET_SHA" >&2
-              exit 1
-            }
-          fi
-
-          release_exists=false
-          release_url=""
-          if release_json="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url 2>/dev/null)"; then
-            release_exists=true
-            release_url="$(jq -r '.url' <<<"$release_json")"
-            [ "$tag_exists" = "true" ] || {
-              echo "GitHub Release $TAG exists without the expected Git tag" >&2
-              exit 1
-            }
-          fi
-
-          echo "tag_exists=$tag_exists" >> "$GITHUB_OUTPUT"
-          echo "release_exists=$release_exists" >> "$GITHUB_OUTPUT"
-          echo "release_url=$release_url" >> "$GITHUB_OUTPUT"
-
-      - name: Create annotated release tag
-        if: steps.existing.outputs.tag_exists != 'true'
-        env:
-          TAG: ${{ steps.command.outputs.tag }}
-          TARGET_SHA: ${{ steps.command.outputs.sha }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$TAG" "$TARGET_SHA" -m "SCPF $TAG"
-          git push origin "refs/tags/$TAG"
-
-      - name: Create GitHub Release
-        if: steps.existing.outputs.release_exists != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.command.outputs.tag }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          gh release create "$TAG"             --repo "$GITHUB_REPOSITORY"             --verify-tag             --title "SCPF $TAG"             --notes-file release-notes.md
-
-      - name: Verify immutable published release
-        id: verify
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.command.outputs.tag }}
-          TARGET_SHA: ${{ steps.command.outputs.sha }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch origin "refs/tags/$TAG:refs/tags/$TAG" --force
-          [ "$(git cat-file -t "$TAG")" = "tag" ] || {
-            echo "$TAG is not an annotated tag" >&2
-            exit 1
-          }
-          resolved="$(git rev-list -n 1 "$TAG")"
-          [ "$resolved" = "$TARGET_SHA" ] || {
-            echo "$TAG resolves to $resolved, not $TARGET_SHA" >&2
-            exit 1
-          }
-          release_json="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName)"
-          [ "$(jq -r '.tagName' <<<"$release_json")" = "$TAG" ] || exit 1
-          echo "url=$(jq -r '.url' <<<"$release_json")" >> "$GITHUB_OUTPUT"
+          python scripts/release/publish_release.py             --repository "$GITHUB_REPOSITORY"             --version "${{ steps.command.outputs.version }}"             --target-sha "${{ steps.command.outputs.sha }}"             --github-output "$GITHUB_OUTPUT"
 
       - name: Record publication on tracking issue
         env:
           GH_TOKEN: ${{ github.token }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          TAG: ${{ steps.command.outputs.tag }}
+          TAG: ${{ steps.publish.outputs.tag }}
           TARGET_SHA: ${{ steps.command.outputs.sha }}
-          RELEASE_URL: ${{ steps.verify.outputs.url }}
+          RELEASE_URL: ${{ steps.publish.outputs.url }}
         shell: bash
         run: |
-          set -euo pipefail
           body="Published and verified `$TAG` at `$TARGET_SHA`: $RELEASE_URL"
           gh api -X POST             "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments"             -f body="$body"             >/dev/null
