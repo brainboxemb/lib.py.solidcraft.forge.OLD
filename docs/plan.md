@@ -104,7 +104,7 @@ as obsolete.
 | `cad-verification-package` | **current** | Prepares the exact released verification-library dependency once for model/reference consumers. |
 | `forge-tests` | **current** | Tests the exact built Forge package; separate from release verification. |
 | `forge-release` | **current** | Exact-candidate release evidence consumed by the release validator. |
-| `model-verification-batch` | **current; improvement active** | Shared SolidCraft runtime remains desired; #661 addresses coarse internal selected-model granularity. |
+| `model-verification-batch` | **current; selective consumer context accepted** | Shared SolidCraft runtime remains desired; #661 now restricts the producer to CAD-CI active direct model dependents. |
 | `reference-verification-batch` | **current** | Shared heavy reference runtime for independent CAD implementations and diagram production. |
 | `release-policy` | **current** | Tests release validator/publisher without CAD runtimes and is an explicit release gate. |
 | `site-source` | **current** | Keeps presentation/source validation independent from CAD execution. |
@@ -115,80 +115,46 @@ Do not remove or combine an item merely to reduce directory count. Any future
 structural simplification needs a separate requirements/design decision after
 the current responsibilities and consumers remain preserved.
 
-### WS1 — #661 Forge consumer adoption of selective shared model batch
+### WS1 — #674 shared merge/lane policy extraction
 
-Primary lane: `dev-ci`. **Now.**
+Primary lane: `dev-ci`. **Next.**
 
-Measured released-stack evidence established the original problem:
+Forge currently carries a repository-local implementation of the reusable
+main/dev-cad/dev-ci merge policy. Downstream CAD now needs the same mechanical
+behavior.
 
-- one-model run `45014107995`: top-level graph selected only six targets, but
-  `model-verification-batch` still executed all 36 active Forge models;
-- no-model durable run `45014447149`: no model/reference batch started;
-- explicit full run `45011709878`: full catalog execution is correct.
+#674 is a Forge consumer/qualification requirement, not permission to duplicate
+the implementation again. Before changing Forge:
 
-The generic gap is now fixed and externally accepted by its owners:
+1. record the exact current Forge merge/lane behavior that must be preserved;
+2. open/use the normative implementation issue in the actual shared owner
+   (expected `tool.cad.ci` unless the owner audit says otherwise);
+3. test and release the shared implementation there;
+4. externally accept that exact release;
+5. replace Forge-local policy only after released equivalence is demonstrated.
 
-- `lib.py.cad.ci 0.11.0` adds signature-safe
-  `selection_context: direct_dependents`;
-- `tool.cad.ci 0.18.1` pins that exact release;
-- `tool.cad.ci.test` #77 / PR #78 / run `45019713862` proves the released
-  behavior end-to-end.
+The temporary CAD-local copy must not block current CAD migration and must not
+be treated as the final architecture.
 
-Forge consumer work is therefore limited to:
+### WS2 — native sheet-metal CAD-library work
 
-1. pin the exact accepted `tool.cad.ci 0.18.1` revision;
-2. opt only `model-verification-batch:verify_models` into
-   `selection_context: direct_dependents`;
-3. read `CAD_CI_ACTIVE_DEPENDENTS_JSON`, validate those ids against Forge's
-   existing processed declarative model ids, and compile/verify only that
-   selected subset;
-4. keep an explicit empty direct-dependent selection runtime-free;
-5. rerun the one-model, no-op and explicit-full evidence and compare actual
-   model count/container starts/duration.
+Primary lane: `dev-cad`. **Now, independent of dev-ci.**
 
-Forge must not re-run Git selection, infer changed paths or add a second
-planner. The exact active-dependent list, target signature, cache identity and
-public evidence remain generic CAD-CI responsibilities.
+#567 connected mixed line/arc closed profiles is complete and merged. #568 is
+now only the SolidCraft 0.45 flange-family tracking parent.
 
-The independent-reference batch is explicitly outside #661. Its nested
-model/engine sparse-selection problem is different and must not be redesigned
-inside this model-batch fix.
+Current focused children:
 
-### WS2 — #567 mixed line/arc closed Sketch profiles
-
-Primary lane: `dev-cad`. **Now, parallel with #661.**
-
-Pinned SolidCraft 0.45 native commands already provide the required low-level
-building blocks:
-
-- `sketch.line`;
-- `sketch.arc.center_point`;
-- `sketch.arc.three_point`;
-- `sketch.arc.tangent`;
-- stable created curve/point ids;
-- `sketch.loose_ends` / tie diagnostics.
-
-Next action is a focused Forge connected-curve profile API that:
-
-- preserves authored line/arc intent;
-- produces a genuinely closed native profile;
-- works for ordinary extrusion;
-- provides the foundation needed by the sheet-metal contour/flange work;
-- does not fall back to Polygon2D approximation or raw caller command
-  dictionaries.
-
-Requirements/design/API contract must be written before implementation.
-
-### WS3 — next CAD-library work
-
-- #568 native sheet-metal flange/contour — **next** after #567 profile
-  foundation.
+- #682 native `sheet.flange(type=edge)` — **now**;
+- #683 reusable open connected Sketch curve chains — **next**;
+- #684 native `sheet.flange(type=contour)` — **blocked on #683**;
 - #349 focused Revolve child first — **later**.
+
+Do not recombine #682/#683/#684 into one broad sheet-metal change.
 
 ### WS4 — cross-repository terminology and Verification/reference quality
 
-- #659 build/verify/results terminology — **later**; coordinate after #661 so
-  architecture and vocabulary do not change at the same time.
+- #659 build/verify/results terminology — **later**; start after the active #674 governance extraction so architecture and vocabulary do not move together.
 - #570 remove CADCraft from Verification diagrams — **later**.
 - #335 build123d sheet-metal reference semantics — **later**.
 
@@ -208,10 +174,13 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Adopt accepted tool 0.18.1/lib 0.11.0 in the model batch only, then remeasure one-model/no-op/full execution. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
-| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
-| #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
+| #674 Shared merge/lane policy extraction | dev-ci / shared owner | **next** | Preserve current Forge behavior as consumer acceptance, implement/release in the actual shared owner, then replace Forge-local policy only after equivalence. |
+| #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **tracking** | Coordinate #682/#683/#684 only; no direct implementation PR. |
+| #682 Native sheet edge flange | dev-cad | **now** | Complete focused native qualification for the documented minimal edge-flange slice. |
+| #683 Reusable open connected Sketch curve chains | dev-cad | **next** | Design/qualify generic open line+tangent-arc chain after #682. |
+| #684 Native contour flange | dev-cad | **blocked** | Implement only after #683 supplies the qualified open-chain contract. |
+| #679 Namespace repeated component-local feature names | dev-cad | **next** | Audit as reusable Forge compiler requirement; keep separate from sheet-metal work. |
+| #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #674 shared-governance architecture is settled. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
 | #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with actual sheet-metal workflow. |
@@ -223,6 +192,12 @@ Requirements/design/API contract must be written before implementation.
 | #8 Tube/RectTube/OvalTube | dev-cad | **later** | Reconcile intent with native shell/pipe/boolean histories. |
 | #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325, then close/rewrite. |
 | #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate remaining constraint scope from overlap with #9. |
+
+## Recently completed
+
+- #670 CI/scripts documentation — central and per-item CI documentation merged to `dev-ci`.
+- #661 selective shared model batch — merged Forge adoption of tool.cad.ci 0.18.1 / lib.py.cad.ci 0.11.0; one-model proof run `45021406133` executed only `simple-box` in one shared SolidCraft container (batch total ~10.9 s), while explicit full-run behavior remains complete.
+- #567 mixed line/arc closed Sketch profiles — merged to `dev-cad` with native saved-design qualification.
 
 ## Next release checkpoint
 
