@@ -304,8 +304,8 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The active stack is exact externally accepted `tool.cad.ci 0.18.0` backed by
-`lib.py.cad.ci 0.10.0`, with Forge explicitly using `jobs=2`. The released
+The active stack is exact externally accepted `tool.cad.ci 0.18.1` backed by
+`lib.py.cad.ci 0.11.0`, with Forge explicitly using `jobs=2`. The released
 same-runner durable action owns scope/base resolution plus complete build-scope
 preparation/publication. The same caller-owned runner then builds the Forge site
 from that returned prepared scope and publishes only the matching Pages
