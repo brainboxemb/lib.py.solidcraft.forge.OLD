@@ -1,0 +1,105 @@
+[
+  {
+    "display_value": 40.0,
+    "name": "length",
+    "unit": "mm",
+    "value": 40.0
+  },
+  {
+    "display_value": 30.0,
+    "name": "end_height",
+    "unit": "mm",
+    "value": 30.0
+  },
+  {
+    "attachment": "fixed",
+    "created": {
+      "constraints": [],
+      "curves": [],
+      "dimensions": [],
+      "points": []
+    },
+    "name": "Contour Path",
+    "projected": null,
+    "sketch": 1
+  },
+  {
+    "constraints": [
+      "k1"
+    ],
+    "created": {
+      "constraints": [
+        "k1"
+      ],
+      "curves": [
+        "l1"
+      ],
+      "dimensions": [],
+      "points": [
+        "p1",
+        "l1.start"
+      ]
+    },
+    "curves": [
+      "l1"
+    ],
+    "sketch": {
+      "dof": 0,
+      "solved": true
+    }
+  },
+  {
+    "constraints": [
+      "k2"
+    ],
+    "created": {
+      "constraints": [
+        "k2"
+      ],
+      "curves": [
+        "a1"
+      ],
+      "dimensions": [],
+      "points": [
+        "a1.center",
+        "a1.end"
+      ]
+    },
+    "curves": [
+      "a1"
+    ],
+    "sketch": {
+      "dof": 2,
+      "solved": true
+    }
+  },
+  {
+    "constraints": [
+      "k3"
+    ],
+    "created": {
+      "constraints": [
+        "k3"
+      ],
+      "curves": [
+        "l2"
+      ],
+      "dimensions": [],
+      "points": [
+        "p2",
+        "l2.start"
+      ]
+    },
+    "curves": [
+      "l2"
+    ],
+    "sketch": {
+      "dof": 2,
+      "solved": true
+    }
+  },
+  {
+    "profiles": 0,
+    "sketch": 1
+  }
+]

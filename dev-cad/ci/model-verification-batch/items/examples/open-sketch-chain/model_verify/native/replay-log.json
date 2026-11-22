@@ -1,0 +1,92 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "16727b1f67047f99d89b8ca3f8f2dd4b8858e8cdba6098299f2244db0c4e47c8",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "length",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "end_height",
+        "expression": "30",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "Contour Path"
+      }
+    },
+    {
+      "index": 3,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            "length",
+            0
+          ]
+        ],
+        "ids": [
+          "l1"
+        ],
+        "connect": true
+      }
+    },
+    {
+      "index": 4,
+      "command": "sketch.arc.tangent",
+      "resolved_params": {
+        "start": "l1.end",
+        "curve": "l1",
+        "end": [
+          50,
+          10
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            50,
+            10
+          ],
+          [
+            50,
+            "end_height"
+          ]
+        ],
+        "ids": [
+          "l2"
+        ],
+        "connect": true
+      }
+    },
+    {
+      "index": 6,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    }
+  ],
+  "completed": 7
+}
