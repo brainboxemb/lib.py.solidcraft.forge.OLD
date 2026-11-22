@@ -4,6 +4,8 @@ from pathlib import Path
 import re
 import unittest
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES = ROOT / "examples"
@@ -33,14 +35,19 @@ class CiProcessSelectionContractTests(unittest.TestCase):
             path.parent.name
             for path in EXAMPLES.glob("*/model.yml")
         }
-        self.assertEqual(set(configured), expected)
-        self.assertEqual(
-            {slug for slug, enabled in configured.items() if enabled},
-            expected,
+        self.assertTrue(expected.issubset(configured))
+        self.assertTrue(
+            all(configured[slug] for slug in expected),
+            "every public Verification model must be process:true",
         )
-        self.assertFalse(
-            {slug for slug, enabled in configured.items() if not enabled},
-        )
+
+        extras = set(configured) - expected
+        for slug in sorted(extras):
+            role_path = EXAMPLES / slug / "role.yml"
+            self.assertTrue(role_path.is_file(), role_path)
+            role = yaml.safe_load(role_path.read_text(encoding="utf-8"))
+            self.assertEqual(role.get("role"), "regression-fixture")
+            self.assertEqual(role.get("decision"), "keep")
 
 
 if __name__ == "__main__":
