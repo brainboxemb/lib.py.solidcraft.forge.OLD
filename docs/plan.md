@@ -54,12 +54,12 @@ main.
 
 Current externally accepted stack:
 
-- `lib.py.cad.ci 0.11.0` @
-  `e621daf6e309bdd0e3f643a12007f1b66490696d`;
-- `tool.cad.ci 0.19.0` @
-  `5677c41a61929b32ab2cb07087a6505f7b9347d8`;
-- `tool.cad.ci.test` #80 / PR #81 / acceptance run
-  `45022699789` — success for tool 0.19.0, including the released merge-policy contract.
+- `lib.py.cad.ci 0.11.1` @
+  `fa6bf244381dde609a0b04de673d774911c52fea`;
+- `tool.cad.ci 0.21.0` @
+  `b1474f6be66dc0236f2a5c2555af07a100447255`;
+- permanent `tool.cad.ci.test` released-stack acceptance run
+  `45045346481` — success for the exact 0.21.0 / 0.11.1 stack.
 
 The released root composite action is the accepted long-lived durable path:
 
