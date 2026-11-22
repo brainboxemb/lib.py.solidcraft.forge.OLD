@@ -203,7 +203,6 @@ models:
 Model migrations are proven in reviewable batches after the representative
 simple-box proof.
 
-
 ## Staged model participation
 
 Forge may declare released CAD-CI item participation with the generic
@@ -361,8 +360,8 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.18.0` /
-`lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
+Forge uses the exact externally accepted `tool.cad.ci 0.19.0` /
+`lib.py.cad.ci 0.11.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
 Forge explicitly requests `jobs=2` from the released tool on both pull-request
@@ -486,33 +485,62 @@ dev-cad -> main
 dev-ci  -> main
 ```
 
-Promotion PRs require complete validation.
+A long-lived lane may first need stable history synchronized into it:
+
+```text
+main -> dev-cad
+main -> dev-ci
+```
+
+Both permanent-direction PRs require normal PR validation.
 
 Merge method selection must be machine-controlled:
 
-- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge commit;
-- every other PR -> squash merge.
+- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge
+  promotion;
+- base exactly `dev-cad` or `dev-ci` + head `main` -> normal merge
+  synchronization;
+- every other supported PR -> squash merge.
 
-Repository automation must use the policy-controlled merge workflow rather than
-calling the merge API with a chosen method.
+Repository automation must use exact externally accepted
+`tool.cad.ci 0.20.0` at
+`d45cdcef33cf1035311bab9a88c3f99208ef3b29`, accepted in
+`tool.cad.ci.test` run `45031453651`, rather than calling the merge API or
+deciding the merge method in Forge-local code.
 
-The policy workflow must reject draft, unmergeable or non-green PR heads. After
-a successful merge into a durable source ref (`main`, `dev-cad` or
-`dev-ci`) it must explicitly dispatch the Forge integration workflow on that
-ref, because merges performed with the repository `GITHUB_TOKEN` do not
-generate a second workflow run from their resulting push event.
+Forge keeps only a thin `issue_comment` wrapper that supplies repository
+policy:
 
-After a direct lane promotion it must ensure that the promoted long-lived lane
-exists and points at the resulting main merge commit, including while repository
-`delete_branch_on_merge` is still enabled, and dispatch Forge integration for
-both `main` and the restored promoted lane.
+- stable ref `main`;
+- long-lived lanes `dev-cad` and `dev-ci`;
+- permanent generated refs `build` and `gh-pages`;
+- the conservative temporary-prefix allow-list;
+- Forge integration workflow `scpf.yml`.
+
+The released shared workflow must reject draft, unmergeable or non-green PR
+heads, verify the immutable current head SHA, derive the merge class/method and
+require same-repository heads for permanent-direction operations.
+
+For lane-to-main promotion it preserves/advances the promoted lane at the
+resulting main merge commit and dispatches configured integration for both
+stable and retained lane. For main-to-lane synchronization it must not mutate
+the stable source ref; the normal merge updates the lane base and integration is
+dispatched for that updated lane.
 
 Merged source-branch cleanup is allow-list based. Only explicitly temporary
 prefixes may be deleted automatically. `main`, `dev-cad`, `dev-ci`,
 generated branches and backup refs are never cleanup targets.
 
+Forge no longer owns a general `/cleanup-branches` maintenance implementation.
+The final local cleanup audit retained only active or unique/unmerged historical
+heads. Those are not generic cleanup candidates; deliberate retirement requires
+a separately reviewed exact-SHA decision. Future ordinary merged temporary heads
+are cleaned by the released shared merge workflow.
+
 After promotion the other dev lane incorporates main separately; unpromoted
-work in that lane must never be overwritten.
+work in that lane must never be overwritten. Stable-to-lane synchronization is
+the supported history-preserving path when that incorporation needs a real
+merge.
 
 Generic source-freshness, complete-scope reconciliation and generated-branch
 retry behavior remain CAD-CI responsibilities.
@@ -763,7 +791,9 @@ those logical item boundaries.
 
 Forge verification therefore batches expensive runtime work:
 
-- one SolidCraft runtime processes the current declarative model list;
+- one SolidCraft runtime processes the **selected active declarative model
+  dependents** of the shared model batch; an explicit full run naturally
+  supplies the complete processed model set;
 - one reference runtime processes the current independent-reference list;
 - build123d uses one isolated interpreter/import for its complete case list;
 - CadQuery, PythonSCAD and pyBOSL2 process their complete lists in the shared
@@ -771,15 +801,39 @@ Forge verification therefore batches expensive runtime work:
 - CADCraft processes the complete diagram source list inside the same heavy
   reference runtime batch.
 
-Per-case verification state remains isolated. Each model/reference has its own
-input, output directory and structured result. A failure in one case must not
-prevent later cases in the same batch from running. After the complete list is
-processed, the batch returns failure when one or more cases failed.
+`model-verification-batch:verify_models` opts in to released CAD-CI
+`selection_context: direct_dependents`. Forge reads the reserved
+`CAD_CI_ACTIVE_DEPENDENTS_JSON` value and uses those ids only to choose which
+already-processed Forge model definitions enter the SolidCraft manifest.
+
+Requirements:
+
+- Forge validates every supplied id against its existing processed declarative
+  model ids and rejects unexpected dependents;
+- Forge preserves CAD-CI order and does not derive a second selection from Git,
+  changed paths, timestamps or model source inspection;
+- an empty active-dependent list starts no SolidCraft runtime and produces an
+  empty producer output root successfully;
+- one selected model starts one shared SolidCraft runtime containing only that
+  model;
+- an explicit full run receives every processed direct model dependent;
+- CAD-CI remains the sole owner of the active list, its target signature/cache
+  identity and public `active_dependents` evidence;
+- changing the active-dependent set must not be made CURRENT by Forge-local
+  state or caching.
+
+Per-case verification state remains isolated. Each selected model/reference has
+its own input, output directory and structured result. A failure in one case
+must not prevent later cases in the same batch from running. After the selected
+list is processed, the batch returns failure when one or more cases failed.
+
+The independent-reference batch is not changed by #661. Sparse selection across
+nested model/engine reference children is a separate concern.
 
 CAD-CI continues to own logical selection, dependencies, SCons state, caching
 and durable publication. Forge owns only the batch runtime invocation and the
 mapping from batch results back to existing per-case outputs. No generic worker
-pool or batch scheduler is added to lib.py.cad.ci.
+pool, changed-path planner or batch scheduler is added in Forge.
 
 
 ## Example documentation preservation
@@ -1065,14 +1119,13 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.18.0 backed
-by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
+The exact accepted dependency for this capability is tool.cad.ci 0.19.0 backed
+by lib.py.cad.ci 0.11.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
 Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
-
 
 ## Connected mixed-curve Sketch profiles
 
