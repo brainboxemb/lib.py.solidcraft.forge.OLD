@@ -127,65 +127,9 @@ the technical implementation issue in the actual owner
 
 Do not add a Forge- or consumer-local changed-path planner.
 
-### WS2 — #567 mixed line/arc closed Sketch profiles
+### WS2 — next CAD-library work
 
-Primary lane: `dev-cad`. **Now, parallel with #661.**
-
-Pinned SolidCraft 0.45 native commands already provide the required low-level
-building blocks:
-
-- `sketch.line`;
-- `sketch.arc.center_point`;
-- `sketch.arc.three_point`;
-- `sketch.arc.tangent`;
-- stable created curve/point ids;
-- `sketch.loose_ends` / tie diagnostics.
-
-Next action is a focused Forge connected-curve profile API that:
-
-- preserves authored line/arc intent;
-- produces a genuinely closed native profile;
-- works for ordinary extrusion;
-- provides the foundation needed by the sheet-metal contour/flange work;
-- does not fall back to Polygon2D approximation or raw caller command
-  dictionaries.
-
-Requirements/design/API contract must be written before implementation.
-
-#### #567 branch status
-
-Requirements, design and public API text are written. The branch now implements
-one shared native lowering path for connected `line`, `arc.three_point` and
-`arc.center_point` segments with `connect=true`, reused by standalone extrusion,
-attached Sketch extrusion and `sheet_metal()`.
-
-Focused unit/command-contract coverage is present. The native
-`examples/connected-profile-sheet` regression fixture also proves the saved
-SolidCraft design after changing both `half_span` and `radius`.
-
-Native run `45018359496` reported `connected-profile-sheet=pass`, including
-baseline and saved-design verification. The enclosing run failed only because
-the pre-existing public-catalog guards treated the non-public regression fixture
-as a public Verification case; #676 fixed that boundary and is now merged to
-`dev-cad`.
-
-Current next action: rerun #672 on the reconciled `dev-cad` base. If green,
-merge #567. No further API or qualification scope is required.
-
-Qualification implementation:
-
-- `examples/connected-profile-sheet` is a deliberate `regression-fixture`, not a public Verification catalog entry;
-- its normal `forge-model-declarative` CI item participates in the shared native model batch;
-- it owns focused command-contract and declarative native/saved-design verification;
-- it intentionally has no `model.yml`, independent reference engines or visual baseline because it is not a public Verification model;
-- saved-design mutation changes both `half_span` and `radius`, proving straight-segment and arc geometry rebuild while retaining one solved closed profile and one closed sheet-metal body.
-
-No polygon approximation, raw caller command dictionaries or second sheet-metal-only profile compiler.
-
-### WS3 — next CAD-library work
-
-- #568 native sheet-metal flange/contour — **next** after #567 profile
-  foundation.
+- #568 native sheet-metal flange/contour — **now**; #567 connected-profile foundation is merged and natively qualified.
 - #349 focused Revolve child first — **later**.
 
 ### WS4 — cross-repository terminology and Verification/reference quality
@@ -212,8 +156,7 @@ No polygon approximation, raw caller command dictionaries or second sheet-metal-
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
 | #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Rerun #672 on the reconciled `dev-cad` base; native baseline and saved-design qualification already pass. |
-| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
+| #568 Native sheet-metal flange/contour | dev-cad | **now** | Resume native sheet-metal flange/contour qualification on the merged #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
@@ -227,6 +170,9 @@ No polygon approximation, raw caller command dictionaries or second sheet-metal-
 | #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325, then close/rewrite. |
 | #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate remaining constraint scope from overlap with #9. |
 
+## Recently completed
+
+- #567 mixed line/arc closed Sketch profiles — merged to `dev-cad`; shared native line/arc lowering, ordinary extrusion and sheet-metal consumption are covered by unit contracts and `connected-profile-sheet` baseline/saved-design SolidCraft verification.
 ## Next release checkpoint
 
 Before a second large post-v0.11 batch accumulates, open the planned v0.12.0
