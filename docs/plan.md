@@ -142,7 +142,6 @@ temporary promotion/synchronization branch.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #729 Canonical docs/handoff.md | governance/main | **now** | Move the durable session entrypoint to `docs/handoff.md` under the shared meta convention without changing release/promotion work. |
 | #726 Adopt tool.cad.ci 0.20.1 | governance/main | **now** | Repin only the thin wrapper/test to the exact externally accepted patch release; qualify and merge through shared policy. |
 | #722 Normalize/restore shared documents around sync | dev-cad | **blocked on #721** | Temporary merge-neutral state is complete; after successful sync, restore CAD documentation from exact `f4440ec2...`. |
 | #717 Reconcile main/dev-cad history | repository/dev-cad | **blocked on #726** | Refresh and retry exact PR #721 with 0.20.1, then require durable lane integration and #722 restoration. |
@@ -163,6 +162,7 @@ temporary promotion/synchronization branch.
 
 ## Recently completed
 
+- #729 moved the canonical Forge session handoff to `docs/handoff.md`, retired the old manual copy and aligned the document with the shared meta handoff template.
 - tool.cad.ci #108 — 0.20.1 released at `eb64a46b...`; external acceptance
   run `45033890474` succeeded.
 - #722 pre-sync conflict neutralization — dev-cad now at `8ee6c3f4...`; all
