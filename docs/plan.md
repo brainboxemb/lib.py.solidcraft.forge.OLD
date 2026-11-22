@@ -3,13 +3,11 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Forge has two independent responsibility areas:
-
-1. the CAD library itself — public API, compiler/lowering, modelling semantics,
-   examples, native qualification and model-specific Verification;
-2. CI/runtime/Verification integration around that library — exact released
-   generic CAD-CI consumption, immutable runtime consumption, durable build/Page
-   publication and release mechanics.
+Forge is first and foremost the central CAD library: public API, compiler/lowering,
+modelling semantics, reusable CAD capabilities, examples and Forge-owned verification
+expectations. CI/runtime/Verification integration is supporting infrastructure around
+that library and must remain delegated to its generic owner repositories where the
+behavior is not Forge-specific.
 
 `dev-cad` and `dev-ci` advance independently unless they share a real owner
 release or architecture gate.
@@ -95,7 +93,7 @@ Short-lived branches target one lane and are squash-merged. Exact
 
 ## Active workstreams
 
-### WS1 — #661 shared CAD-CI batch/selectivity governance
+### WS1 — #661 Forge consumer validation of shared batch/selectivity
 
 Primary lane: `dev-ci`. **Now.**
 
@@ -121,9 +119,9 @@ For each, capture:
 If Forge already meets the required selectivity contract, close #661 with
 evidence and let downstream CAD consumers adopt the same pattern.
 
-If a generic gap is demonstrated, define the missing requirement here and open
-the technical implementation issue in the actual owner
-(`lib.py.cad.ci`, `tool.cad.ci` or verification) before any consumer change.
+If a generic gap is demonstrated, record the Forge consumer requirement and evidence here,
+then move the normative generic requirement and implementation to the actual owner
+(`lib.py.cad.ci`, `tool.cad.ci` or verification). Forge validates the released result; it does not govern the generic CI architecture.
 
 Do not add a Forge- or consumer-local changed-path planner.
 
@@ -181,7 +179,7 @@ Requirements/design/API contract must be written before implementation.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0 before deciding whether a generic owner change is required. |
+| #661 Validate shared batch/selectivity as a Forge consumer | dev-ci | **now** | Measure one-model/no-op/full batch selectivity on tool 0.18.0/lib 0.10.0; move any generic requirement/change to the owning CAD-CI repository and qualify its release from Forge. |
 | #567 Mixed line/arc closed Sketch profiles | dev-cad | **now** | Define connected line/arc profile API and native lowering contract, then implement focused qualification. |
 | #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after #567 connected-profile foundation. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #661 architecture decision. |
