@@ -4,6 +4,8 @@ kind: verification
 needs:
   - forge-package
 watch:
+  - ci/forge-release/ci.yml
+  - CHANGELOG.md
   - scpf/scpf/**
   - scpf/pyproject.toml
   - scripts/tool_verify.py
@@ -22,6 +24,8 @@ strategy:
 steps:
   - id: tool_verify
     inputs:
+      - ci/forge-release/ci.yml
+      - CHANGELOG.md
       - scpf/scpf/**
       - scpf/pyproject.toml
       - scripts/tool_verify.py
