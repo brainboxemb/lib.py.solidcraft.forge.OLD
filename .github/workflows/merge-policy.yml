@@ -20,7 +20,7 @@ jobs:
       issues: write
       checks: read
       statuses: read
-    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@5677c41a61929b32ab2cb07087a6505f7b9347d8
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@d45cdcef33cf1035311bab9a88c3f99208ef3b29
     with:
       command: ${{ github.event.comment.body }}
       pull_request_number: ${{ github.event.issue.number }}

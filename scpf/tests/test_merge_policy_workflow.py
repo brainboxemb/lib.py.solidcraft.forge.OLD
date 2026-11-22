@@ -6,7 +6,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "merge-policy.yml"
-RELEASE = "5677c41a61929b32ab2cb07087a6505f7b9347d8"
+RELEASE = "d45cdcef33cf1035311bab9a88c3f99208ef3b29"
 
 
 class MergePolicyWorkflowTests(unittest.TestCase):
