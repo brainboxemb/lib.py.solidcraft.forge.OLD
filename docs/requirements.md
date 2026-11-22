@@ -346,7 +346,7 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.17.1` /
+Forge uses the exact externally accepted `tool.cad.ci 0.18.0` /
 `lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
@@ -1040,10 +1040,52 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.17.1 backed
+The exact accepted dependency for this capability is tool.cad.ci 0.18.0 backed
 by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
 Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
+
+
+## Durable Forge workflow consumption
+
+Forge consumes the externally accepted `tool.cad.ci 0.18.0` same-runner
+durable action for long-lived branch integration.
+
+Requirements:
+
+- `main`, `dev-cad` and `dev-ci` pushes/manual runs execute on one caller
+  runner and one workspace;
+- the released root composite action owns generic durable-scope resolution,
+  exact incremental/full-run base selection, the one CAD-CI/SCons graph,
+  complete durable build-scope preparation and build publication;
+- Forge passes only the exact source SHA, durable scope/source ref, jobs and
+  required token/environment inputs;
+- Forge must not duplicate `build fetch`, `update-main`, `update-named`,
+  `prepare-named` or `publish build` orchestration in workflow shell;
+- the action must execute exactly one CAD-CI graph with `jobs=2`;
+- no build artifact upload/download, second publication runner, second
+  tool/library bootstrap or second CAD-CI graph may be introduced;
+- after the action returns, Forge builds its site on the same runner using the
+  exact `prepared_scope` and `build_commit` outputs;
+- Forge then performs one generic `cad_ci_tool publish pages` call on that
+  same runner;
+- stable `main` Pages publication preserves `dev-cad` and `dev-ci`
+  subtrees; named lane publication updates only its matching subtree;
+- generated provenance must still record the exact source SHA, durable build
+  commit and logical build scope.
+
+Pull-request policy remains Forge-owned and cheap:
+
+- one PR job may classify changed filenames before CAD bootstrap;
+- docs-only PRs into `dev-cad` or `dev-ci` may skip CAD-CI;
+- promotion PRs targeting `main` always execute complete validation;
+- classification must stay in that same PR job rather than introducing a
+  separate classifier runner;
+- generic affected-item/dependency/SCons selection remains CAD-CI-owned.
+
+The exact accepted tool revision for this contract is
+`b62f9d0b169aa201a3c66c3166f364396b2d71bc` (tool.cad.ci 0.18.0),
+backed by lib.py.cad.ci 0.10.0.
