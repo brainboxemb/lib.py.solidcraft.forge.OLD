@@ -123,7 +123,20 @@ The two pre-release integration gates are resolved at source level:
 - the jobs=2 CI experiment is resolved: main uses accepted tool.cad.ci 0.17.0 /
   lib.py.cad.ci 0.9.3 with jobs=2.
 
-Release execution is now the only `now` work:
+Release execution is now the only `now` work.
+
+Current release blocker discovered during the v0.11.0 preflight:
+
+- main `1e8028d9ed028207df8d8c651e77e71232be29fa` has green durable
+  build/Page publication, but `build/main` reused `ci/forge-release`
+  evidence from `92758bd34b8b83bcfe28180b8ae2d42c3338f215`;
+- the cause is that release-candidate metadata such as `CHANGELOG.md` is not
+  currently an input of the `forge-release` CAD-CI item;
+- before publication, make the release item depend on release-candidate
+  metadata and prove `forge-release.source_commit` equals the exact new main
+  release SHA.
+
+Release execution after that fix:
 
 1. require durable `build/main` and stable Pages to point to the accepted
    post-#651 main source;
