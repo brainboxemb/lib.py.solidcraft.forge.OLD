@@ -144,6 +144,39 @@ class SheetMetalTests(unittest.TestCase):
         )
         self.assertEqual(fold["angle"], "bend_angle")
 
+    def test_connected_profile_is_shared_by_sheet_metal_base(self):
+        with Sketch(name="MixedBlank", plane="XY") as blank:
+            contour = blank.profile(start=(0, 0))
+            contour.line_to((40, 0))
+            contour.arc_through_to((40, 20), through=(50, 10))
+            contour.line_to((0, 20))
+            contour.line_to((0, 0))
+            contour.close()
+
+        commands = compile_model(
+            blank.sheet_metal(
+                thickness=2,
+                bend_radius=2,
+                rule_name="Mixed Sheet",
+            ),
+            "MixedSheet",
+        )["commands"]
+        self.assertEqual(
+            [row["command"] for row in commands],
+            [
+                "sheet.manage_rules",
+                "sketch.create",
+                "sketch.line",
+                "sketch.arc.three_point",
+                "sketch.line",
+                "sketch.line",
+                "sketch.finish",
+                "sheet.flange",
+            ],
+        )
+        for row in commands[2:6]:
+            self.assertTrue(row["params"]["connect"])
+
     def test_sheet_metal_and_fold_validate_authoring_contract(self):
         with Sketch(name="Blank", plane="XY") as blank:
             Rectangle2D(80, 40)
