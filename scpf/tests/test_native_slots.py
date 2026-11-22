@@ -317,6 +317,8 @@ class NativeSlotFamilyTests(unittest.TestCase):
                 )
                 for name in length_names:
                     self.assertIn(name, length)
+                if command_name == "sketch.slot.center_point":
+                    self.assertIn("* 2", length)
 
                 bind = dimensioned["bind"]
                 centre_line = next(
@@ -356,6 +358,7 @@ class NativeSlotFamilyTests(unittest.TestCase):
                     if row["type"] == "vertical"
                 )
                 self.assertIn("slot_y", str(vertical["value"]))
+                self.assertIn("abs(", str(vertical["value"]))
                 horizontal = next(
                     row for row in position
                     if row["type"] == "horizontal"
@@ -424,6 +427,7 @@ class NativeSlotFamilyTests(unittest.TestCase):
             )
         )
         self.assertIn("slot_x", str(horizontal["value"]))
+        self.assertIn("abs(", str(horizontal["value"]))
 
     def test_parametric_straight_slot_requires_matching_perpendicular_intent(self):
         from scpf import Parameter
