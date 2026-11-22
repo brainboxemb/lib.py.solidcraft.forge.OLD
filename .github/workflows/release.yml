@@ -67,5 +67,6 @@ jobs:
           RELEASE_URL: ${{ steps.publish.outputs.url }}
         shell: bash
         run: |
-          body="Published and verified `$TAG` at `$TARGET_SHA`: $RELEASE_URL"
+          printf -v body 'Published and verified `%s` at `%s`: %s' \
+            "$TAG" "$TARGET_SHA" "$RELEASE_URL"
           gh api -X POST             "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments"             -f body="$body"             >/dev/null
