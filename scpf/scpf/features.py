@@ -38,6 +38,7 @@ from .sketches import (
     compile_base,
     compile_connected_profile,
     compile_open_chain,
+    compile_open_chain_with_curves,
     compile_standalone_sketch,
     _extrude_profile_params,
 )
@@ -83,6 +84,7 @@ def _is_feature_tree(shape):
         "sketch_base_extrusion",
         "sketch_open_chain",
         "sheet_base",
+        "sheet_contour_flange",
         "sheet_edge_flange",
         "sheet_fold",
     ):
@@ -1229,6 +1231,30 @@ def _non_count_parameter_names(node, found=None):
                 found,
             )
             return found
+        if node.kind == "sheet_contour_flange":
+            (
+                contour,
+                distance,
+                thickness,
+                bend_radius,
+                _k_factor,
+                rule_name,
+                flip,
+                reverse,
+            ) = node.data
+            _non_count_parameter_names(
+                (
+                    contour,
+                    distance,
+                    thickness,
+                    bend_radius,
+                    rule_name,
+                    flip,
+                    reverse,
+                ),
+                found,
+            )
+            return found
         if node.kind == "sheet_edge_flange":
             original, edges, height, _angle, height_from, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1315,6 +1341,19 @@ def _sheet_dimensionless_parameter_names(node, found=None):
             ) = node.data
             found.update(param.name for param in parameters_in(k_factor))
             return found
+        if node.kind == "sheet_contour_flange":
+            (
+                _contour,
+                _distance,
+                _thickness,
+                _bend_radius,
+                k_factor,
+                _rule_name,
+                _flip,
+                _reverse,
+            ) = node.data
+            found.update(param.name for param in parameters_in(k_factor))
+            return found
         _sheet_dimensionless_parameter_names(node.data, found)
     elif isinstance(node, (tuple, list)):
         for item in node:
@@ -1335,6 +1374,64 @@ def _native_feature_name(feature):
 def _to_commands(shape, name):
     if shape.kind == "sketch_open_chain":
         return compile_open_chain(shape)
+
+    if shape.kind == "sheet_contour_flange":
+        (
+            contour,
+            distance,
+            thickness,
+            bend_radius,
+            k_factor,
+            rule_name,
+            flip,
+            reverse,
+        ) = shape.data
+
+        _require_positive(distance, "contour flange distance")
+        _require_positive(thickness, "contour flange thickness")
+        _require_positive(bend_radius, "contour flange bend radius")
+        k = pv(k_factor)
+        if not 0 < k < 1:
+            raise ModelError(
+                "contour flange k_factor must be between 0 and 1"
+            )
+
+        sketch, meta, curves = compile_open_chain_with_curves(contour)
+        rule = _command(
+            "sheet.manage_rules",
+            name=rule_name,
+            thickness=command_value(thickness),
+            k_factor=command_value(k_factor),
+            bend_radius=command_value(bend_radius),
+            active=True,
+        )
+        params = {
+            "type": "contour",
+            "sketch": meta["sketch_name"],
+            "curves": curves,
+            "distance": command_value(distance),
+            "rule": rule_name,
+            "body_name": name,
+        }
+        if flip:
+            params["flip"] = True
+        if reverse:
+            params["reverse"] = True
+
+        meta.update(
+            {
+                "sheet": True,
+                "thickness": thickness,
+                "bend_radius": bend_radius,
+                "k_factor": k_factor,
+                "rule_name": rule_name,
+            }
+        )
+        return [
+            rule,
+            *sketch,
+            _command("sheet.flange", **params),
+        ], meta
 
     if shape.kind == "sheet_base":
         (

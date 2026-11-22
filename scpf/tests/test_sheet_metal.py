@@ -319,6 +319,220 @@ class SheetMetalTests(unittest.TestCase):
                 "NotSheet",
             )
 
+    def test_contour_flange_uses_native_open_chain_and_replay_curve_bindings(self):
+        with Sketch(name="Contour", plane="XZ") as sketch:
+            chain = sketch.chain(start=(0, 0))
+            chain.line_to((35, 0))
+            chain.tangent_arc_to((40, 5))
+            chain.line_to((40, 30))
+            contour = chain.finish()
+
+        document = compile_model(
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+                k_factor=0.44,
+                rule_name="Contour Rule",
+            ),
+            "ContourSheet",
+        )
+        self.assertEqual(document["format"], "scpf-replay")
+        self.assertEqual(document["version"], 2)
+
+        commands = document["commands"]
+        self.assertEqual(
+            [row["command"] for row in commands],
+            [
+                "sheet.manage_rules",
+                "sketch.create",
+                "sketch.line",
+                "sketch.arc.tangent",
+                "sketch.line",
+                "sketch.finish",
+                "sheet.flange",
+            ],
+        )
+
+        self.assertEqual(
+            commands[0]["params"],
+            {
+                "name": "Contour Rule",
+                "thickness": 2.5,
+                "k_factor": 0.44,
+                "bend_radius": 2.5,
+                "active": True,
+            },
+        )
+        self.assertEqual(
+            commands[2]["bind"],
+            {"$contour_curves_1": "curves"},
+        )
+        self.assertEqual(
+            commands[3]["bind"],
+            {
+                "$contour_curves_2": {
+                    "field": "curves",
+                    "prepend": "$contour_curves_1",
+                }
+            },
+        )
+        self.assertEqual(
+            commands[4]["bind"],
+            {
+                "$contour_curves_3": {
+                    "field": "curves",
+                    "prepend": "$contour_curves_2",
+                }
+            },
+        )
+
+        flange = commands[-1]["params"]
+        self.assertEqual(
+            flange,
+            {
+                "type": "contour",
+                "sketch": "Contour",
+                "curves": "$contour_curves_3",
+                "distance": 50,
+                "rule": "Contour Rule",
+                "body_name": "ContourSheet",
+            },
+        )
+        self.assertNotIn("thickness", flange)
+        self.assertNotIn("k_factor", flange)
+        self.assertNotIn("bend_radius", flange)
+        self.assertFalse(
+            any(row["command"] == "solid.extrude" for row in commands)
+        )
+
+    def test_contour_flange_preserves_dimensions_and_native_options(self):
+        leg = Parameter("leg_length", 35)
+        width = Parameter("contour_width", 50)
+        thickness = Parameter("sheet_thickness", 2.5)
+        radius = Parameter("sheet_radius", 2.5)
+        k_factor = Parameter("sheet_k", 0.44)
+
+        with Sketch(name="Contour", plane="XZ") as sketch:
+            chain = sketch.chain(start=(0, 0))
+            chain.line_to((leg, 0))
+            chain.tangent_arc_to((40, 5))
+            chain.line_to((40, 30))
+            contour = chain.finish()
+
+        document = compile_model(
+            contour.contour_flange(
+                distance=width,
+                thickness=thickness,
+                bend_radius=radius,
+                k_factor=k_factor,
+                rule_name="Contour Rule",
+                flip=True,
+                reverse=True,
+            ),
+            "ParametricContour",
+        )
+        commands = document["commands"]
+
+        units = {
+            row["params"]["name"]: row["params"]["unit"]
+            for row in commands
+            if row["command"] == "parameters.add"
+        }
+        self.assertEqual(
+            units,
+            {
+                "leg_length": "mm",
+                "contour_width": "mm",
+                "sheet_thickness": "mm",
+                "sheet_radius": "mm",
+                "sheet_k": "",
+            },
+        )
+
+        first_line = next(
+            row for row in commands
+            if row["command"] == "sketch.line"
+        )
+        self.assertEqual(
+            first_line["params"]["points"],
+            [[0, 0], ["leg_length", 0]],
+        )
+
+        flange = commands[-1]["params"]
+        self.assertEqual(flange["distance"], "contour_width")
+        self.assertTrue(flange["flip"])
+        self.assertTrue(flange["reverse"])
+
+    def test_contour_flange_validates_authoring_contract(self):
+        with Sketch(name="Contour", plane="XZ") as sketch:
+            chain = sketch.chain(start=(0, 0))
+            chain.line_to((35, 0))
+            chain.line_to((35, 30))
+            contour = chain.finish()
+
+        for distance in (0, -1, float("nan")):
+            with self.subTest(distance=distance), self.assertRaisesRegex(
+                ValueError, "distance"
+            ):
+                contour.contour_flange(
+                    distance=distance,
+                    thickness=2.5,
+                    bend_radius=2.5,
+                )
+
+        for thickness in (0, -1, float("nan")):
+            with self.subTest(thickness=thickness), self.assertRaisesRegex(
+                ValueError, "thickness"
+            ):
+                contour.contour_flange(
+                    distance=50,
+                    thickness=thickness,
+                    bend_radius=2.5,
+                )
+
+        with self.assertRaisesRegex(ValueError, "bend_radius"):
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=0,
+            )
+        with self.assertRaisesRegex(ValueError, "k_factor"):
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+                k_factor=1,
+            )
+        with self.assertRaisesRegex(ValueError, "rule_name"):
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+                rule_name="",
+            )
+        with self.assertRaisesRegex(TypeError, "flip"):
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+                flip="yes",
+            )
+        with self.assertRaisesRegex(TypeError, "reverse"):
+            contour.contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+                reverse="yes",
+            )
+
+        with self.assertRaisesRegex(ValueError, "open connected Sketch chain"):
+            Box(10, 10, 10).contour_flange(
+                distance=50,
+                thickness=2.5,
+                bend_radius=2.5,
+            )
+
     def test_sheet_metal_and_fold_validate_authoring_contract(self):
         with Sketch(name="Blank", plane="XY") as blank:
             Rectangle2D(80, 40)

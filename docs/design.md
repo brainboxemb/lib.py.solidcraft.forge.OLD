@@ -1890,3 +1890,104 @@ tangent arc with a polyline.
 It emits no `sheet.flange` command. #684 owns the later mapping from this
 qualified `sketch_open_chain` Shape to
 `sheet.flange(type="contour", sketch=..., curves=..., distance=...)`.
+
+
+## Native contour-flange design
+
+#684 consumes the #683 `sketch_open_chain` Shape without turning that Shape
+into a closed profile or an intermediate solid.
+
+### Public object flow
+
+```text
+Sketch.chain(...)
+  -> Shape(kind="sketch_open_chain")
+  -> contour.contour_flange(
+       distance,
+       thickness,
+       bend_radius,
+       k_factor,
+       rule_name,
+       flip,
+       reverse,
+     )
+  -> Shape(kind="sheet_contour_flange")
+```
+
+The material arguments deliberately mirror `Sketch.sheet_metal()` because a
+contour flange creates a new sheet body and therefore needs a deterministic
+sheet rule in a new design. They do not become contour-flange material fields.
+Both sheet-body creation paths continue to lower one
+`sheet.manage_rules(...)` command and then refer to that rule by name.
+
+A first-class reusable SheetRule object is outside #684. Introducing that larger
+API only to avoid repeating the already accepted sheet-body creation arguments
+would broaden this focused native feature unnecessarily.
+
+### Ordered runtime curve binding
+
+The open chain contains authored segment descriptors, but
+`sketch.arc.tangent` does not accept an authored `ids=` field. SolidCraft
+returns the created curve ids after replay. Contour flange, in turn, requires
+the exact ordered `curves` ids.
+
+Forge therefore uses its existing SCPF replay variables instead of guessing an
+arc id:
+
+```text
+sketch.line(... ids=["l1"])
+  bind $contour_curves_1 <- curves
+
+sketch.arc.tangent(start="l1.end", ...)
+  bind $contour_curves_2 <- prepend($contour_curves_1, curves)
+
+sketch.line(... ids=["l2"])
+  bind $contour_curves_3 <- prepend($contour_curves_2, curves)
+
+sketch.finish
+
+sheet.flange(
+  type="contour",
+  sketch="Contour",
+  curves=$contour_curves_3,
+  distance=<expression>,
+  rule="Forge Sheet",
+  body_name=<Forge body name>,
+  flip?=true,
+  reverse?=true,
+)
+```
+
+The replay variable resolves to one flat ordered list. This keeps curve identity
+owned by SolidCraft where the native command owns it and reuses Forge's existing
+binding/chunking mechanism.
+
+Standalone #683 compilation stays unchanged. A contour-specific lowering helper
+adds bindings only when another native command actually consumes the complete
+curve list.
+
+### Feature-tree lowering
+
+`sheet_contour_flange` is a body-producing feature root, not a wrapper around
+an existing body:
+
+```text
+sheet.manage_rules(...)
+sketch.create
+ordered open-chain commands with replay bindings
+sketch.finish
+sheet.flange(type="contour", ...)
+```
+
+Metadata marks the result as sheet material and retains the same rule fields as
+`sheet_base`, so later generic sheet operations such as edge flange/fold can
+reuse the resulting body without a separate contour-only path.
+
+### Native semantics
+
+The pinned SolidCraft 0.45 reference describes contour flange as an independent
+sheet made from an open chain of lines and tangent arcs. The reference oracle
+also establishes that the sketch path is the sheet face away from the material
+and `distance` extends the contour along the sketch-plane normal. Forge does
+not reimplement those conventions; `flip` and `reverse` are passed through
+only when explicitly requested.

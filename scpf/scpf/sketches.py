@@ -113,8 +113,8 @@ def compile_connected_profile(profile, *, offset=(0, 0)):
 
 
 
-def compile_open_chain(shape):
-    """Lower one reusable open Sketch chain to native SolidCraft commands."""
+def _compile_open_chain(shape, *, bind_curves):
+    """Lower one reusable open Sketch chain, optionally binding all curve ids."""
 
     if shape.kind != "sketch_open_chain":
         raise ModelError("expected a sketch_open_chain")
@@ -130,6 +130,25 @@ def compile_open_chain(shape):
     def point(value):
         return [command_value(value[0]), command_value(value[1])]
 
+    curve_variable = None
+    curve_count = 0
+
+    def append_curve(command):
+        nonlocal curve_variable, curve_count
+        if bind_curves:
+            curve_count += 1
+            next_variable = f"$contour_curves_{curve_count}"
+            if curve_variable is None:
+                binding = "curves"
+            else:
+                binding = {
+                    "field": "curves",
+                    "prepend": curve_variable,
+                }
+            command["bind"] = {next_variable: binding}
+            curve_variable = next_variable
+        commands.append(command)
+
     previous_line_id = None
     line_count = 0
     for segment in segments:
@@ -138,7 +157,7 @@ def compile_open_chain(shape):
             _kind, start, end = segment
             line_count += 1
             line_id = f"l{line_count}"
-            commands.append(
+            append_curve(
                 _command(
                     "sketch.line",
                     points=[point(start), point(end)],
@@ -155,7 +174,7 @@ def compile_open_chain(shape):
                 raise ModelError(
                     "open Sketch tangent arc requires a preceding line"
                 )
-            commands.append(
+            append_curve(
                 _command(
                     "sketch.arc.tangent",
                     start=f"{previous_line_id}.end",
@@ -169,7 +188,7 @@ def compile_open_chain(shape):
         raise ModelError(f"unsupported open Sketch chain segment: {kind}")
 
     commands.append(_command("sketch.finish"))
-    return commands, {
+    meta = {
         "sketch": True,
         "open_chain": True,
         "sketch_name": sketch_name,
@@ -177,7 +196,29 @@ def compile_open_chain(shape):
         "sketch_plane_offset": plane_offset if plane_offset is not None else 0,
         "segments": segments,
     }
+    return commands, meta, curve_variable
 
+
+def compile_open_chain(shape):
+    """Lower one reusable open Sketch chain to native SolidCraft commands."""
+
+    commands, meta, _curve_variable = _compile_open_chain(
+        shape,
+        bind_curves=False,
+    )
+    return commands, meta
+
+
+def compile_open_chain_with_curves(shape):
+    """Lower an open chain and bind its complete ordered native curve list."""
+
+    commands, meta, curve_variable = _compile_open_chain(
+        shape,
+        bind_curves=True,
+    )
+    if curve_variable is None:
+        raise ModelError("open Sketch chain has no curves to consume")
+    return commands, meta, curve_variable
 
 def compile_standalone_sketch(
     sketch_name,
