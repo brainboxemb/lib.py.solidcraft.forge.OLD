@@ -10,6 +10,13 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Changed
 
+- Forge push/manual CI now consumes externally accepted `tool.cad.ci 0.18.0`
+  for cohesive same-runner durable scope resolution, one CAD-CI/SCons run and
+  complete build-scope publication. The Forge workflow keeps only its
+  repository-specific PR classification, site generation and Pages publication
+  around that released action; no second runner or build-artifact handoff is
+  introduced (#662).
+
 - Forge CI now consumes externally accepted `tool.cad.ci 0.17.1` /
   `lib.py.cad.ci 0.10.0` and projects shared model/reference/diagram batch
   results with the library-owned dependency-output `copy:` action instead of
