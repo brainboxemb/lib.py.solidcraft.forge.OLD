@@ -112,6 +112,73 @@ def compile_connected_profile(profile, *, offset=(0, 0)):
     }
 
 
+
+def compile_open_chain(shape):
+    """Lower one reusable open Sketch chain to native SolidCraft commands."""
+
+    if shape.kind != "sketch_open_chain":
+        raise ModelError("expected a sketch_open_chain")
+    sketch_name, plane, plane_offset, _start, segments = shape.data
+    if plane not in ("XY", "XZ", "YZ"):
+        raise ModelError("open Sketch chain requires an XY, XZ or YZ plane")
+
+    params = {"plane": plane, "name": sketch_name}
+    if plane_offset is not None:
+        params["offset"] = command_value(plane_offset)
+    commands = [_command("sketch.create", **params)]
+
+    def point(value):
+        return [command_value(value[0]), command_value(value[1])]
+
+    previous_line_id = None
+    line_count = 0
+    for segment in segments:
+        kind = segment[0]
+        if kind == "line":
+            _kind, start, end = segment
+            line_count += 1
+            line_id = f"l{line_count}"
+            commands.append(
+                _command(
+                    "sketch.line",
+                    points=[point(start), point(end)],
+                    ids=[line_id],
+                    connect=True,
+                )
+            )
+            previous_line_id = line_id
+            continue
+
+        if kind == "arc_tangent":
+            _kind, _start, end = segment
+            if previous_line_id is None:
+                raise ModelError(
+                    "open Sketch tangent arc requires a preceding line"
+                )
+            commands.append(
+                _command(
+                    "sketch.arc.tangent",
+                    start=f"{previous_line_id}.end",
+                    curve=previous_line_id,
+                    end=point(end),
+                )
+            )
+            previous_line_id = None
+            continue
+
+        raise ModelError(f"unsupported open Sketch chain segment: {kind}")
+
+    commands.append(_command("sketch.finish"))
+    return commands, {
+        "sketch": True,
+        "open_chain": True,
+        "sketch_name": sketch_name,
+        "sketch_plane": plane,
+        "sketch_plane_offset": plane_offset if plane_offset is not None else 0,
+        "segments": segments,
+    }
+
+
 def compile_standalone_sketch(
     sketch_name,
     plane,
