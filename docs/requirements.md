@@ -346,8 +346,8 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.18.0` /
-`lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
+Forge uses the exact externally accepted `tool.cad.ci 0.18.1` /
+`lib.py.cad.ci 0.11.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
 Forge explicitly requests `jobs=2` from the released tool on both pull-request
@@ -1076,8 +1076,8 @@ For model/reference shared batches:
 - Forge does not implement bundle selection, projection, signatures, caching,
   CURRENT decisions or jobs scheduling.
 
-The exact accepted dependency for this capability is tool.cad.ci 0.18.0 backed
-by lib.py.cad.ci 0.10.0. A future pin change requires the normal external
+The exact accepted dependency for this capability is tool.cad.ci 0.18.1 backed
+by lib.py.cad.ci 0.11.0. A future pin change requires the normal external
 released-stack acceptance chain before Forge adoption.
 
 Performance evidence is diagnostic, not an SLA. #261 must compare the
