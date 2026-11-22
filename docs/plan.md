@@ -3,6 +3,19 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
+Forge has two parallel responsibility areas that must both remain visible in
+planning and handoffs:
+
+1. the **CAD library itself** — public API, compiler/lowering, modelling
+   semantics, examples, native qualification and model-specific verification;
+2. the **CI/verification/runtime integration around that library** — generic
+   CAD-CI consumption, durable build/Page publication, verification package
+   integration, runtime-image consumption and release mechanics.
+
+Neither area is subordinate to the other. `dev-cad` and `dev-ci` are separate
+execution lanes for these two concerns and should progress independently when
+there is no real dependency between them.
+
 Permanent requirements, design, API and release contracts belong in the normal
 documents under `docs/`. Issues keep implementation detail and history.
 
@@ -80,8 +93,12 @@ repository-wide instructions.
 
 ## Lane rule
 
-- `dev-cad` owns Forge API/compiler/model/reference/Verification work.
-- `dev-ci` owns Forge CI/infrastructure/runtime-consumer/publication work.
+The repository deliberately has two concurrent work lanes:
+
+- `dev-cad` owns the Forge CAD library: API/compiler/model semantics,
+  references, qualification/Verification content and CAD-facing behavior;
+- `dev-ci` owns the infrastructure around that library: Forge CI integration,
+  runtime-consumer wiring, durable build state and publication.
 - Generic CAD-CI behavior is fixed and released in its owner repository first.
 - Runtime construction/release is fixed in `docker.cad.solidcraft` first.
 - A blocked CAD issue remains CAD work; dependency handoffs do not move lanes.
