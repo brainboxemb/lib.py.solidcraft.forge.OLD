@@ -144,6 +144,19 @@ Current 0.45 split:
 Do not combine #682/#683/#684 back into one large sheet-metal PR. Edge flange
 and open-chain contour are different public API/compiler contracts.
 
+#### #682 focused implementation contract
+
+Requirements/design/API are now fixed for the first edge-flange slice:
+
+- public `Shape.flange(...)` on an existing sheet body;
+- explicit fixed XYZ edge picks only;
+- editable height/angle plus native height/position/flip options;
+- one native `sheet.flange(type=edge)`;
+- no duplicated sheet material properties;
+- no per-edge segment dictionaries, chained bends, relief overrides or contour/open-chain behavior.
+
+Next: implement the Shape node/compiler lowering and focused unit/native qualification.
+
 ### WS4 — cross-repository terminology and Verification/reference quality
 
 - #659 build/verify/results terminology — **later**; coordinate after #661 so
