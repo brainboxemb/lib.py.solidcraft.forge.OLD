@@ -92,7 +92,7 @@ promotion branch.
 
 Owner: Forge repository; issue #714.
 
-Status: **now**.
+Status: **now**, with promotion PR #716 temporarily blocked by document reconciliation #717.
 
 Completed post-v0.11 CAD-library scope on `dev-cad` includes:
 
@@ -108,14 +108,16 @@ Completed post-v0.11 CAD-library scope on `dev-cad` includes:
 
 Next gate:
 
-1. promote exact `dev-cad -> main` through a direct PR;
-2. require the PR to qualify the complete combined main + CAD history;
-3. merge only through `/merge`, which must select a normal merge commit for
+1. complete #717: reconcile the four document overlaps exposed by exact promotion PR #716 without changing the promotion shape;
+2. require #716 to become clean/mergeable and obtain fresh exact-head validation;
+3. promote exact `dev-cad -> main` through that direct PR;
+4. require the PR to qualify the complete combined main + CAD history;
+5. merge only through `/merge`, which must select a normal merge commit for
    the exact permanent-lane promotion;
-4. verify the resulting exact `main` SHA has successful durable
+6. verify the resulting exact `main` SHA has successful durable
    `build/main` and stable Pages provenance;
-5. only then prepare the explicit v0.12.0 candidate under #714;
-6. publish only through `/release v0.12.0 <exact-main-sha>` after
+7. only then prepare the explicit v0.12.0 candidate under #714;
+8. publish only through `/release v0.12.0 <exact-main-sha>` after
    `forge-release`, `release-policy`, durable build and Pages all agree.
 
 If the direct lane PR exposes a real overlap between main-side governance and
@@ -149,7 +151,8 @@ replace the direct permanent-lane promotion with a squash workaround.
 
 | Issue | Lane/owner | Status | Next action |
 | --- | --- | --- | --- |
-| #714 Release Forge 0.12.0 | repository | **now** | Directly promote accepted `dev-cad` to `main`, verify durable main/Pages, then prepare and publish one exact v0.12.0 candidate. |
+| #717 Reconcile main/dev-cad document overlaps | dev-cad | **now** | Reconcile only `AGENTS.md`, `docs/design.md`, `docs/plan.md` and `docs/requirements.md`; then require #716 to become clean and freshly green. |
+| #714 Release Forge 0.12.0 | repository | **blocked on #717** | Resume exact `dev-cad -> main` promotion in existing PR #716 after the four document overlaps are reconciled. |
 | #713 Audit/reduce Forge scripts | repository / verification owner | **later** | Reassess current tree/documentation after the release; do not resume the audit during the active promotion. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately after the release checkpoint. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Preserve diagram responsibility while replacing CADCraft sources. |
