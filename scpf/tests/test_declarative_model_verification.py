@@ -195,14 +195,22 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
                 ).read_text(encoding="utf-8")
                 self.assertIn("template: forge-model-declarative", ci)
 
-    def test_batch_reuses_runtime_but_materializes_per_model(self):
+    def test_batch_reuses_runtime_and_emits_child_projection_roots(self):
         text = BATCH.read_text(encoding="utf-8")
         self.assertIn("processed_declarative_slugs", text)
-        self.assertIn("dependency_output_root", text)
         self.assertIn('"docker"', text)
         self.assertIn('"run"', text)
         self.assertIn("for row in rows:", text)
-        self.assertIn("materialize_case", text)
+        self.assertIn(
+            'case_root = batch_root / "examples" / slug',
+            text,
+        )
+        self.assertIn(
+            '"/output/items/examples/{slug}/model_verify"',
+            text,
+        )
+        self.assertNotIn("dependency_output_root", text)
+        self.assertNotIn("materialize_case", text)
 
     def test_shared_launcher_only_produces_and_hands_off(self):
         """Forge launcher may replay Forge output but not check SolidCraft data."""
