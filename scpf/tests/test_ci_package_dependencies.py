@@ -4,6 +4,8 @@ from pathlib import Path
 import re
 import unittest
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / "scpf" / "ci.yml"
@@ -66,7 +68,14 @@ class CiPackageDependencyContractTests(unittest.TestCase):
             path.parent.name: path
             for path in EXAMPLES.glob("*/ci.yml")
         }
-        self.assertEqual(set(configs), expected)
+        self.assertTrue(expected.issubset(configs))
+        extras = set(configs) - expected
+        for slug in sorted(extras):
+            role_path = EXAMPLES / slug / "role.yml"
+            self.assertTrue(role_path.is_file(), role_path)
+            role = yaml.safe_load(role_path.read_text(encoding="utf-8"))
+            self.assertEqual(role.get("role"), "regression-fixture")
+            self.assertEqual(role.get("decision"), "keep")
 
         root_ci = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
         model_template = (
