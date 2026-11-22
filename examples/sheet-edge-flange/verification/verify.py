@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import math
 
 from cad_verification import (
     SolidCraftBodyExpectation,
@@ -41,7 +42,7 @@ VERIFICATION = SolidCraftVerification(
             "bend_radius": 2.0,
             "k_factor": 0.5,
             "flange_height": 20.0,
-            "flange_angle": 90.0,
+            "flange_angle": math.radians(90.0),
         },
         parameter_match="subset",
         named_bodies=(COMMON_BODY,),
@@ -56,7 +57,7 @@ VERIFICATION = SolidCraftVerification(
                 body_count=1,
                 parameters={
                     "flange_height": 25.0,
-                    "flange_angle": 75.0,
+                    "flange_angle": math.radians(75.0),
                 },
                 parameter_match="subset",
                 named_bodies=(COMMON_BODY,),
