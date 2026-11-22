@@ -26,10 +26,14 @@ dev-ci
 
 Current stable integration commit:
 
-`6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4`
+`7238a6d515106835b56a2bf6b208dd67da2d061e`
 
-That merge contains the accepted standalone Sketch Boolean work from #354.
-`build/main` and stable Pages both resolve to that exact commit.
+That baseline includes:
+
+- #354 standalone Sketch Boolean operands;
+- #261 dependency-output `copy:` integration and jobs=2 runtime improvement;
+- durable `build/main` and stable Pages provenance on the same exact source
+  commit.
 
 ### Forge release
 
@@ -49,20 +53,29 @@ main.
 
 ### Accepted generic CAD-CI stack
 
-The previous Forge baseline used tool 0.17.0 / lib 0.9.3.
-
-A new exact released pair is now externally accepted for #261:
+Current externally accepted stack:
 
 - `lib.py.cad.ci 0.10.0` @
   `397fb04005b46de8d433cb18c091b1e73714b877`;
-- `tool.cad.ci 0.17.1` @
-  `1012e6a539a2fddd8194124844fe208bf16cf4e4`;
-- `tool.cad.ci.test` #70 / PR #71;
-- complete acceptance run `45006989548` — success;
-- direct CLI, reusable workflow, same-runner action and dependency-output
-  `copy:` all passed on that exact released pair.
+- `tool.cad.ci 0.18.0` @
+  `b62f9d0b169aa201a3c66c3166f364396b2d71bc`;
+- `tool.cad.ci.test` #73 / PR #74;
+- acceptance run `45010776155` — success.
 
-Forge still uses `jobs=2`; no jobs increase is part of #261.
+The released 0.18.0 root composite action provides the accepted same-runner
+long-lived durable path:
+
+```text
+checkout/bootstrap once
+  -> resolve prior durable scope/base
+  -> one CAD-CI/SCons graph
+  -> prepare/publish complete durable build scope
+  -> return prepared scope/build commit to later steps on the same runner
+```
+
+No artifact handoff or second post-action runner is part of that contract.
+
+Forge remains explicitly on `jobs=2`.
 
 ## Lane rule
 
@@ -78,90 +91,89 @@ Short-lived branches target one lane and are squash-merged. Exact
 
 ## Active workstreams
 
-### WS1 — #261 full Forge integration runtime
+### WS1 — #662 simplify Forge workflow around released durable action
 
 Primary lane: `dev-ci`. **Now.**
 
-Measured accepted jobs=2 runs showed:
+The current push/manual Forge workflow still duplicates generic durable
+orchestration in local YAML:
 
-- model/reference heavy batches finish in roughly 60-81 seconds;
-- the remaining SCons tail was roughly 107-176 seconds;
-- reference image-pull variation explained only about 10 seconds;
-- the tail contained many per-item projection actions after shared batch results
-  already existed.
+- durable build-scope lookup/base resolution;
+- generic CAD-CI action invocation with manually resolved selection;
+- build-branch fetch;
+- complete scope update/prepare;
+- durable build publication.
 
-Owner-first generic work is complete and externally accepted. Forge may now
-consume the released `copy:` action.
+That duplication is now obsolete because tool.cad.ci 0.18.0 owns the same
+sequence in one externally accepted same-runner composite action.
 
-Implementation order:
+Required cut-over:
 
-1. pin tool.cad.ci 0.17.1 in the Forge workflow;
-2. make shared model/reference batches produce item-shaped projection roots;
-3. replace projection-only model/reference/diagram consumer commands with
-   declarative `copy:`;
-4. keep real per-model `contract_test` commands unchanged;
-5. remove obsolete Forge materialize-only code after the config no longer uses
-   it;
-6. run promotion-equivalent jobs=2 evidence and compare total post-batch tail;
-7. if the remaining tail is still material, measure again before changing any
-   other owner layer;
-8. do not raise jobs beyond 2 in this change.
+1. pin exact tool.cad.ci 0.18.0;
+2. keep the PR path one job and preserve its current docs-only/full-promotion
+   policy without adding a classifier runner;
+3. replace the push/manual local durable shell blocks with one released
+   `tool.cad.ci@b62f9d0b...` durable action step;
+4. keep Forge-owned site generation immediately after that action on the same
+   runner using `prepared_scope` and `build_commit` outputs;
+5. keep one generic Pages publication call after site generation;
+6. preserve main/dev-cad/dev-ci scope semantics and stable-main preservation of
+   named Pages subtrees;
+7. keep jobs=2;
+8. update tests to reject reintroduction of local durable scope/build
+   orchestration;
+9. prove named and main durable build/Page provenance before promotion.
 
-Target projection layout:
+Performance constraint: **do not** split the durable path into separate
+reusable-workflow jobs, runners or artifacts.
 
-```text
-model-verification-batch/
-  items/examples/<model>/
-    solidcraft.json
-    model_verify/...
+### WS2 — #661 shared CAD-CI batch/selectivity governance
 
-reference-verification-batch/
-  items/examples/<model>/<implementation>/
-    references/
-      verification.json
-      <model>/<implementation>/...
-  diagrams/...
-```
+Primary lane: `dev-ci`. **Next.**
 
-Child items use `copy: source: items/{item_path}`. The generic library owns
-bundle projection; Forge owns only producer layout and declarative config.
+The shared batch/copy pattern is already working. Measure one-model, no-op and
+explicit-full scenarios on the current released stack before deciding whether a
+new generic selectivity capability is required for downstream CAD consumers.
 
-### WS2 — CAD-library next work
+Do not implement consumer-local changed-path planners.
+
+### WS3 — CAD-library next work
 
 Primary lane: `dev-cad`.
 
-1. #567 mixed line/arc closed Sketch profiles;
-2. #568 native sheet-metal flange/contour;
-3. #349 focused Revolve child first, broader SOLID › CREATE inventory later.
+1. #567 mixed line/arc closed Sketch profiles — **next**;
+2. #568 native sheet-metal flange/contour — **next** after #567 contract;
+3. #349 focused Revolve child first — **later**.
 
-### WS3 — Verification/reference quality
+### WS4 — cross-repository terminology and Verification/reference quality
 
-- #570 remove CADCraft from explanatory Verification diagrams — later.
-- #335 build123d sheet-metal reference semantics — later.
+- #659 build/verify/results terminology — **later**; coordinate after #662 so
+  workflow names/outputs are not renamed during the durable cut-over.
+- #570 remove CADCraft from Verification diagrams — **later**.
+- #335 build123d sheet-metal reference semantics — **later**.
 
-### WS4 — API coverage roadmap
+### WS5 — API coverage and interaction research
 
-- #347 generalized pattern seeds — later.
-- #9 first-class Sketch/constraints/workplanes — later epic.
-- #8 hollow primitive intent — later.
-
-### WS5 — AnchorFrame research / interaction polish
-
-- #325 root-cause research — later.
-- #81 rotated occurrence-local AnchorFrame references — later.
-- #82 Joints-folder visibility — later.
-- #175 probably obsolete; consolidate useful evidence into #325.
-- #5 probably obsolete in current broad form; separate remaining constraint
-  scope from already-delivered anchor behavior.
+- #347 generalized pattern seeds — **later**.
+- #9 first-class Sketch/constraints/workplanes — **later** epic.
+- #8 hollow primitive intent — **later**.
+- #325 AnchorFrame root-cause research — **later**.
+- #81 rotated occurrence-local AnchorFrame references — **later**.
+- #82 Joints-folder visibility — **later**.
+- #175 — **probably obsolete**; consolidate useful evidence into #325.
+- #5 — **probably obsolete** in current broad form; separate any remaining
+  constraint scope from #9.
 
 ## Open issue assignment — 2026-11-22
 
-| Issue | Lane | Disposition | Next action |
+| Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
-| #261 Measure/reduce full integration runtime | dev-ci | **now** | Adopt accepted tool 0.17.1/lib 0.10.0 copy projection and remeasure jobs=2. |
-| #567 Mixed line/arc closed Sketch profiles | dev-cad | **next** | Focused connected-curve profile API. |
-| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts first. |
-| #349 Remaining SOLID › CREATE coverage | dev-cad | **next** | Split focused Revolve child for latch work. |
+| #662 Consume tool.cad.ci 0.18.0 durable action and simplify Forge workflow | dev-ci | **now** | Replace duplicated durable push orchestration with one released same-runner action and prove build/Page provenance. |
+| #661 Govern shared CAD-CI architecture and consumer model-build batch requirements | dev-ci | **next** | Measure one-model/no-op/full batch selectivity on the current released stack. |
+| #567 Mixed line/arc closed Sketch profiles | dev-cad | **next** | Design focused connected line/arc profile API from pinned SolidCraft 0.45 native commands. |
+| #568 Native sheet-metal flange/contour | dev-cad | **next** | Qualify immutable runtime contracts after the connected-profile foundation. |
+| #659 Standardize build/verification/results terminology | cross-repo | **later** | Start after #662 so workflow structure and terminology do not change simultaneously. |
+| #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused Revolve child for latch work. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Replace explanatory sources without moving generic rendering into Forge. |
 | #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with actual sheet-metal workflow. |
 | #347 Patterns accept any applied Shape feature | dev-cad | **later** | Generalize seed validation by native feature identity. |
