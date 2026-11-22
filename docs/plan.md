@@ -33,26 +33,24 @@ Current Forge-consumed generic CI stack:
 
 - `lib.py.cad.ci 0.9.3` @
   `74486c441f1f2b170ff3dc06e0edcaf662fbec6b`;
-- `tool.cad.ci 0.16.2` @
-  `59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9`;
-- external black-box acceptance: `tool.cad.ci.test` #62 / PR #63.
-
-Newer externally accepted tool surface available for an explicit consumer
-experiment:
-
 - `tool.cad.ci 0.17.0` @
   `d88d6e189c12edb5a30158c068145c099c17a019`;
-- same `lib.py.cad.ci 0.9.3`;
 - external jobs=2 acceptance: `tool.cad.ci.test` #66 / PR #67;
-- public evidence proved real overlapping SCons actions through jobs=2.
+- Forge explicitly uses `jobs=2` on PR and durable integration runs.
 
-Forge selective-startup evidence:
+Forge performance evidence:
 
-- old tool 0.16.1 / lib 0.9.2 pre-target interval: 26.507 s;
-- current tool 0.16.2 / lib 0.9.3 pre-target interval: 1.375 s.
+- selective startup improved from 26.507 s on tool 0.16.1 / lib 0.9.2 to
+  1.375 s on tool 0.16.2 / lib 0.9.3;
+- jobs=1 full promotion #636: 4m54s;
+- jobs=2 #645 first run: 4m44s;
+- jobs=2 #645 exact-SHA rerun: 3m12s;
+- the clean jobs=2 rerun measured 7.015 s pre-target, 62.238 s model
+  verification and 59.616 s reference verification with the heavy batches
+  overlapping.
 
-The structural owner-layer contract remains authoritative; timing values are
-diagnostic evidence.
+The structural owner-layer contract remains authoritative. Timing values are
+diagnostic evidence and runner/image-pull variance remains material.
 
 ## Recently completed default-branch work
 
@@ -66,6 +64,11 @@ diagnostic evidence.
 - #340: closed as superseded by permanent lanes and normal two-parent
   promotions.
 - #481: conservative evidence-only branch cleanup completed.
+- #637 / #645: exact tool.cad.ci 0.17.0 with explicit jobs=2 accepted and
+  promoted by normal dev-ci -> main merge; durable main/dev-ci build and Pages
+  publication are green.
+- #643 / #644: release documentation corrected and Forge v0.11.0 made an
+  explicit real-tag/GitHub-Release milestone.
 
 ## Lane rule
 
@@ -98,12 +101,12 @@ Issue #642 owns the next **real** Forge release.
 The latest actual GitHub Release remains `v0.10.0`. Source metadata already
 carries `0.11.0`, but that is release preparation only.
 
-Release v0.11.0 is planned after the two current integration tracks settle:
+Release v0.11.0 is planned after the current CAD integration settles:
 
 - #355 reaches an accepted/promoted state, or is explicitly deferred from
   0.11.0 with the changelog reflecting that decision;
-- #637 resolves the jobs=2 experiment and main is left on the chosen accepted
-  CAD-CI configuration.
+- the jobs=2 CI experiment is already resolved: main now uses the accepted
+  tool.cad.ci 0.17.0 / lib.py.cad.ci 0.9.3 stack with jobs=2.
 
 Before another large CAD/API wave is stacked on main:
 
@@ -122,19 +125,18 @@ A changelog heading or package version is not a release.
 
 Primary lane: `dev-ci`.
 
-1. #637 measure full Forge integration with exact externally accepted
-   tool.cad.ci 0.17.0 and explicit `jobs=2`.
-2. #261 use that evidence to decide the next performance step on the current
-   SCons/runtime architecture.
+#637 is complete. Forge now uses exact tool.cad.ci 0.17.0 / lib.py.cad.ci
+0.9.3 with explicit jobs=2.
 
-Rules for #637:
+#261 is the next measurement-driven CI work, but it does not preempt #355 or the
+v0.11.0 integration milestone. Its next investigation is:
 
-- no Forge-local scheduler, worker pool or target loop;
-- runtime stays v0.3.4;
-- library stays 0.9.3;
-- tool pin changes only to exact released 0.17.0;
-- jobs=2 is an explicit Forge consumer value, not a hidden global default;
-- compare against full promotion #636 baseline before promoting.
+1. separate immutable-image pull time from container execution across repeated
+   promotion-equivalent runs;
+2. explain the large reference-image pull variance;
+3. identify the remaining serial SCons tail after model/reference batches;
+4. fix only the owner layer of the dominant cost;
+5. do not increase the jobs bound beyond 2 without separate evidence.
 
 ### WS1 — active CAD blockers
 
@@ -190,7 +192,7 @@ preempt current P1 blockers.
 | #81 Inline AnchorFrame references for rotated occurrences | `dev-cad` | WS4 | **P3** | Investigate occurrence-local frames later. |
 | #82 Joints folder visibility | `dev-cad` | WS4 | **P3** | Decide interaction/export policy after higher-impact defects. |
 | #175 HUB75-like AnchorFrame diagnostic | `dev-cad` | WS4 | **Retire/consolidate** | Move useful evidence to #325/background docs. |
-| #261 Full Forge integration runtime | `dev-ci` | WS0 | **P2 measurement-driven** | Use #637 jobs=2 result to identify the next real critical path; do not revive the old Qualification-image/matrix design. |
+| #261 Full Forge integration runtime | `dev-ci` | WS0 | **P2 measurement-driven** | Measure image-pull/runner variance and the remaining serial tail on the accepted jobs=2 stack; do not increase jobs or revive the old Qualification-image/matrix design without evidence. |
 | #325 AnchorFrame regression root cause | `dev-cad` | WS4 | **P3 research** | Resume only when AnchorFrame becomes active. |
 | #335 build123d Sheet Metal reference | `dev-cad` | WS2 | **P2** | Replace solid approximation with current sheet-metal workflow. |
 | #347 Patterns accept any applied Shape feature | `dev-cad` | WS3 | **P2** | Base source validation on native history-feature identity. |
@@ -200,21 +202,17 @@ preempt current P1 blockers.
 | #567 Mixed line/arc closed Sketch profiles | `dev-cad` | WS1 | **P1** | Deliver focused connected-curve profile API. |
 | #568 Native sheet-metal flange/contour | `dev-cad` | WS1 | **P1 runtime-sensitive** | Qualify against immutable v0.3.4 contracts before exposing APIs. |
 | #570 Remove CADCraft from Verification diagrams | `dev-cad` | WS2 | **P2** | Replace explanatory diagram sources with deterministic Forge-owned sources. |
-| #637 Forge integration jobs=2 experiment | `dev-ci` | WS0 | **P1 now** | Adopt exact tool 0.17.0, set explicit jobs=2, measure full promotion against #636, then keep/revert based on evidence. |
-| #642 Release Forge 0.11.0 | `main/release` | Release milestone | **P1 integration milestone** | After #355/#637 settle, stabilize main, reconcile changelog, verify exact release SHA, create real `v0.11.0` tag + GitHub Release, then record released baseline. |
-| #643 Correct release docs and plan | `main governance` | Release milestone | **P0 now** | Merge the corrected release contract and explicit 0.11.0 milestone before further integration. |
+| #642 Release Forge 0.11.0 | `main/release` | Release milestone | **P1 integration milestone** | After #355 is accepted/promoted or explicitly deferred, stabilize main, reconcile changelog, verify exact release SHA, create real `v0.11.0` tag + GitHub Release, then record released baseline. |
+| #647 Reconcile plan after jobs=2 promotion | `main governance` | WS0 | **P0 now** | Merge this plan-only state correction; then keep #355 as the active CAD gate for v0.11.0. |
 
 ## Immediate execution order
 
-1. [#643] Merge the corrected release contract / v0.11.0 milestone.
-2. [#355, dev-cad] Continue SolidCraft 0.45 parametric Slot qualification.
-3. [#637, dev-ci] In parallel, complete the exact tool 0.17.0 / jobs=2 Forge
-   integration experiment and full-promotion comparison.
-4. Promote accepted lane work and leave `main` on one stable, fully verified
-   CAD/runtime/CI baseline.
-5. [#642] Release **Forge v0.11.0** from that exact green main SHA before
-   starting another large CAD/API wave. If #355 is deliberately deferred, keep
-   it out of the 0.11.0 changelog explicitly.
-6. After v0.11.0, use #637 results to continue #261 and proceed with
-   #354/#567/#568 and focused #349 Revolve as priorities permit.
-7. Rewrite/retire #175 and #5 before treating them as implementation work.
+1. [#647] Merge this plan reconciliation.
+2. [#355, dev-cad] Finish SolidCraft 0.45 parametric Slot native baseline and
+   saved-design mutation qualification, update public API docs, merge to
+   dev-cad, prove durable lane output, then promote to main.
+3. [#642] Release **Forge v0.11.0** from one exact green main SHA after #355 is
+   promoted, or explicitly defer #355 and keep it out of the 0.11.0 changelog.
+4. After v0.11.0, continue #261 image-pull/serial-tail investigation and proceed
+   with #354/#567/#568 and focused #349 Revolve as priorities permit.
+5. Rewrite/retire #175 and #5 before treating them as implementation work.
