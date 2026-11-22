@@ -1,4 +1,6 @@
-# Validate the explicit Forge release-publication policy without CAD runtimes.
+# Forge repository CI item: test explicit Forge release validation/publication policy without CAD runtimes.
+# The authoritative Forge release contract is docs/release.md.
+# Local documentation: README.md
 id: release-policy
 process: true
 kind: test

@@ -1,4 +1,6 @@
-# Verify canonical SolidCraft reference against the exact immutable runtime.
+# Forge repository CI item: verify the checked SolidCraft command reference against the immutable runtime.
+# Runtime images are owned/released by docker.cad.solidcraft; Forge is a consumer.
+# Local documentation: README.md
 id: solidcraft-reference
 process: true
 kind: verification

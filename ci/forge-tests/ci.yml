@@ -1,4 +1,6 @@
-# Run the Forge unit-test suite against the exact built package.
+# Forge repository CI item: run the Forge test suite against the exact built package.
+# Generic selection/scheduling/caching remain owned by the released CAD-CI stack.
+# Local documentation: README.md
 id: forge-tests
 kind: tool
 needs:

@@ -1,4 +1,6 @@
-# Validate example-owned presentation metadata without starting CAD runtimes.
+# Forge repository CI item: validate site source and model-owned presentation metadata without CAD runtimes.
+# This validates distributed metadata; it is not a second model catalog.
+# Local documentation: README.md
 id: site-source
 process: true
 kind: test
