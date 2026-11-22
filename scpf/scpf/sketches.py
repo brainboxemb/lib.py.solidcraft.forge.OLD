@@ -51,6 +51,67 @@ def _extrude_profile_params(profile_picks, exact_regions):
     return params
 
 
+def compile_connected_profile(profile, *, offset=(0, 0)):
+    """Lower one declarative mixed line/arc profile into native sketch commands."""
+
+    if profile.kind != "connected_profile":
+        raise ModelError("expected a connected_profile")
+    start, segments = profile.data
+    ox, oy = offset
+
+    def point(value):
+        return [
+            command_value(_combine_dimension(ox, value[0])),
+            command_value(_combine_dimension(oy, value[1])),
+        ]
+
+    commands = []
+    for segment in segments:
+        kind = segment[0]
+        if kind == "line":
+            _kind, segment_start, end = segment
+            commands.append(
+                _command(
+                    "sketch.line",
+                    points=[point(segment_start), point(end)],
+                    connect=True,
+                )
+            )
+            continue
+        if kind == "arc_three_point":
+            _kind, segment_start, end, through = segment
+            commands.append(
+                _command(
+                    "sketch.arc.three_point",
+                    start=point(segment_start),
+                    end=point(end),
+                    through=point(through),
+                    connect=True,
+                )
+            )
+            continue
+        if kind == "arc_center_point":
+            _kind, segment_start, end, center, clockwise = segment
+            commands.append(
+                _command(
+                    "sketch.arc.center_point",
+                    center=point(center),
+                    start=point(segment_start),
+                    end=point(end),
+                    clockwise=clockwise,
+                    connect=True,
+                )
+            )
+            continue
+        raise ModelError(f"unsupported connected profile segment: {kind}")
+
+    return commands, {
+        "profile": "connected",
+        "profile_start": start,
+        "profile_segments": segments,
+    }
+
+
 def compile_standalone_sketch(
     sketch_name,
     plane,
@@ -123,6 +184,24 @@ def compile_standalone_sketch(
             diameter=command_value(diameter),
         ))
         meta = {"profile": "circle"}
+    elif profile.kind == "connected_profile":
+        if profile_anchor is not None:
+            raise ModelError(
+                "connected profiles use authored sketch coordinates"
+            )
+        connected, meta = compile_connected_profile(
+            profile,
+            offset=(ox, oy),
+        )
+        sketch.extend(connected)
+        meta.update(
+            {
+                "sketch_plane": plane,
+                "sketch_plane_offset": (
+                    plane_offset if plane_offset is not None else 0
+                ),
+            }
+        )
     elif profile.kind == "polygon":
         if profile_anchor is not None:
             raise ModelError(
@@ -157,7 +236,7 @@ def compile_standalone_sketch(
         }
     else:
         raise ModelError(
-            "standalone Sketch supports Rectangle2D, RoundedRectangle2D, Circle2D and Polygon2D"
+            "standalone Sketch supports Rectangle2D, RoundedRectangle2D, Circle2D, Polygon2D and connected profiles"
         )
 
     sketch.append(_command("sketch.finish"))
