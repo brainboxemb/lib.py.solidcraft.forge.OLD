@@ -1,0 +1,298 @@
+{
+  "checks": [
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "baseline/measurements.json",
+          "sha256": "50978f794b6b922ec4f4c25acda129348864ceba1d6567179fd87bcba03d2175",
+          "size": 3222
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft body count",
+          "pass": true
+        },
+        "named_bodies": [
+          {
+            "closed": {
+              "actual": true,
+              "expected": true,
+              "label": "sole body closed",
+              "pass": true
+            },
+            "selector": "sole",
+            "sheet_metal": {
+              "actual": true,
+              "expected": true,
+              "label": "sole body sheet_metal",
+              "pass": true
+            }
+          }
+        ],
+        "parameters": {
+          "actual": {
+            "bend_radius": 2.0,
+            "depth": 40.0,
+            "flange_angle": 1.5707963267948966,
+            "flange_height": 20.0,
+            "k_factor": 0.5,
+            "thickness": 2.0,
+            "width": 80.0
+          },
+          "expected": {
+            "bend_radius": 2.0,
+            "depth": 40.0,
+            "flange_angle": 1.5707963267948966,
+            "flange_height": 20.0,
+            "k_factor": 0.5,
+            "thickness": 2.0,
+            "width": 80.0
+          },
+          "label": "SolidCraft parameters",
+          "pass": true
+        },
+        "sketch_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft sketch count",
+          "pass": true
+        },
+        "sketches": [
+          {
+            "actual": {
+              "curves": 4,
+              "name": "Blank",
+              "profiles": 1,
+              "status": "solved"
+            },
+            "expected": {
+              "curves": 4,
+              "name": "Blank",
+              "profiles": 1,
+              "status": "solved"
+            },
+            "label": "Blank sketch",
+            "pass": true
+          }
+        ]
+      },
+      "id": "baseline",
+      "reason": null,
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "saved_designs/resize_edge_flange/model.sc",
+          "sha256": "f3b94cc2a40c51f3d77f6eed3006680b5ca6ca83cf1605f4be4415fc324e3548",
+          "size": 11326
+        },
+        {
+          "kind": "file",
+          "path": "saved_designs/resize_edge_flange/measurements.json",
+          "sha256": "007621b0d9fc404686a0823069a8497e62f920c7dd246355d363fd7305b0ba68",
+          "size": 3233
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft body count",
+          "pass": true
+        },
+        "named_bodies": [
+          {
+            "closed": {
+              "actual": true,
+              "expected": true,
+              "label": "sole body closed",
+              "pass": true
+            },
+            "selector": "sole",
+            "sheet_metal": {
+              "actual": true,
+              "expected": true,
+              "label": "sole body sheet_metal",
+              "pass": true
+            }
+          }
+        ],
+        "parameters": {
+          "actual": {
+            "flange_angle": 1.3089969389957472,
+            "flange_height": 25.0
+          },
+          "expected": {
+            "flange_angle": 1.3089969389957472,
+            "flange_height": 25.0
+          },
+          "label": "SolidCraft parameters",
+          "pass": true
+        },
+        "sketch_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft sketch count",
+          "pass": true
+        },
+        "sketches": [
+          {
+            "actual": {
+              "curves": 4,
+              "name": "Blank",
+              "profiles": 1,
+              "status": "solved"
+            },
+            "expected": {
+              "curves": 4,
+              "name": "Blank",
+              "profiles": 1,
+              "status": "solved"
+            },
+            "label": "Blank sketch",
+            "pass": true
+          }
+        ]
+      },
+      "id": "saved_design_resize_edge_flange",
+      "reason": null,
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "inspections/flat_pattern/results.json",
+          "sha256": "78818d9c364d096d1789a18bd60fd5fe3f99dc70d8eb53b5c86085bfc7c3fa49",
+          "size": 1137
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "checks": [
+          {
+            "comparison": {
+              "actual": 1,
+              "expected": 1,
+              "label": "SolidCraft inspection check result_count",
+              "pass": true
+            },
+            "id": "result_count",
+            "path": []
+          },
+          {
+            "comparison": {
+              "actual": 1,
+              "expected": 1,
+              "label": "SolidCraft inspection check bend_count",
+              "pass": true
+            },
+            "id": "bend_count",
+            "path": [
+              0,
+              "bends"
+            ]
+          },
+          {
+            "comparison": {
+              "actual": 90.0,
+              "delta": 0.0,
+              "expected": 90.0,
+              "kind": "scalar",
+              "label": "SolidCraft inspection check bend_angle",
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "id": "bend_angle",
+            "path": [
+              0,
+              "bends",
+              0,
+              "angle_deg"
+            ]
+          },
+          {
+            "comparison": {
+              "actual": 2.0,
+              "delta": 0.0,
+              "expected": 2.0,
+              "kind": "scalar",
+              "label": "SolidCraft inspection check bend_radius",
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "id": "bend_radius",
+            "path": [
+              0,
+              "bends",
+              0,
+              "radius"
+            ]
+          },
+          {
+            "comparison": {
+              "actual": "Edge Flange Rule",
+              "expected": "Edge Flange Rule",
+              "label": "SolidCraft inspection check sheet_rule",
+              "pass": true
+            },
+            "id": "sheet_rule",
+            "path": [
+              0,
+              "rule"
+            ]
+          },
+          {
+            "comparison": {
+              "actual": 2.0,
+              "delta": 0.0,
+              "expected": 2.0,
+              "kind": "scalar",
+              "label": "SolidCraft inspection check sheet_thickness",
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "id": "sheet_thickness",
+            "path": [
+              0,
+              "thickness"
+            ]
+          },
+          {
+            "comparison": {
+              "actual": 0.5,
+              "delta": 0.0,
+              "expected": 0.5,
+              "kind": "scalar",
+              "label": "SolidCraft inspection check sheet_k_factor",
+              "pass": true,
+              "tolerance": 0.001
+            },
+            "id": "sheet_k_factor",
+            "path": [
+              0,
+              "k_factor"
+            ]
+          }
+        ]
+      },
+      "id": "inspection_flat_pattern",
+      "reason": null,
+      "status": "pass"
+    }
+  ],
+  "input": "/output/items/examples/sheet-edge-flange/model_verify/native/model.sc",
+  "metadata": {},
+  "schema": "cad-verification",
+  "schema_version": 1,
+  "status": "pass",
+  "verification_id": "sheet-edge-flange"
+}
