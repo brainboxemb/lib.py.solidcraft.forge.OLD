@@ -909,6 +909,23 @@ def _dim_sub(left, right):
         return -right
     return left - right
 
+def _dim_abs(value):
+    """Return a positive CAD distance while preserving symbolic dependencies."""
+
+    if isinstance(value, Parameter):
+        return Expression(
+            abs(value.value),
+            f"abs({value.name})",
+            (value,),
+        )
+    if isinstance(value, Expression):
+        return Expression(
+            abs(value.value),
+            f"abs({value.expression})",
+            value.parameters,
+        )
+    return abs(value)
+
 
 def _box_corner_from_anchor(length, width, height, point, anchor):
     """Return the native Box corner when one box anchor is placed at point."""
@@ -1824,31 +1841,44 @@ def RoundedRectangle2D(width, depth, radius):
     return register_profile(Shape("rounded_rectangle", (width, depth, radius)))
 
 
-def _slot_point(name, value):
+def _slot_point(name, value, *, allow_symbolic=False):
     if not isinstance(value, (tuple, list)) or len(value) != 2:
         raise ValueError(f"{name} must be an (x, y) point")
     point = tuple(value)
     concrete = tuple(_pv(coordinate) for coordinate in point)
     if not all(isfinite(coordinate) for coordinate in concrete):
         raise ValueError(f"{name} must contain finite coordinates")
-    # SolidCraft's native Slot creators take authored sketch points. Keep
-    # those positions fixed; dimensions such as width remain symbolic.
-    if any(isinstance(coordinate, (Parameter, Expression)) for coordinate in point):
+    # SolidCraft 0.45 direct Slot point fields are numeric PlainPoint values.
+    # Straight-Slot constructors may retain symbolic authored intent here so
+    # feature lowering can emit numeric seed points plus native dimensions and
+    # constraints. Arc-Slot point fields remain direct/fixed in this slice.
+    if (
+        not allow_symbolic
+        and any(
+            isinstance(coordinate, (Parameter, Expression))
+            for coordinate in point
+        )
+    ):
         raise TypeError(f"{name} currently requires fixed numeric coordinates")
     return point
 
 
+def _slot_points_equal(left, right):
+    """Compare current Slot point values without discarding symbolic intent."""
+
+    return all(_pv(a) == _pv(b) for a, b in zip(left, right))
+
+
 def _slot_width(width):
-    # SolidCraft 0.42's direct sketch.slot.* creators require a JSON number.
-    # Parametric Slot dimensions belong to sketch.draw.dimensioned, which is
-    # a separate native authoring contract.
-    if isinstance(width, bool) or not isinstance(width, (int, float)):
-        raise TypeError(
-            "native Slot width must be a fixed numeric value; "
-            "parametric Slot dimensions require the separate "
-            "sketch.draw.dimensioned capability"
-        )
-    if not isfinite(width) or width <= 0:
+    """Validate one SolidCraft 0.45 native Slot width without baking it."""
+
+    if isinstance(width, bool):
+        raise TypeError("slot width must be a numeric CAD dimension")
+    try:
+        concrete = _pv(width)
+    except TypeError as exc:
+        raise TypeError("slot width must be a numeric CAD dimension") from exc
+    if not isfinite(concrete) or concrete <= 0:
         raise ValueError("slot width must be a positive finite number")
     return width
 
@@ -1858,19 +1888,24 @@ def SlotCenterToCenter2D(p0, p1, width):
 
     Parameters:
         p0: Centre of the first round end as (x, y) in sketch coordinates, in mm.
+            Coordinates may be numeric or Parameter/Expression values.
         p1: Centre of the second round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+            Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
-        p0 and p1 must be different points. The straight part runs between
-        these two end centres.
+        p0 and p1 must be different points. Parameterized endpoints currently
+        require a horizontal or vertical Slot and matching symbolic intent on
+        the perpendicular coordinate. Fixed numeric diagonal Slots remain
+        supported.
 
     Example:
         SlotCenterToCenter2D((-10, 0), (10, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
-    if p0 == p1:
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
+    if _slot_points_equal(p0, p1):
         raise ValueError("center-to-center Slot endpoints must differ")
     from .explicit_sketch import register_profile
     return register_profile(
@@ -1882,21 +1917,26 @@ def SlotOverall2D(p0, p1, width):
     """Create a straight Slot from its two outermost end points.
 
     Parameters:
-        p0: Outermost point of the first round end as (x, y) in sketch coordinates, in mm.
-        p1: Outermost point of the second round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+        p0: Outermost point of the first round end as (x, y) in sketch coordinates,
+            in mm. Coordinates may be numeric or Parameter/Expression values.
+        p1: Outermost point of the second round end as (x, y) in sketch coordinates,
+            in mm. Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
         The distance from p0 to p1 is the total Slot length, including both
-        round ends, and must be larger than width.
+        round ends, and must be larger than width. Parameterized endpoints
+        currently require a horizontal or vertical Slot and matching symbolic
+        intent on the perpendicular coordinate.
 
     Example:
         SlotOverall2D((-15, 0), (15, 0), 6)
     """
-    p0 = _slot_point("p0", p0)
-    p1 = _slot_point("p1", p1)
+    p0 = _slot_point("p0", p0, allow_symbolic=True)
+    p1 = _slot_point("p1", p1, allow_symbolic=True)
     width = _slot_width(width)
-    length = sum((b - a) ** 2 for a, b in zip(p0, p1)) ** 0.5
+    length = sum((_pv(b) - _pv(a)) ** 2 for a, b in zip(p0, p1)) ** 0.5
     if length <= _pv(width):
         raise ValueError("overall Slot length must be larger than its width")
     from .explicit_sketch import register_profile
@@ -1908,19 +1948,23 @@ def SlotCenterPoint2D(center, end, width):
 
     Parameters:
         center: Centre of the complete Slot as (x, y) in sketch coordinates, in mm.
+            Coordinates may be numeric or Parameter/Expression values.
         end: Centre of one round end as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm. This is also the diameter of each round end.
+            Coordinates may be numeric or Parameter/Expression values.
+        width: Total Slot width in mm, numeric or Parameter/Expression. This is
+            also the diameter of each round end.
 
     Limits:
         center and end must differ. The other round-end centre is mirrored
-        through center.
+        through center. Parameterized endpoints currently require a horizontal
+        or vertical Slot.
 
     Example:
         SlotCenterPoint2D((0, 0), (10, 0), 6)
     """
-    center = _slot_point("center", center)
-    end = _slot_point("end", end)
-    if center == end:
+    center = _slot_point("center", center, allow_symbolic=True)
+    end = _slot_point("end", end, allow_symbolic=True)
+    if _slot_points_equal(center, end):
         raise ValueError("center-point Slot end must differ from its centre")
     from .explicit_sketch import register_profile
     return register_profile(
@@ -1935,10 +1979,12 @@ def SlotArcThreePoint2D(start, through, end, width):
         start: Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
         through: A point that the centre arc must pass through, as (x, y) in mm.
         end: End point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm, measured perpendicular to the centre arc.
+        width: Total Slot width in mm, numeric or Parameter/Expression, measured
+            perpendicular to the centre arc.
 
     Limits:
-        start, through and end must be three different points.
+        start, through and end must be three different fixed numeric points.
+        Arc-Slot authored points are not parameterized in this release.
 
     Example:
         SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6)
@@ -1960,12 +2006,14 @@ def SlotArcCenter2D(center, start, width, *, end=None, sweep=None):
     Parameters:
         center: Centre of the underlying circular arc as (x, y) in sketch coordinates, in mm.
         start: Start point of the Slot centre arc as (x, y) in sketch coordinates, in mm.
-        width: Total Slot width in mm, measured perpendicular to the centre arc.
-        end: Optional end point of the centre arc as (x, y) in mm.
+        width: Total Slot width in mm, numeric or Parameter/Expression, measured
+            perpendicular to the centre arc.
+        end: Optional fixed numeric end point of the centre arc as (x, y) in mm.
         sweep: Optional positive sweep angle in degrees.
 
     Limits:
-        Supply exactly one of end= or sweep=. center and start must differ.
+        Supply exactly one of end= or sweep=. center, start and end are fixed
+        numeric authored points in this release. center and start must differ.
         sweep must be greater than 0 and less than 360 degrees.
 
     Example:

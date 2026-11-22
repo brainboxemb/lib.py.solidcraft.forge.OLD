@@ -150,6 +150,60 @@ class SketchPatternMirrorTests(unittest.TestCase):
         self.assertEqual(names.count("sketch.finish"), 1)
         self.assertEqual(names.count("solid.extrude"), 1)
 
+    def test_parametric_slot_pattern_keeps_profile_and_runtime_bindings(self):
+        board = Box(140, 90, 5, anchor=Anchor.BOTTOM)
+        start = Parameter("slot_start", 20)
+        end = Parameter("slot_end", 40)
+        y = Parameter("slot_y", 15)
+
+        with Sketch(
+            name="Parametric clamp slots",
+            on=board,
+            parent=Anchor.TOP,
+        ) as sketch:
+            seed = SlotCenterToCenter2D(
+                (start, y),
+                (end, y),
+                8,
+            )
+            sketch.rectangular_pattern(
+                seed,
+                count=2,
+                spacing=50,
+                direction=Axis.X,
+            )
+
+        commands = compile_model(
+            board - sketch.extrude(Depth.THROUGH_ALL),
+            "ParametricSlotBoard",
+        )["commands"]
+
+        dimensioned = next(
+            row for row in commands
+            if row["command"] == "sketch.draw.dimensioned"
+        )
+        self.assertEqual(
+            dimensioned["bind"]["$sketch_1_profile_1"],
+            "curves",
+        )
+        self.assertIn(
+            "centre_line",
+            set(dimensioned["bind"].values()),
+        )
+        self.assertIn(
+            "middle",
+            set(dimensioned["bind"].values()),
+        )
+
+        pattern = next(
+            row for row in commands
+            if row["command"] == "sketch.pattern.rectangular"
+        )
+        self.assertEqual(
+            pattern["params"]["entities"],
+            "$sketch_1_profile_1",
+        )
+
     def test_pattern_count_and_spacing_remain_native_parameters(self):
         board = Box(120, 90, 5, anchor=Anchor.BOTTOM)
         columns = Parameter("columns", 4)

@@ -47,6 +47,7 @@ BATCH_TWO_SAVED_DESIGN_MODELS = {
     "eight-flightcase-corners",
     "rectangular-pattern",
     "selective-profile-extrude",
+    "slot-family",
 }
 
 MIGRATED_MODELS = (
@@ -134,7 +135,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
                 )
 
     def test_batch_two_saved_design_contract_is_model_specific(self):
-        """Only the four historical batch-two mutation cases keep mutations."""
+        """Keep the explicit batch-two saved-design coverage list authoritative."""
 
         for slug in BATCH_TWO_MODELS:
             with self.subTest(slug=slug):
