@@ -74,7 +74,7 @@ jobs:
 
       - name: Run exact released CAD CI stack
         if: steps.classify.outputs.run_cad == 'true'
-        uses: brainboxemb/tool.cad.ci@d88d6e189c12edb5a30158c068145c099c17a019
+        uses: brainboxemb/tool.cad.ci@1012e6a539a2fddd8194124844fe208bf16cf4e4
         with:
           source_sha: ${{ github.event.pull_request.head.sha }}
           base_sha: ${{ github.event.pull_request.base.sha }}
@@ -130,7 +130,7 @@ jobs:
           esac
 
       - name: Run exact released CAD CI stack
-        uses: brainboxemb/tool.cad.ci@d88d6e189c12edb5a30158c068145c099c17a019
+        uses: brainboxemb/tool.cad.ci@1012e6a539a2fddd8194124844fe208bf16cf4e4
         with:
           source_sha: ${{ github.sha }}
           base_sha: ${{ steps.lane.outputs.base_sha }}
