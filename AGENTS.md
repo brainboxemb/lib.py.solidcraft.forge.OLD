@@ -33,10 +33,12 @@ capabilities but must not reimplement them locally.
 The active CI structure is defined by:
 
 - `.github/workflows/scpf.yml`
+- `.github/workflows/release.yml` — explicit owner-controlled package publication only
 - `cad-ci.yml`
 - `scpf/ci.yml`
 - `ci/forge-tests/ci.yml`
 - `ci/forge-release/ci.yml`
+- `ci/release-policy/ci.yml` — tests release validation/publication policy without CAD runtimes
 - `ci/cad-verification-package/ci.yml`
 - migrated `examples/<model>/ci.yml` files
 - `scripts/tool_ci.py`
@@ -44,6 +46,7 @@ The active CI structure is defined by:
 - `scripts/forge_example.py`
 - `scripts/model_verification_batch.py`
 - `scripts/model_verify_declarative.py`
+- `scripts/release/validate_release.py`
 
 The generic planner/executor is `tool.cad.ci`.
 
