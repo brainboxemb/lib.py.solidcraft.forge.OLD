@@ -77,7 +77,10 @@ class DiagramEvidenceTests(unittest.TestCase):
         self.assertIn("- reference-verification-batch", text)
         self.assertIn("scripts/build_diagrams.py", text)
         self.assertIn("verification/diagrams/sources/**", text)
-        self.assertIn("materialize-diagrams", text)
+        self.assertIn("copy:", text)
+        self.assertIn("dependency: reference-verification-batch", text)
+        self.assertIn("source: .", text)
+        self.assertNotIn("materialize-diagrams", text)
         self.assertIn("- diagrams", text)
 
     def test_renderer_collects_all_diagram_results_before_failure(self):
