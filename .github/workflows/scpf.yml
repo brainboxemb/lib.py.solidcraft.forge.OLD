@@ -74,11 +74,12 @@ jobs:
 
       - name: Run exact released CAD CI stack
         if: steps.classify.outputs.run_cad == 'true'
-        uses: brainboxemb/tool.cad.ci@59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9
+        uses: brainboxemb/tool.cad.ci@d88d6e189c12edb5a30158c068145c099c17a019
         with:
           source_sha: ${{ github.event.pull_request.head.sha }}
           base_sha: ${{ github.event.pull_request.base.sha }}
           full_run: ${{ github.event.pull_request.base.ref == 'main' && (github.event.pull_request.head.ref == 'dev-cad' || github.event.pull_request.head.ref == 'dev-ci' || github.event.pull_request.head.ref == 'promote/dev-cad' || github.event.pull_request.head.ref == 'promote/dev-ci') }}
+          jobs: "2"
           github_token: ${{ github.token }}
 
   cad_ci_push:
@@ -129,11 +130,12 @@ jobs:
           esac
 
       - name: Run exact released CAD CI stack
-        uses: brainboxemb/tool.cad.ci@59e4c4d3f377f906b33bb2d1fee808f96c6fb1b9
+        uses: brainboxemb/tool.cad.ci@d88d6e189c12edb5a30158c068145c099c17a019
         with:
           source_sha: ${{ github.sha }}
           base_sha: ${{ steps.lane.outputs.base_sha }}
           full_run: ${{ steps.lane.outputs.full_run }}
+          jobs: "2"
           github_token: ${{ github.token }}
 
       - name: Fetch current durable build branch

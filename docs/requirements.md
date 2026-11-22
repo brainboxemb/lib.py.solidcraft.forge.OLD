@@ -283,9 +283,14 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.16.2` /
+Forge uses the exact externally accepted `tool.cad.ci 0.17.0` /
 `lib.py.cad.ci 0.9.3` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
+
+Forge explicitly requests `jobs=2` from the released tool on both pull-request
+and long-lived branch integration runs. The tool/library/SCons stack remains the
+sole owner of target parallelism and scheduling. Forge must not add a local
+worker pool, target loop or second dependency scheduler.
 
 The source branches have fixed roles:
 
