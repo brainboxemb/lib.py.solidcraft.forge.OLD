@@ -399,7 +399,7 @@ class SiteSourceTests(unittest.TestCase):
             ROOT / ".github" / "workflows" / "scpf.yml"
         ).read_text(encoding="utf-8")
         tool_revision = (
-            "1012e6a539a2fddd8194124844fe208bf16cf4e4"
+            "b62f9d0b169aa201a3c66c3166f364396b2d71bc"
         )
         self.assertIn(
             f"brainboxemb/tool.cad.ci@{tool_revision}",
@@ -431,22 +431,6 @@ class SiteSourceTests(unittest.TestCase):
             "base_sha: ${{ github.event.pull_request.base.sha }}",
             pr,
         )
-        self.assertIn(
-            "github.event.pull_request.head.ref == 'dev-cad'",
-            pr,
-        )
-        self.assertIn(
-            "github.event.pull_request.head.ref == 'dev-ci'",
-            pr,
-        )
-        self.assertIn(
-            "github.event.pull_request.head.ref == 'promote/dev-cad'",
-            pr,
-        )
-        self.assertIn(
-            "github.event.pull_request.head.ref == 'promote/dev-ci'",
-            pr,
-        )
         self.assertNotIn("publish build", pr)
         self.assertNotIn("publish pages", pr)
 
@@ -462,44 +446,23 @@ class SiteSourceTests(unittest.TestCase):
         )
         self.assertIn("cancel-in-progress: true", push)
         self.assertIn("main|dev-cad|dev-ci", push)
-        self.assertIn("scope_exists=false", push)
-        self.assertIn("full_run=true", push)
         self.assertIn(
-            "base_sha: ${{ steps.lane.outputs.base_sha }}",
+            "durable_scope: ${{ github.ref_name }}",
             push,
         )
         self.assertIn(
-            "BASE_SHA: ${{ steps.lane.outputs.base_sha }}",
+            "source_ref: ${{ github.ref_name }}",
             push,
         )
         self.assertIn(
-            'FETCH_HEAD:$SOURCE_SCOPE/build.json',
-            push,
-        )
-        self.assertNotIn("EVENT_BEFORE", push)
-        self.assertIn('SOURCE_SHA: ${{ github.sha }}', push)
-        self.assertIn('base_sha=$SOURCE_SHA', push)
-        self.assertIn('"source_commit"', push)
-        self.assertIn("python -c", push)
-        self.assertNotIn('python - "$probe/build.json" <<', push)
-        self.assertIn(
-            "python -m cad_ci_tool build fetch",
+            "BUILD_COMMIT: ${{ steps.cad_ci.outputs.build_commit }}",
             push,
         )
         self.assertIn(
-            "python -m cad_ci_tool build update-main",
+            "PREPARED_SCOPE: ${{ steps.cad_ci.outputs.prepared_scope }}",
             push,
         )
-        self.assertIn(
-            "python -m cad_ci_tool build update-named",
-            push,
-        )
-        self.assertIn(
-            "python -m cad_ci_tool build prepare-named",
-            push,
-        )
-        self.assertIn("--scope named --scope-name", push)
-        self.assertIn("--build-evidence prepared-scope", push)
+        self.assertIn('--build-evidence "$PREPARED_SCOPE"', push)
         self.assertIn('--build-scope "$SCOPE"', push)
         self.assertIn("--preserve-subtree dev-cad", push)
         self.assertIn("--preserve-subtree dev-ci", push)
@@ -512,6 +475,22 @@ class SiteSourceTests(unittest.TestCase):
             "generated-site/qualification/manifest.json",
             push,
         )
+
+        for retired in (
+            "Resolve durable source scope",
+            "Fetch current durable build branch",
+            "Prepare complete durable scope",
+            "Publish complete durable scope",
+            "python -m cad_ci_tool build fetch",
+            "python -m cad_ci_tool build update-main",
+            "python -m cad_ci_tool build update-named",
+            "python -m cad_ci_tool build prepare-named",
+            "python -m cad_ci_tool publish build",
+            "FETCH_HEAD:",
+            "scope_exists=false",
+        ):
+            self.assertNotIn(retired, push)
+
         self.assertNotIn("actions/setup-python", push)
         self.assertNotIn("pip install", push)
 
