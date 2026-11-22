@@ -42,12 +42,25 @@
                   9.0
                 ],
                 "tolerance_mm": 0.3
+              },
+              {
+                "actual_mm": 1.0,
+                "delta_mm": 0.0,
+                "expected_mm": 1.0,
+                "label": "standalone world-plane tunnel",
+                "pass": true,
+                "point": [
+                  0.0,
+                  22.0,
+                  2.5
+                ],
+                "tolerance_mm": 0.3
               }
             ],
             "volume": {
-              "actual_mm3": 33428.06625829426,
-              "delta_mm3": 0.2522724236987415,
-              "expected_mm3": 33428.31853071796,
+              "actual_mm3": 31828.066258294264,
+              "delta_mm3": 0.2522724236951035,
+              "expected_mm3": 31828.31853071796,
               "pass": true,
               "tolerance_mm3": 60.0
             },
@@ -73,6 +86,6 @@
     }
   ],
   "schema": 1,
-  "source_sha": "7958a1f0ee3f565fb1a739b1cb4a673d733d7a4e",
+  "source_sha": "6ed22a5a6cc803e8e34f995deb6e7c6a2bfff7e4",
   "status": "pass"
 }

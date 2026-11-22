@@ -1,7 +1,7 @@
 {
   "format": "scpf-replay-log",
   "version": 1,
-  "replay_sha256": "cf0b9d5b1b005db0e989712827e04a868786d017f7e1cecb67555d0e2dc47f98",
+  "replay_sha256": "10f1ccde0d37a0f33354a3c8482faf0c88c97fc457512db20a0a7d1832b31805",
   "variables": {
     "$face_point_1": [
       -20.0,
@@ -76,6 +76,51 @@
     },
     {
       "index": 7,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "cut_width",
+        "expression": "10",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 8,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "cut_height",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 9,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "cut_y",
+        "expression": "22",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 10,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "cut_z",
+        "expression": "2.5",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 11,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "cut_length",
+        "expression": "100",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 12,
       "command": "solid.box",
       "resolved_params": {
         "length": "base_width",
@@ -90,7 +135,7 @@
       }
     },
     {
-      "index": 8,
+      "index": 13,
       "command": "model.faces",
       "resolved_params": {
         "body": "RoundedRectangleSketch"
@@ -105,7 +150,7 @@
       }
     },
     {
-      "index": 9,
+      "index": 14,
       "command": "sketch.create",
       "resolved_params": {
         "plane": {
@@ -122,7 +167,7 @@
       }
     },
     {
-      "index": 10,
+      "index": 15,
       "command": "sketch.rectangle.rounded",
       "resolved_params": {
         "p0": [
@@ -137,12 +182,12 @@
       }
     },
     {
-      "index": 11,
+      "index": 16,
       "command": "sketch.finish",
       "resolved_params": {}
     },
     {
-      "index": 12,
+      "index": 17,
       "command": "solid.extrude",
       "resolved_params": {
         "operation": "join",
@@ -153,7 +198,46 @@
         "distance": "pad_height",
         "direction": "positive"
       }
+    },
+    {
+      "index": 18,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "YZ",
+        "name": "World cut"
+      }
+    },
+    {
+      "index": 19,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          "(cut_y) + (-(cut_width / 2))",
+          "(cut_z) + (-(cut_height / 2))"
+        ],
+        "p1": [
+          "(cut_y) + (cut_width / 2)",
+          "(cut_z) + (cut_height / 2)"
+        ]
+      }
+    },
+    {
+      "index": 20,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 21,
+      "command": "solid.extrude",
+      "resolved_params": {
+        "distance": "cut_length",
+        "direction": "symmetric",
+        "operation": "cut",
+        "targets": [
+          "RoundedRectangleSketch"
+        ]
+      }
     }
   ],
-  "completed": 13
+  "completed": 22
 }

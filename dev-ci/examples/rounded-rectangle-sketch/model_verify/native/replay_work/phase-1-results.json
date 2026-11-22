@@ -42,6 +42,36 @@
     "value": 8.0
   },
   {
+    "display_value": 10.0,
+    "name": "cut_width",
+    "unit": "mm",
+    "value": 10.0
+  },
+  {
+    "display_value": 2.0,
+    "name": "cut_height",
+    "unit": "mm",
+    "value": 2.0
+  },
+  {
+    "display_value": 22.0,
+    "name": "cut_y",
+    "unit": "mm",
+    "value": 22.0
+  },
+  {
+    "display_value": 2.5,
+    "name": "cut_z",
+    "unit": "mm",
+    "value": 2.5
+  },
+  {
+    "display_value": 100.0,
+    "name": "cut_length",
+    "unit": "mm",
+    "value": 100.0
+  },
+  {
     "bodies": [
       "RoundedRectangleSketch"
     ],
@@ -50,7 +80,7 @@
       "RoundedRectangleSketch"
     ],
     "feature": 1,
-    "ms": 3.086005,
+    "ms": 2.3243679999999998,
     "name": "Box1",
     "removed_bodies": [],
     "warning": null
