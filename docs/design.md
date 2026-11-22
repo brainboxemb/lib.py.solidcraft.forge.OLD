@@ -1991,3 +1991,23 @@ also establishes that the sketch path is the sheet face away from the material
 and `distance` extends the contour along the sketch-plane normal. Forge does
 not reimplement those conventions; `flip` and `reverse` are passed through
 only when explicitly requested.
+
+
+## Shared model metadata boundary
+
+`scpf.model_metadata` is the owner of the canonical model-description schema.
+It contains the immutable field set, a small value object and validation for an
+already-parsed mapping. It intentionally does not import PyYAML; YAML is a file
+format concern of the site/consumer adapter, not a dependency of the CAD API.
+
+Forge's site adapter loads `model.yml` with its existing YAML dependency and
+passes the mapping to `scpf.model_metadata.validate_model_metadata()`. Product
+CAD repositories do the same through their existing catalog loader. This gives
+both repositories one executable schema definition without coupling the Forge
+package to website tooling.
+
+The contract rejects unknown keys. There is deliberately no extension namespace
+inside `model.yml`: allowing arbitrary consumer fields would recreate the schema
+drift that #703 is intended to remove. A consumer-specific presentation setting
+must use a separately named presentation source; CI/source/verification/generated
+state remains in its existing owner layer.
