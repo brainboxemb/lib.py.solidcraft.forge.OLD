@@ -89,6 +89,35 @@ PR to `main` is squash-merged.
 
 ## Active workstreams
 
+### Release milestone — Forge v0.11.0
+
+Owner: main/release integration.
+
+Issue #642 owns the next **real** Forge release.
+
+The latest actual GitHub Release remains `v0.10.0`. Source metadata already
+carries `0.11.0`, but that is release preparation only.
+
+Release v0.11.0 is planned after the two current integration tracks settle:
+
+- #355 reaches an accepted/promoted state, or is explicitly deferred from
+  0.11.0 with the changelog reflecting that decision;
+- #637 resolves the jobs=2 experiment and main is left on the chosen accepted
+  CAD-CI configuration.
+
+Before another large CAD/API wave is stacked on main:
+
+1. stabilize main with durable build + stable Pages green;
+2. reconcile `[Unreleased]` so only shipped work moves into the dated
+   `[0.11.0]` section;
+3. run the release-candidate verification against one exact main SHA;
+4. create immutable tag `v0.11.0` at that SHA;
+5. create the GitHub Release;
+6. verify tag and GitHub Release both resolve to the intended SHA;
+7. record the released baseline in this plan.
+
+A changelog heading or package version is not a release.
+
 ### WS0 — CI performance and integration
 
 Primary lane: `dev-ci`.
@@ -172,15 +201,20 @@ preempt current P1 blockers.
 | #568 Native sheet-metal flange/contour | `dev-cad` | WS1 | **P1 runtime-sensitive** | Qualify against immutable v0.3.4 contracts before exposing APIs. |
 | #570 Remove CADCraft from Verification diagrams | `dev-cad` | WS2 | **P2** | Replace explanatory diagram sources with deterministic Forge-owned sources. |
 | #637 Forge integration jobs=2 experiment | `dev-ci` | WS0 | **P1 now** | Adopt exact tool 0.17.0, set explicit jobs=2, measure full promotion against #636, then keep/revert based on evidence. |
-| #639 Reconcile plan after #638 promotion | `main governance` | WS0 | **P0 now** | Merge this plan-only correction, then synchronize both permanent lanes before starting #355/#637 branches. |
+| #642 Release Forge 0.11.0 | `main/release` | Release milestone | **P1 integration milestone** | After #355/#637 settle, stabilize main, reconcile changelog, verify exact release SHA, create real `v0.11.0` tag + GitHub Release, then record released baseline. |
+| #643 Correct release docs and plan | `main governance` | Release milestone | **P0 now** | Merge the corrected release contract and explicit 0.11.0 milestone before further integration. |
 
 ## Immediate execution order
 
-1. [#639] Merge this plan reconciliation and synchronize `dev-cad` and
-   `dev-ci` to the new main baseline.
-2. [#355, dev-cad] Start the SolidCraft 0.45 parametric Slot qualification.
-3. [#637, dev-ci] In parallel, run the exact tool 0.17.0 / jobs=2 Forge
-   integration experiment.
-4. Use #637 results to update #261 with the measured next bottleneck.
-5. Continue #354/#567/#568 and focused #349 Revolve as dependencies permit.
-6. Rewrite/retire #175 and #5 before treating them as implementation work.
+1. [#643] Merge the corrected release contract / v0.11.0 milestone.
+2. [#355, dev-cad] Continue SolidCraft 0.45 parametric Slot qualification.
+3. [#637, dev-ci] In parallel, complete the exact tool 0.17.0 / jobs=2 Forge
+   integration experiment and full-promotion comparison.
+4. Promote accepted lane work and leave `main` on one stable, fully verified
+   CAD/runtime/CI baseline.
+5. [#642] Release **Forge v0.11.0** from that exact green main SHA before
+   starting another large CAD/API wave. If #355 is deliberately deferred, keep
+   it out of the 0.11.0 changelog explicitly.
+6. After v0.11.0, use #637 results to continue #261 and proceed with
+   #354/#567/#568 and focused #349 Revolve as priorities permit.
+7. Rewrite/retire #175 and #5 before treating them as implementation work.
