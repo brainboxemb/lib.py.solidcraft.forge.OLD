@@ -1093,19 +1093,19 @@
           "name": "SlotCenterToCenter2D",
           "summary": "Create a straight Slot from the centres of its two round ends.",
           "use_when": "",
-          "limits": "p0 and p1 must be different points. The straight part runs between these two end centres.",
+          "limits": "p0 and p1 must be different points. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate. Fixed numeric diagonal Slots remain supported.",
           "parameters": [
             {
               "name": "p0",
-              "description": "Centre of the first round end as (x, y) in sketch coordinates, in mm."
+              "description": "Centre of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "p1",
-              "description": "Centre of the second round end as (x, y) in sketch coordinates, in mm."
+              "description": "Centre of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "width",
-              "description": "Total Slot width in mm. This is also the diameter of each round end."
+              "description": "Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
             }
           ],
           "example": "SlotCenterToCenter2D((-10, 0), (10, 0), 6)",
@@ -1117,19 +1117,19 @@
           "name": "SlotOverall2D",
           "summary": "Create a straight Slot from its two outermost end points.",
           "use_when": "",
-          "limits": "The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width.",
+          "limits": "The distance from p0 to p1 is the total Slot length, including both round ends, and must be larger than width. Parameterized endpoints currently require a horizontal or vertical Slot and matching symbolic intent on the perpendicular coordinate.",
           "parameters": [
             {
               "name": "p0",
-              "description": "Outermost point of the first round end as (x, y) in sketch coordinates, in mm."
+              "description": "Outermost point of the first round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "p1",
-              "description": "Outermost point of the second round end as (x, y) in sketch coordinates, in mm."
+              "description": "Outermost point of the second round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "width",
-              "description": "Total Slot width in mm. This is also the diameter of each round end."
+              "description": "Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
             }
           ],
           "example": "SlotOverall2D((-15, 0), (15, 0), 6)",
@@ -1141,19 +1141,19 @@
           "name": "SlotCenterPoint2D",
           "summary": "Create a straight Slot from its centre and one round-end centre.",
           "use_when": "",
-          "limits": "center and end must differ. The other round-end centre is mirrored through center.",
+          "limits": "center and end must differ. The other round-end centre is mirrored through center. Parameterized endpoints currently require a horizontal or vertical Slot.",
           "parameters": [
             {
               "name": "center",
-              "description": "Centre of the complete Slot as (x, y) in sketch coordinates, in mm."
+              "description": "Centre of the complete Slot as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "end",
-              "description": "Centre of one round end as (x, y) in sketch coordinates, in mm."
+              "description": "Centre of one round end as (x, y) in sketch coordinates, in mm. Coordinates may be numeric or Parameter/Expression values."
             },
             {
               "name": "width",
-              "description": "Total Slot width in mm. This is also the diameter of each round end."
+              "description": "Total Slot width in mm, numeric or Parameter/Expression. This is also the diameter of each round end."
             }
           ],
           "example": "SlotCenterPoint2D((0, 0), (10, 0), 6)",
@@ -1165,7 +1165,7 @@
           "name": "SlotArcThreePoint2D",
           "summary": "Create a curved Slot whose centre arc passes through three points.",
           "use_when": "",
-          "limits": "start, through and end must be three different points.",
+          "limits": "start, through and end must be three different fixed numeric points. Arc-Slot authored points are not parameterized in this release.",
           "parameters": [
             {
               "name": "start",
@@ -1181,7 +1181,7 @@
             },
             {
               "name": "width",
-              "description": "Total Slot width in mm, measured perpendicular to the centre arc."
+              "description": "Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc."
             }
           ],
           "example": "SlotArcThreePoint2D((-15, 0), (0, 10), (15, 0), 6)",
@@ -1193,7 +1193,7 @@
           "name": "SlotArcCenter2D",
           "summary": "Create a curved Slot from an arc centre and start point.",
           "use_when": "",
-          "limits": "Supply exactly one of end= or sweep=. center and start must differ. sweep must be greater than 0 and less than 360 degrees.",
+          "limits": "Supply exactly one of end= or sweep=. center, start and end are fixed numeric authored points in this release. center and start must differ. sweep must be greater than 0 and less than 360 degrees.",
           "parameters": [
             {
               "name": "center",
@@ -1205,11 +1205,11 @@
             },
             {
               "name": "width",
-              "description": "Total Slot width in mm, measured perpendicular to the centre arc."
+              "description": "Total Slot width in mm, numeric or Parameter/Expression, measured perpendicular to the centre arc."
             },
             {
               "name": "end",
-              "description": "Optional end point of the centre arc as (x, y) in mm."
+              "description": "Optional fixed numeric end point of the centre arc as (x, y) in mm."
             },
             {
               "name": "sweep",

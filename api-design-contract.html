@@ -337,9 +337,25 @@ SlotArcThreePoint2D(start, through, end, width)
 SlotArcCenter2D(center, start, width, *, end=None, sweep=None)
 ```
 
-Slot authoring points are fixed sketch-local numeric coordinates. Native direct
-Slot width is currently a fixed positive number; parametric Slot dimensions
-belong to SolidCraft&#x27;s separate dimensioned-sketch capability.
+All five constructors accept a positive numeric width or an editable
+`Parameter` / `Expression` width.
+
+The three straight constructors also accept parameterized authored endpoints
+when the current Slot axis is horizontal or vertical. Forge keeps SolidCraft&#x27;s
+native point fields numeric, creates numeric seed geometry, and drives native
+`length`, orientation and middle-position dimensions instead. Saved-design
+parameter changes therefore rebuild the same native Slot history without
+rerunning Forge Python.
+
+For a parameterized horizontal Slot, both authored Y coordinates must represent
+the same symbolic intent; the equivalent rule applies to X for a vertical Slot.
+Parameterized diagonal straight Slots are not supported. Fixed numeric diagonal
+Slots continue to use the direct native creator. Saved-design position changes
+may move a parameterized straight Slot on its authored side of the sketch
+origin; crossing an origin axis is not supported in this release.
+
+The two arc-Slot constructors keep fixed numeric authored points in this
+release, while their width may be parameterized.
 
 Slots can participate in the supported native sketch
 `rectangular_pattern()` and `mirror()` operations.
