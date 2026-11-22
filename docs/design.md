@@ -235,7 +235,7 @@ change only makes the dependency graph semantically correct.
 
 ## Forge bounded SCons jobs policy
 
-Forge consumes externally accepted `tool.cad.ci 0.18.1` with one explicit
+Forge consumes externally accepted `tool.cad.ci 0.19.0` with one explicit
 bounded value:
 
 ```text
@@ -478,38 +478,34 @@ dev-ci  -> PR main
 
 The promotion PR requests complete validation.
 
-Merge execution is centralized in `.github/workflows/merge-policy.yml`.
-A repository-owner `/merge` comment triggers the workflow. The workflow reads
-the current PR metadata and delegates the base/head decision to
-`scripts/merge_policy.py`.
+Forge does not implement merge-method or branch-lifecycle mechanics locally.
+`.github/workflows/merge-policy.yml` is a thin owner-only `/merge` trigger
+that calls the exact released reusable workflow from tool.cad.ci 0.19.0 at
+`5677c41a61929b32ab2cb07087a6505f7b9347d8`.
 
-The policy returns:
+Forge supplies only consumer configuration:
 
 ```text
-main + dev-cad -> merge
-main + dev-ci  -> merge
-everything else -> squash
+stable_ref = main
+lane_refs = [dev-cad, dev-ci]
+permanent_refs = [build, gh-pages]
+temporary_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
+integration_workflow = scpf.yml
 ```
 
-Before merging, the workflow requires the current head to be open, non-draft,
-mergeable and green across current check-runs/status contexts. It supplies the
-immutable head SHA to GitHub's merge API.
+The released workflow owns current-head/check/status validation, merge-method
+selection, GitHub merge execution, allow-listed temporary-head cleanup,
+long-lived-lane preservation after promotion and optional integration dispatch.
 
-A successful GitHub-API merge made with `GITHUB_TOKEN` does not trigger the
-normal `push` workflow. Therefore the merge workflow explicitly dispatches
-`scpf.yml` on the merged destination ref after GitHub returns the immutable
-merge SHA. The dispatched Forge workflow runs the same branch-integration job as
-a normal push.
+The consumer wrapper contains no GitHub API calls and no Python merge-policy
+helper. `scripts/merge_policy.py` and its Forge-local unit tests are removed
+after released equivalence is qualified.
 
-Repository `delete_branch_on_merge` currently remains enabled. After a direct
-long-lived-lane promotion the policy workflow therefore verifies the promoted
-lane ref and recreates or advances it to the resulting main merge commit when
-needed, then also dispatches `scpf.yml` on that promoted lane. Stable
-`main` and the promoted named lane therefore both advance their durable
-build/Page scopes to the same merge commit.
-
-For other merged PRs, branch cleanup is limited to explicit temporary prefixes.
-Permanent/generated/backup refs are never deleted by the merge workflow.
+The historical `/cleanup-branches` bulk maintenance job is retired rather than
+moved into shared tooling. Its final audit deleted the one integrated temporary
+head and retained only an active PR head plus unique/unmerged historical refs.
+Those retained refs require explicit exact-SHA retirement decisions and must not
+become broader generic cleanup exceptions.
 
 After promotion, main publishes stable output from main itself. The other
 development lane incorporates main separately. A development preview is never
@@ -1177,7 +1173,7 @@ as current evidence.
 ## Stable Pages publication flow
 
 Stable main publication uses one caller-owned runner with exact released
-`tool.cad.ci 0.18.1`:
+`tool.cad.ci 0.19.0`:
 
 ```text
 push main
@@ -1579,7 +1575,7 @@ The reference batch continues producing `diagrams/`. The
 
 `lib.py.cad.ci 0.11.0` owns direct bundle-member projection, active-dependent
 selection context, target signatures, SCons ordering, CacheDir reuse,
-CURRENT/CACHE_RESTORED evidence and parallel safety. `tool.cad.ci 0.18.1`
+CURRENT/CACHE_RESTORED evidence and parallel safety. `tool.cad.ci 0.19.0`
 exposes that exact released library and was externally accepted by
 `tool.cad.ci.test` run `45019713862`. Forge does not duplicate those mechanics.
 
@@ -1591,7 +1587,7 @@ after the shared batches finish.
 
 ## Durable lane workflow cut-over
 
-Long-lived Forge integration uses the externally accepted tool.cad.ci 0.18.1
+Long-lived Forge integration uses the externally accepted tool.cad.ci 0.19.0
 root composite action as one same-runner execution boundary:
 
 ```text
