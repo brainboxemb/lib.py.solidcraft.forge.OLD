@@ -7,6 +7,7 @@ Je werkt verder aan Forge als centrale CAD-library en aan de repositories die di
 
 Belangrijkste repositories:
 
+- `meta.cad.solidcraft` — gedeelde, kleine SolidCraft/CAD-conventies en documenttemplates; `templates/docs/plan.md` is de structurele referentie voor repositoryplannen
 - `lib.py.solidcraft.forge` — centrale Forge CAD-library: publieke API, compiler/lowering, modellering en Forge-eigen verificatievoorbeelden
 - `lib.py.cad.ci` — generieke CAD-CI-logica
 - `tool.cad.ci` — dunne CLI/reusable workflows
@@ -17,12 +18,14 @@ Belangrijkste repositories:
 - `tool.py.lib.ci.test` — externe test daarvan
 
 Gebruik deze handoff alleen als ingang. Bepaal de actuele werkzaamheden altijd
-uit GitHub en de repositoryplannen.
+uit GitHub en de repositoryplannen. Gedeelde SolidCraft/CAD-conventies staan in
+`brainboxemb/meta.cad.solidcraft`; kopieer zulke conventies niet opnieuw lokaal
+als die meta-repository al de autoriteit is.
 
 Voor iedere actieve repo:
 
 1. Lees eerst actuele issues, PR's en branches.
-2. Lees `AGENTS.md` en `docs/plan.md`.
+2. Lees `AGENTS.md` en `docs/plan.md`; gebruik voor de planstructuur de gedeelde referentie `brainboxemb/meta.cad.solidcraft/templates/docs/plan.md`.
 3. Behandel `docs/plan.md` als source of truth voor onafgemaakt werk.
 4. Maak een issue als de wijziging nog geen issue heeft.
 5. Update `docs/plan.md` vóór implementatie en beoordeel alle open issues

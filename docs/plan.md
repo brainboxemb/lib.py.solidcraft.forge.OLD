@@ -159,6 +159,7 @@ Primary lane: `dev-cad`.
 
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
+| #707 Adopt meta.cad.solidcraft shared conventions | governance | **now** | Link the shared meta repository from the Forge handoff and use its plan structure as the shared reference without moving Forge implementation there. |
 | #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **now** | Track #684 through merge/lane integration; then reassess whether the flange family has unfinished child scope. |
 | #684 Native contour flange | dev-cad | **effectively complete but still open** | Final one-commit PR #698 head check, `/merge`, then require successful dispatched `dev-cad` integration before closure. |
 | #679 Namespace repeated component-local feature names | dev-cad | **next** | Resume after #684 unless downstream HUB75 work makes it the immediate blocker. |
