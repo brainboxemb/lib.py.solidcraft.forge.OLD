@@ -1148,3 +1148,44 @@ The remaining work is deliberately split:
 
 No child may fall back to extruded/fused solid approximations or caller-authored
 raw SolidCraft command dictionaries.
+
+
+## Native sheet edge flange
+
+Forge exposes the first focused SolidCraft 0.45 edge-flange slice on an
+existing Forge sheet body.
+
+Public intent:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, 0, 2)],
+    height=20,
+    angle=90,
+    height_from="outer",
+    position="outside",
+    flip=False,
+)
+```
+
+Requirements:
+
+- the operation applies only to an existing native Forge sheet history;
+- lowering uses one native `sheet.flange(type="edge")` command;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ pick points;
+- `height` is a positive length and may remain a Forge Parameter/Expression;
+- `angle` is an editable angular value accepted by the native command;
+- `height_from` is one of `outer`, `inner` or `tangent`;
+- `position` is one of `inside`, `outside`, `middle`,
+  `material_outside` or `tangent`;
+- `flip` is boolean;
+- the existing sheet rule remains authoritative for thickness, K-factor and
+  default bend radius; Forge does not duplicate those inputs on the flange API;
+- caller-authored SolidCraft edge dictionaries are not public API in this slice;
+- per-edge angle/height overrides, segment dictionaries, chained `then`
+  bends and corner-relief overrides are out of scope;
+- the operation must preserve the existing sheet body/history and must not
+  lower through solid extrusion/fusion approximations.
+
+Qualification must prove native edge-flange history, one editable height/angle
+saved-design mutation, save/reopen stability and flat-pattern continuity.
