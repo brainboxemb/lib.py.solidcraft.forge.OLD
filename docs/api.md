@@ -718,7 +718,7 @@ sheet = sheet.flange(
     height=20,
     angle=90,
     height_from="outer",
-    position="outside",
+    position=None,
     flip=False,
 )
 ```
@@ -730,7 +730,7 @@ sheet.flange(
     height,
     angle=90,
     height_from="outer",
-    position="outside",
+    position=None,
     flip=False,
 )
 ```
@@ -739,6 +739,10 @@ sheet.flange(
 sheet top/bottom edges. `height` and `angle` may use Forge parameters or
 expressions where supported by SolidCraft. The sheet's existing rule supplies
 thickness, K-factor and default bend radius.
+
+When `position` is omitted, Forge does not emit a position field and leaves
+SolidCraft 0.45 to apply its native default. Explicit values are `inside`,
+`outside`, `middle`, `material_outside` or `tangent`.
 
 The initial API does not expose per-edge dictionaries, segmented flanges,
 corner-relief overrides or chained bends.
