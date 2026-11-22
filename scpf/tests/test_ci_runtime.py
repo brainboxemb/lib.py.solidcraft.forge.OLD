@@ -13,7 +13,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "scpf.yml"
 MODEL_VERIFY = ROOT / "scripts" / "model_verify_declarative.py"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
-TOOL_COMMIT = "5677c41a61929b32ab2cb07087a6505f7b9347d8"
+TOOL_COMMIT = "b1474f6be66dc0236f2a5c2555af07a100447255"
 
 
 def configured_variable(name: str) -> str:
