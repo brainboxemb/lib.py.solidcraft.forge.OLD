@@ -2,8 +2,8 @@
 
 import unittest
 
-from scpf import Hole, Parameter, Rectangle2D, Sketch
-from scpf.compiler import compile_model
+from scpf import Box, Hole, Parameter, Rectangle2D, Sketch
+from scpf.compiler import ModelError, compile_model
 
 
 def make_sheet(
@@ -176,6 +176,98 @@ class SheetMetalTests(unittest.TestCase):
         )
         for row in commands[2:6]:
             self.assertTrue(row["params"]["connect"])
+
+    def test_edge_flange_lowers_to_native_sheet_flange(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+
+        height = Parameter("flange_height", 18)
+        angle = Parameter("flange_angle", 92)
+        sheet = blank.sheet_metal(
+            thickness=2,
+            bend_radius=2,
+            k_factor=0.5,
+            rule_name="Edge Flange Rule",
+        )
+        sheet = sheet.flange(
+            edges=[(40, 0, 2)],
+            height=height,
+            angle=angle,
+            height_from="inner",
+            flip=True,
+        )
+
+        commands = compile_model(sheet, "EdgeFlange")["commands"]
+        flange = commands[-1]
+        self.assertEqual(flange["command"], "sheet.flange")
+        self.assertEqual(
+            flange["params"],
+            {
+                "type": "edge",
+                "edges": [[40, 0, 2]],
+                "height": "flange_height",
+                "angle": "flange_angle",
+                "height_from": "inner",
+                "flip": True,
+                "body": "EdgeFlange",
+            },
+        )
+        self.assertNotIn("thickness", flange["params"])
+        self.assertNotIn("k_factor", flange["params"])
+        self.assertNotIn("radius", flange["params"])
+        self.assertNotIn("position", flange["params"])
+
+        units = {
+            row["params"]["name"]: row["params"]["unit"]
+            for row in commands
+            if row["command"] == "parameters.add"
+        }
+        self.assertEqual(units["flange_height"], "mm")
+        self.assertEqual(units["flange_angle"], "deg")
+
+    def test_edge_flange_explicit_position_and_validation(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        positioned = compile_model(
+            sheet.flange(
+                edges=[(40, 0, 2)],
+                height=15,
+                position="material_outside",
+            ),
+            "Positioned",
+        )["commands"][-1]["params"]
+        self.assertEqual(positioned["position"], "material_outside")
+
+        invalid = (
+            lambda: sheet.flange(edges=[], height=10),
+            lambda: sheet.flange(edges=[(1, 2)], height=10),
+            lambda: sheet.flange(edges=[(1, 2, float("nan"))], height=10),
+            lambda: sheet.flange(edges=[(1, 2, 3)], height=0),
+            lambda: sheet.flange(edges=[(1, 2, 3)], height=10, angle=0),
+            lambda: sheet.flange(
+                edges=[(1, 2, 3)], height=10, height_from="middle"
+            ),
+            lambda: sheet.flange(
+                edges=[(1, 2, 3)], height=10, position="centerline"
+            ),
+        )
+        for create in invalid:
+            with self.subTest(create=create), self.assertRaises(ValueError):
+                create()
+
+        with self.assertRaises(TypeError):
+            sheet.flange(edges=[(1, 2, 3)], height=10, flip="yes")
+
+        with self.assertRaisesRegex(ModelError, "existing sheet body"):
+            compile_model(
+                Box(20, 20, 4).flange(
+                    edges=[(10, 0, 4)],
+                    height=10,
+                ),
+                "NotSheet",
+            )
 
     def test_sheet_metal_and_fold_validate_authoring_contract(self):
         with Sketch(name="Blank", plane="XY") as blank:
