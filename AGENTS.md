@@ -67,7 +67,7 @@ Those are independent checks.
 
 Migrated model items use `model_verify`. That step compiles the model with the
 exact built Forge wheel, produces the initial native SolidCraft model and then
-delegates verification to released `lib.py.cad.verfication`.
+delegates verification to released `lib.py.cad.verification`.
 
 A model keeps only model-specific verification data in
 `verification/verify.py`; it does not own a procedural verification CLI.
@@ -142,8 +142,8 @@ Forge is a consumer only. Root `cad-ci.yml` selects the immutable released
 runtime role images:
 
 ```text
-FORGE_RUNTIME_IMAGE=ghcr.io/brainboxemb/cad-solidcraft:v0.3.2
-REFERENCE_RUNTIME_IMAGE=ghcr.io/brainboxemb/cad-reference:v0.3.2
+FORGE_RUNTIME_IMAGE=ghcr.io/brainboxemb/cad-solidcraft:v0.3.4
+REFERENCE_RUNTIME_IMAGE=ghcr.io/brainboxemb/cad-reference:v0.3.4
 ```
 
 Normal SolidCraft model/visual verification uses only
@@ -196,10 +196,34 @@ or the agent directory.
 Historical documentation-architecture discussion is preserved under
 `docs/background/documentation-architecture.md`.
 
-## Current work
+## Current work and handoff protocol
 
-`docs/plan.md` contains only unfinished repository work. Completed plan
-sections are removed after their corresponding change is merged.
+A handoff is only an entrypoint. Never treat copied handoff text as fresher than
+GitHub or the repository plan.
+
+For every work session:
+
+1. inspect current issues, PRs and branches;
+2. read this `AGENTS.md` and `docs/plan.md`;
+3. treat `docs/plan.md` as the source of truth for unfinished work;
+4. create an issue before implementation when the logical change has none;
+5. update the plan before implementation and reassess every open issue as
+   `now`, `next`, `later`, `blocked`, `probably obsolete` or
+   `effectively complete but still open`;
+6. update requirements/design documents when behavior or architecture changes;
+7. only then change code;
+8. keep one logical change to one issue, branch and PR;
+9. after merge or release, reconcile the plan again.
+
+Do not serialize independent work unnecessarily. `dev-cad` and `dev-ci` may
+advance in parallel; wait for a workflow only when the next step actually
+depends on its result. Shared dependency releases and architecture gates remain
+synchronization points. Repository-wide governance may use a short branch
+directly against `main`.
+
+`docs/plan.md` contains unfinished repository work. Completed plan sections are
+removed after their corresponding change is merged, while still-open completed
+issues are explicitly classified until they are closed.
 
 ## Generated output, branches and Pages
 
@@ -257,8 +281,8 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The active stack is exact externally accepted `tool.cad.ci 0.16.1` backed by
-`lib.py.cad.ci 0.9.2`. One caller-owned runner executes CAD-CI, prepares and
+The active stack is exact externally accepted `tool.cad.ci 0.17.0` backed by
+`lib.py.cad.ci 0.9.3`, with Forge explicitly using `jobs=2`. One caller-owned runner executes CAD-CI, prepares and
 publishes its own complete scope, builds the Forge site from that exact prepared
 scope and publishes only the matching Pages root/subtree.
 
@@ -289,15 +313,27 @@ Site Python code may discover/load/validate/render data, but complete
 hand-authored pages and guide prose belong in external templates/content, not
 Python string literals.
 
-The public GitHub Pages source remains deliberately on the preserved backup
-branch until #366 explicitly performs the live cut-over.
+Generated GitHub Pages publication is live. The stable root represents `main`
+and `/dev-cad/` and `/dev-ci/` are lane previews. Issue #366 is complete and
+must not be treated as an active publication gate.
 
 ## Release state
 
-The package version is stored in `scpf/pyproject.toml`.
+The package version is stored in `scpf/pyproject.toml`, but source metadata is
+not release evidence.
 
-The previous automatic release-validation/publication path is no longer active.
-Issue #366 tracks publication integration with the current CAD-CI architecture.
+The latest actual Forge release is `v0.10.0`. Source metadata currently carries
+`0.11.0` as preparation for the next release; post-0.10 changes remain under
+`[Unreleased]` until an intentional release candidate is chosen.
+
+Issue #642 owns the real `v0.11.0` release. A Forge release exists only after
+the immutable Git tag and GitHub Release are both created and verified against
+the intended green `main` SHA. The authoritative procedure is
+`docs/release.md`.
+
+The current workflow verifies candidates and publishes durable build/Page
+state, but does not itself create the Forge tag or GitHub Release. Issue #366 is
+complete and is not a release blocker.
 
 ## Historical documents
 
