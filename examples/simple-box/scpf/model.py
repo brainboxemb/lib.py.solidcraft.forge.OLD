@@ -1,5 +1,7 @@
 """Smallest SCPF regression example: one parameterized, editable Box."""
 
+# #661 one-model selectivity probe; no model behavior change.
+
 
 class SimpleBox:
     length = 40.0
