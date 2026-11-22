@@ -913,3 +913,36 @@ existed before cut-over:
 
 Human explanatory copy belongs in templates/content. Python may validate,
 compose rows, resolve evidence URLs and write compatibility aliases.
+
+
+## SolidCraft 0.45 parametric native Slots
+
+Forge preserves SolidCraft's native Slot history and the exact 0.45 command
+contracts captured under `docs/reference/solidcraft/0.45.0/`.
+
+Requirements:
+
+- all five native `Slot*2D` constructors accept a fixed positive width or a
+  Forge `Parameter` / `Expression`;
+- current evaluated width must remain positive and finite;
+- a fixed-point Slot lowers directly to its native `sketch.slot.*` creator,
+  including a symbolic width expression where SolidCraft accepts it;
+- direct SolidCraft Slot point fields remain numeric `PlainPoint` values;
+- the three straight Slot constructors may accept symbolic authored point
+  coordinates only when the current axis is horizontal or vertical;
+- symbolic straight endpoints lower to numeric seed points plus native
+  `sketch.draw.dimensioned` dimensions;
+- the dimensioned creator uses the canonical 0.45 roles `length` and
+  `width`;
+- Forge constrains the returned native `centre_line` horizontal/vertical and
+  drives the returned native `middle` point from the sketch origin so authored
+  position remains parameter-driven;
+- the two perpendicular endpoint coordinate intents must be identical so a
+  horizontal/vertical Slot cannot become skewed after parameter mutation;
+- diagonal straight Slots remain supported only when their authored points are
+  fixed numeric coordinates;
+- arc-Slot authored points remain fixed numeric coordinates in this slice;
+- no rounded-rectangle fallback, numeric baking or Forge-owned sketch solver is
+  allowed;
+- qualification must prove generated commands, native 0.45 acceptance and
+  saved-design parameter mutation/rebuild.
