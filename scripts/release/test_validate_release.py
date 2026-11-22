@@ -137,10 +137,10 @@ class ReleaseValidatorTests(unittest.TestCase):
         self.assertIn("scripts/release/publish_release.py", workflow)
         self.assertIn("printf -v body", workflow)
         self.assertIn(
-            "Published and verified \`%s\` at \`%s\`: %s",
+            "Published and verified `%s` at `%s`: %s",
             workflow,
         )
-        self.assertNotIn('body="Published and verified \`', workflow)
+        self.assertNotIn('body="Published and verified `', workflow)
         self.assertNotIn("gh release create", workflow)
         self.assertNotIn("git tag -a", workflow)
         self.assertNotIn("workflow_run:", workflow)
