@@ -1,0 +1,145 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "44eef079e8480315f5b8dbbbc9f016799f73fc379ae1addf632a5caf1ab9b699",
+  "variables": {
+    "$leftplate": 2,
+    "$rightplate": 6
+  },
+  "commands": [
+    {
+      "index": 0,
+      "command": "component.create",
+      "resolved_params": {
+        "name": "LeftPlate",
+        "grounded": true
+      },
+      "bindings": {
+        "$leftplate": 2
+      }
+    },
+    {
+      "index": 1,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "d1_LeftPlate__Profile"
+      }
+    },
+    {
+      "index": 2,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          -10.0,
+          -8.0
+        ],
+        "p1": [
+          10.0,
+          8.0
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 4,
+      "command": "solid.extrude",
+      "resolved_params": {
+        "distance": 4,
+        "direction": "positive",
+        "body_name": "LeftPlate"
+      }
+    },
+    {
+      "index": 5,
+      "command": "component.activate",
+      "resolved_params": {
+        "component": "root"
+      }
+    },
+    {
+      "index": 6,
+      "command": "component.create",
+      "resolved_params": {
+        "name": "RightPlate",
+        "grounded": false
+      },
+      "bindings": {
+        "$rightplate": 6
+      }
+    },
+    {
+      "index": 7,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "d2_RightPlate__Profile"
+      }
+    },
+    {
+      "index": 8,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          -15.0,
+          -9.0
+        ],
+        "p1": [
+          15.0,
+          9.0
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 10,
+      "command": "solid.extrude",
+      "resolved_params": {
+        "distance": 6,
+        "direction": "positive",
+        "body_name": "RightPlate"
+      }
+    },
+    {
+      "index": 11,
+      "command": "component.activate",
+      "resolved_params": {
+        "component": "root"
+      }
+    },
+    {
+      "index": 12,
+      "command": "occurrence.move",
+      "resolved_params": {
+        "occurrence": 2,
+        "translate": [
+          -30,
+          0,
+          0
+        ],
+        "move_grounded": true
+      }
+    },
+    {
+      "index": 13,
+      "command": "occurrence.move",
+      "resolved_params": {
+        "occurrence": 6,
+        "translate": [
+          30,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "completed": 14
+}
