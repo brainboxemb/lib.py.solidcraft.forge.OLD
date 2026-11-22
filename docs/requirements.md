@@ -346,8 +346,8 @@ qualification orchestration.
 
 ## Durable generated build output and development lanes
 
-Forge uses the exact externally accepted `tool.cad.ci 0.17.0` /
-`lib.py.cad.ci 0.9.3` stack for all selection, execution, durable-scope and
+Forge uses the exact externally accepted `tool.cad.ci 0.17.1` /
+`lib.py.cad.ci 0.10.0` stack for all selection, execution, durable-scope and
 generated-branch mechanics.
 
 Forge explicitly requests `jobs=2` from the released tool on both pull-request
