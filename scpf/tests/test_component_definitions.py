@@ -1251,6 +1251,76 @@ class ComponentDefinitionTests(unittest.TestCase):
             for command in commands
         ))
 
+    def test_component_local_sketch_names_are_namespaced_per_definition(self):
+        from scpf import Sketch
+        from scpf.assembly import compile_assembly
+        from scpf.core import Rectangle2D
+        from scpf.runner import component
+
+        class Left:
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(20, 10)
+                return sketch.extrude(4)
+
+        class Right:
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(30, 12)
+                return sketch.extrude(6)
+
+        commands = compile_assembly(
+            component(Left)() + component(Right)(),
+            "Assembly",
+        )["commands"]
+
+        sketch_names = [
+            command["params"]["name"]
+            for command in commands
+            if command["command"] == "sketch.create"
+        ]
+        extrude_names = [
+            command["params"]["name"]
+            for command in commands
+            if command["command"] == "solid.extrude"
+        ]
+
+        self.assertEqual(
+            sketch_names,
+            ["d1_Left_Profile", "d2_Right_Profile"],
+        )
+        self.assertEqual(extrude_names, sketch_names)
+
+    def test_parameterized_component_definitions_get_distinct_feature_namespaces(self):
+        from scpf import Sketch
+        from scpf.assembly import compile_assembly
+        from scpf.core import Rectangle2D
+        from scpf.runner import component
+
+        class Strip:
+            width = 20.0
+
+            def build(self):
+                with Sketch(name="Profile", plane="XY") as sketch:
+                    Rectangle2D(self.width, 10)
+                return sketch.extrude(4)
+
+        StripPart = component(Strip)
+        commands = compile_assembly(
+            StripPart(width=20) + StripPart(width=30),
+            "Assembly",
+        )["commands"]
+
+        sketch_names = [
+            command["params"]["name"]
+            for command in commands
+            if command["command"] == "sketch.create"
+        ]
+        self.assertEqual(
+            sketch_names,
+            ["d1_Strip_Profile", "d2_Strip_2_Profile"],
+        )
+
     def test_copy_creates_a_second_occurrence_of_one_definition(self):
         from scpf.core import Box
         from scpf.model_objects import ModelDefinition, ModelInstance, Placement
