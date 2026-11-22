@@ -1493,3 +1493,81 @@ Implementation boundary:
 
 This preserves one editable native Sketch + Extrude history and keeps authored
 Sketch coordinates/parameters unchanged.
+
+
+## Shared-batch item projection with CAD-CI copy
+
+The shared batch remains the expensive producer. The change is only the shape
+of its published dependency output and the child action used to claim one
+result.
+
+### Model batch
+
+```text
+ci/model-verification-batch
+  -> items/examples/<slug>/
+       solidcraft.json
+       model_verify/...
+```
+
+The batch compiles/verifies all active declarative models exactly as before.
+Its internal runtime manifest points at those item-shaped paths directly.
+
+Each model item keeps its real `contract_test` step, then uses:
+
+```yaml
+copy:
+  dependency: model-verification-batch
+  source: items/{item_path}
+outputs:
+  - solidcraft.json
+  - model_verify
+```
+
+### Reference batch
+
+The heavy runtime may still create one temporary aggregate
+`references/<slug>/<implementation>/...` tree because the released
+verification library owns that output format. After the runtime returns, the
+Forge batch producer converts it once into child-owned projection roots:
+
+```text
+items/examples/<slug>/<implementation>/
+  references/
+    verification.json
+    <slug>/<implementation>/...
+```
+
+The child `verification.json` has the same one-model/one-implementation
+semantic subset previously written by `materialize_case()`.
+
+After successful projection construction, the aggregate reference tree is not a
+declared CAD-CI batch output and may be removed. This avoids publishing both
+aggregate and child copies in the dependency bundle.
+
+Each reference item uses the same generic source template:
+
+```yaml
+copy:
+  dependency: reference-verification-batch
+  source: items/{item_path}
+outputs:
+  - references
+```
+
+### Diagrams
+
+The reference batch continues producing `diagrams/`. The
+`verification-diagrams` item uses a generic copy from source `.` with output
+`diagrams`; no Forge materializer process remains.
+
+### Ownership and timing
+
+`lib.py.cad.ci 0.10.0` owns direct bundle-member projection, target signatures,
+SCons ordering, CacheDir reuse, CURRENT/CACHE_RESTORED evidence and parallel
+safety. Forge does not duplicate those mechanics.
+
+Forge timing comparisons use structured CAD-CI target evidence plus the existing
+batch timing diagnostics. The expected improvement is specifically the removal
+of repeated complete dependency snapshots and projection-only Python actions
+after the shared batches finish.
