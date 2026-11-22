@@ -137,8 +137,8 @@ Forge consumer adoption status:
    `027513809f24115e0ea94727a12276833c74df64`, allow-listed temporary-head
    cleanup, dispatched `dev-ci` integration `45025211322` and Pages
    deployment `45025267221`;
-3. **now — #699** — reconcile this plan before the final promotion proof;
-4. **next/final #674 proof** — exact `dev-ci -> main` through repository
+3. **effectively complete but still open — #699** — plan reconciliation is merged and lane integration `45026629675` is green; close the child after this final status-only reconciliation;
+4. **now/final #674 proof** — exact `dev-ci -> main` through repository
    `/merge`: normal merge commit, permanent `dev-ci` preservation and
    successful dispatched integration;
 5. close #674 only after that direct-promotion evidence is recorded### WS2 — active CAD-library lane
@@ -180,7 +180,7 @@ Primary lane: `dev-cad`. **Independent of #674.**
 | Issue | Lane | Status | Next action |
 | --- | --- | --- | --- |
 | #674 Shared merge/lane policy adoption | dev-ci | **now** | After #699, promote exact `dev-ci -> main` through `/merge`; verify normal merge commit, permanent-lane preservation and dispatched integration. |
-| #699 Prepare dev-ci plan for final promotion proof | dev-ci | **now** | Merge this docs-only reconciliation via the normal short-lived policy, then perform the #674 lane promotion. |
+| #699 Prepare dev-ci plan for final promotion proof | dev-ci | **effectively complete but still open** | Reconciliation is merged and integration `45026629675` is green; close after this final status-only plan update. |
 | #568 SolidCraft 0.45 sheet flange coverage parent | dev-cad | **now** | Track active #684; #682 and #683 are complete. |
 | #684 Native contour flange | dev-cad | **now** | Complete draft PR #698 native qualification independently of the CI promotion lane. |
 | #679 Namespace repeated component-local feature names | dev-cad | **next** | Resume after #684 unless downstream HUB75 work makes it the immediate blocker. |
