@@ -1376,6 +1376,13 @@ the numeric seed point preserves which side of the sketch origin was authored.
 `abs()` is part of SolidCraft 0.45's expression language and the typed Forge
 expression retains the original parameter dependencies for namespacing/replay.
 
+The seed therefore owns the sign/side while the dimension owns the editable
+distance. A saved-design mutation may move the Slot toward or away from the
+origin on that same side, including to zero, but sign-crossing through the
+origin is not qualified in this release. Supporting that requires a native
+signed-placement relation rather than pretending an unsigned linear dimension
+carries side information.
+
 Arc Slot points stay on the direct numeric path until their native parametric
 placement/radius contracts are qualified separately.
 
