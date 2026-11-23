@@ -134,6 +134,9 @@ until the stable CI cut-over is complete.
 
 ### WS4 — API coverage and research
 
+- #751 native exploded-view intent/lowering — **blocked on v0.12 checkpoint**;
+  downstream CAD #367 needs a reusable wrapper over SolidCraft 0.45
+  `explode.create/show` without baking moved occurrences into model geometry.
 - #750 standalone Shape transform / local rotated cutter — **blocked on v0.12 checkpoint**;
   downstream CAD #362/#8 needs this to restore the final CornerBracket arm-tip
   wedge without a consumer-local transform workaround.
@@ -162,6 +165,7 @@ until the stable CI cut-over is complete.
 | #748 Provide a qualified STL export path | dev-cad / runtime owner as needed | **blocked on v0.12 checkpoint** | Required by CAD #345; first determine the native SolidCraft/runtime export owner, then qualify STL from the accepted saved result without consumer STEP conversion. |
 | #749 Isolate project-local modules between run_script roots | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #154 / draft PR #349; do not add consumer-local sys.modules cleanup. Implement after the current CI/history/release checkpoint permits a new CAD/API batch. |
 | #750 Support local rotation/transform of standalone Shape cutters | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #362/#8 for the preserved CornerBracket arm-tip wedge; implement generically after the current release checkpoint. |
+| #751 Expose and qualify native SolidCraft exploded views | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #367; wrap/qualify SolidCraft 0.45 explode views rather than consumer-authored occurrence moves. |
 | #743 Adopt tool.cad.ci v0.31.0 merge governance | governance/main | **now** | Repin thin wrapper/test to v0.31 public names; merge to main. |
 | #741 Synchronize main into dev-ci before #740 | repository/dev-ci | **blocked on #743** | Resolve PR #742 through v0.31 reviewed conflict recovery, then require dev-ci integration green. |
 | #740 Migrate historical root action to workflow/config model | dev-ci | **blocked on #741** | Implement against synchronized dev-ci using exact accepted v0.31 workflows and publication config. |
