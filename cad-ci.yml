@@ -7,6 +7,17 @@ variables:
   SOLIDCRAFT_VERSION: "0.45.0"
 
 builders:
+  forge-model: ci/builders/forge-model
+  forge-package: ci/builders/forge-package
+  forge-tests: ci/builders/forge-tests
+  forge-release: ci/builders/forge-release
+  release-policy: ci/builders/release-policy
+  site-source: ci/builders/site-source
+  solidcraft-reference: ci/builders/solidcraft-reference
+  model-verification-batch: ci/builders/model-verification-batch
+  reference-verification-batch: ci/builders/reference-verification-batch
+  forge-reference-projection: ci/builders/forge-reference-projection
+  verification-diagrams: ci/builders/verification-diagrams
   pages-site: ci/builders/pages-site
 
 publication:
@@ -33,23 +44,7 @@ templates:
         - scripts/model_visual.py
     strategy:
       reuse: true
-    steps:
-      - id: contract_test
-        inputs:
-          item:
-            - scpf/**
-            - tests/**
-          repo:
-            - scripts/forge_example.py
-            - scripts/model_contract_test.py
-        run: [python, ../../scripts/model_contract_test.py]
-      - id: model_verify
-        copy:
-          dependency: model-verification-batch
-          source: items/{item_path}
-        outputs:
-          - solidcraft.json
-          - model_verify
+    builder: forge-model
 
   forge-reference:
     kind: verification
@@ -67,13 +62,7 @@ templates:
         - scripts/reference_verification_batch.py
     strategy:
       reuse: true
-    steps:
-      - id: verify_reference
-        copy:
-          dependency: reference-verification-batch
-          source: items/{item_path}
-        outputs:
-          - references
+    builder: forge-reference-projection
 
   forge-reference-build123d:
     kind: verification
@@ -92,13 +81,7 @@ templates:
         - scripts/reference_verification_batch.py
     strategy:
       reuse: true
-    steps:
-      - id: verify_reference
-        copy:
-          dependency: reference-verification-batch
-          source: items/{item_path}
-        outputs:
-          - references
+    builder: forge-reference-projection
 
 items:
   - scpf
