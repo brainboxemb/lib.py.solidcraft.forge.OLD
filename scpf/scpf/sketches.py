@@ -3,7 +3,7 @@
 Each supported base shape returns its command list plus simple shape metadata.
 Feature operations (Hole, Fillet, join, cut) are handled separately.
 """
-from math import isfinite
+from math import cos, isfinite, radians, sin
 from .core import (
     Shape,
     Anchor,
@@ -257,6 +257,41 @@ def compile_open_chain_with_curves(shape):
         raise ModelError("open Sketch chain has no curves to consume")
     return commands, meta, curve_variable
 
+def _sketch_plane_frame(plane, *, origin=None, rotation=None):
+    """Return a native world Sketch frame for an explicit plane and rotation."""
+
+    axes = {
+        "XY": ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        "XZ": ((1.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+        "YZ": ((0.0, 1.0, 0.0), (0.0, 0.0, 1.0)),
+    }
+    if plane not in axes:
+        raise ModelError("Sketch frame requires an XY, XZ or YZ plane")
+
+    x_dir, y_dir = axes[plane]
+    angles = rotation or (0.0, 0.0, 0.0)
+    rx, ry, rz = (radians(float(value)) for value in angles)
+
+    def rotate(vector):
+        x, y, z = vector
+        y, z = y * cos(rx) - z * sin(rx), y * sin(rx) + z * cos(rx)
+        x, z = x * cos(ry) + z * sin(ry), -x * sin(ry) + z * cos(ry)
+        x, y = x * cos(rz) - y * sin(rz), x * sin(rz) + y * cos(rz)
+        return tuple(
+            0.0 if abs(value) < 1e-12 else
+            1.0 if abs(value - 1.0) < 1e-12 else
+            -1.0 if abs(value + 1.0) < 1e-12 else
+            value
+            for value in (x, y, z)
+        )
+
+    return {
+        "origin": [pv(value) for value in (origin or (0, 0, 0))],
+        "x_dir": list(rotate(x_dir)),
+        "y_dir": list(rotate(y_dir)),
+    }
+
+
 def compile_standalone_sketch(
     sketch_name,
     plane,
@@ -264,6 +299,7 @@ def compile_standalone_sketch(
     plane_offset,
     profiles,
     operations,
+    rotation=None,
 ):
     """Compile one standalone Sketch without choosing its 3D operation."""
     if operations:
@@ -275,12 +311,22 @@ def compile_standalone_sketch(
     if len(profiles) != 1:
         raise ModelError("standalone Sketch currently requires exactly one profile")
     profile, profile_anchor, (ox, oy) = profiles[0]
-    if origin is not None:
-        raise ModelError("standalone Sketch origin is not supported yet")
+    if (origin is not None or rotation is not None) and plane_offset is not None:
+        raise ModelError("explicit Sketch frame cannot use plane offset")
 
-    sketch_params = {"plane": plane, "name": sketch_name}
-    if plane_offset is not None:
-        sketch_params["offset"] = command_value(plane_offset)
+    if origin is not None or rotation is not None:
+        sketch_params = {
+            "plane": _sketch_plane_frame(
+                plane,
+                origin=origin,
+                rotation=rotation,
+            ),
+            "name": sketch_name,
+        }
+    else:
+        sketch_params = {"plane": plane, "name": sketch_name}
+        if plane_offset is not None:
+            sketch_params["offset"] = command_value(plane_offset)
     sketch = [_command("sketch.create", **sketch_params)]
 
     if profile.kind in ("rectangle", "rounded_rectangle"):
@@ -456,6 +502,7 @@ def compile_base(shape, name, *, operation="new"):
             operations,
             profile_picks,
             exact_regions,
+            rotation,
         ) = shape.data
         _require_positive(distance, "sketch extrusion distance")
         sketch, meta = compile_standalone_sketch(
@@ -465,6 +512,7 @@ def compile_base(shape, name, *, operation="new"):
             plane_offset,
             profiles,
             operations,
+            rotation,
         )
         meta["thickness"] = distance
         if meta.get("profile") == "polygon":
