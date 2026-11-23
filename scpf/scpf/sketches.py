@@ -51,6 +51,175 @@ def _extrude_profile_params(profile_picks, exact_regions):
     return params
 
 
+def compile_connected_profile(profile, *, offset=(0, 0)):
+    """Lower one declarative mixed line/arc profile into native sketch commands."""
+
+    if profile.kind != "connected_profile":
+        raise ModelError("expected a connected_profile")
+    start, segments = profile.data
+    ox, oy = offset
+
+    def point(value):
+        return [
+            command_value(_combine_dimension(ox, value[0])),
+            command_value(_combine_dimension(oy, value[1])),
+        ]
+
+    commands = []
+    for segment in segments:
+        kind = segment[0]
+        if kind == "line":
+            _kind, segment_start, end = segment
+            commands.append(
+                _command(
+                    "sketch.line",
+                    points=[point(segment_start), point(end)],
+                    connect=True,
+                )
+            )
+            continue
+        if kind == "arc_three_point":
+            _kind, segment_start, end, through = segment
+            commands.append(
+                _command(
+                    "sketch.arc.three_point",
+                    start=point(segment_start),
+                    end=point(end),
+                    through=point(through),
+                    connect=True,
+                )
+            )
+            continue
+        if kind == "arc_center_point":
+            _kind, segment_start, end, center, clockwise = segment
+            commands.append(
+                _command(
+                    "sketch.arc.center_point",
+                    center=point(center),
+                    start=point(segment_start),
+                    end=point(end),
+                    clockwise=clockwise,
+                    connect=True,
+                )
+            )
+            continue
+        raise ModelError(f"unsupported connected profile segment: {kind}")
+
+    return commands, {
+        "profile": "connected",
+        "profile_start": start,
+        "profile_segments": segments,
+    }
+
+
+
+def _compile_open_chain(shape, *, bind_curves):
+    """Lower one reusable open Sketch chain, optionally binding all curve ids."""
+
+    if shape.kind != "sketch_open_chain":
+        raise ModelError("expected a sketch_open_chain")
+    sketch_name, plane, plane_offset, _start, segments = shape.data
+    if plane not in ("XY", "XZ", "YZ"):
+        raise ModelError("open Sketch chain requires an XY, XZ or YZ plane")
+
+    params = {"plane": plane, "name": sketch_name}
+    if plane_offset is not None:
+        params["offset"] = command_value(plane_offset)
+    commands = [_command("sketch.create", **params)]
+
+    def point(value):
+        return [command_value(value[0]), command_value(value[1])]
+
+    curve_variable = None
+    curve_count = 0
+
+    def append_curve(command):
+        nonlocal curve_variable, curve_count
+        if bind_curves:
+            curve_count += 1
+            next_variable = f"$contour_curves_{curve_count}"
+            if curve_variable is None:
+                binding = "curves"
+            else:
+                binding = {
+                    "field": "curves",
+                    "prepend": curve_variable,
+                }
+            command["bind"] = {next_variable: binding}
+            curve_variable = next_variable
+        commands.append(command)
+
+    previous_line_id = None
+    line_count = 0
+    for segment in segments:
+        kind = segment[0]
+        if kind == "line":
+            _kind, start, end = segment
+            line_count += 1
+            line_id = f"l{line_count}"
+            append_curve(
+                _command(
+                    "sketch.line",
+                    points=[point(start), point(end)],
+                    ids=[line_id],
+                    connect=True,
+                )
+            )
+            previous_line_id = line_id
+            continue
+
+        if kind == "arc_tangent":
+            _kind, _start, end = segment
+            if previous_line_id is None:
+                raise ModelError(
+                    "open Sketch tangent arc requires a preceding line"
+                )
+            append_curve(
+                _command(
+                    "sketch.arc.tangent",
+                    start=f"{previous_line_id}.end",
+                    curve=previous_line_id,
+                    end=point(end),
+                )
+            )
+            previous_line_id = None
+            continue
+
+        raise ModelError(f"unsupported open Sketch chain segment: {kind}")
+
+    commands.append(_command("sketch.finish"))
+    meta = {
+        "sketch": True,
+        "open_chain": True,
+        "sketch_name": sketch_name,
+        "sketch_plane": plane,
+        "sketch_plane_offset": plane_offset if plane_offset is not None else 0,
+        "segments": segments,
+    }
+    return commands, meta, curve_variable
+
+
+def compile_open_chain(shape):
+    """Lower one reusable open Sketch chain to native SolidCraft commands."""
+
+    commands, meta, _curve_variable = _compile_open_chain(
+        shape,
+        bind_curves=False,
+    )
+    return commands, meta
+
+
+def compile_open_chain_with_curves(shape):
+    """Lower an open chain and bind its complete ordered native curve list."""
+
+    commands, meta, curve_variable = _compile_open_chain(
+        shape,
+        bind_curves=True,
+    )
+    if curve_variable is None:
+        raise ModelError("open Sketch chain has no curves to consume")
+    return commands, meta, curve_variable
+
 def compile_standalone_sketch(
     sketch_name,
     plane,
@@ -123,6 +292,24 @@ def compile_standalone_sketch(
             diameter=command_value(diameter),
         ))
         meta = {"profile": "circle"}
+    elif profile.kind == "connected_profile":
+        if profile_anchor is not None:
+            raise ModelError(
+                "connected profiles use authored sketch coordinates"
+            )
+        connected, meta = compile_connected_profile(
+            profile,
+            offset=(ox, oy),
+        )
+        sketch.extend(connected)
+        meta.update(
+            {
+                "sketch_plane": plane,
+                "sketch_plane_offset": (
+                    plane_offset if plane_offset is not None else 0
+                ),
+            }
+        )
     elif profile.kind == "polygon":
         if profile_anchor is not None:
             raise ModelError(
@@ -157,7 +344,7 @@ def compile_standalone_sketch(
         }
     else:
         raise ModelError(
-            "standalone Sketch supports Rectangle2D, RoundedRectangle2D, Circle2D and Polygon2D"
+            "standalone Sketch supports Rectangle2D, RoundedRectangle2D, Circle2D, Polygon2D and connected profiles"
         )
 
     sketch.append(_command("sketch.finish"))

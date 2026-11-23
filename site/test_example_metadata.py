@@ -7,6 +7,7 @@ from pathlib import Path
 import unittest
 
 from example_metadata import discover_example_metadata, load_section_presentation
+from scpf.model_metadata import MODEL_METADATA_FIELDS
 from example_documentation import discover_example_documentation
 
 
@@ -73,15 +74,7 @@ class ExampleMetadataTests(unittest.TestCase):
     def test_model_yml_keeps_only_agreed_generic_fields(self):
         import yaml
 
-        expected = {
-            "section",
-            "priority",
-            "title",
-            "tagline",
-            "description",
-            "parameters",
-            "stages",
-        }
+        expected = set(MODEL_METADATA_FIELDS)
         for row in discover_example_metadata():
             with self.subTest(slug=row.slug):
                 source = (

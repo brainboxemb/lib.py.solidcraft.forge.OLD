@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/sheet-contour-flange/verification/verify.py
+reason: >
+  Issue #684 requires focused native SolidCraft qualification for contour
+  flange authoring from an open Sketch chain, replay-bound curve identity,
+  flat-pattern continuity and saved-design distance/line mutation. This fixture
+  deliberately stays outside the public Verification catalog.

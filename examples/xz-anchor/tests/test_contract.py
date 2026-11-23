@@ -11,7 +11,7 @@ class CommandContractTests(unittest.TestCase):
     def test_xz_anchor_command_contract(self):
         rows = run_script(ROOT / "examples/xz-anchor/scpf/model.py")["commands"]
         sketch = next(row["params"] for row in rows if row["command"] == "sketch.create")
-        self.assertEqual(sketch, {"plane": "XZ", "name": "Profile"})
+        self.assertEqual(sketch, {"plane": "XZ", "name": "d1_Board__Profile"})
         joints = [row["params"] for row in rows if row["command"] == "joint.create"]
         self.assertEqual(len(joints), 2)
         self.assertEqual([joint["a"]["corner"] for joint in joints], [[20.0, 0.0, 20.0], [-20.0, 0.0, 20.0]])

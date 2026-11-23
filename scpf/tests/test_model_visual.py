@@ -237,10 +237,8 @@ class ModelVisualTests(unittest.TestCase):
 
     def test_every_active_model_owns_approved_visual_policy(self):
         active = sorted(
-            path.parent.parent.name
-            for path in (ROOT / "examples").glob(
-                "*/verification/verify.py"
-            )
+            path.parent.name
+            for path in (ROOT / "examples").glob("*/model.yml")
         )
         visual = sorted(
             path.parent.parent.name
