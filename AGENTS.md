@@ -39,7 +39,7 @@ The active CI structure is defined by:
 - `ci/forge-tests/ci.yml`
 - `ci/forge-release/ci.yml`
 - `ci/release-policy/ci.yml` — tests release validation/publication policy without CAD runtimes
-- `ci/cad-verification-package/ci.yml`
+- `ci/builders/*/builder.yml` — Forge-owned executable repository builders
 - migrated `examples/<model>/ci.yml` files
 - `scripts/tool_ci.py`
 - `scripts/tool_verify.py`
@@ -63,25 +63,32 @@ Forge package CI is split into independent items:
 
 ```text
 forge-package
-  -> forge-tests
-  -> forge-release
+  ├─ forge-tests
+  ├─ forge-release
+  └─ model-verification-batch
+       └─ examples/<model> native SolidCraft verification
 
-cad-verification-package
-  -> selected model/reference verification items
-
-forge-package + cad-verification-package
-  -> selected model verification items
+CAD-CI internal cad-ci-verification-package
+  ├─ model-verification-batch
+  ├─ reference-verification-batch (PythonSCAD/pyBOSL2 only)
+  └─ built-in reference runtime
+       ├─ CadQuery reference items
+       └─ build123d reference items
 ```
 
-The arrows mean package-artifact dependency, not one serial release chain.
+The arrows mean dependency ownership, not one serial release chain.
 
 - `forge-package` builds the exact SCPF wheel once.
 - `forge-tests` installs that wheel and runs the reusable Forge unit suite.
 - `forge-release` release-verifies that wheel with the fixed representative
   examples.
-- each declarative model item depends on `forge-package` and
-  `cad-verification-package`, and compiles/verifies with those exact wheels.
-- each reference item depends on `cad-verification-package`.
+- declarative model items depend on `forge-package` and the shared
+  `model-verification-batch`; the batch consumes the CAD-CI-owned exact
+  verification package.
+- CadQuery/build123d reference items use the released built-in builders plus
+  first-class `mesh-geometry` verification directly.
+- PythonSCAD/pyBOSL2 reference items remain Forge-owned and project results from
+  `reference-verification-batch`.
 
 Model verification must not depend on `forge-tests` or `forge-release`.
 Those are independent checks.
@@ -94,8 +101,8 @@ A model keeps only model-specific verification data in
 `verification/verify.py`; it does not own a procedural verification CLI.
 All current model items use the declarative verification path, have native
 `model_verify` coverage and own model-local independent-reference geometry
-contracts. The shared reference path runs PythonSCAD, pyBOSL2,
-CadQuery and build123d for the complete catalog.
+contracts. Generic build123d/CadQuery export and mesh verification are not
+implemented in Forge.
 
 The catalog lineage and the additional non-catalog fixtures below `examples/`
 are documented in `docs/background/example-history.md`.
@@ -168,16 +175,19 @@ REFERENCE_RUNTIME_IMAGE=ghcr.io/brainboxemb/cad-reference:v0.3.4
 ```
 
 Normal SolidCraft model/visual verification uses only
-`FORGE_RUNTIME_IMAGE`. Independent PythonSCAD/pyBOSL2/CadQuery/build123d
-reference verification uses only `REFERENCE_RUNTIME_IMAGE`.
+`FORGE_RUNTIME_IMAGE`. Forge-owned PythonSCAD/pyBOSL2 reference work uses
+`REFERENCE_RUNTIME_IMAGE`. Built-in CadQuery/build123d references use the
+root `runtimes.reference` role owned by released `lib.py.cad.ci`.
 
 Forge must not duplicate the runtime Dockerfile, dependency/version pins or
 release workflow. Runtime package composition, role boundaries and release
 management belong in `docker.cad.solidcraft`.
 
-The runtime images must not embed `lib.py.cad.verification`. Forge supplies
-the exact released verification package as the `cad-verification-package`
-CAD-CI dependency and mounts that wheel into the selected runtime container.
+The runtime images must not embed `lib.py.cad.verification`. Root `cad-ci.yml`
+pins the exact released verification package; released `lib.py.cad.ci`
+materializes one internal `cad-ci-verification-package` and injects it into the
+built-in runtime. Forge-owned SolidCraft/PythonSCAD/pyBOSL2 consumers may use
+that same direct dependency but must not build or transport another wheel.
 
 Changing the verification-library pin or a model-local `verification/verify.py`
 must not require a Docker runtime release.
@@ -322,15 +332,13 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-Merge governance consumes exact externally accepted
-`tool.cad.ci v0.31.0` at
-`27bdf67077ddd485cea95ba199069249c20c2a46`. The wrapper uses the public
-branch-role inputs and supports both normal `/merge` and reviewed
-`/merge-resolved` conflict recovery.
-
-Normal Forge PR/durable CAD-CI execution is still on the historical root
-composite-action path until #740 completes. Forge explicitly uses `jobs=2`.
-Do not treat the governance adoption as the CAD-CI execution cut-over.
+Merge governance and normal Forge PR/durable CAD-CI execution consume exact
+externally accepted `tool.cad.ci v0.33.2` at
+`4812d87304109a68538d844e8baa5bacdbbc198d`. Merge governance keeps the
+public branch-role inputs and supports both normal `/merge` and reviewed
+`/merge-resolved` conflict recovery. Normal CI uses the released reusable
+PR/durable workflows with `jobs=2`; Forge does not own PR classification,
+durable build-store mechanics or Pages publication.
 
 Do not reintroduce Actions artifact transport, a second publication runner, a
 second tool/library bootstrap, or Forge-owned selection/build-store logic.
