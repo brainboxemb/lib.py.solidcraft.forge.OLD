@@ -271,6 +271,56 @@ Sketch coordinates rather than parameter expressions.
 A direct 3D primitive such as `Box` remains a native primitive; Forge must not
 synthesize an unnecessary Sketch merely to construct it.
 
+
+
+#### Connected mixed line/arc profiles
+
+Use a connected profile builder when one closed Sketch region mixes straight
+segments and true circular arcs:
+
+```python
+with Sketch(name=&quot;Blank&quot;, plane=&quot;XY&quot;) as blank:
+    contour = blank.profile(start=(0, 0))
+    contour.line_to((40, 0))
+    contour.arc_through_to((40, 20), through=(50, 10))
+    contour.line_to((0, 20))
+    contour.line_to((0, 0))
+    contour.close()
+
+solid = blank.extrude(8)
+```
+
+The same closed profile can start a native sheet-metal body:
+
+```python
+sheet = blank.sheet_metal(
+    thickness=2,
+    bend_radius=2,
+)
+```
+
+Available initial segment methods:
+
+```python
+contour.line_to(end)
+contour.arc_through_to(end, *, through)
+contour.arc_center_to(end, *, center, clockwise=False)
+contour.close()
+```
+
+All coordinates are sketch-local. Parameter/Expression values remain editable
+native point expressions. Forge lowers arcs to native SolidCraft arc commands;
+it never replaces them with short polygon edges.
+
+Each call starts at the previous segment&#x27;s endpoint. Author the final segment
+back to the original start point, then call `close()`. `close()` validates
+closure but does not invent geometry.
+
+Tangent-arc authoring is deliberately not part of this first slice because the
+native command addresses a previous curve entity. Forge will not expose or
+guess generated SolidCraft ids merely to add syntactic sugar.
+
+
 #### Native Sketch pattern and mirror operations
 
 A profile already authored in the active Sketch can seed an associative native
@@ -702,6 +752,136 @@ A public API behaviour is not considered complete merely because one example
 renders correctly. It needs the appropriate Q1-Q6 evidence. A qualification
 fixture is evidence for this document; the fixture itself is never the API
 definition.
+
+### Sheet edge flange
+
+Add a native flange to one or more selected edges of an existing sheet body:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, -20, 2)],
+    height=20,
+    angle=90,
+)
+```
+
+Optional native placement controls are available without changing SolidCraft&#x27;s
+default when omitted:
+
+```python
+sheet = sheet.flange(
+    edges=[(40, -20, 2)],
+    height=height,
+    angle=bend_angle,
+    height_from=&quot;inner&quot;,
+    position=&quot;material_outside&quot;,
+    flip=True,
+)
+```
+
+`edges` currently accepts a non-empty sequence of fixed finite XYZ points only.
+`height` may be parameterized and must stay positive. `angle` may be parameterized
+and must be non-zero with magnitude below 180°. `height_from` accepts `outer`,
+`inner` or `tangent`; `position` accepts `inside`, `outside`, `middle`,
+`material_outside` or `tangent`. Leave either as `None` to use SolidCraft&#x27;s
+native default.
+
+The sheet&#x27;s existing rule continues to own thickness, K-factor and bend radius.
+`flange()` does not expose per-edge segmentation, corner-relief overrides, chained
+bends or raw SolidCraft dictionaries in this initial API.
+
+
+#### Open connected Sketch chains
+
+Use an open chain when downstream native behavior needs a connected Sketch path
+rather than a closed profile:
+
+```python
+with Sketch(name=&quot;Contour&quot;, plane=&quot;XY&quot;) as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((40, 0))
+    chain.tangent_arc_to((50, 10))
+    chain.line_to((50, 30))
+    contour = chain.finish()
+```
+
+Initial builder methods:
+
+```python
+chain.line_to(end)
+chain.tangent_arc_to(end)
+chain.finish()
+```
+
+`finish()` returns a reusable open-chain Shape. It does not close the chain
+and does not make it a selectable closed profile.
+
+The initial form requires a standalone Sketch on XY/XZ/YZ. A plane `offset=` is
+supported; attached `on=` and explicit 3D `origin=` chains are not part of this
+slice.
+
+The initial tangent-arc form must immediately follow a line segment. Forge uses
+a private deterministic native line id to satisfy SolidCraft&#x27;s tangent
+reference; callers never pass or receive native curve ids. A line may follow
+the tangent arc, so normal line/tangent/line contour paths are supported.
+
+Coordinates are sketch-local. `line_to()` endpoints may use Forge
+Parameter/Expression values. The initial `tangent_arc_to()` endpoint must be a
+fixed finite numeric point because SolidCraft 0.45 rejects expressions in
+`sketch.arc.tangent.end`; Forge reports that at authoring time instead of
+emitting an invalid replay command. Arc-to-arc tangent continuation is not part
+of this first API slice.
+
+
+### Sheet contour flange
+
+Turn a finished reusable open Sketch chain into a native contour-flange sheet:
+
+```python
+with Sketch(name=&quot;Contour&quot;, plane=&quot;XZ&quot;) as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((35, 0))
+    chain.tangent_arc_to((40, 5))
+    chain.line_to((40, 30))
+    contour = chain.finish()
+
+sheet = contour.contour_flange(
+    distance=50,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+)
+```
+
+Optional controls:
+
+```python
+sheet = contour.contour_flange(
+    distance=width,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+    rule_name=&quot;Bracket sheet&quot;,
+    flip=True,
+    reverse=True,
+)
+```
+
+`distance` may be a Forge Parameter/Expression and must stay positive.
+`thickness`, `bend_radius`, `k_factor` and `rule_name` define the native
+sheet rule used for the new body, using the same semantics as
+`Sketch.sheet_metal()`. They are not duplicated into the native contour-flange
+feature.
+
+The receiver must be the Shape returned by `chain.finish()`. Forge compiles its
+full ordered line/tangent-arc chain, captures any SolidCraft-generated curve ids
+through replay bindings and supplies that exact list to
+`sheet.flange(type=&quot;contour&quot;)`. Native curve ids are not part of the public
+API.
+
+`flip` and `reverse` default to false and are emitted only when true.
+Contour flange creates its own sheet body; use `Shape.flange(edges=...)` for
+an edge flange on sheet material that already exists.
 </code></pre></section>
 </main>
 
