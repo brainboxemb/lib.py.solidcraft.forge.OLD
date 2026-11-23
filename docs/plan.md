@@ -78,8 +78,8 @@ Status: **now**. Lane: `dev-ci`.
 The released v0.35.0 workflow adds read-only targeted selection. Qualify this
 migration in explicit gates without toggling model `process` state:
 
-1. one representative model: `simple-box`;
-2. five model source paths in one graph;
+1. **passed** — one representative model: `simple-box` (run `45217991932`);
+2. **current** — five model source paths in one graph;
 3. ten model source paths in one graph;
 4. remove the temporary selector and run the full catalog.
 
