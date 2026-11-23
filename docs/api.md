@@ -706,6 +706,64 @@ renders correctly. It needs the appropriate Q1-Q6 evidence. A qualification
 fixture is evidence for this document; the fixture itself is never the API
 definition.
 
+## Sheet metal
+
+Forge sheet metal is native editable SolidCraft history, not a solid-envelope
+approximation. A sheet body has one active rule that owns material
+`thickness`, `k_factor` and the default `bend_radius`.
+
+There are two body-creation paths:
+
+- `Sketch.sheet_metal(...)` creates a flat sheet from one closed Sketch and
+  defines the sheet rule directly;
+- `Shape.contour_flange(...)` creates a sheet from a finished connected open
+  Sketch chain and defines the rule for that new body.
+
+Operations on an existing sheet — `fold()`, `flange()`, `hem()` and
+`path_flange()` — inherit the active material rule instead of repeating
+thickness/K-factor/default-radius fields. A feature may still own its own
+editable dimensions, such as flange height, hem length/gap or an explicit
+path-flange radius override.
+
+Use Parameters/Expressions for dimensions where the method contract permits
+them. Current edge picks and straight fold-line coordinates are deliberately
+fixed finite coordinates. Forge does not turn a numeric pick into a claimed
+long-lived topology reference.
+
+Native flat-pattern, saved-design and sheet-rule evidence is part of the
+behavioural contract. A matching formed bounding box alone is not sufficient
+qualification for sheet-metal history.
+
+### Flat sheet and fold
+
+Create a new flat body from a closed Sketch:
+
+```python
+with Sketch(name="Blank", plane="XY") as sketch:
+    Rectangle2D(80, 40)
+
+sheet = sketch.sheet_metal(
+    thickness=2,
+    bend_radius=2,
+    k_factor=0.5,
+    rule_name="Panel sheet",
+)
+```
+
+Then bend existing material without restating the rule:
+
+```python
+sheet = sheet.fold(
+    line=((20, -20, 0), (20, 20, 0)),
+    angle=90,
+    fixed=(-30, 0, 0),
+)
+```
+
+The initial `fold()` contract accepts one straight line made from fixed XY/XYZ
+points. `angle` may be parameterized. Bend allowance and material dimensions
+remain owned by the active sheet rule.
+
 ### Sheet edge flange
 
 Add a native flange to one or more selected edges of an existing sheet body:
@@ -835,3 +893,46 @@ API.
 `flip` and `reverse` default to false and are emitted only when true.
 Contour flange creates its own sheet body; use `Shape.flange(edges=...)` for
 an edge flange on sheet material that already exists.
+
+
+### Sheet hem
+
+Fold one or more existing sheet edges back while keeping native sheet history:
+
+```python
+sheet = sheet.hem(
+    edges=[(40, 0, 2)],
+    length=12,
+    gap=4,
+)
+```
+
+`edges` is currently a non-empty sequence of fixed finite XYZ picks.
+`length` must be positive and may remain parameterized. `gap` is optional;
+when omitted SolidCraft uses the sheet-rule behaviour. `flip=True` reverses
+the hem side. Thickness, K-factor and default bend radius remain inherited from
+the existing sheet body.
+
+### Sheet path flange
+
+Use a finished connected open Sketch chain as the path for a flange on an
+existing sheet edge:
+
+```python
+with Sketch(name="Path", plane="XZ") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((0, 14))
+    path = chain.finish()
+
+sheet = sheet.path_flange(
+    edge=(40, 0, 2),
+    path=path,
+    radius=3,
+)
+```
+
+The current SolidCraft 0.45 contract accepts a fixed XYZ edge pick and a
+non-empty **line-only** open chain. Tangent arcs and generic edge selectors are
+not yet qualified for path flange. `radius` is optional; omitting it inherits
+the active sheet rule, while supplying it overrides only this feature's bend
+radius. Thickness and K-factor always remain owned by the existing sheet rule.
