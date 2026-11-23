@@ -36,7 +36,7 @@ permanent-lane merge policy. Exact-head PR run `45228705759`, main durable run
 blocked by two release-path fixes:
 
 - #763: update the Forge-specific release check to the current CAD-CI Pages
-  record;
+  `ci-build-record`;
 - #739: replace Forge's local generic release code with the released
   `tool.py.lib.ci` reusable release workflow/template.
 
@@ -86,14 +86,14 @@ Status: **now, in parallel with WS2**.
 
 Required order:
 
-1. sync current `main` into `dev-ci`;
+1. run `sync-to-dev` from current `main` into `dev-ci`;
 2. #763 updates only the Forge-owned release validator and its documentation/tests;
 3. #739 replaces Forge's local command parsing/tag/GitHub Release code with the
    released `tool.py.lib.ci` release template and reusable workflow;
 4. require the exact `dev-ci` head to pass its normal CI checks;
 5. merge exact `dev-ci -> main` through the released merge policy;
 6. require the resulting exact `main` commit to have a green main build,
-   exact `forge-release` evidence and a stable Pages record for that source;
+   exact `forge-release` evidence and the stable Pages `ci-build-record` for that source;
 7. publish v0.12.0 only through the released reusable release workflow;
 8. verify the annotated `v0.12.0` tag and GitHub Release.
 
@@ -139,7 +139,7 @@ Other longer-term API/research work remains later: #349, #347, #325, #81, #82,
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
 | #739 Adopt tool.py.lib.ci release template | dev-ci | **now** | Remove Forge-local generic release handling and call the released reusable release workflow/template before v0.12.0 publication. |
-| #763 Align release validation with CAD-CI Pages record | dev-ci | **now** | Update the Forge-specific validator to the current final Pages record and test it. |
+| #763 Align release validation with CAD-CI Pages ci-build-record | dev-ci | **now** | Update the Forge-specific validator to the current final Pages `ci-build-record` and test it. |
 | #714 Release Forge 0.12.0 | repository | **blocked on #763 + #739** | Publish only after both release-path fixes are merged through dev-ci to main and the new exact main build is green. |
 | #746 Cone join/cut feature compilation | dev-cad | **now / WS2** | Reusable compiler gap; implement in the next CAD/API batch. |
 | #747 Polygon2D explicit/attached Sketch compilation | dev-cad | **now / WS2** | Required by downstream CAD; no consumer workaround. |
