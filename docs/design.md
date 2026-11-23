@@ -2091,6 +2091,47 @@ A generic sheet-edge selector, multiple hem profile types and rule/material
 authoring are separate future API decisions and are not inferred by this
 feature.
 
+## Native sheet path-flange lowering
+
+`Shape.path_flange()` composes two already-qualified histories instead of
+creating another path abstraction:
+
+```text
+existing sheet history
+  -> Shape(kind="sheet_path_flange", existing, edge, path, radius)
+  -> recurse existing history; require base metadata sheet=True
+  -> compile_open_chain_with_curves(path)
+       -> sketch.create
+       -> ordered sketch.line ...
+       -> replay-bound complete curves list
+       -> sketch.finish
+  -> sheet.path_flange(
+       edge=[x,y,z],
+       sketch=<authored path Sketch name>,
+       curves=<bound ordered curve list>,
+       radius?=<expression>,
+       body=<current body name>
+     )
+```
+
+The open-chain object and replay binding remain owned by #683. #776 only
+connects that existing identity to an existing sheet body. It does not parse
+Sketch internals into a new public structure and callers never supply native
+curve ids.
+
+### Initial native-contract boundary
+
+SolidCraft 0.45 documents `sheet.path_flange` as consuming an open chain of
+Sketch **lines**. Although #683 can also author a tangent arc for contour-flange
+consumers, the first path-flange slice therefore rejects non-line segments.
+This can be broadened later only with direct runtime qualification.
+
+The XYZ sheet-edge pick is fixed topology-identification data, matching the
+existing edge-flange/hem selection policy. Path coordinates and optional
+`radius` remain normal Forge Parameter/Expression inputs. Omitting `radius`
+delegates bend radius to the active sheet rule; providing it overrides only the
+path-flange feature.
+
 ## Open connected Sketch-chain design
 
 #683 deliberately does not reuse `connected_profile`. A closed selectable
