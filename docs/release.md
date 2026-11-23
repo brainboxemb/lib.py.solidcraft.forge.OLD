@@ -27,10 +27,9 @@ Released baseline:
 - qualified SolidCraft: `0.45.0`;
 - immutable runtime: `docker.cad.solidcraft v0.3.4`.
 
-Before publication, `build/main`, `ci/forge-release` and stable Pages all
-identified the exact tagged source commit. The release-policy tests were also
-green for the release code in use; unchanged test output may be reused by the
-build system.
+Before publication, durable `build/main`, `ci/forge-release`,
+`ci/release-policy` and stable Pages all resolved to the exact tagged source
+commit.
 
 Issue #642 is complete. The historical source-only commit that previously used
 the words “Release SCPF 0.11.0” was not itself release evidence; the real
@@ -84,8 +83,7 @@ At minimum, verify:
 3. stable generated Pages publication;
 4. `ci/forge-release/ci.yml` / `forge-release` representative package
    verification from the exact candidate SHA;
-5. current `ci/release-policy` tests are green; when release-policy inputs
-   change, that item must be rebuilt from the candidate SHA;
+5. `ci/release-policy` from the exact candidate SHA;
 6. no active entry in
    `docs/background/design/release-blockers.txt`;
 7. package metadata, dated changelog section and tested SolidCraft version

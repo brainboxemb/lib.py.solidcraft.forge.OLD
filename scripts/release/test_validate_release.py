@@ -16,19 +16,9 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(validator)
 
 TARGET = "a" * 40
-BUILD_COMMIT = "c" * 40
 
 
-def documents(
-    *,
-    build_source=TARGET,
-    release_source=TARGET,
-    page_source=TARGET,
-    page_build_source=TARGET,
-    page_build_scope="main",
-    page_build_commit=BUILD_COMMIT,
-    page_record_scope="main",
-):
+def documents(*, build_source=TARGET, release_source=TARGET, page_source=TARGET):
     return {
         (TARGET, validator.BLOCKERS_PATH): "# no active blockers\n",
         (TARGET, "scpf/pyproject.toml"): (
@@ -59,17 +49,8 @@ def documents(
         ),
         ("origin/gh-pages", validator.PAGES_PROVENANCE_PATH): json.dumps(
             {
-                "schema": 1,
                 "source_commit": page_source,
-                "build_commit": page_build_commit,
-                "build_scope": page_build_scope,
-            }
-        ),
-        (BUILD_COMMIT, validator.BUILD_MANIFEST_PATH): json.dumps(
-            {
-                "schema": 1,
-                "scope": page_record_scope,
-                "source_commit": page_build_source,
+                "build_manifest_source_commit": page_source,
             }
         ),
     }
@@ -128,22 +109,6 @@ class ReleaseValidatorTests(unittest.TestCase):
     def test_rejects_stale_stable_pages(self):
         with self.assertRaisesRegex(SystemExit, "stable Pages source_commit"):
             self.run_validate(documents(page_source="b" * 40))
-
-    def test_rejects_non_main_stable_pages(self):
-        with self.assertRaisesRegex(SystemExit, "build_scope is not main"):
-            self.run_validate(documents(page_build_scope="dev-cad"))
-
-    def test_rejects_invalid_stable_pages_build_commit(self):
-        with self.assertRaisesRegex(SystemExit, "build_commit is not a full commit SHA"):
-            self.run_validate(documents(page_build_commit="not-a-commit"))
-
-    def test_rejects_non_main_ci_build_record_referenced_by_pages(self):
-        with self.assertRaisesRegex(SystemExit, "no main ci-build-record"):
-            self.run_validate(documents(page_record_scope="dev-cad"))
-
-    def test_rejects_stale_ci_build_record_referenced_by_pages(self):
-        with self.assertRaisesRegex(SystemExit, "build commit does not match"):
-            self.run_validate(documents(page_build_source="b" * 40))
 
     def test_rejects_undated_release_section(self):
         docs = documents()

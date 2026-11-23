@@ -30,9 +30,8 @@ Requirements:
   non-comment blocker;
 - durable `build/main/build.json` must name that SHA as its source commit and
   its `ci/forge-release` item must have been produced from that same SHA;
-- stable `gh-pages/provenance.json` must name that SHA as `source_commit`,
-  must say `build_scope=main`, and its `build_commit` must contain
-  `main/build.json` for that same source SHA;
+- stable `gh-pages/provenance.json` must name that SHA as both site source and
+  build-manifest source;
 - publication creates an annotated `vX.Y.Z` Git tag and a GitHub Release only
   after all of those checks pass;
 - an existing tag may only be reused when it resolves to the exact requested

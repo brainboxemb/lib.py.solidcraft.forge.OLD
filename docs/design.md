@@ -1059,18 +1059,15 @@ The adapter does not require all item `source_commit` values to equal the site
 source commit. Sparse durable main intentionally preserves previously accepted
 unchanged items.
 
-The repository site builder may write extra local build details while rendering.
-Before publication, released CAD-CI writes the final root
-`provenance.json` with:
+Stable `site/build.py` writes root `provenance.json` with:
 
 - `source_commit`: the source checkout used to generate the site;
-- `build_commit`: the immutable generated `build` branch commit used by the site;
-- `build_scope`: `main` for stable Pages;
-- `schema`: the generic Pages record version.
+- `build_commit`: the immutable generated `build` branch commit;
+- `build_scope`: `main`;
+- the generic build manifest's `source_commit` for traceability.
 
-Forge release validation follows `build_commit` to `main/build.json` and
-checks that ci-build-record against the requested release commit. It does not
-require a duplicate build-manifest source field in Pages.
+This root record describes generation inputs; it does not replace per-item
+provenance.
 
 ## Durable presentation preview production
 
@@ -1447,9 +1444,7 @@ repository owner comment
             * no active foundational blocker
             * build/main source == requested SHA
             * forge-release evidence source == requested SHA
-            * stable Pages source == requested SHA
-            * stable Pages build_scope == main
-            * stable Pages build_commit contains main/build.json for requested SHA
+            * stable Pages source/build-manifest source == requested SHA
             * extract release notes from that changelog section
        -> create/verify annotated vX.Y.Z tag at requested SHA
        -> create/verify GitHub Release from extracted notes

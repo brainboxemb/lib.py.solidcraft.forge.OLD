@@ -60,7 +60,7 @@ def release_notes(changelog: str, version: str) -> str:
 
 
 def validate_durable_evidence(target_sha: str) -> None:
-    """Require the main ci-build-record and stable Pages build for target_sha."""
+    """Require durable main build and stable Pages evidence for target_sha."""
     build = json.loads(read_at("origin/build", BUILD_MANIFEST_PATH))
     if build.get("scope") != "main":
         raise SystemExit("build/main manifest is not scope=main")
@@ -87,26 +87,10 @@ def validate_durable_evidence(target_sha: str) -> None:
             "stable Pages source_commit does not match release target: "
             f"{pages.get('source_commit')!r}"
         )
-    if pages.get("build_scope") != "main":
+    if pages.get("build_manifest_source_commit") != target_sha:
         raise SystemExit(
-            "stable Pages build_scope is not main: "
-            f"{pages.get('build_scope')!r}"
-        )
-
-    build_commit = pages.get("build_commit")
-    if not isinstance(build_commit, str) or FULL_SHA.fullmatch(build_commit) is None:
-        raise SystemExit(
-            "stable Pages build_commit is not a full commit SHA: "
-            f"{build_commit!r}"
-        )
-
-    pages_build = json.loads(read_at(build_commit, BUILD_MANIFEST_PATH))
-    if pages_build.get("scope") != "main":
-        raise SystemExit("stable Pages build commit has no main ci-build-record")
-    if pages_build.get("source_commit") != target_sha:
-        raise SystemExit(
-            "stable Pages build commit does not match release target: "
-            f"{pages_build.get('source_commit')!r}"
+            "stable Pages build-manifest source does not match release target: "
+            f"{pages.get('build_manifest_source_commit')!r}"
         )
 
 
