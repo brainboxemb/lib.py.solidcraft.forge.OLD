@@ -134,6 +134,7 @@ until the stable CI cut-over is complete.
 
 ### WS4 — API coverage and research
 
+- #748 qualified STL export from accepted SolidCraft results — **blocked on v0.12 checkpoint**; downstream CAD #345 remains publication/adoption owner after an upstream release.
 - #747 explicit/attached Sketch Polygon2D lowering — **blocked on v0.12 checkpoint**;
   downstream CAD #348 already owns the temporary compatibility workaround.
 - #749 `run_script()` model-local import isolation — **blocked on v0.12 checkpoint**;
@@ -155,6 +156,7 @@ until the stable CI cut-over is complete.
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
 | #747 Support Polygon2D in explicit/attached Sketch compilation | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #348 to remove the temporary FlexBenchDog per-rib Slot workaround; implement only after current CI/history/release checkpoint permits a new CAD/API batch. |
+| #748 Provide a qualified STL export path | dev-cad / runtime owner as needed | **blocked on v0.12 checkpoint** | Required by CAD #345; first determine the native SolidCraft/runtime export owner, then qualify STL from the accepted saved result without consumer STEP conversion. |
 | #749 Isolate project-local modules between run_script roots | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #154 / draft PR #349; do not add consumer-local sys.modules cleanup. Implement after the current CI/history/release checkpoint permits a new CAD/API batch. |
 | #743 Adopt tool.cad.ci v0.31.0 merge governance | governance/main | **now** | Repin thin wrapper/test to v0.31 public names; merge to main. |
 | #741 Synchronize main into dev-ci before #740 | repository/dev-ci | **blocked on #743** | Resolve PR #742 through v0.31 reviewed conflict recovery, then require dev-ci integration green. |
