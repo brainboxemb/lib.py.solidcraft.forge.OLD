@@ -15,6 +15,7 @@ from typing import Any, Iterable
 
 
 IMPLEMENTATIONS = ("pythonscad", "pybosl2", "cadquery", "build123d")
+BUILTIN_IMPLEMENTATIONS = frozenset({"cadquery", "build123d"})
 
 
 @dataclass(frozen=True)
@@ -36,8 +37,8 @@ class ReferenceEvidence:
     item: ItemEvidence
     verification: dict[str, Any]
     stl_path: Path
-    preview_path: Path
-    preview: dict[str, Any]
+    preview_path: Path | None
+    preview: dict[str, Any] | None
 
 
 @dataclass(frozen=True)
@@ -202,7 +203,7 @@ def _reference(
     slug: str,
     implementation: str,
 ) -> ReferenceEvidence:
-    """Load one accepted reference child from its canonical source-path item."""
+    """Load one accepted reference child from its owner-defined output shape."""
 
     source_path = f"examples/{slug}/{implementation}"
     item = _item(root, manifest_items, source_path)
@@ -211,9 +212,49 @@ def _reference(
             f"{slug}/{implementation}: durable reference item is not pass"
         )
     item_root = root / source_path
-    result_root = (
-        item_root / "references" / slug / implementation
-    )
+
+    if implementation in BUILTIN_IMPLEMENTATIONS:
+        verification = _json_object(
+            item_root / "verification" / "verification.json",
+            f"{slug}/{implementation} reference verification",
+        )
+        if (
+            verification.get("schema") != "cad-verification"
+            or verification.get("schema_version") != 1
+        ):
+            raise ValueError(
+                f"{slug}/{implementation}: unsupported generic verification report"
+            )
+        geometry = next(
+            (
+                row
+                for row in verification.get("checks", ())
+                if isinstance(row, dict) and row.get("id") == "geometry"
+            ),
+            None,
+        )
+        if (
+            verification.get("status") != "pass"
+            or not isinstance(geometry, dict)
+            or geometry.get("status") != "pass"
+        ):
+            raise ValueError(
+                f"{slug}/{implementation}: reference is not accepted/pass"
+            )
+        stl_path = _nonempty_file(
+            item_root / "model.stl",
+            f"{slug}/{implementation} STL",
+        )
+        return ReferenceEvidence(
+            implementation=implementation,
+            item=item,
+            verification=verification,
+            stl_path=stl_path,
+            preview_path=None,
+            preview=None,
+        )
+
+    result_root = item_root / "references" / slug / implementation
     verification = _json_object(
         result_root / "verification.json",
         f"{slug}/{implementation} reference verification",
@@ -481,8 +522,8 @@ def load_stable_build_evidence(
         sorted(
             (
                 root
-                / "ci"
-                / "cad-verification-package"
+                / ".cad-ci-verification"
+                / "package"
                 / "dist"
             ).glob("brainboxemb_cad_verification_lib-*.whl")
         )
