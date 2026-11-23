@@ -115,6 +115,16 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-v0.12.0 is complete under #714. Keep future release preparation explicit and
-continue using the same central flow; choose the next version only when the
-next coherent stable-main batch is ready.
+Forge v0.13.0 is the active release checkpoint under #781.
+
+The post-v0.12 CAD batch is on stable `main` at
+`733134e66283e57c65a608731c04945fbf177b60` and its exact main branch build
+`45258575394` is green. Prepare version/changelog metadata on a short-lived
+branch, merge that preparation to `main`, require the exact resulting main
+branch build green, then publish only with:
+
+```text
+/release v0.13.0 <exact-40-character-main-sha>
+```
+
+v0.12.0 remains immutable and must not be moved or retagged.

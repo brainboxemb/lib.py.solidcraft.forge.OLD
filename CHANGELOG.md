@@ -8,6 +8,8 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-23
+
 ### Added
 
 - Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
