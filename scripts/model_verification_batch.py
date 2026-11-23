@@ -180,7 +180,7 @@ def run_host_batch() -> int:
 
     forge_wheel = dependency_wheel("forge-package", "scpf-*.whl")
     verification_wheel = dependency_wheel(
-        "cad-verification-package",
+        "cad-ci-verification-package",
         "brainboxemb_cad_verification_lib-*.whl",
     )
     batch_started = time.perf_counter()
