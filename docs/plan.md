@@ -105,9 +105,9 @@ Completed on `dev-cad`:
 
 Current order:
 
-1. **now** — #749 isolate project-local Python modules between
-   `run_script()` model roots;
-2. #750 standalone Shape local rotation/transform;
+1. **complete on dev-cad** — #749 model-local import isolation, PR #770,
+   merge `fd836e4797a7672497fc63978902ff2306fd9b7a`;
+2. **now** — #750 rotated local Sketch frame for standalone prism/cutter Shapes;
 3. #751 native SolidCraft exploded views;
 4. #753 component-local native Cylinder joins across copied/rotated
    occurrences.
@@ -123,8 +123,8 @@ Each issue uses its own branch from current `dev-cad` and returns to
 | #714 Release Forge 0.12.0 | main/release | **blocked on #739** | Publish only after #739 reaches main and the exact main build is green. |
 | #746 Cone boolean feature compilation | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
-| #749 Isolate project-local modules between run_script roots | dev-cad | **now** | Make local imports independent of earlier run_script calls in the same process. |
-| #750 Standalone Shape local transform/rotation | dev-cad | **next** | Add generic local cutter transform support after #749. |
+| #749 Isolate project-local modules between run_script roots | dev-cad | **implemented on dev-cad** | PR #770 is green and merged; keep open until the CAD batch reaches stable main/release. |
+| #750 Standalone Shape local transform/rotation | dev-cad | **now** | Add a rotated explicit Sketch frame so standalone extruded cutters can be translated/rotated before normal CSG. |
 | #751 Native SolidCraft exploded views | dev-cad | **next** | Wrap and qualify native explode behavior after #750. |
 | #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after #751** | Refresh the existing focused draft against current dev-cad and qualify it. |
 | #713 Audit/reduce Forge scripts | repository | **later** | Remove only genuine duplicates after the release-flow migration. |
@@ -164,6 +164,6 @@ Forge must not own:
 
 ## Next checkpoint
 
-Continue #749 on `dev-cad` while `tool.cad.ci.test #256` runs independently.
+Continue #750 on `dev-cad` while `tool.cad.ci.test #256` runs independently.
 When #256 passes, finish #739 on `dev-ci` and release Forge v0.12.0 through
 the central CAD release flow.
