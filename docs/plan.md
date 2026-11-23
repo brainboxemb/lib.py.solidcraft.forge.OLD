@@ -22,7 +22,7 @@ dev-ci
 Current heads after v0.13.1 publication:
 
 - `main`: `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
-- `dev-cad`: `733134e66283e57c65a608731c04945fbf177b60`;
+- `dev-cad`: `ee7f8ef6ff4e9942310d82f50f8be6b93714ef51`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
 Latest published Forge package: **v0.13.1** at exact
@@ -65,6 +65,21 @@ The central release flow is proven by v0.12.0. Pages is web output and is not
 release evidence. The stable release evidence is the main **ci-build-record**.
 
 ## Active work
+
+### CAD regression — #796 symbolic placed-Cylinder anchors
+
+Status: **now / release-blocking for the product-CAD consumer**.
+
+CAD adoption PR #406 proved that released Forge v0.13.1 regresses a valid
+parametric placed Cylinder used by `hub75-panel`. Run `45263158238` fails
+in `_dim_add()` because the placed3d path converts a symbolic coordinate to a
+native string expression before Cylinder anchor arithmetic combines it with an
+Expression height.
+
+Fix the generic conversion boundary in Forge, add focused Cylinder coverage and
+cover the shared placed Cone path where applicable. Do not require the consumer
+to bake parameter values or add a model-local workaround. After exact-head
+qualification, this fix needs a patch release before CAD #405 can proceed.
 
 ### Release — v0.13.1
 
@@ -120,6 +135,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
+| #796 Symbolic placed-Cylinder anchor arithmetic | **now / CAD regression** | Preserve Parameter/Expression values through anchor arithmetic; qualify Cylinder and shared placed primitive paths, then patch-release for CAD #405. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
 | #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
 | #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
@@ -142,7 +158,11 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-Resume #779, #785 and #786 from the current post-release refs. Keep #788 as a
-separate measured performance lane and #751 exploded views at lower priority.
-Do not start another Forge release until a coherent new stable-main batch
-exists.
+1. fix and qualify #796 first because it blocks adoption of the released
+   capability batch in the product-CAD repository;
+2. publish the smallest appropriate patch release containing #796 so CAD #405
+   can qualify a corrected exact Forge release;
+3. resume #779, #785 and #786 from the post-release refs in parallel where they
+   do not depend on #796;
+4. keep #788 as a separate measured performance lane and #751 exploded views at
+   lower priority.
