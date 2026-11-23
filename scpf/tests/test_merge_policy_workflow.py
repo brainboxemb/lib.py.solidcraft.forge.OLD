@@ -6,20 +6,22 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "merge-policy.yml"
-RELEASE = "27bdf67077ddd485cea95ba199069249c20c2a46"
+RELEASE = "v0.33.2"
 
 
 class MergePolicyWorkflowTests(unittest.TestCase):
-    def test_forge_wrapper_is_thin_and_pins_released_shared_policy(self):
+    def test_forge_wrapper_is_thin_and_uses_released_shared_policy(self):
         text = WORKFLOW.read_text(encoding="utf-8")
 
+        self.assertIn("# template: tool.cad.ci/merge-policy", text)
+        self.assertIn("# template-version: 4", text)
+        self.assertIn(f"# tool-release: {RELEASE}", text)
         self.assertIn("issue_comment:", text)
         self.assertIn("github.event.comment.body == '/merge'", text)
         self.assertIn(
             "startsWith(github.event.comment.body, '/merge-resolved')",
             text,
         )
-        self.assertIn("github.actor == github.repository_owner", text)
         self.assertIn(
             "uses: brainboxemb/tool.cad.ci/.github/workflows/"
             f"reusable-merge-policy.yml@{RELEASE}",
@@ -27,15 +29,9 @@ class MergePolicyWorkflowTests(unittest.TestCase):
         )
 
         self.assertIn("stable_branch: main", text)
-        self.assertIn("development_branches: '[\"dev-cad\",\"dev-ci\"]'", text)
+        self.assertIn("development_branches: '["dev-cad","dev-ci"]'", text)
         self.assertIn(
-            "permanent_branches: '[\"build\",\"gh-pages\"]'",
-            text,
-        )
-        self.assertIn(
-            "temporary_branch_prefixes: "
-            "'[\"issue/\",\"fix/\",\"feature/\",\"accept/\","
-            "\"promote/\",\"docs/\",\"chore/\"]'",
+            "permanent_branches: '["build","gh-pages"]'",
             text,
         )
         self.assertIn("integration_workflow: scpf.yml", text)
@@ -45,6 +41,8 @@ class MergePolicyWorkflowTests(unittest.TestCase):
             "lane_refs_json:",
             "permanent_refs_json:",
             "temporary_prefixes_json:",
+            "temporary_branch_prefixes:",
+            "github.actor == github.repository_owner",
         ):
             self.assertNotIn(retired, text)
 
