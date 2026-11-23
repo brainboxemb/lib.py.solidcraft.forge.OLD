@@ -35,18 +35,25 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.12.0**.
+Latest actual Forge release: **v0.13.1**.
 
-- annotated tag: `v0.12.0`;
+- annotated tag: `v0.13.1`;
 - exact source:
-  `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
-- published GitHub Release: `v0.12.0`;
+  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- published GitHub Release: `v0.13.1`;
+- central release run: `45262594629`;
 - qualified SolidCraft: `0.45.0`.
 
-The central CAD release flow published and verified this release in run
-`45250563106`. The annotated tag resolves to the exact stable-main source
-above. The earlier failed v0.12.0 attempt did not create a competing tag or
-release.
+The annotated tag resolves to the exact source above and the release workflow
+completed successfully.
+
+v0.13.1 changes release/documentation metadata only relative to v0.13.0. It
+clarifies that v0.12.0 was published before #746/#747/#749/#750 reached stable
+`main`. Those fixes first became available in the published v0.13.0 release.
+v0.13.1 is the recommended patch level because that boundary is stated
+explicitly in its release notes.
+
+Do not move or rewrite v0.12.0, v0.13.0 or v0.13.1.
 
 ## Consumer workflow
 
@@ -115,15 +122,7 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-Forge **v0.13.1** is the active patch-release checkpoint under #789.
+No new Forge release is scheduled immediately after v0.13.1.
 
-This patch changes release/documentation metadata only. After the preparation
-PR reaches `main`, require the exact resulting main branch build green, then
-publish only with:
-
-```text
-/release v0.13.1 <exact-40-character-main-sha>
-```
-
-Verify that the annotated tag and GitHub Release resolve to the exact prepared
-main SHA. Do not move or rewrite v0.12.0 or v0.13.0.
+Resume the active CAD/documentation work and choose the next version only when
+the next coherent stable-main batch is ready.
