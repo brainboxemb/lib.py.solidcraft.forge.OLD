@@ -7,7 +7,6 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,14 +21,10 @@ def load_script(name: str, relative: str):
 
 
 forge_example = load_script("forge_example_ci_test", "scripts/forge_example.py")
-verification_package = load_script(
-    "verification_package_ci_test",
-    "scripts/verification_package.py",
-)
 
 
 class CiDependencyTests(unittest.TestCase):
-    def test_dependency_wheel_supports_separate_package_patterns(self):
+    def test_dependency_wheel_supports_owner_package_dependency(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             forge = root / "forge"
@@ -40,13 +35,15 @@ class CiDependencyTests(unittest.TestCase):
             verification_wheel = (
                 verification
                 / "dist"
-                / "brainboxemb_cad_verification_lib-0.12.0-py3-none-any.whl"
+                / "brainboxemb_cad_verification_lib-0.16.0-py3-none-any.whl"
             )
             forge_wheel.write_bytes(b"forge")
             verification_wheel.write_bytes(b"verification")
             dependencies = {
                 "forge-package": {"output_root": str(forge)},
-                "cad-verification-package": {"output_root": str(verification)},
+                "cad-ci-verification-package": {
+                    "output_root": str(verification)
+                },
             }
             with patch.dict(
                 os.environ,
@@ -59,28 +56,26 @@ class CiDependencyTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     forge_example.dependency_wheel(
-                        "cad-verification-package",
+                        "cad-ci-verification-package",
                         "brainboxemb_cad_verification_lib-*.whl",
                     ),
                     verification_wheel.resolve(),
                 )
 
-    def test_verification_wheel_version_reads_metadata(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            wheel = Path(tmp) / (
-                "brainboxemb_cad_verification_lib-0.12.0-py3-none-any.whl"
-            )
-            with zipfile.ZipFile(wheel, "w") as archive:
-                archive.writestr(
-                    "brainboxemb_cad_verification_lib-0.12.0.dist-info/METADATA",
-                    "Metadata-Version: 2.1\n"
-                    "Name: brainboxemb-cad-verification-lib\n"
-                    "Version: 0.12.0\n",
-                )
-            self.assertEqual(
-                verification_package.wheel_version(wheel),
-                "0.12.0",
-            )
+    def test_verification_package_is_root_pinned_and_not_forge_built(self):
+        config = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
+        self.assertIn("verification:", config)
+        self.assertIn(
+            "repository: brainboxemb/lib.py.cad.verification",
+            config,
+        )
+        self.assertIn('version: "0.16.0"', config)
+        self.assertIn(
+            "commit: c7c145b7be0c602724e8cca874ef29990baaad1e",
+            config,
+        )
+        self.assertFalse((ROOT / "scripts" / "verification_package.py").exists())
+        self.assertFalse((ROOT / "ci" / "cad-verification-package").exists())
 
 
 if __name__ == "__main__":
