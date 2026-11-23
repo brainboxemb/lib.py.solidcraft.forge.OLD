@@ -155,9 +155,9 @@ def _base_rectangle_center(shape):
             )
     if shape.kind == "sketch_base_extrusion":
         (
-        _, plane, origin, plane_offset, profiles, _, direction,
-        _operations, _profile_picks, _exact_regions, rotation,
-    ) = shape.data
+            _, plane, origin, plane_offset, profiles, _, direction,
+            _operations, _profile_picks, _exact_regions, rotation,
+        ) = shape.data
         if (
             plane != "XY"
             or origin is not None
