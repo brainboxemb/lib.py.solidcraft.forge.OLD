@@ -8,6 +8,13 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep symbolic primitive placement coordinates typed until anchor arithmetic is
+  complete, fixing #797 where a parametrically placed Cylinder could mix a
+  native string expression with a Forge `Expression` during CSG lowering.
+
+
 ## [0.13.1] - 2026-11-23
 
 ### Release clarification
