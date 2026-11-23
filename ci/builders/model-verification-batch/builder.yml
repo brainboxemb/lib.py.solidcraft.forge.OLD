@@ -1,5 +1,6 @@
 schema: 1
 description: Produce active native SolidCraft model verification in one shared runtime batch.
+verification_package: true
 
 steps:
   - id: verify_models

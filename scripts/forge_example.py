@@ -73,6 +73,20 @@ def dependency_wheel(
     return one_built_wheel(Path(output_root) / "dist", pattern)
 
 
+def verification_wheel() -> Path:
+    """Return the exact verification wheel exposed by CAD-CI."""
+
+    raw = os.environ.get("CAD_CI_VERIFICATION_WHEEL", "").strip()
+    if not raw:
+        raise RuntimeError("CAD_CI_VERIFICATION_WHEEL is required")
+    path = Path(raw).resolve()
+    if not path.is_file() or path.suffix != ".whl":
+        raise RuntimeError(
+            f"CAD_CI_VERIFICATION_WHEEL must name a wheel: {path}"
+        )
+    return path
+
+
 def python_environment(package: Path) -> dict[str, str]:
     """Return an environment that imports Forge from the built wheel."""
 

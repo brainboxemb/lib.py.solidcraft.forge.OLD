@@ -13,7 +13,7 @@ import time
 
 import yaml
 
-from forge_example import dependency_wheel
+from forge_example import verification_wheel
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -246,10 +246,7 @@ def run_batch() -> int:
     if items.exists():
         shutil.rmtree(items)
 
-    wheel = dependency_wheel(
-        "cad-ci-verification-package",
-        "brainboxemb_cad_verification_lib-*.whl",
-    )
+    verification_package = verification_wheel()
     image = runtime_image()
     slugs = processed_reference_slugs()
 
@@ -274,13 +271,13 @@ def run_batch() -> int:
             "-v",
             f"{output}:/output",
             "-v",
-            f"{wheel.parent}:/cad-verification:ro",
+            f"{verification_package.parent}:/cad-verification:ro",
             "-w",
             "/workspace",
             "-e",
             (
                 "PYTHONPATH="
-                f"/cad-verification/{wheel.name}:"
+                f"/cad-verification/{verification_package.name}:"
                 "/workspace/scpf:/workspace"
             ),
             image,
