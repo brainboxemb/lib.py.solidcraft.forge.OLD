@@ -1,4 +1,4 @@
-"""Guard the Forge package/test/release CAD-CI dependency graph."""
+"""Guard Forge package, builder and verification dependency ownership."""
 
 from pathlib import Path
 import re
@@ -10,6 +10,7 @@ PACKAGE = ROOT / "scpf" / "ci.yml"
 TESTS = ROOT / "ci" / "forge-tests" / "ci.yml"
 RELEASE = ROOT / "ci" / "forge-release" / "ci.yml"
 EXAMPLES = ROOT / "examples"
+BUILDERS = ROOT / "ci" / "builders"
 
 
 def needs(text: str) -> set[str]:
@@ -29,35 +30,46 @@ def needs(text: str) -> set[str]:
 
 
 class CiPackageDependencyContractTests(unittest.TestCase):
-    """Keep package consumers independent from tests/release verification."""
+    """Keep item config declarative and executable behavior builder-owned."""
 
-    def test_package_item_only_builds_the_wheel(self):
-        text = PACKAGE.read_text(encoding="utf-8")
-        self.assertIn("id: forge-package", text)
-        self.assertIn("- id: tool_build", text)
-        self.assertNotIn("- id: tool_test", text)
-        self.assertNotIn("- id: tool_verify", text)
-        self.assertIn("outputs: [dist]", text)
+    def test_package_item_selects_only_package_builder(self):
+        item = PACKAGE.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "forge-package" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("id: forge-package", item)
+        self.assertIn("builder: forge-package", item)
+        self.assertNotIn("steps:", item)
+        self.assertIn("- id: tool_build", builder)
+        self.assertIn("outputs: [dist]", builder)
+        self.assertNotIn("- id: tool_test", builder)
+        self.assertNotIn("- id: tool_verify", builder)
 
     def test_unit_tests_depend_only_on_package(self):
-        text = TESTS.read_text(encoding="utf-8")
-        self.assertIn("id: forge-tests", text)
-        self.assertEqual(needs(text), {"forge-package"})
-        self.assertIn("- id: tool_test", text)
-        self.assertIn("- scpf/scpf/**", text)
-        self.assertNotIn("tool_build", text)
-        self.assertNotIn("tool_verify", text)
+        item = TESTS.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "forge-tests" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertEqual(needs(item), {"forge-package"})
+        self.assertIn("builder: forge-tests", item)
+        self.assertNotIn("steps:", item)
+        self.assertIn("- id: tool_test", builder)
+        self.assertNotIn("tool_build", builder)
+        self.assertNotIn("tool_verify", builder)
 
     def test_release_verification_depends_only_on_package(self):
-        text = RELEASE.read_text(encoding="utf-8")
-        self.assertIn("id: forge-release", text)
-        self.assertEqual(needs(text), {"forge-package"})
-        self.assertIn("- id: tool_verify", text)
-        self.assertIn("- scpf/scpf/**", text)
-        self.assertNotIn("tool_build", text)
-        self.assertNotIn("tool_test", text)
+        item = RELEASE.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "forge-release" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertEqual(needs(item), {"forge-package"})
+        self.assertIn("builder: forge-release", item)
+        self.assertNotIn("steps:", item)
+        self.assertIn("- id: tool_verify", builder)
+        self.assertNotIn("tool_build", builder)
+        self.assertNotIn("tool_test", builder)
 
-    def test_every_model_depends_only_on_package(self):
+    def test_every_model_uses_one_shared_declarative_template(self):
         expected = {
             path.parent.name
             for path in EXAMPLES.glob("*/model.yml")
@@ -69,32 +81,20 @@ class CiPackageDependencyContractTests(unittest.TestCase):
         self.assertEqual(set(configs), expected)
 
         root_ci = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
-        model_template = (
-            "  forge-model-declarative:\n"
-            "    kind: model\n"
-            "    needs:\n"
-            "      - forge-package\n"
-            "      - model-verification-batch\n"
-        )
-        self.assertIn(model_template, root_ci)
+        self.assertIn("  forge-model-declarative:", root_ci)
+        self.assertIn("    builder: forge-model", root_ci)
+        self.assertIn("      - forge-package", root_ci)
+        self.assertIn("      - model-verification-batch", root_ci)
 
         for slug, path in sorted(configs.items()):
             with self.subTest(slug=slug, path=path):
                 text = path.read_text(encoding="utf-8")
-                if "template: forge-model-declarative" in text:
-                    self.assertEqual(needs(text), set())
-                elif "scripts/model_verify_declarative.py" in text:
-                    self.assertEqual(
-                        needs(text),
-                        {"forge-package", "model-verification-batch"},
-                    )
-                else:
-                    self.assertEqual(needs(text), {"forge-package"})
-                self.assertNotIn("forge-tool", text)
-                self.assertNotIn("forge-tests", text)
-                self.assertNotIn("forge-release", text)
+                self.assertIn("template: forge-model-declarative", text)
+                self.assertNotIn("steps:", text)
+                self.assertNotIn("run:", text)
+                self.assertNotIn("copy:", text)
 
-    def test_verification_batches_own_expensive_dependencies(self):
+    def test_verification_batches_consume_owner_package(self):
         model_batch = (
             ROOT / "ci" / "model-verification-batch" / "ci.yml"
         ).read_text(encoding="utf-8")
@@ -104,19 +104,25 @@ class CiPackageDependencyContractTests(unittest.TestCase):
 
         self.assertEqual(
             needs(model_batch),
-            {"forge-package", "cad-verification-package"},
+            {"forge-package", "cad-ci-verification-package"},
         )
         self.assertEqual(
             needs(reference_batch),
-            {"cad-verification-package"},
+            {"cad-ci-verification-package"},
         )
+        self.assertFalse((ROOT / "ci" / "cad-verification-package").exists())
 
-    def test_root_manifest_discovers_split_checks(self):
+    def test_root_manifest_owns_builders_and_generic_verification(self):
         text = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
         self.assertIn("  - scpf\n", text)
         self.assertIn("  - ci/*\n", text)
+        self.assertIn("builders:", text)
+        self.assertIn("forge-model: ci/builders/forge-model", text)
+        self.assertIn("verification:", text)
+        self.assertIn("runtimes:", text)
+        self.assertIn('reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"', text)
 
-    def test_consumers_resolve_dependency_wheel(self):
+    def test_consumers_resolve_dependency_wheels_without_packaging_them(self):
         tool_ci = (ROOT / "scripts" / "tool_ci.py").read_text(encoding="utf-8")
         tool_verify = (
             ROOT / "scripts" / "tool_verify.py"
@@ -128,8 +134,7 @@ class CiPackageDependencyContractTests(unittest.TestCase):
         self.assertIn('dependency_wheel("forge-package")', tool_ci)
         self.assertIn('dependency_wheel("forge-package")', tool_verify)
         self.assertIn("def dependency_wheel(", forge_example)
-        self.assertIn('name: str = "forge-package"', forge_example)
-        self.assertIn('pattern: str = "scpf-*.whl"', forge_example)
+        self.assertFalse((ROOT / "scripts" / "verification_package.py").exists())
 
 
 if __name__ == "__main__":
