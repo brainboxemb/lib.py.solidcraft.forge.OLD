@@ -205,6 +205,37 @@ class GeometryPrimitives(unittest.TestCase):
             ["depth", "front_depth"],
         )
 
+    def test_runner_keeps_hub75_style_symbolic_cylinder_join_typed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            script = Path(directory) / "model.py"
+            script.write_text(
+                "class Panel:\n"
+                "    depth = 80.0\n"
+                "    front_depth = 10.0\n"
+                "    def build(self):\n"
+                "        body = Box(120, 80, 4, anchor=Anchor.BOTTOM)\n"
+                "        tube = Cylinder(\n"
+                "            d=8,\n"
+                "            h=self.depth + 5 - self.front_depth,\n"
+                "            anchor=Anchor.BOTTOM,\n"
+                "        ).at(20, 15, self.front_depth, anchor=Anchor.BOTTOM)\n"
+                "        return body + tube\n"
+                "Panel()\n",
+                encoding="utf-8",
+            )
+            commands = run_script(script)["commands"]
+
+        cylinder = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cylinder"
+        )
+        self.assertEqual(cylinder["operation"], "join")
+        self.assertEqual(cylinder["base"], [20, 15, "front_depth"])
+        self.assertEqual(
+            cylinder["height"],
+            "(depth + 5 mm) - (front_depth)",
+        )
+
     def test_symbolic_box_and_cone_placement_anchor_arithmetic_stays_symbolic(self):
         from scpf import BOTTOM, Box, Cone, Parameter
         from scpf.compiler import compile_model
