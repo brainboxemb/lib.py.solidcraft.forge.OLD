@@ -1,94 +1,53 @@
-# Forge repository scripts
+# Forge scripts
 
-This directory contains **Forge-owned repository helpers** used by package
-testing, model/reference verification, site evidence, governance and release
-publication.
+This directory contains Forge-owned integration entry points. It is **not** a
+second CAD-CI or verification framework.
 
-These scripts are not the generic CAD-CI engine. Generic selection, SCons
-execution, caching, durable build storage and Pages publication belong to
-`lib.py.cad.ci` / `tool.cad.ci`.
+Generic CAD-CI planning, execution, builders, durable scopes and publication
+belong to `lib.py.cad.ci`. Released GitHub workflow/governance integration
+belongs to `tool.cad.ci`. Generic verification mechanics belong to
+`lib.py.cad.verification`. Runtime/container composition belongs to
+`docker.cad.solidcraft`.
 
-This README documents the current scripts and their callers. It does not imply
-that every script is a stable public API.
+Every retained script below must have a concrete Forge-owned responsibility and
+an active caller.
 
-## Package and example mechanics
+| Script | Caller | Classification | Status |
+| --- | --- | --- | --- |
+| `build_diagrams.py` | `reference_verification_batch.py`; `ci/reference-verification-batch` | Forge verification-diagram producer using the selected reference runtime | keep pending #570 |
+| `capture_solidcraft_reference.py` | `verify_solidcraft_reference_runtime.py`; maintenance capture | Forge checked command-registry normalization/validation | keep |
+| `forge_example.py` | model/package verification scripts | shared Forge package/example helper module; not a standalone CI entry point | keep |
+| `model_contract_test.py` | `cad-ci.yml` model template | thin Forge adapter for model-owned command-contract tests | keep |
+| `model_verification_batch.py` | `ci/model-verification-batch/ci.yml` | Forge active-model batch producer; process-driving portions remain under #713 review | reduce |
+| `model_verify_declarative.py` | model verification batch/tests | Forge native-model producer plus verification-library adapter; generic verification mechanics must stay in the released library | reduce |
+| `model_visual.py` | declarative model verification/tests | Forge SolidCraft camera/snapshot adapter; generic image/regression mechanics stay in verification library | keep/review |
+| `qualification_summary.py` | `site/build.py`; tests | Forge public five-check presentation mapping over already-produced evidence | keep |
+| `reference_verification_batch.py` | `ci/reference-verification-batch/ci.yml` | Forge reference-catalog batch producer; generic runtime/verification mechanics remain owner-layer responsibilities | reduce |
+| `tool_ci.py` | Forge package/test CI items | Forge package build/test adapter | keep |
+| `tool_verify.py` | `ci/forge-release/ci.yml` | Forge release-qualification adapter for representative examples | keep |
+| `verification_package.py` | `ci/cad-verification-package/ci.yml` | compatibility transport for the exact verification wheel | **temporary; remove when Forge adopts released CAD-CI verification-package injection** |
+| `verify_solidcraft_reference_runtime.py` | `ci/solidcraft-reference/ci.yml` | Forge check of the versioned command snapshot against the selected immutable runtime | keep |
+| `release/validate_release.py` | release workflow/publisher/tests | Forge-specific release gate | keep |
+| `release/publish_release.py` | `.github/workflows/release.yml` | Forge-specific release publication | keep |
+| `release/test_validate_release.py` | `ci/release-policy/ci.yml` | release-policy test entry point | keep |
+| `release/test_publish_release.py` | `ci/release-policy/ci.yml` | release-publication test entry point | keep |
 
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `forge_example.py` | Shared mechanics for locating the exact built Forge wheel, running example contract tests, compiling Forge models and writing command documents. It deliberately does not decide CI scope. | Imported by Forge package/model/reference verification scripts. |
-| `tool_ci.py` | Build/test adapter for the Forge Python package and its repository test suite. | `forge-tests` CAD-CI item; package-related tests. |
-| `tool_verify.py` | Release-level verification of the built Forge wheel against a fixed representative example set and expected rejection set. | `forge-release` CAD-CI item. |
-| `model_contract_test.py` | Run one model's Forge command-contract tests against the exact built wheel. | Model item template in root `cad-ci.yml`. |
+## Removed legacy launchers
 
-## Native model verification
+- `model_verify.py` — superseded by the declarative shared batch; no active
+  caller remains and current CI tests explicitly require it not to be wired.
+- `verification_evidence.py` — superseded by the shared reference batch; no
+  active caller remains.
 
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `model_verification_batch.py` | Run active declarative Forge model verification as one shared SolidCraft-runtime batch and write per-model results. | `model-verification-batch` CAD-CI item. |
-| `model_verify_declarative.py` | Produce/replay one Forge-native model and delegate generic checks/evidence to released `lib.py.cad.verification`. | Used by the model verification batch. |
-| `model_visual.py` | Forge-specific visual policy loading, SolidCraft camera conversion and snapshot invocation. Generic image comparison remains in `lib.py.cad.verification`. | Used by declarative model verification. |
-| `model_verify.py` | Older single-model SolidCraft verification launcher. | Compatibility/support script; not the current shared-batch entrypoint. Review current call sites before modifying or removing it. |
-| `qualification_summary.py` | Compose already-produced verification evidence into Forge's public qualification semantics; it does not execute CAD. | Forge test/site evidence paths; semantic composition comes from released verification library. |
+## Rules for new work
 
-## Independent reference verification
-
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `reference_verification_batch.py` | Run all active independent reference implementations in one shared reference runtime and write per-reference evidence. | `reference-verification-batch` CAD-CI item. |
-| `verification_evidence.py` | Single-reference evidence launcher for the released reference runtime. | Compatibility/support helper; the current repository-level entrypoint is the shared reference batch. Review call sites before modifying/removing it. |
-| `build_diagrams.py` | Render the versioned Forge verification-diagram sources. | Shared reference batch; diagram sources live under `verification/diagrams/sources/`. |
-
-## Verification dependency packaging
-
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `verification_package.py` | Fetch/build/check the exact released `lib.py.cad.verification` wheel and provenance used by Forge CI. | `cad-verification-package` CAD-CI item; configuration in `ci/cad-verification-package/package.json`. |
-
-## SolidCraft runtime reference
-
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `capture_solidcraft_reference.py` | Capture and validate a canonical versioned SolidCraft command-registry snapshot. | Maintainer/reference-update workflow; snapshots under `docs/reference/solidcraft/`. |
-| `verify_solidcraft_reference_runtime.py` | Compare a checked command-registry snapshot with the exact immutable SolidCraft runtime. | `solidcraft-reference` CAD-CI item. |
-
-## Repository governance
-
-Forge owns no merge-policy implementation script. The repository's thin
-`.github/workflows/merge-policy.yml` wrapper consumes the exact released
-tool.cad.ci reusable merge-policy workflow. Merge-method decisions, current-head
-checks, branch lifecycle and allow-listed post-merge cleanup therefore remain in
-the shared tool owner rather than in this scripts directory.
-
-## Release publication
-
-The release helpers live in `scripts/release/` because they form one contract.
-
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `release/validate_release.py` | Validate one exact Forge release candidate against source, changelog and durable build/Page evidence. | `.github/workflows/release.yml`, release-policy tests, and publisher. |
-| `release/publish_release.py` | Publish an already-validated Forge release/tag from exact durable evidence. | `.github/workflows/release.yml`. |
-| `release/test_validate_release.py` | Regression tests for release-candidate validation. | `release-policy` CAD-CI item. |
-| `release/test_publish_release.py` | Regression tests for publication behavior. | `release-policy` CAD-CI item. |
-
-The authoritative release contract is [`docs/release.md`](../docs/release.md).
-
-## Ownership rule
-
-When editing a script, first identify which category above owns the behavior:
-
-- Forge API/compiler/model behavior stays in Forge;
-- generic CAD-CI behavior belongs in `lib.py.cad.ci` / `tool.cad.ci`;
-- generic model/reference verification belongs in `lib.py.cad.verification`;
-- immutable runtime/dependency packaging belongs in its runtime owner repository.
-
-Do not add a Forge-local workaround for behavior owned by one of those generic
-repositories.
-
-## Related documentation
-
-- [Repository-level CI items](../ci/README.md)
-- [Root CAD-CI configuration](../cad-ci.yml)
-- [Repository plan](../docs/plan.md)
-- [Repository requirements](../docs/requirements.md)
-- [Repository design](../docs/design.md)
-- [Examples](../examples/README.md)
+1. Do not add a script merely to bridge two Python APIs that can call each other
+   directly.
+2. Do not put generic CAD-CI selection, scheduling, caching or publication
+   behavior here.
+3. Do not put generic verification algorithms or result semantics here.
+4. Prefer a package module for reusable Forge code and a single thin script
+   only when CAD-CI, GitHub Actions or the release process needs a process
+   entry point.
+5. Update this file in the same change whenever a retained script is added,
+   removed or changes owner/caller.

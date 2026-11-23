@@ -121,13 +121,18 @@ them with temporary promotion/synchronization branches. Because `main` is now
 moving for #743/#740, do not repeatedly re-neutralize dev-cad shared documents
 until the stable CI cut-over is complete.
 
-### WS3 — deferred infrastructure/documentation cleanup
+### WS3 — reduce Forge script layers
 
+- #713 scripts ownership audit — **now** in the CI lane. First slice removes
+  dead launchers, documents every retained script/caller and makes the owner
+  boundary explicit. Follow-up slices move generic verification/process
+  mechanics behind released owner APIs instead of preserving wrapper layers.
+- Generic CAD-CI executable ownership is being restored in
+  `lib.py.cad.ci` #136; shared-workflow ownership is being narrowed in
+  `tool.cad.ci` #164. Forge must not compensate with local orchestration.
 - #739 released `tool.py.lib.ci` release-template adoption — **next after
   #740**, separate from CAD-CI migration.
 - #737 historical changelog normalization — **later / docs-only**.
-- #713 scripts ownership audit — **later**; reassess after the CI/release
-  checkpoint.
 - #659 build/verification/results terminology — **later**.
 - #570 remove CADCraft from Verification diagrams — **later**.
 - #335 build123d sheet-metal reference semantics — **later**.
@@ -159,7 +164,7 @@ until the stable CI cut-over is complete.
 | #716 #714 promote dev-cad post-v0.11 batch | repository/main | **blocked on #717** | Keep exact dev-cad -> main PR; rerun after history sync/restoration. |
 | #714 Release Forge 0.12.0 | repository | **blocked on #716** | Prepare/publish only after promoted main + durable evidence are green. |
 | #737 Historical changelog alignment | docs | **later** | Do not mix retrospective changelog rewrite into release/CI cut-over. |
-| #713 Audit/reduce Forge scripts | repository | **later** | Reassess after #740/#714; remove only truly generic duplicates. |
+| #713 Audit/reduce Forge scripts | dev-ci | **now** | Remove dead launchers, add complete scripts ownership/caller inventory, then reduce generic verification/process-driving layers behind released owner APIs. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Schedule separately after architecture/release work stabilizes. |
 | #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Preserve diagram responsibility while replacing CADCraft sources. |
 | #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Split focused work only when a current model requires it. |

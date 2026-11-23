@@ -23,9 +23,11 @@ This repository also owns how Forge consumes the released generic CAD-CI,
 verification and SolidCraft runtime layers, plus its durable build/Page scopes
 and Forge release integration.
 
-Generic CI behavior itself belongs in `lib.py.cad.ci` / `tool.cad.ci`; generic
-verification behavior belongs in `lib.py.cad.verification`; runtime packaging
-belongs in `docker.cad.solidcraft`. Forge integrates those released owner-layer
+Generic CAD-CI behavior and the installed `cad-ci` executable belong in
+`lib.py.cad.ci`. `tool.cad.ci` owns the released GitHub workflow/governance
+adapters around that tool. Generic verification behavior belongs in
+`lib.py.cad.verification`; runtime packaging belongs in
+`docker.cad.solidcraft`. Forge integrates those released owner-layer
 capabilities but must not reimplement them locally.
 
 ## Current CI files
@@ -49,7 +51,12 @@ The active CI structure is defined by:
 - `scripts/release/validate_release.py`
 - `scripts/release/publish_release.py`
 
-The generic planner/executor is `tool.cad.ci`.
+The generic CAD-CI planner/executor and installed `cad-ci` command are owned
+by `lib.py.cad.ci`; `tool.cad.ci` is the shared GitHub workflow/governance
+adapter. Every retained top-level helper under `scripts/` must be classified in
+`scripts/README.md` with its caller and Forge-owned reason to exist. Do not add
+a new top-level launcher when an existing Forge module, owner-library API or
+CAD-CI builder contract can carry the behavior.
 
 Forge model items declare item-level `process` state in
 `examples/<model>/ci.yml`. The reconciled catalog contains 36 active model-verification items: the final

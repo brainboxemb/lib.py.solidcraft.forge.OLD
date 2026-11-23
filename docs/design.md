@@ -25,6 +25,40 @@ Promotion pull requests from `dev-cad` or `dev-ci` to `main` request a
 complete processed run. The GitHub workflow does not understand runtime
 packaging or selected item kinds.
 
+## Script ownership boundary
+
+Top-level `scripts/*.py` files are integration entry points, not a second
+framework. The complete retained set and its callers are documented in
+`scripts/README.md`.
+
+The ownership rule is:
+
+```text
+Forge-specific package/model/reference producer or presentation policy
+    -> may remain as a documented Forge adapter
+
+generic CAD-CI planning/execution/publication
+    -> lib.py.cad.ci
+
+GitHub workflow/governance integration
+    -> tool.cad.ci
+
+generic verification mechanics
+    -> lib.py.cad.verification
+
+runtime/package composition
+    -> docker.cad.solidcraft
+```
+
+A script that has no active caller is removed rather than kept as a historical
+launcher. A script that mainly process-drives generic verification is a
+migration candidate under #713, even when it remains temporarily required by
+the current Forge batch. `scripts/verification_package.py` is specifically a
+temporary compatibility adapter until the released CAD-CI
+`verification_package` builder capability is adopted by Forge; it must not
+become a permanent package transport layer.
+
+
 ## Runtime lifecycle
 
 Runtime construction and release are external to Forge:
