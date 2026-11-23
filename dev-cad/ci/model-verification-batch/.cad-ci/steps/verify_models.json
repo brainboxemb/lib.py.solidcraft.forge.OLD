@@ -8,6 +8,7 @@
     "assembly-decorator": "34de6d74631470bc8e5dedc881483bbe41c59cfe7a7ae93a968a8955086a36a6",
     "assembly-owned-anchor": "05fd5ce9bdc6ed0219c33efe6252d7d3a537990797b3dd266e9303f6554e0dd5",
     "attach-angle": "28cec723b50d29f9576787b55b06d77c9b6c1dbaf0f6939308f5f62f2038725b",
+    "attached-through-all": "1001b131259d6650d1d2a3e81fb64aa62da3496d0f40f764c27469c50b7bcbc9",
     "bracket": "3d51b9641dc89c6c48fe3eac509c538eb017c44123cd360c3343a25438c11122",
     "circle-negative-extrude": "17c7f55e185b7ac9d017c5c014f1a1a6c7b7d38bbd0bc5fe94f740440dfcba0a",
     "circular-feature-pattern": "bb9d3f38a34001f5b6d83613d0116eefe2b7b36dd670dcfa00731ac547e0cb69",
@@ -51,6 +52,7 @@
     "assembly-decorator",
     "assembly-owned-anchor",
     "attach-angle",
+    "attached-through-all",
     "bracket",
     "circle-negative-extrude",
     "circular-feature-pattern",
@@ -87,13 +89,13 @@
     "top-sketch-after-chamfer",
     "xz-anchor"
   ],
-  "bundle_sha256": "f9653eb050d788d0ba73abcc0e6810353878a3ac6dba5547b4226dbbd56b4144",
-  "duration_seconds": 71.254,
+  "bundle_sha256": "56fce6272e61fa4fefbfebc19aaacd284837347ca35adb736c72b53c0651abff",
+  "duration_seconds": 54.049,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-23T18:09:57.421Z",
+  "finished_at": "2026-11-23T18:30:34.016Z",
   "item": "model-verification-batch",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -101,15 +103,15 @@
     "items": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "2afd4d21bd0809531116b77b8f14ba88451d5cc6a3f3dffb9a20af5e812740d9"
+      "sha256": "f322a7bea81ca6ce70810a8b74e39a59873a8c6a959e87406006471eff6aaf97"
     }
   },
-  "run_finished_at": "2026-11-23T18:11:03.921Z",
-  "run_started_at": "2026-11-23T18:08:34.691Z",
+  "run_finished_at": "2026-11-23T18:31:13.766Z",
+  "run_started_at": "2026-11-23T18:29:31.636Z",
   "schema": 6,
-  "started_at": "2026-11-23T18:08:46.173Z",
+  "started_at": "2026-11-23T18:29:39.970Z",
   "status": "pass",
   "step": "verify_models",
-  "target_spec_digest": "47b103402533d8c386add41a17f51445d8e5afdb00aa71e6f6e038cf841bd489",
+  "target_spec_digest": "91eddc1ecd8a46274b34c79d537f507e46bab2f3b1671ff9e8c6f6ad88c3eb2b",
   "timeout_seconds": null
 }
