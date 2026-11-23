@@ -488,18 +488,19 @@ lane-to-stable class; synchronization is the stable-to-lane class. Ordinary
 short-lived PRs remain squash merges.
 
 Forge does not implement merge-method or branch-lifecycle mechanics locally.
-`.github/workflows/merge-policy.yml` is a thin owner-only `/merge` trigger
-that calls exact released `tool.cad.ci 0.20.1` at
-`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, externally accepted in
-`tool.cad.ci.test` run `45031453651`.
+`.github/workflows/merge-policy.yml` is a thin owner-only trigger for
+`/merge` and reviewed `/merge-resolved` commands. It calls exact released
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`, externally accepted through
+`tool.cad.ci.test` #223.
 
 Forge supplies only consumer configuration:
 
 ```text
-stable_ref = main
-lane_refs = [dev-cad, dev-ci]
-permanent_refs = [build, gh-pages]
-temporary_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
+stable_branch = main
+development_branches = [dev-cad, dev-ci]
+permanent_branches = [build, gh-pages]
+temporary_branch_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
 integration_workflow = scpf.yml
 ```
 
@@ -507,11 +508,12 @@ The released workflow owns current-head/check/status validation, merge-class
 selection, GitHub merge execution, allow-listed temporary-head cleanup and
 optional integration dispatch.
 
-For stable-to-lane synchronization the stable branch is also the PR head. The
-released 0.20.1 workflow therefore removes same-head `issue_comment`
+For stable-to-development synchronization the stable branch is also the PR
+head. The released v0.31 workflow removes same-head `issue_comment`
 command-workflow checks from the validation set by Actions-run identity before
-latest-check evaluation. This prevents the merge command from validating
-itself while preserving normal PR-check and commit-status gates.
+latest-check evaluation. It also owns reviewed conflict recovery through
+`/merge-resolved`. Forge does not synthesize merge trees or mutate permanent
+refs outside that released policy.
 
 For `lane -> main` promotion it preserves/advances the lane at the resulting
 stable merge commit. For `main -> lane` synchronization it performs no
