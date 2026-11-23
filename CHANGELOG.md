@@ -34,6 +34,12 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Added
 
+- Added native `Shape.hem(...)` sheet-metal history on existing sheet
+  bodies. Hem length and optional gap remain parameterized in mm, the active
+  sheet rule continues to own material/bend properties, and the focused
+  regression fixture verifies saved-design mutation plus recoverable native
+  flat-pattern history (#773).
+
 - Standalone `Sketch(...).extrude(...)` can now be used directly as a Boolean
   operand with `+`, `-` and `&`. Forge keeps the independent Sketch on its
   authored plane and lowers the extrusion directly to native SolidCraft
