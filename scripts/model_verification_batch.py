@@ -17,6 +17,7 @@ import yaml
 from forge_example import (
     compile_commands,
     dependency_wheel,
+    verification_wheel,
     write_commands,
 )
 
@@ -179,10 +180,7 @@ def run_host_batch() -> int:
         return 0
 
     forge_wheel = dependency_wheel("forge-package", "scpf-*.whl")
-    verification_wheel = dependency_wheel(
-        "cad-verification-package",
-        "brainboxemb_cad_verification_lib-*.whl",
-    )
+    verification_package = verification_wheel()
     batch_started = time.perf_counter()
     compile_started = time.perf_counter()
     manifest = write_manifest(batch_root, forge_wheel, slugs)
@@ -203,7 +201,7 @@ def run_host_batch() -> int:
 
     container_forge_wheel = f"/forge-package/{forge_wheel.name}"
     container_verification_wheel = (
-        f"/cad-verification/{verification_wheel.name}"
+        f"/cad-verification/{verification_package.name}"
     )
     container_started = time.perf_counter()
     completed = subprocess.run(
@@ -226,7 +224,7 @@ def run_host_batch() -> int:
             "-v",
             f"{forge_wheel.parent}:/forge-package:ro",
             "-v",
-            f"{verification_wheel.parent}:/cad-verification:ro",
+            f"{verification_package.parent}:/cad-verification:ro",
             "-w",
             "/workspace",
             image,

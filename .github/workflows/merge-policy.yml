@@ -1,3 +1,10 @@
+# template: tool.cad.ci/merge-policy
+# template-version: 4
+# tool-release: v0.35.0
+#
+# Copied from the released tool.cad.ci consumer template.
+# Forge changes only the explicitly repository-owned policy below.
+
 name: Merge policy
 
 on:
@@ -12,8 +19,7 @@ jobs:
     if: >-
       github.event.issue.pull_request &&
       (github.event.comment.body == '/merge' ||
-       startsWith(github.event.comment.body, '/merge-resolved')) &&
-      github.actor == github.repository_owner
+       startsWith(github.event.comment.body, '/merge-resolved'))
     permissions:
       actions: write
       contents: write
@@ -21,12 +27,13 @@ jobs:
       issues: write
       checks: read
       statuses: read
-    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@27bdf67077ddd485cea95ba199069249c20c2a46
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@v0.35.0
     with:
       command: ${{ github.event.comment.body }}
       pull_request_number: ${{ github.event.issue.number }}
+
+      # Repository policy.
       stable_branch: main
       development_branches: '["dev-cad","dev-ci"]'
       permanent_branches: '["build","gh-pages"]'
-      temporary_branch_prefixes: '["issue/","fix/","feature/","accept/","promote/","docs/","chore/"]'
       integration_workflow: scpf.yml

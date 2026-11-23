@@ -209,13 +209,17 @@ checks live under `ci/forge-tests/ci.yml` and
 `ci/forge-release/ci.yml`; root `cad-ci.yml` discovers those CI items
 explicitly.
 
-The consumer boundary is the generic `CAD_CI_DEPENDENCIES_JSON` mapping.
+The package boundaries use two public CAD-CI contracts:
 
-- `forge-package` exposes the exact Forge wheel;
-- `cad-verification-package` exposes the exact released verification wheel.
+- `forge-package` exposes the exact Forge wheel through
+  `CAD_CI_DEPENDENCIES_JSON`;
+- repository builders declaring `verification_package: true` receive the exact
+  released verification wheel through `CAD_CI_VERIFICATION_WHEEL`.
 
-`forge_example.dependency_wheel(...)` resolves a wheel from the dependency
-item's output root.
+`forge_example.dependency_wheel(...)` resolves normal repository dependency
+wheels. `forge_example.verification_wheel()` resolves only the public
+verification-wheel environment contract; Forge never addresses CAD-CI's
+internal synthesized package item.
 
 Model verification mounts both wheels read-only into `cad-solidcraft` and
 sets `PYTHONPATH` to those wheel paths. Reference verification mounts only the
@@ -320,7 +324,7 @@ Each processed declarative model item exposes Q2 and native verification as
 separate ordered CAD-CI steps:
 
 ```text
-forge-package wheel + cad-verification-package wheel
+forge-package wheel + CAD_CI_VERIFICATION_WHEEL
   -> contract_test
      -> run model-owned examples/<model>/tests against the Forge wheel
   -> model_verify
@@ -1641,3 +1645,119 @@ validation. It does not implement CAD selection itself.
 This cut-over deliberately does not use a reusable workflow job for the durable
 push path: site generation must continue immediately after CAD/build publication
 in the same workspace without artifact transport or a second bootstrap.
+
+## CAD-CI v0.35.0 Forge integration
+
+This design supersedes the historical root-composite-action and Forge-owned
+shared-batch integration sections above.
+
+### Workflow boundary
+
+`.github/workflows/scpf.yml` is a thin caller only:
+
+```text
+PR
+  -> tool.cad.ci reusable-ci@v0.35.0
+     -> released PR policy + one CAD-CI/SCons graph
+
+main/dev-cad/dev-ci push or dispatch
+  -> tool.cad.ci reusable-durable@v0.35.0
+     -> resolve durable scope
+     -> one CAD-CI/SCons graph
+     -> publish complete build scope
+     -> run configured Pages builder
+     -> publish matching Pages root/subtree
+```
+
+Forge supplies only its branch policy, jobs=2 and repository configuration.
+There are no local checkout/bootstrap, PR-file pagination, durable build-store
+or Pages-publisher steps.
+
+### Repository-owned builder boundary
+
+Root `cad-ci.yml` maps Forge-specific builder names to
+`ci/builders/<name>`. Each builder directory owns one `builder.yml` and may
+own helper Python files when needed.
+
+Normal items/templates own only declarative identity/process/kind/needs/watch/
+strategy/builder selection. Moving a command into a builder changes ownership,
+not scheduling: the released library still lowers it into the same SCons graph.
+
+The initial Forge builder set covers the existing Forge-owned responsibilities:
+
+- Forge package build;
+- Forge package tests;
+- Forge release verification;
+- SolidCraft model verification batch/projection while it remains Forge-owned;
+- PythonSCAD/pyBOSL2 reference work that has no generic built-in yet;
+- site-source validation;
+- SolidCraft reference compatibility guard;
+- verification-diagram presentation;
+- post-build Pages rendering.
+
+### Generic built-in reference boundary
+
+For build123d/CadQuery reference items:
+
+```text
+examples/<slug>/<implementation>/model.py
+  -> built-in builder (lib.py.cad.ci)
+  -> one shared reference container
+  -> model.stl
+  -> mesh-geometry adapter (lib.py.cad.verification)
+  -> verification/verification.json
+```
+
+The root verification package pin causes CAD-CI to materialize one exact
+verification wheel. Forge repository builders opt in with
+`verification_package: true` and receive its path through
+`CAD_CI_VERIFICATION_WHEEL`; Forge does not know or address the internal
+package node.
+
+Forge-owned presentation consumes the already accepted durable STL. It may
+produce preview PNG/metadata during the Pages rendering boundary because those
+artifacts communicate the result but do not decide semantic geometry PASS/FAIL.
+The site continues linking STL and verification evidence to the immutable
+generated build commit.
+
+PythonSCAD/pyBOSL2 are intentionally separate until their execution contract is
+promoted into an owner library. Do not disguise those engines as local copies
+of the built-in builder implementation.
+
+### Pages builder
+
+The repository-owned Pages builder runs once after complete durable build
+publication with:
+
+```text
+CAD_CI_COMPLETE_SCOPE
+CAD_CI_BUILD_SCOPE
+CAD_CI_SOURCE_SHA
+CAD_CI_SOURCE_REF
+CAD_CI_BUILD_COMMIT
+CAD_CI_OUTPUT
+```
+
+It invokes `site/build.py` with that exact complete-scope/source/build
+evidence and writes only the configured site directory below
+`CAD_CI_OUTPUT`. CAD-CI owns stable/named Pages placement and branch
+publication.
+
+
+### Staged migration probes
+
+The v0.35.0 lane wrapper supports read-only targeted qualification. During
+#740, the PR call temporarily supplies the same public selector so each branch
+update executes only the current migration gate:
+
+```text
+item: simple-box
+  -> changed_paths: 5 model source paths
+  -> changed_paths: 10 model source paths
+  -> selector removed: normal full catalog gate
+```
+
+No model `ci.yml` participation state changes between these gates. The
+selector is an invocation parameter only. `lib.py.cad.ci` still owns affected
+item selection, dependency closure, direct-dependent batch context and SCons
+execution.

@@ -1,22 +1,22 @@
-"""Run Forge-owned independent reference implementations and verify their STL output."""
+"""Run remaining Forge-owned independent reference implementations.
+
+PythonSCAD and pyBOSL2 execution/presentation remain Forge-owned. Generic mesh
+contract parsing and verification are delegated to lib.py.cad.verification.
+"""
 
 from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 import runpy
-import subprocess
-import sys
-import traceback
 import time
+import traceback
 from typing import Any
 
 from cad_verification import (
-    GeometryContract,
-    SurfaceDistanceProbe,
     VerificationFailure,
+    load_geometry_contract,
     validate_mesh_geometry,
 )
 
@@ -24,41 +24,20 @@ from verification.reference_preview import render_reference_preview
 
 
 ROOT = Path(__file__).resolve().parents[1]
-IMPLEMENTATIONS = ("pythonscad", "pybosl2", "cadquery", "build123d")
+IMPLEMENTATIONS = ("pythonscad", "pybosl2")
 
 
-def load_contract(slug: str) -> GeometryContract:
-    """Load one model-local reference geometry contract."""
+def contract_path(slug: str) -> Path:
+    """Return one required model-local geometry contract."""
 
     path = ROOT / "examples" / slug / "verification" / "reference_geometry.json"
     if not path.is_file():
         raise RuntimeError(f"{slug}: missing local reference contract: {path}")
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("schema") != 1:
-        raise RuntimeError(f"{slug}: unsupported reference contract schema")
-    probes = tuple(
-        SurfaceDistanceProbe(
-            label=row["label"],
-            point=tuple(row["point"]),
-            distance_mm=row["distance_mm"],
-            tolerance_mm=row["tolerance_mm"],
-        )
-        for row in data.get("surface_distance_probes", [])
-    )
-    return GeometryContract(
-        bounds_min=tuple(data["bounds_min"]),
-        bounds_max=tuple(data["bounds_max"]),
-        bounds_tolerance_mm=data["bounds_tolerance_mm"],
-        volume_mm3=data.get("volume_mm3"),
-        volume_tolerance_mm3=data.get("volume_tolerance_mm3"),
-        watertight=data.get("watertight"),
-        bounds_sufficient=data.get("bounds_sufficient", True),
-        surface_distance_probes=probes,
-    )
+    return path
 
 
 def source_path(slug: str, implementation: str) -> Path:
-    """Return one required reference source."""
+    """Return one required Forge-owned reference source."""
 
     path = ROOT / "examples" / slug / implementation / "model.py"
     if not path.is_file():
@@ -77,113 +56,30 @@ def load_reference(path: Path):
     return namespace["model"]
 
 
-def export_build123d(source: Path, target: Path) -> None:
-    """Export one build123d source using its isolated runtime interpreter."""
-
-    python = os.environ.get("BUILD123D_PYTHON", sys.executable)
-    helper = ROOT / "verification" / "build123d_export.py"
-    completed = subprocess.run(
-        [python, str(helper), str(source), str(target)],
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    if completed.returncode:
-        detail = (completed.stderr or completed.stdout).strip()
-        raise RuntimeError(
-            f"build123d export failed with status "
-            f"{completed.returncode}: {detail}"
-        )
-
-
-def export_build123d_batch(
-    slugs: tuple[str, ...],
-    output: Path,
-) -> dict[str, str | None]:
-    """Export all build123d cases in one isolated interpreter/import."""
-
-    python = os.environ.get("BUILD123D_PYTHON", sys.executable)
-    helper = ROOT / "verification" / "build123d_export.py"
-    work = output / ".build123d-batch"
-    work.mkdir(parents=True, exist_ok=True)
-    manifest = work / "manifest.json"
-    result = work / "result.json"
-
-    rows = []
-    for slug in slugs:
-        target = output / slug / "build123d" / "model.stl"
-        target.parent.mkdir(parents=True, exist_ok=True)
-        rows.append(
-            {
-                "slug": slug,
-                "source": str(source_path(slug, "build123d")),
-                "target": str(target),
-            }
-        )
-
-    manifest.write_text(
-        json.dumps({"schema": 1, "cases": rows}, indent=2, sort_keys=True)
-        + "\n",
-        encoding="utf-8",
-    )
-    completed = subprocess.run(
-        [
-            python,
-            str(helper),
-            "--batch",
-            str(manifest),
-            "--result",
-            str(result),
-        ],
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-    )
-    if not result.is_file():
-        detail = (completed.stderr or completed.stdout).strip()
-        raise RuntimeError(
-            "build123d batch did not produce structured results"
-            + (f": {detail}" if detail else "")
-        )
-
-    payload = json.loads(result.read_text(encoding="utf-8"))
-    errors = {
-        row["slug"]: row.get("error")
-        for row in payload.get("cases", [])
-        if row.get("status") != "pass"
-    }
-    return {slug: errors.get(slug) for slug in slugs}
-
-
 def export_reference(
     slug: str,
     implementation: str,
     target: Path,
 ) -> None:
-    """Run one independent implementation and export one STL."""
+    """Run one Forge-owned implementation and export one STL."""
 
+    if implementation not in IMPLEMENTATIONS:
+        raise RuntimeError(
+            f"Forge reference runner does not own implementation: {implementation}"
+        )
     source = source_path(slug, implementation)
     target.parent.mkdir(parents=True, exist_ok=True)
-
-    if implementation == "build123d":
-        export_build123d(source, target)
-    else:
-        model = load_reference(source)
-        export = getattr(model, "export", None)
-        if not callable(export):
-            raise RuntimeError(
-                f"{slug}/{implementation}: model has no export() method"
-            )
-        if implementation == "cadquery":
-            export(str(target), exportType="STL")
-        else:
-            exported = export(str(target))
-            if not target.is_file() and exported is not None:
-                candidate = Path(exported)
-                if candidate.is_file():
-                    target.write_bytes(candidate.read_bytes())
+    model = load_reference(source)
+    export = getattr(model, "export", None)
+    if not callable(export):
+        raise RuntimeError(
+            f"{slug}/{implementation}: model has no export() method"
+        )
+    exported = export(str(target))
+    if not target.is_file() and exported is not None:
+        candidate = Path(exported)
+        if candidate.is_file():
+            target.write_bytes(candidate.read_bytes())
 
     if not target.is_file() or target.stat().st_size == 0:
         raise RuntimeError(
@@ -196,7 +92,7 @@ def verify_exported(
     implementation: str,
     output: Path,
 ) -> tuple[dict[str, Any], bool]:
-    """Verify one exported STL and attach separate presentation evidence."""
+    """Verify one exported STL and attach separate Forge presentation evidence."""
 
     target = output / slug / implementation
     stl = target / "model.stl"
@@ -205,7 +101,10 @@ def verify_exported(
             f"{slug}/{implementation}: no non-empty STL was exported"
         )
     try:
-        evidence = validate_mesh_geometry(stl, load_contract(slug))
+        evidence = validate_mesh_geometry(
+            stl,
+            load_geometry_contract(contract_path(slug)),
+        )
     except VerificationFailure as exc:
         raise RuntimeError(
             f"{slug}/{implementation}: reference geometry failed: {exc}"
@@ -282,7 +181,7 @@ def verify_one(
     implementation: str,
     output: Path,
 ) -> tuple[dict[str, Any], bool]:
-    """Export, verify and render one reference implementation."""
+    """Export, verify and render one remaining Forge-owned reference."""
 
     target = output / slug / implementation
     target.mkdir(parents=True, exist_ok=True)
@@ -291,7 +190,7 @@ def verify_one(
 
 
 def selected_implementations(value: str) -> tuple[str, ...]:
-    """Parse and validate one implementation selection."""
+    """Parse and validate one Forge-owned implementation selection."""
 
     if value.strip().lower() == "all":
         return IMPLEMENTATIONS
@@ -307,7 +206,8 @@ def selected_implementations(value: str) -> tuple[str, ...]:
     unknown = sorted(set(selected) - set(IMPLEMENTATIONS))
     if unknown:
         raise RuntimeError(
-            "unknown reference implementation(s): " + ", ".join(unknown)
+            "Forge reference runner does not own implementation(s): "
+            + ", ".join(unknown)
         )
     return selected
 
@@ -334,7 +234,7 @@ def verify_batch(
     implementations: tuple[str, ...],
     output: Path,
 ) -> tuple[list[dict[str, Any]], bool]:
-    """Verify all cases, grouping execution by implementation."""
+    """Verify all selected cases, grouped by Forge-owned implementation."""
 
     by_slug: dict[str, list[dict[str, Any]]] = {
         slug: [] for slug in slugs
@@ -343,31 +243,13 @@ def verify_batch(
 
     for implementation in implementations:
         implementation_started = time.perf_counter()
-        build123d_errors: dict[str, str | None] | None = None
-        if implementation == "build123d":
-            try:
-                build123d_errors = export_build123d_batch(slugs, output)
-            except Exception as exc:
-                build123d_errors = {slug: str(exc) for slug in slugs}
-
         for slug in slugs:
             try:
-                if implementation == "build123d":
-                    assert build123d_errors is not None
-                    error = build123d_errors.get(slug)
-                    if error:
-                        raise RuntimeError(error)
-                    result, presentation_failed = verify_exported(
-                        slug,
-                        implementation,
-                        output,
-                    )
-                else:
-                    result, presentation_failed = verify_one(
-                        slug,
-                        implementation,
-                        output,
-                    )
+                result, presentation_failed = verify_one(
+                    slug,
+                    implementation,
+                    output,
+                )
                 failed = failed or presentation_failed
             except Exception as exc:  # continue through the complete batch
                 failed = True
@@ -410,14 +292,14 @@ def verify_batch(
 
 
 def main() -> int:
-    """Verify explicitly selected model references."""
+    """Verify explicitly selected remaining Forge-owned references."""
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cases", required=True)
     parser.add_argument(
         "--implementations",
         default="all",
-        help="all or a comma/space-separated implementation list",
+        help="all or a comma/space-separated Forge-owned implementation list",
     )
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--source-sha", required=True)
@@ -441,7 +323,7 @@ def main() -> int:
         encoding="utf-8",
     )
     print(
-        "reference verification: "
+        "Forge-owned reference verification: "
         + ", ".join(
             row["model"] + "=" + row["status"] for row in models
         ),

@@ -184,14 +184,35 @@ class QualificationSummaryTests(unittest.TestCase):
             },
         )
         for implementation in summary.REFERENCE_IMPLEMENTATIONS:
-            self.write_json(
-                root,
-                (
-                    f"examples/{slug}/{implementation}/references/"
-                    f"{slug}/{implementation}/verification.json"
-                ),
-                {"implementation": implementation, "status": "pass"},
-            )
+            if implementation in {"cadquery", "build123d"}:
+                self.write_json(
+                    root,
+                    (
+                        f"examples/{slug}/{implementation}/verification/"
+                        "verification.json"
+                    ),
+                    {
+                        "schema": "cad-verification",
+                        "schema_version": 1,
+                        "status": "pass",
+                        "checks": [
+                            {
+                                "id": "geometry",
+                                "status": "pass",
+                                "evidence": {"bounds": {"pass": True}},
+                            }
+                        ],
+                    },
+                )
+            else:
+                self.write_json(
+                    root,
+                    (
+                        f"examples/{slug}/{implementation}/references/"
+                        f"{slug}/{implementation}/verification.json"
+                    ),
+                    {"implementation": implementation, "status": "pass"},
+                )
         return case
 
     def test_restores_existing_public_five_check_shape(self):
@@ -232,13 +253,24 @@ class QualificationSummaryTests(unittest.TestCase):
                 / "examples"
                 / "simple-box"
                 / "cadquery"
-                / "references"
-                / "simple-box"
-                / "cadquery"
+                / "verification"
                 / "verification.json"
             )
             target.write_text(
-                json.dumps({"implementation": "cadquery", "status": "fail"}),
+                json.dumps(
+                    {
+                        "schema": "cad-verification",
+                        "schema_version": 1,
+                        "status": "fail",
+                        "checks": [
+                            {
+                                "id": "geometry",
+                                "status": "fail",
+                                "evidence": {},
+                            }
+                        ],
+                    }
+                ),
                 encoding="utf-8",
             )
             result, gate = summary.compose_case(root, "simple-box")

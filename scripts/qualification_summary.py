@@ -251,26 +251,53 @@ def _visual_check(case_root: Path) -> dict[str, Any]:
 
 
 def _reference_check(evidence_root: Path, slug: str):
-    """Return the canonical reference gate without reading batch outputs."""
+    """Return the canonical reference gate from each owner-defined report."""
 
     SemanticCheck, _, compose_semantic_result, _ = _semantic_api()
     checks = []
     evidence = []
+    builtins = {"cadquery", "build123d"}
     for implementation in REFERENCE_IMPLEMENTATIONS:
-        path = (
-            Path(evidence_root)
-            / "examples"
-            / slug
-            / implementation
-            / "references"
-            / slug
-            / implementation
-            / "verification.json"
-        )
+        item_root = Path(evidence_root) / "examples" / slug / implementation
+        if implementation in builtins:
+            path = item_root / "verification" / "verification.json"
+        else:
+            path = (
+                item_root
+                / "references"
+                / slug
+                / implementation
+                / "verification.json"
+            )
+
         report = _read_object(path)
         status = _check_status(report.get("status") if report else None)
-        if report is not None and report.get("implementation") != implementation:
-            status = "error"
+        if report is not None:
+            if implementation in builtins:
+                geometry = next(
+                    (
+                        row
+                        for row in report.get("checks", ())
+                        if isinstance(row, dict) and row.get("id") == "geometry"
+                    ),
+                    None,
+                )
+                geometry_status = (
+                    geometry.get("status")
+                    if isinstance(geometry, dict)
+                    else None
+                )
+                if (
+                    report.get("schema") != "cad-verification"
+                    or report.get("schema_version") != 1
+                    or geometry_status not in {"pass", "fail", "error"}
+                ):
+                    status = "error"
+                elif status == "pass" and geometry_status != "pass":
+                    status = "error"
+            elif report.get("implementation") != implementation:
+                status = "error"
+
         relative = (
             path.relative_to(evidence_root).as_posix()
             if path.is_file()
