@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all active independent verification in one shared reference runtime."""
+"""Run remaining Forge-owned PythonSCAD/pyBOSL2 references and diagrams."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from forge_example import dependency_wheel
 
 
 ROOT = Path(__file__).resolve().parents[1]
-IMPLEMENTATIONS = ("pythonscad", "pybosl2", "cadquery", "build123d")
+IMPLEMENTATIONS = ("pythonscad", "pybosl2")
 
 
 def output_root() -> Path:
@@ -51,7 +51,7 @@ def source_sha() -> str:
 
 
 def processed_reference_slugs() -> tuple[str, ...]:
-    """Return process:true models with the complete four-reference set."""
+    """Return process:true models with the remaining Forge-owned reference set."""
 
     slugs: list[str] = []
     for ci_path in sorted((ROOT / "examples").glob("*/ci.yml")):
@@ -105,7 +105,7 @@ def run_inside_runtime(cases: str, commit: str) -> int:
             "--cases",
             cases,
             "--implementations",
-            "all",
+            ",".join(IMPLEMENTATIONS),
             "--out",
             "/output/references",
             "--source-sha",
