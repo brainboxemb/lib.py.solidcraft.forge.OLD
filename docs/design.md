@@ -1548,6 +1548,121 @@ This preserves one editable native Sketch + Extrude history and keeps authored
 Sketch coordinates/parameters unchanged.
 
 
+## Primitive Boolean lowering
+
+Primitive Boolean operations have one implementation boundary in `scpf/csg.py`.
+
+```text
+pure primitive expression
+  -> CSG compiler
+  -> _csg_apply()
+  -> solid.cylinder / solid.cone
+
+ordered feature body + primitive operand
+  -> feature compiler builds the existing body
+  -> delegate the primitive operand to _csg_apply()
+  -> solid.cylinder / solid.cone with operation + targets
+```
+
+The feature compiler decides ordering only. It does not reimplement native
+Cylinder or Cone validation, base calculation or command fields. This keeps
+direct and positioned primitives consistent with the pure CSG path and ensures
+Cone parameters and axial anchors follow the same code in both cases.
+
+`_is_pure_csg_tree()` therefore recognizes positioned Cone as well as
+positioned Cylinder. A later non-primitive feature still moves the full
+expression to ordered feature compilation, where only the primitive operand is
+delegated back to the shared CSG primitive operation.
+
+## Polygon2D Sketch lowering
+
+Polygon2D command creation is shared between standalone and explicit/attached
+Sketch compilation:
+
+```text
+Polygon2D
+  -> _polygon_profile_command()
+  -> sketch.line(points=..., closed=true, ids=...)
+
+standalone Sketch
+  -> same helper at the standalone Sketch origin
+
+explicit/attached Sketch
+  -> same helper with the Sketch-local offset
+  -> sketch.finish
+  -> solid.extrude(operation=join|cut, targets=[body])
+```
+
+The feature compiler owns Sketch order and target selection only. It does not
+carry a second Polygon2D validation or command implementation.
+
+The existing `attached-through-all` regression fixture is the native runtime
+proof for this path. Its model uses one closed Polygon2D cut on the top face of
+a Box. The ordinary Forge tests inspect the command plan; the declarative
+model-verification batch replays the same source in the released SolidCraft
+runtime and verifies the resulting body.
+
+## run_script model-local import isolation
+
+`run_script()` temporarily adds two kinds of import path:
+
+```text
+model.py parent directory   -> model-local helpers/packages
+project root                -> shared models.components.* imports
+```
+
+Only top-level Python names that are physically present beside `model.py` are
+isolated. Before execution, any already-loaded modules under those names are
+saved and temporarily removed from `sys.modules`. After execution, modules
+loaded under those local names are removed and the caller's saved modules are
+restored.
+
+```text
+discover local names beside model.py
+  -> save matching sys.modules entries
+  -> remove matching entries
+  -> add temporary import paths
+  -> execute model
+  -> remove newly loaded local-name modules
+  -> restore saved modules
+  -> restore sys.path
+```
+
+The broader project-root import path is deliberately not used to choose module
+names for removal. This preserves legitimate shared packages such as
+`models.components.*` while preventing independent model roots from sharing a
+cached `assemblies.*`, `parts.*` or other local package by accident.
+
+## Rotated Sketch cutter frame
+
+Issue #750 uses the native arbitrary Sketch frame already accepted by
+SolidCraft rather than inventing a new solid-transform command.
+
+```text
+Sketch(
+  plane="XY",
+  origin=(x, y, z),
+  rotation=(rx, ry, rz),
+)
+  -> fixed Euler rotation X -> Y -> Z
+  -> rotated local x_dir / y_dir
+  -> sketch.create(
+       plane={
+         origin: [...],
+         x_dir: [...],
+         y_dir: [...],
+       }
+     )
+  -> existing Sketch profile commands
+  -> existing solid.extrude
+  -> normal CSG join/cut/intersect
+```
+
+The frame conversion is shared by standalone Sketch extrusion and explicit
+world-plane Sketches on an existing body. It keeps the cutter editable as a
+native Sketch + extrusion and avoids browser-name selectors or consumer-local
+coordinate expansion.
+
 ## Shared-batch item projection with CAD-CI copy
 
 The shared batch remains the expensive producer. The change is only the shape
@@ -1969,6 +2084,82 @@ active sheet rule and refuses per-flange material fields.
 Height and angle stay as authored Forge Parameter/Expression values and lower via
 `command_value()`. XYZ selection points are fixed finite pick coordinates because
 they identify topology rather than drive geometry.
+
+## Native sheet-hem lowering
+
+`Shape.hem()` follows the same existing-sheet feature-history boundary as
+`Shape.flange()` and `Shape.fold()`.
+
+```text
+sheet_base / later sheet history
+  -> Shape(kind="sheet_hem", ...)
+  -> recurse existing history
+  -> require base metadata sheet=True
+  -> sheet.hem(
+       edges=[[x,y,z], ...],
+       length=<expression>,
+       gap?=<expression>,
+       body=<current body name>,
+       flip?=true
+     )
+```
+
+The feature does not create a second sheet rule and does not repeat thickness,
+K-factor or bend radius. SolidCraft owns hem geometry and flat-pattern
+development.
+
+### Selection and parameter boundary
+
+The initial hem slice reuses the explicit finite XYZ topology-pick vocabulary
+already qualified for edge flange. `length` and optional `gap` are ordinary
+mm-valued Forge Parameter/Expression fields. `gap=None` is semantically
+different from an explicit value and is therefore omitted from the native
+command, allowing the active sheet rule to supply its default.
+
+A generic sheet-edge selector, multiple hem profile types and rule/material
+authoring are separate future API decisions and are not inferred by this
+feature.
+
+## Native sheet path-flange lowering
+
+`Shape.path_flange()` composes two already-qualified histories instead of
+creating another path abstraction:
+
+```text
+existing sheet history
+  -> Shape(kind="sheet_path_flange", existing, edge, path, radius)
+  -> recurse existing history; require base metadata sheet=True
+  -> compile_open_chain_with_curves(path)
+       -> sketch.create
+       -> ordered sketch.line ...
+       -> replay-bound complete curves list
+       -> sketch.finish
+  -> sheet.path_flange(
+       edge=[x,y,z],
+       sketch=<authored path Sketch name>,
+       curves=<bound ordered curve list>,
+       radius?=<expression>,
+       body=<current body name>
+     )
+```
+
+The open-chain object and replay binding remain owned by #683. #776 only
+connects that existing identity to an existing sheet body. It does not parse
+Sketch internals into a new public structure and callers never supply native
+curve ids.
+
+### Initial native-contract boundary
+
+SolidCraft 0.45 documents `sheet.path_flange` as consuming an open chain of
+Sketch **lines**. Although #683 can also author a tangent arc for contour-flange
+consumers, the first path-flange slice therefore rejects non-line segments.
+This can be broadened later only with direct runtime qualification.
+
+The XYZ sheet-edge pick is fixed topology-identification data, matching the
+existing edge-flange/hem selection policy. Path coordinates and optional
+`radius` remain normal Forge Parameter/Expression inputs. Omitting `radius`
+delegates bend radius to the active sheet rule; providing it overrides only the
+path-flange feature.
 
 ## Open connected Sketch-chain design
 

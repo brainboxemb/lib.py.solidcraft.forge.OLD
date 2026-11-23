@@ -8,6 +8,35 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Added
+
+- Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
+  Hem length and optional gap remain parameterized in mm while the active sheet
+  rule owns thickness, K-factor and bend radius (#773).
+
+- Added native `Shape.path_flange(...)` on existing sheet bodies using the
+  reusable open connected Sketch-chain replay identity. The qualified initial
+  contract is line-only with an optional parameterized bend-radius override
+  (#776).
+
+### Fixed
+
+- Cone primitives now participate in native feature-compiler Boolean
+  join/cut/intersect operations instead of being limited to the primitive-only
+  CSG route (#746).
+
+- `Polygon2D` now lowers correctly inside explicit and face-attached Sketches,
+  including attached through-all cutter workflows (#747).
+
+- `run_script()` isolates model-local Python modules between independent model
+  roots so one CAD model cannot reuse another model's local import accidentally
+  (#749).
+
+- Standalone extruded Sketch cutters preserve an explicit rotated local Sketch
+  frame before normal Boolean CSG, enabling rotated cutter Shapes without a
+  consumer-local workaround (#750).
+
+
 ## [0.12.0] - 2026-11-23
 
 ### Added

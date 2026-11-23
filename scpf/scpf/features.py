@@ -41,6 +41,8 @@ from .sketches import (
     compile_open_chain_with_curves,
     compile_standalone_sketch,
     _extrude_profile_params,
+    _polygon_profile_command,
+    _sketch_plane_frame,
 )
 
 
@@ -52,7 +54,7 @@ def _is_pure_csg_tree(shape):
     if shape.kind in CSG_PRIMITIVE_KINDS or shape.kind == "placed_box":
         return True
     if shape.kind == "placed3d":
-        return shape.data[0].kind == "cylinder"
+        return shape.data[0].kind in ("cylinder", "cone")
     if shape.kind == "translated":
         return _is_pure_csg_tree(shape.data[0])
     if shape.kind in ("union", "difference", "intersection"):
@@ -86,6 +88,8 @@ def _is_feature_tree(shape):
         "sheet_base",
         "sheet_contour_flange",
         "sheet_edge_flange",
+        "sheet_hem",
+        "sheet_path_flange",
         "sheet_fold",
     ):
         return True
@@ -626,23 +630,20 @@ def _explicit_sketch_commands(
         profile_picks,
         exact_regions,
     ) = feature.data
-    plane_name, sketch_origin = plane_info
+    plane_name, sketch_origin, sketch_rotation = plane_info
     if target != original:
         raise ModelError("explicit Sketch must target the body being modified")
     if shape.kind not in ("union", "difference"):
         raise ModelError("explicit Sketch extrusion must be added or subtracted")
 
     if plane_name is not None:
-        if sketch_origin is not None:
-            orientation = {
-                "XY": ([1, 0, 0], [0, 1, 0]),
-                "XZ": ([1, 0, 0], [0, 0, 1]),
-                "YZ": ([0, 1, 0], [0, 0, 1]),
-            }
-            x_dir, y_dir = orientation[plane_name]
+        if sketch_origin is not None or sketch_rotation is not None:
             plane = dict(
-                plane={"origin": [pv(v) for v in sketch_origin],
-                       "x_dir": x_dir, "y_dir": y_dir},
+                plane=_sketch_plane_frame(
+                    plane_name,
+                    origin=sketch_origin,
+                    rotation=sketch_rotation,
+                ),
                 name=sketch_name,
             )
         else:
@@ -788,6 +789,22 @@ def _explicit_sketch_commands(
             else:
                 command = "sketch.rectangle.two_point"
             append_profile(_command(command, **params), profile)
+            continue
+
+        if profile.kind == "polygon":
+            if profile_anchor is not None:
+                raise ModelError(
+                    "Polygon2D uses authored sketch coordinates; "
+                    "semantic CENTER is not supported yet"
+                )
+            append_profile(
+                _polygon_profile_command(
+                    profile,
+                    plane=plane_name or "XY",
+                    offset=(ox, oy),
+                ),
+                profile,
+            )
             continue
 
         if profile.kind == "text":
@@ -1045,7 +1062,7 @@ def _explicit_sketch_commands(
 
         raise ModelError(
             "explicit Sketch supports Circle2D, Rectangle2D, RoundedRectangle2D, "
-            "connected profiles, Text2D or native Slot*2D profiles"
+            "Polygon2D, connected profiles, Text2D or native Slot*2D profiles"
         )
 
     for operation in sketch_operations:
@@ -1262,6 +1279,16 @@ def _non_count_parameter_names(node, found=None):
                 (edges, height, height_from, position, flip),
                 found,
             )
+            return found
+        if node.kind == "sheet_hem":
+            original, edges, length, gap, flip = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names((edges, length, gap, flip), found)
+            return found
+        if node.kind == "sheet_path_flange":
+            original, edge, path, radius = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names((edge, path, radius), found)
             return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
@@ -1517,6 +1544,45 @@ def _to_commands(shape, name):
             params["flip"] = True
         return steps + [_command("sheet.flange", **params)], base
 
+    if shape.kind == "sheet_hem":
+        original, edges, length, gap, flip = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError("sheet hem requires existing sheet material")
+        params = {
+            "edges": [
+                [command_value(value) for value in point]
+                for point in edges
+            ],
+            "length": command_value(length),
+            "body": name,
+        }
+        if gap is not None:
+            params["gap"] = command_value(gap)
+        if flip:
+            params["flip"] = True
+        return steps + [_command("sheet.hem", **params)], base
+
+    if shape.kind == "sheet_path_flange":
+        original, edge, path, radius = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError(
+                "sheet path flange requires existing sheet material"
+            )
+        sketch, meta, curves = compile_open_chain_with_curves(path)
+        params = {
+            "edge": [command_value(value) for value in edge],
+            "sketch": meta["sketch_name"],
+            "curves": curves,
+            "body": name,
+        }
+        if radius is not None:
+            params["radius"] = command_value(radius)
+        return steps + sketch + [
+            _command("sheet.path_flange", **params)
+        ], base
+
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data
         steps, base = _to_commands(original, name)
@@ -1680,27 +1746,18 @@ def _to_commands(shape, name):
             raise ModelError(
                 f"{added.kind} must be positioned with .attach() or .at()"
             )
-        if added.kind in ("cylinder", "placed3d"):
-            if added.kind == "placed3d":
-                primitive, x, y, z = added.data
-            else:
-                primitive, x, y, z = added, 0, 0, 0
-            if primitive.kind != "cylinder":
-                raise ModelError("boolean primitive requires Cylinder")
-            height, diameter, axis, anchor = primitive.data
-            _require_positive(height, "cylinder height")
-            _require_positive(diameter, "cylinder diameter")
-            native_base = _cylinder_base_from_anchor(
-                height, diameter, axis, (x, y, z), anchor
-            )
-            return steps + [
-                _command("solid.cylinder",
-                         height=command_value(height),
-                         diameter=command_value(diameter),
-                         base=[command_value(v) for v in native_base],
-                         axis=axis, operation="join" if shape.kind == "union" else "cut",
-                         targets=[name]),
-            ], base
+        primitive_kind = (
+            added.data[0].kind if added.kind == "placed3d" else added.kind
+        )
+        if primitive_kind in ("cylinder", "cone") and added.kind in (
+                "cylinder", "cone", "placed3d"):
+            from .csg import _csg_apply
+            operation = {
+                "union": "join",
+                "difference": "cut",
+                "intersection": "intersect",
+            }[shape.kind]
+            return steps + _csg_apply(added, name, operation), base
         raise ModelError(f"unsupported CAD feature {added.kind}")
     raise ModelError(f"unsupported CAD solid {shape.kind}")
 

@@ -314,6 +314,85 @@ SolidCraft 0.45 explicitly supports `new|join|cut|intersect|auto` on
 `solid.extrude.operation`; Forge only exposes the deterministic operations
 required by the public Boolean operators.
 
+## Primitive Boolean operands
+
+Direct and positioned native primitives must use one Boolean lowering contract
+whether the existing body is a pure primitive CSG body or already contains
+ordered native features.
+
+Requirements:
+
+- direct and positioned `Cylinder` and `Cone` operands support native
+  `join`, `cut` and `intersect` operations when used with Forge Boolean
+  operators;
+- primitive-only expressions remain on the primitive CSG compiler;
+- when the existing body needs ordered feature compilation, the primitive
+  operand reuses the same native primitive operation code instead of duplicating
+  Cylinder/Cone command generation in the feature compiler;
+- Cone lowering preserves authored `diameter`, `top_diameter`, `height`,
+  axis and axial-anchor-derived base;
+- join/cut/intersect target the existing body directly through SolidCraft's
+  native `targets` field; Forge must not create a temporary second body.
+
+## Polygon2D in explicit and attached Sketches
+
+A closed `Polygon2D` is a normal Sketch profile. It must work in an explicit
+or body-attached `Sketch` wherever other closed straight-edged profiles work.
+
+Requirements:
+
+- the explicit/attached Sketch compiler accepts `Polygon2D`;
+- Polygon2D lowers to one native `sketch.line` command with `closed=true`;
+- authored vertex order and optional edge ids are preserved;
+- Sketch-local placement offsets are applied to authored polygon coordinates;
+- the Polygon2D plane must match the explicit Sketch plane;
+- extrusion uses the existing native Sketch extrusion path, including
+  `join` and `cut` on an existing body;
+- standalone and explicit/attached Polygon2D use one shared command builder;
+- Forge keeps a focused attached Polygon2D regression fixture that is replayed
+  in the released SolidCraft runtime, not only compiled to a command document.
+
+## Model-local Python import isolation
+
+Each `run_script(path)` call must resolve Python modules owned beside that
+model's `model.py` independently from earlier model executions in the same
+Python process.
+
+Requirements:
+
+- two model roots may use the same local top-level package/module name and each
+  run resolves its own source;
+- local modules loaded during one run do not remain available to a later model
+  root through `sys.modules`;
+- a module that existed under the same name before `run_script()` is restored
+  after the run;
+- the temporary model import path is removed after execution;
+- project-shared imports such as `models.components.*` remain shared and are
+  not broadly purged;
+- installed Forge modules and Python standard-library modules are not broadly
+  removed from `sys.modules`;
+- repeated execution of one model root is deterministic.
+
+## Rotated explicit Sketch frames
+
+A standalone or explicitly world-positioned Sketch may define a fixed local
+rotation before extrusion.
+
+Requirements:
+
+- `Sketch(..., rotation=(rx, ry, rz))` accepts exactly three finite numeric
+  degree values;
+- rotations are applied about local X, then Y, then Z;
+- `origin=(x, y, z)` is the world translation of the local Sketch origin;
+- the compiler lowers the frame to native `sketch.create` `origin`,
+  `x_dir` and `y_dir`; Forge does not add a model-specific transform
+  command;
+- a standalone rotated Sketch extrusion can be used as the normal operand of
+  CSG join/cut/intersect;
+- `offset` is not combined with an explicit rotated frame;
+- rotated Sketch sheet-metal and open-chain authoring remain unsupported until
+  separately qualified.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
@@ -1305,6 +1384,80 @@ Requirements:
 Qualification must include a native sheet base plus edge flange, saved-design
 mutation of both flange height and angle, save/reopen verification and native
 flat-pattern evidence proving one connected sheet body remains.
+
+## Native sheet hem
+
+An existing Forge sheet body supports one focused native hem operation:
+
+```python
+sheet.hem(
+    edges=[(40, 0, 2)],
+    length=12,
+    gap=None,
+    flip=False,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.hem`;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ points
+  selecting existing sheet edges;
+- `length` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression in the native command;
+- `gap=None` omits the native field so the sheet rule supplies the default;
+  an explicit `gap` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression;
+- `flip` is boolean and is emitted only when true;
+- Forge supplies the current sheet body name;
+- thickness, K-factor, bend radius and material remain inherited from the
+  existing sheet rule and are not hem arguments;
+- the operation is valid only on feature history known by Forge to be sheet
+  material;
+- this first slice does not accept generic edge selectors or compound native
+  edge descriptors;
+- no extruded, revolved or fused-solid approximation is permitted.
+
+Qualification must include saved-design mutation of hem length/gap, save/reopen
+verification and native flat-pattern bend evidence proving one connected closed
+sheet-metal body remains.
+
+## Native sheet path flange
+
+An existing Forge sheet body supports one focused native path-flange operation:
+
+```python
+sheet.path_flange(
+    edge=(40, 0, 2),
+    path=path,
+    radius=None,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.path_flange`;
+- `edge` is one explicit fixed finite XYZ pick point on an existing sheet edge;
+- `path` is the finished reusable open connected Sketch chain from #683;
+- this first runtime-qualified slice accepts a non-empty **line-only** open chain;
+  tangent-arc path segments stay outside the public contract until the native
+  path-flange runtime proves them;
+- Forge compiles the path with the existing ordered replay curve binding and
+  passes the authored Sketch name plus bound curve list to SolidCraft;
+- optional `radius` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression; `None` omits the native field so the active sheet rule
+  supplies the bend radius;
+- Forge supplies the current sheet body name;
+- thickness, K-factor and material remain inherited from the existing sheet
+  rule and are not path-flange arguments;
+- applying the operation to non-sheet geometry is a compiler error;
+- generic edge selectors, caller-authored native curve ids and a second path
+  representation are not introduced;
+- no extruded/fused-solid approximation is permitted.
+
+Qualification must include the native command/replay contract, parameterized
+path/radius values, saved-design rebuild/reopen and recoverable flat-pattern
+bend evidence on one connected closed sheet-metal body.
 
 ## Reusable open connected Sketch chains
 
