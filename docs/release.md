@@ -1,148 +1,120 @@
 # Forge release
 
-This document describes the repository's current package-release contract.
+This document describes Forge-specific release rules and how Forge consumes the
+shared CAD release flow.
 
-## Version sources
+## Ownership
 
-The SCPF package version is defined in `scpf/pyproject.toml`.
+Forge is a release-flow consumer.
 
-SolidCraft compatibility is defined separately in
-`scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION`.
+Released `tool.cad.ci v0.36.1` owns:
 
-A package-version change and a tested-SolidCraft-version change are different
-decisions and must not be coupled accidentally.
+- parsing/checking the stable main `ci-build-record`;
+- proving the requested release commit is the exact stable build source;
+- keeping Pages out of release qualification.
+
+Released `tool.py.lib.ci v0.2.1` owns:
+
+- strict `/release vX.Y.Z <40-character-sha>` parsing;
+- repository-owner enforcement;
+- requiring the requested SHA to remain the stable branch head;
+- annotated tag creation/verification;
+- GitHub Release creation/verification;
+- idempotent repeated publication;
+- publication reporting on the triggering issue.
+
+Forge owns only repository-specific validation:
+
+- `scpf/pyproject.toml` package version matches the requested version;
+- `CHANGELOG.md` contains a dated release section with release content;
+- `docs/background/design/release-blockers.txt` has no active blocker;
+- `scpf/scpf/version.py::TESTED_SOLIDCRAFT_VERSION` is readable;
+- the Forge validator writes the release notes used by the shared publisher.
+
+`gh-pages` is web output and is not release evidence.
 
 ## Current release state
 
-The latest **actual** Forge GitHub Release is **`v0.11.0`**.
+Latest actual Forge release: **v0.11.0**.
 
-Released baseline:
-
-- package version: `0.11.0`;
-- annotated tag: `v0.11.0`;
-- exact tagged source commit:
+- tag: `v0.11.0`;
+- exact source:
   `9258d54079981604b6dd777a4c4face897c190fe`;
-- GitHub Release:
-  `https://github.com/brainboxemb/lib.py.solidcraft.forge/releases/tag/v0.11.0`;
-- qualified SolidCraft: `0.45.0`;
-- immutable runtime: `docker.cad.solidcraft v0.3.4`.
+- qualified SolidCraft: `0.45.0`.
 
-Before publication, durable `build/main`, `ci/forge-release`,
-`ci/release-policy` and stable Pages all resolved to the exact tagged source
-commit.
+The v0.12.0 source preparation is already present in the current integration
+history. Publication waits for #739 to reach stable `main` and for the exact
+resulting main build to be green.
 
-Issue #642 is complete. The historical source-only commit that previously used
-the words “Release SCPF 0.11.0” was not itself release evidence; the real
-release is the immutable tag + GitHub Release above.
+The earlier failed v0.12.0 release attempt created no v0.12.0 tag or GitHub
+Release.
 
-The current `CHANGELOG.md` keeps a fresh `## [Unreleased]` section for work
-after v0.11.0.
+## Consumer workflow
 
-## What counts as a release
-
-A package version, dated changelog heading, commit message or green CI run is
-not sufficient release evidence.
-
-A Forge release is complete only when:
-
-1. one exact green `main` SHA has matching durable build/Page evidence;
-2. `forge-release` verification was produced from that exact SHA;
-3. an annotated `vX.Y.Z` Git tag resolves to that SHA;
-4. a GitHub Release exists for that tag.
-
-## Release blockers
-
-The active foundational blocker list is:
+Forge keeps a copy-ready thin wrapper in:
 
 ```text
-docs/background/design/release-blockers.txt
+.github/workflows/release.yml
 ```
 
-Blank/comment-only content means there is no active foundational blocker.
+It pins:
 
-The release candidate must also satisfy any explicit gate recorded in the
-current repository plan and release issue. A release must not be published from
-an arbitrary source revision merely because the blocker file is empty.
+```text
+brainboxemb/tool.cad.ci/.github/workflows/reusable-release.yml@v0.36.1
+```
 
-## Development changelog
+with:
 
-User-visible changes remain under `## [Unreleased]` until an intentional
-release candidate is chosen.
+```text
+stable_ref: main
+build_branch: build
+validator_path: scripts/release/validate_release.py
+```
 
-Do not create a dated release section early. The v0.11.0 history demonstrated
-why source preparation and actual immutable publication must remain distinct.
+Do not add local command parsing, build-record parsing, tag creation, GitHub
+Release calls or Pages checks to this wrapper.
 
-## Release-candidate verification
+## Forge validator
 
-The exact intended release source must be a green `main` revision.
+The shared workflow checks out the exact requested source commit and calls:
 
-At minimum, verify:
+```text
+python scripts/release/validate_release.py \
+  --version X.Y.Z \
+  --target-sha <exact-sha> \
+  --notes-out <path>
+```
 
-1. normal Forge/CAD-CI source and model checks;
-2. durable `build/main` integration;
-3. stable generated Pages publication;
-4. `ci/forge-release/ci.yml` / `forge-release` representative package
-   verification from the exact candidate SHA;
-5. `ci/release-policy` from the exact candidate SHA;
-6. no active entry in
-   `docs/background/design/release-blockers.txt`;
-7. package metadata, dated changelog section and tested SolidCraft version
-   match the intended release contract.
+The validator reads only files from that exact checkout. It does not fetch or
+parse generated branches.
 
-Release-candidate metadata such as `CHANGELOG.md` is an explicit input of
-`forge-release`, so a release-preparation change cannot silently reuse
-package-release evidence from an older source commit.
+The `target-sha` argument is part of the shared validator interface; exact
+source selection and stable-main verification are owned by the shared release
+flow.
 
-## Publishing a Forge release
+## Publishing
 
-Publication is an explicit repository-owner operation. A successful CAD-CI run
-never publishes a release automatically.
+Publication remains an explicit repository-owner action. A normal CAD-CI build
+never creates a release automatically.
 
-The owner command is:
+After the intended release commit is stable on `main` and its main build is
+green, comment on the release tracking issue:
 
 ```text
 /release vX.Y.Z <exact-40-character-main-sha>
 ```
 
-Post it on the dedicated release tracking issue only after the release-
-preparation PR has merged and durable main integration is complete.
+The central flow then:
 
-The owner-only workflow is intentionally thin. It delegates validation, tag
-policy and GitHub Release publication to repository code under
-`scripts/release/`.
+1. checks the stable main `ci-build-record`;
+2. runs the Forge-specific validator;
+3. creates or verifies the annotated tag and GitHub Release;
+4. reports the release on the tracking issue.
 
-For each release:
+A repeated command for the exact same version/SHA is idempotent. A stale source,
+conflicting tag or mismatched release is rejected by the shared flow.
 
-1. choose the exact green `main` SHA;
-2. reconcile `CHANGELOG.md`, moving only shipped changes into the dated
-   release section and leaving a fresh `[Unreleased]`;
-3. verify package metadata contains the intended version;
-4. require `build/main`, `forge-release`, `release-policy` and stable
-   Pages provenance to resolve to the same exact SHA;
-5. post `/release vX.Y.Z <sha>` on that release issue;
-6. let `scripts/release/validate_release.py` reject stale/mismatched evidence;
-7. let `scripts/release/publish_release.py` create or verify the annotated
-   tag and GitHub Release;
-8. independently verify that tag and Release resolve to the intended commit;
-9. reconcile `docs/plan.md` after publication.
+## Next checkpoint
 
-The publisher may repair the narrow case where the correct annotated tag
-already exists at the validated SHA but the GitHub Release is absent. It never
-moves a conflicting tag.
-
-## Next release checkpoint
-
-The plan currently targets **v0.12.0** as the next release checkpoint after the
-first coherent post-v0.11 CAD/CI batch reaches `main`.
-
-That is a planning checkpoint only. Do not bump source metadata or create a
-dated v0.12.0 changelog section until a dedicated release issue explicitly
-starts that release.
-
-## Related primary documents
-
-- [API](api.md)
-- [Design](design.md)
-- [Development](development.md)
-- [Plan](plan.md)
-- [Requirements](requirements.md)
+The next planned release is **v0.12.0** under #714, after #739 reaches
+`main` and the exact main build is green.
