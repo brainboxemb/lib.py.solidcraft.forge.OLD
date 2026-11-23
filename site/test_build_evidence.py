@@ -195,14 +195,40 @@ class StableBuildEvidenceTests(unittest.TestCase):
         )
 
         for index, implementation in enumerate(IMPLEMENTATIONS):
+            built_in = implementation in {"cadquery", "build123d"}
             item_root = self.make_item(
                 root,
                 items,
                 f"examples/{slug}/{implementation}",
                 item_id=f"{slug}-{implementation}",
                 source_commit=f"reference-commit-{index}",
-                final_step="verify_reference",
+                final_step="verify" if built_in else "verify_reference",
             )
+            if built_in:
+                write_bytes(item_root / "model.stl", b"solid stl")
+                write_json(
+                    item_root / "verification" / "verification.json",
+                    {
+                        "schema": "cad-verification",
+                        "schema_version": 1,
+                        "verification_id": f"{slug}-{implementation}",
+                        "status": "pass",
+                        "checks": [
+                            {
+                                "id": "geometry",
+                                "status": "pass",
+                                "reason": None,
+                                "error": None,
+                                "evidence": {
+                                    "bounds": {"pass": True}
+                                },
+                                "artifacts": [],
+                            }
+                        ],
+                    },
+                )
+                continue
+
             result_root = (
                 item_root / "references" / slug / implementation
             )
@@ -228,10 +254,10 @@ class StableBuildEvidenceTests(unittest.TestCase):
 
         write_bytes(
             root
-            / "ci"
-            / "cad-verification-package"
+            / ".cad-ci-verification"
+            / "package"
             / "dist"
-            / "brainboxemb_cad_verification_lib-0.15.0-py3-none-any.whl",
+            / "brainboxemb_cad_verification_lib-0.16.0-py3-none-any.whl",
             b"wheel",
         )
         write_json(
@@ -306,6 +332,18 @@ class StableBuildEvidenceTests(unittest.TestCase):
             self.assertEqual(len(example.saved_designs), 1)
             self.assertEqual(example.saved_designs[0][0], "length_50")
             self.assertTrue(evidence.verification_wheel_path.is_file())
+            references = {
+                row.implementation: row
+                for row in example.references
+            }
+            self.assertIsNone(references["cadquery"].preview_path)
+            self.assertIsNone(references["build123d"].preview_path)
+            self.assertIsNotNone(references["pythonscad"].preview_path)
+            self.assertIsNotNone(references["pybosl2"].preview_path)
+            self.assertEqual(
+                references["cadquery"].verification["schema"],
+                "cad-verification",
+            )
             self.assertEqual(evidence.diagram_provenance["status"], "pass")
             self.assertEqual(
                 [path.name for path in evidence.diagram_paths],
