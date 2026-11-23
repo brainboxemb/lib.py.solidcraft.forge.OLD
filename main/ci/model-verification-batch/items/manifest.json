@@ -56,9 +56,21 @@
     },
     {
       "compile_error": null,
+      "input": "/output/items/examples/component-local-sketch-names/solidcraft.json",
+      "output": "/output/items/examples/component-local-sketch-names/model_verify",
+      "slug": "component-local-sketch-names"
+    },
+    {
+      "compile_error": null,
       "input": "/output/items/examples/components/solidcraft.json",
       "output": "/output/items/examples/components/model_verify",
       "slug": "components"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/examples/connected-profile-sheet/solidcraft.json",
+      "output": "/output/items/examples/connected-profile-sheet/model_verify",
+      "slug": "connected-profile-sheet"
     },
     {
       "compile_error": null,
@@ -95,6 +107,12 @@
       "input": "/output/items/examples/hole-family/solidcraft.json",
       "output": "/output/items/examples/hole-family/model_verify",
       "slug": "hole-family"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/examples/open-sketch-chain/solidcraft.json",
+      "output": "/output/items/examples/open-sketch-chain/model_verify",
+      "slug": "open-sketch-chain"
     },
     {
       "compile_error": null,
@@ -182,6 +200,18 @@
     },
     {
       "compile_error": null,
+      "input": "/output/items/examples/sheet-contour-flange/solidcraft.json",
+      "output": "/output/items/examples/sheet-contour-flange/model_verify",
+      "slug": "sheet-contour-flange"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/examples/sheet-edge-flange/solidcraft.json",
+      "output": "/output/items/examples/sheet-edge-flange/model_verify",
+      "slug": "sheet-edge-flange"
+    },
+    {
+      "compile_error": null,
       "input": "/output/items/examples/sheet-fold/solidcraft.json",
       "output": "/output/items/examples/sheet-fold/model_verify",
       "slug": "sheet-fold"
@@ -218,5 +248,5 @@
     }
   ],
   "schema": 1,
-  "source_sha": "90ac473473ab954103190ba426b350852b380fc0"
+  "source_sha": "5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5"
 }

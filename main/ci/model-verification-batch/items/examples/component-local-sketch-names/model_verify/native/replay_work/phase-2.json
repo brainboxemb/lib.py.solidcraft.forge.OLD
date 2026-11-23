@@ -1,0 +1,27 @@
+{
+  "commands": [
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 2,
+        "translate": [
+          -30,
+          0,
+          0
+        ],
+        "move_grounded": true
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 6,
+        "translate": [
+          30,
+          0,
+          0
+        ]
+      }
+    }
+  ]
+}
