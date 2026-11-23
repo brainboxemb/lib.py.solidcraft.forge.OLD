@@ -1429,6 +1429,43 @@ Qualification must include saved-design mutation of hem length/gap, save/reopen
 verification and native flat-pattern bend evidence proving one connected closed
 sheet-metal body remains.
 
+## Native sheet path flange
+
+An existing Forge sheet body supports one focused native path-flange operation:
+
+```python
+sheet.path_flange(
+    edge=(40, 0, 2),
+    path=path,
+    radius=None,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.path_flange`;
+- `edge` is one explicit fixed finite XYZ pick point on an existing sheet edge;
+- `path` is the finished reusable open connected Sketch chain from #683;
+- this first runtime-qualified slice accepts a non-empty **line-only** open chain;
+  tangent-arc path segments stay outside the public contract until the native
+  path-flange runtime proves them;
+- Forge compiles the path with the existing ordered replay curve binding and
+  passes the authored Sketch name plus bound curve list to SolidCraft;
+- optional `radius` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression; `None` omits the native field so the active sheet rule
+  supplies the bend radius;
+- Forge supplies the current sheet body name;
+- thickness, K-factor and material remain inherited from the existing sheet
+  rule and are not path-flange arguments;
+- applying the operation to non-sheet geometry is a compiler error;
+- generic edge selectors, caller-authored native curve ids and a second path
+  representation are not introduced;
+- no extruded/fused-solid approximation is permitted.
+
+Qualification must include the native command/replay contract, parameterized
+path/radius values, saved-design rebuild/reopen and recoverable flat-pattern
+bend evidence on one connected closed sheet-metal body.
+
 ## Reusable open connected Sketch chains
 
 Forge supports a standalone open Sketch chain as a distinct authoring concept
