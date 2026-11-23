@@ -15,36 +15,29 @@ signatures/defaults remain implementation/docstring-owned.
 
 ## Forge release publication
 
-Forge release verification and Forge release publication are separate actions.
+Forge consumes the released central CAD release flow.
 
 Requirements:
 
 - a green CAD-CI run must never publish a Forge release automatically;
 - publication is an explicit repository-owner operation;
-- the publication request names both the semantic version and one exact
-  40-character `main` commit SHA;
-- that SHA must still be the current `main` head when publication executes;
-- package metadata, the dated changelog section and
-  `TESTED_SOLIDCRAFT_VERSION` are read from that exact SHA;
-- `docs/background/design/release-blockers.txt` must contain no active
-  non-comment blocker;
-- durable `build/main/build.json` must name that SHA as its source commit and
-  its `ci/forge-release` item must have been produced from that same SHA;
-- stable `gh-pages/provenance.json` must name that SHA as both site source and
-  build-manifest source;
-- publication creates an annotated `vX.Y.Z` Git tag and a GitHub Release only
-  after all of those checks pass;
-- an existing tag may only be reused when it resolves to the exact requested
-  SHA; a conflicting tag or existing mismatched release is a hard failure;
-- the release workflow is a thin owner-only trigger; validation and release-note
-  extraction live in repository code under `scripts/release/`;
+- `.github/workflows/release.yml` is a thin wrapper around exact released
+  `tool.cad.ci` release behavior;
+- released CAD-CI owns the stable main `ci-build-record` check;
+- Pages/`gh-pages` is web output and must not be used as release evidence;
+- released `tool.py.lib.ci` owns command parsing, stable-head enforcement,
+  annotated tag/GitHub Release creation, idempotency and issue reporting;
+- Forge's validator may check only repository-specific package version,
+  changelog/release notes, release blockers and tested SolidCraft version;
+- Forge must not contain a second generic release publisher or build-record
+  parser;
 - publication must not modify `main`, `dev-cad`, `dev-ci`, `build` or
   `gh-pages`.
 
 A package-version literal, changelog heading, successful verification run or
 commit message containing the word “release” is not release evidence by itself.
-A release is complete only when the immutable tag and GitHub Release both exist
-for the validated SHA.
+A release is complete only when the central flow has verified the exact source
+and the immutable annotated tag plus GitHub Release both exist for that SHA.
 
 ## SolidCraft runtime ownership
 
