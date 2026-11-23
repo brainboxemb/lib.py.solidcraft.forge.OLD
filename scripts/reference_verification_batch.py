@@ -247,7 +247,7 @@ def run_batch() -> int:
         shutil.rmtree(items)
 
     wheel = dependency_wheel(
-        "cad-verification-package",
+        "cad-ci-verification-package",
         "brainboxemb_cad_verification_lib-*.whl",
     )
     image = runtime_image()
