@@ -10,6 +10,23 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [0.13.0] - 2026-11-23
 
+### Release context
+
+v0.13.0 is the first Forge release containing the post-v0.12 CAD batch. The
+v0.12.0 tag itself is valid and remains immutable, but it was published before
+the following later `dev-cad` fixes reached stable `main`:
+
+- #746 Cone participation in native Boolean feature compilation;
+- #747 `Polygon2D` in explicit and face-attached Sketches;
+- #749 model-local Python import isolation;
+- #750 rotated standalone Sketch cutters.
+
+Downstream models that depend on those fixes require **v0.13.0 or newer**;
+upgrading only to v0.12.0 does not provide them.
+
+The original `Cone` primitive already existed before v0.12.0. The missing
+Cone change was specifically #746's native Boolean feature support.
+
 ### Added
 
 - Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
