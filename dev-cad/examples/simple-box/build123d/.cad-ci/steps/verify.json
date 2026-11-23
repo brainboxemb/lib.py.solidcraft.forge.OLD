@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "fc8453514afe287e3e949c76bec56eef664b26a13f64abb65a73927e7671b8b9",
+  "duration_seconds": 0.017,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:01.938Z",
+  "item": "examples-simple-box-build123d",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "669fa877fa77f5d7257766e512ae3f05e673508f776bea30dfa6b0ebd53038b3"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:01.921Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "7f91f8093c8694b0d6349b6be7464c2eb4ffe6ef394e08ae9b546a301223fa36",
+  "timeout_seconds": null
+}

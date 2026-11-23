@@ -1,13 +1,15 @@
 {
   "action_executed": true,
   "action_type": "copy",
-  "bundle_sha256": "35eee00b1098e0447290fdaf2a12ceb07eb1b3f3431bf96909245c9084b1a162",
-  "duration_seconds": 0.094,
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "10fb3b0f4ad6338d5353fc743558c9f7a355cd22a9b8792d463b1643256cd4e1",
+  "duration_seconds": 0.048,
   "engine": "scons",
-  "engine_schema": 3,
+  "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-22T10:29:00.871Z",
+  "finished_at": "2026-11-23T17:26:00.317Z",
   "item": "examples-parametric-placement-pair-pythonscad",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -15,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "231bf70889caa372c6e26490d01ee11a08d34dca778f7b8ecf8d2af75f398a69"
+      "sha256": "5f1b3aa5f0144b66adc59581f94312f8385dc8ad5b16ab0fab59510506279b6b"
     }
   },
-  "run_finished_at": "2026-11-22T10:29:59.442Z",
-  "run_started_at": "2026-11-22T10:23:48.919Z",
-  "schema": 4,
-  "started_at": "2026-11-22T10:29:00.777Z",
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:00.269Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "65afc29b306d5f817aad1fb6f6a61969201e82b8ded3062414c94cf46f716960",
+  "target_spec_digest": "08d577053010daed57466c04bd4f60a81206386727dfa09ee8f138fec48d4c12",
   "timeout_seconds": null
 }

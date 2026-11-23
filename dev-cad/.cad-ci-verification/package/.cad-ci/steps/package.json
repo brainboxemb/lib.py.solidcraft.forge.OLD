@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "command",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "2242317ad2f549fca7f693aba99e01fd5eef1264a8dcc3f6d1a00ab6b7732cc2",
+  "duration_seconds": 2.066,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": 0,
+  "finished_at": "2026-11-23T17:24:51.329Z",
+  "item": "cad-ci-verification-package",
+  "outcome": "BUILT",
+  "output_state": "UNCHANGED",
+  "outputs": {
+    "dist": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "b3e0c4bb9b3f86813047614803a20b7be556de499479dacd3d98571a85351814"
+    },
+    "provenance.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "9786b12a3ae5c49cedb718b9db45fdd70d389276023996a00a8e16d9970522c8"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:24:49.263Z",
+  "status": "pass",
+  "step": "package",
+  "target_spec_digest": "0d480fbda9913f6060f7d9d0d6e84d0d0bec2458d2847da1767b528eb8827bbb",
+  "timeout_seconds": null
+}

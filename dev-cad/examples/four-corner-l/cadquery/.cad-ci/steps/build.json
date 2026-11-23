@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "4a42a85ae18d413f4dfeb592ca728758d15abbd20510eb0851dde29db664ba49",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:25:58.841Z",
+  "item": "examples-four-corner-l-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "7fdf9887e554a975ad8e01570c9eb5f5fd8a68665effc6cf090c858a6c6c4280"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:25:58.826Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "3dd50238ad04512d507d60b2b6d278395d939ca34af819c0599121957bb28471",
+  "timeout_seconds": null
+}

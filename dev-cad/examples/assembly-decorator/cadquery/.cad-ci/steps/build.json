@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "0f0fc31627d575aab97d51ad8480273adf4723f96f1143218a164e1e57f08ee3",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:25:57.096Z",
+  "item": "examples-assembly-decorator-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "b2b1ba94e9be7e7d1ca2b647b646b10e840b0be6da74932f51971b408fcffcbd"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:25:57.080Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "da2d83d44bf7807ec48c358088a6a9765d288f70a2b91b660cb38bd03e0737b9",
+  "timeout_seconds": null
+}

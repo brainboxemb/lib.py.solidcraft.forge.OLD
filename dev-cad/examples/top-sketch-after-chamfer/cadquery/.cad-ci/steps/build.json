@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "a6528e6cc1368a9c6454744c5f421e037e5629cd99cd9454fcb3bf795e3e1ae7",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:02.494Z",
+  "item": "examples-top-sketch-after-chamfer-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "a76ee1a05c217159a01994715cb29a5710558fc32be05dd58531f6a8d61a21aa"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:02.478Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "9b06ec21ac4d25577e752dc02e9947b6776293f7bee11d8fcd8cfb4baaefe1b4",
+  "timeout_seconds": null
+}

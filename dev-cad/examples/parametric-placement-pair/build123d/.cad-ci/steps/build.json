@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "911857590dd130cc1f29da75c5992750461e673e322043d84ffc4030a611e764",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:00.155Z",
+  "item": "examples-parametric-placement-pair-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "f4cf894f1e473d7548d4c4aa41ebde59e10685fb4c31564f7d0a7aa7ffb81f09"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:00.139Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "c82dde3aec3ec85b09a5c7d9e328de62723380d0fd45506f323ddf7fab686dc9",
+  "timeout_seconds": null
+}

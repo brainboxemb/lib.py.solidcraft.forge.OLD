@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "6c58bba35e99fe44c6e1613c70f3d2b42e63876350ccf12edf6c5eafd1c6f7bf",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:00.190Z",
+  "item": "examples-parametric-placement-pair-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "d503fc1b16e1863c34299536dd8d5d38879fdb9db8812aff8293fa0c47ce116c"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:00.175Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "ca757d55320915adde40103c1a2dc68d3ea61d95b9f4afa606cf1094d8f7ef72",
+  "timeout_seconds": null
+}

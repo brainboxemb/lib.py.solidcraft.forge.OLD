@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "d6269bddd44ba1ffdf7143eb4a0e19c909bafc2d73bc0527802ab56f3c1c1aaa",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:25:59.815Z",
+  "item": "examples-parametric-move-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "3b62c30e1141ecd319b6192b286a8c8138fc4cd0843afee940655a580791f0f3"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:25:59.800Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "5e6dc86758039f91b90679d08badae2b94464c90b0564c9c467cb01d777e57a6",
+  "timeout_seconds": null
+}

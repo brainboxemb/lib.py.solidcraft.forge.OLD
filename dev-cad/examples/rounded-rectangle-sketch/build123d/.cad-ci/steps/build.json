@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "1c14b87600f171aca6ab5e4125dd4be4589acb52a0c0c31205b3a4461041b301",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:01.396Z",
+  "item": "examples-rounded-rectangle-sketch-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "29f55faec1eda6fce5984c5adb5572fc624e45c646ba25dedc549391e5e6ca74"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:01.381Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "34361ce10a7feaee23f70135dc831174d533e60654f301c18c389547da6625f9",
+  "timeout_seconds": null
+}

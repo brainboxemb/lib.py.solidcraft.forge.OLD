@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "2b21968b1d19ad284245471783e537a21c44c18328ba753b533219cfad6f8b32",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:01.604Z",
+  "item": "examples-selective-profile-extrude-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "33528426c01d353759f1b12dc8c0394cf8105434e8369b96c9a7706db88acac6"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:01.587Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "38af7d904944e7be6251d5559add5fab935ce7531289a739aa352199d94d5636",
+  "timeout_seconds": null
+}

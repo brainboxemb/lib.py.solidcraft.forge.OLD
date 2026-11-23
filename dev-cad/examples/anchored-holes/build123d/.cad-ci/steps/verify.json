@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "cc71fd859dcfae8bed85bd75ccc591fa1bb19bbb87dbe84d2166ab5e56fee3d1",
+  "duration_seconds": 0.017,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:25:56.701Z",
+  "item": "examples-anchored-holes-build123d",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "6525fa649fdbae3f67b2fd894046ad65df2393baa37453fe1f18f916a10bb561"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:25:56.684Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "7a8710bde9eaea2c6e104dd68b35ed897bf9763d7fe4cde2ef6b58443be940f1",
+  "timeout_seconds": null
+}

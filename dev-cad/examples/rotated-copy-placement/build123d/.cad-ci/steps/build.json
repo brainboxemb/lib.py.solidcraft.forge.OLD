@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "2478bb9570281e445fc92beca6e27ddabf2230b4959d84305750f2811f739297",
+  "duration_seconds": 0.018,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:26:01.054Z",
+  "item": "examples-rotated-copy-placement-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "9d3232bd6d9d475fade1410c4a8c55f252d98472467e3882b2ab37e4170a1366"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:26:01.036Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "0e277127ca6392b3154e73ef73b96e74f02563fef9b13c0e542d853232f99e8e",
+  "timeout_seconds": null
+}

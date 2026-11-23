@@ -1,13 +1,15 @@
 {
   "action_executed": true,
   "action_type": "copy",
-  "bundle_sha256": "851c3be7a9422816ea1301a63258df088e8a75baa0be087a647a2f328b1bce8d",
-  "duration_seconds": 0.1,
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "bc723551981b0baf7f2c5b83699dbc4d7a874eddffb986cc8eb44f5251b6ac2f",
+  "duration_seconds": 0.046,
   "engine": "scons",
-  "engine_schema": 3,
+  "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-22T10:28:53.815Z",
+  "finished_at": "2026-11-23T17:25:57.161Z",
   "item": "examples-assembly-decorator-pybosl2",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -15,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "ed335c03b185ca12c63f1b707c8f8837c15a737eb8dcb42bee45d4eef8d9041a"
+      "sha256": "5c2215093d282dbf384fd29f7c114d3fa4073455dc56e37aea74a64fe0c3f5da"
     }
   },
-  "run_finished_at": "2026-11-22T10:29:59.442Z",
-  "run_started_at": "2026-11-22T10:23:48.919Z",
-  "schema": 4,
-  "started_at": "2026-11-22T10:28:53.715Z",
+  "run_finished_at": "2026-11-23T17:27:05.298Z",
+  "run_started_at": "2026-11-23T17:24:34.752Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:25:57.115Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "4508fd674c2e98eb5b263f072351a316c516afb568707500876a8446ace66474",
+  "target_spec_digest": "14f6370ea403bf0c69bdacb67cec8e3350690e299f78dc67045aef4dc26303df",
   "timeout_seconds": null
 }
