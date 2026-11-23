@@ -52,6 +52,12 @@ side = side_sketch.extrude(10)
 backward = plate_sketch.extrude(-8)
 centered = plate_sketch.extrude(8, sym=True)</code></pre>
 <p>A sketch plane affects where its axes go; changing the camera does not rotate its geometry. Leave the <code>with Sketch(...)</code> scope, then call <code>sketch.extrude(...)</code> to create 3D material. A positive distance follows the sketch-plane normal, a negative distance goes the other way, and <code>sym=True</code> divides a positive distance equally over both sides. Direct <code>Rectangle2D(...).extrude(...)</code> syntax is intentionally not supported.</p>
+<p><code>Polygon2D</code> works in standalone explicit Sketches and in
+face-attached explicit Sketches; its authored vertices stay sketch-local.
+Standalone Sketches may also use an explicit <code>origin=</code> and
+<code>rotation=(rx, ry, rz)</code>. An extrusion from that rotated local frame
+can participate directly in <code>+</code>, <code>-</code> or <code>&amp;</code>
+CSG, including non-axis-aligned cutters.</p>
 <h2 id="profile-selection">Select profiles when extruding a Sketch</h2>
 <p>By default <code>Sketch.extrude()</code> uses every closed profile in the
 Sketch. Use <code>profiles=[(x, y), ...]</code> when only some closed regions

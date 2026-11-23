@@ -26,6 +26,53 @@ from qualification_view import _expected_body_rows, _raw_file_rows
 
 
 class SiteSourceTests(unittest.TestCase):
+    def test_sheet_metal_api_is_first_class_in_reference_guide_and_cheatsheet(self):
+        reference = (SITE / "api_reference.py").read_text(encoding="utf-8")
+        guide_manifest = json.loads(
+            (SITE / "content" / "guides.json").read_text(encoding="utf-8")
+        )
+        guide = (
+            SITE / "content" / "guides" / "sheet-metal.html"
+        ).read_text(encoding="utf-8")
+        cheatsheet = (
+            SITE / "content" / "cheatsheet.yml"
+        ).read_text(encoding="utf-8")
+
+        expected_methods = (
+            "Sketch.sheet_metal",
+            "Shape.fold",
+            "Shape.flange",
+            "Shape.contour_flange",
+            "Shape.hem",
+            "Shape.path_flange",
+        )
+        for name in expected_methods:
+            with self.subTest(name=name):
+                self.assertIn(f'"{name}"', reference)
+
+        self.assertEqual(
+            sum(
+                1
+                for row in guide_manifest["guides"]
+                if row["slug"] == "sheet-metal"
+            ),
+            1,
+        )
+        for anchor in (
+            "base-sheet",
+            "fold",
+            "edge-flange",
+            "contour-flange",
+            "hem",
+            "path-flange",
+            "flat-pattern",
+        ):
+            self.assertIn(f'id="{anchor}"', guide)
+
+        self.assertIn("- heading: Sheet metal", cheatsheet)
+        for name in expected_methods:
+            self.assertIn(name, cheatsheet)
+
     def test_site_orchestrator_keeps_html_in_explicit_render_layer(self):
         build = (SITE / "build.py").read_text(encoding="utf-8")
         guides = (SITE / "guides.py").read_text(encoding="utf-8")

@@ -8,6 +8,14 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Documentation
+
+- Added a first-class Sheet metal API Guide chapter and complete generated
+  Reference/Cheatsheet coverage for `Sketch.sheet_metal()`,
+  `Shape.fold()`, `Shape.flange()`, `Shape.contour_flange()`,
+  `Shape.hem()` and `Shape.path_flange()` (#786).
+
+
 ## [0.13.2] - 2026-11-23
 
 ### Hotfix context
