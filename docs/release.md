@@ -52,6 +52,22 @@ v0.13.0 or newer; v0.13.1 is the recommended patch level.
 
 The v0.12.0 and v0.13.0 tags remain valid and immutable.
 
+## Active release checkpoint
+
+Forge **v0.13.2** is the active hotfix release under #800.
+
+The #796 implementation is already qualified on both permanent lanes:
+
+- `dev-cad` source: `926feda24ee61c01ab5bfe00521b6aae0c4ede2a`;
+- exact dev-cad branch build: `45267112890`;
+- stable `main` hotfix source before release metadata:
+  `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
+- exact main branch build: `45268325135`.
+
+The v0.13.2 preparation changes only package/release metadata on top of that
+qualified hotfix baseline. After this preparation reaches `main`, require the
+exact resulting main branch build green before publishing.
+
 ## Consumer workflow
 
 Forge keeps a copy-ready thin wrapper in:
@@ -119,8 +135,14 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-No Forge release is currently active.
+Finish #800 as Forge v0.13.2.
 
-Continue normal CAD/API/documentation work and choose the next release version
-only when a coherent stable-main batch is ready. The next release must continue
-to use the central flow and exact main `ci-build-record` evidence.
+After the release-preparation PR reaches `main`, require the exact resulting
+main branch build green and publish only with:
+
+```text
+/release v0.13.2 <exact-40-character-main-sha>
+```
+
+Then verify that the annotated tag and GitHub Release resolve to that exact SHA
+before asking product-CAD PR #406 to adopt the hotfix.
