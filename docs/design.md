@@ -1604,6 +1604,36 @@ names for removal. This preserves legitimate shared packages such as
 `models.components.*` while preventing independent model roots from sharing a
 cached `assemblies.*`, `parts.*` or other local package by accident.
 
+## Rotated Sketch cutter frame
+
+Issue #750 uses the native arbitrary Sketch frame already accepted by
+SolidCraft rather than inventing a new solid-transform command.
+
+```text
+Sketch(
+  plane="XY",
+  origin=(x, y, z),
+  rotation=(rx, ry, rz),
+)
+  -> fixed Euler rotation X -> Y -> Z
+  -> rotated local x_dir / y_dir
+  -> sketch.create(
+       plane={
+         origin: [...],
+         x_dir: [...],
+         y_dir: [...],
+       }
+     )
+  -> existing Sketch profile commands
+  -> existing solid.extrude
+  -> normal CSG join/cut/intersect
+```
+
+The frame conversion is shared by standalone Sketch extrusion and explicit
+world-plane Sketches on an existing body. It keeps the cutter editable as a
+native Sketch + extrusion and avoids browser-name selectors or consumer-local
+coordinate expansion.
+
 ## Shared-batch item projection with CAD-CI copy
 
 The shared batch remains the expensive producer. The change is only the shape

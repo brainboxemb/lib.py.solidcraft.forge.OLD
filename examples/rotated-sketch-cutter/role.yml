@@ -1,0 +1,8 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: scpf/tests/test_sketch_attachment.py
+reason: >
+  Focused #750 regression. Unit tests check the generated native Sketch frame
+  and CAD-CI model verification replays two mirrored rotated prism cuts in
+  released SolidCraft.
