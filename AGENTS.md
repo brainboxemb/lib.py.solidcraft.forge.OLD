@@ -128,7 +128,8 @@ All current historical model-verification cases use
 CLIs; reusable verification mechanics belong in the released verification
 library.
 
-Presentation metadata in `model.yml` uses only:
+Presentation metadata in `model.yml` uses the canonical reusable contract in
+`scpf.model_metadata` and the exact template in `docs/templates/model.yml`:
 
 ```text
 section
@@ -139,6 +140,9 @@ description
 parameters
 stages
 ```
+
+Consumers must reuse `validate_model_metadata()` rather than copying this field
+list or validator. `model.yml` has no consumer-specific extension fields.
 
 `model.yml` is the generic model/page metadata source. `priority` is presentation-only ordering within the declared section; lower values render first. The example
 `README.md` owns human engineering explanation such as the goal, Forge API
