@@ -8,50 +8,82 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
-- Adopt externally accepted `tool.cad.ci v0.31.0` for Forge merge governance, including the public branch-role input names and reviewed `/merge-resolved` conflict-recovery path (#743).
+### Added
 
-- Adopt externally accepted `tool.cad.ci 0.20.0` for the shared `/merge` policy, adding history-preserving `main -> dev-cad|dev-ci` synchronization while retaining normal lane-to-main promotion and squash for ordinary PRs (#718).
+- Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
+  Hem length and optional gap remain parameterized in mm while the active sheet
+  rule owns thickness, K-factor and bend radius (#773).
 
-### Changed
+- Added native `Shape.path_flange(...)` on existing sheet bodies using the
+  reusable open connected Sketch-chain replay identity. The qualified initial
+  contract is line-only with an optional parameterized bend-radius override
+  (#776).
 
-- Forge now owns one canonical reusable `model.yml` contract in `scpf.model_metadata`, with an exact seven-field template and shared mapping validator for Forge and CAD consumers. YAML parsing stays outside the CAD library and consumer-specific extensions are rejected (#703).
+### Fixed
 
-- Assembly lowering now gives component-local Sketch features deterministic document-global native identities. Independent reusable component definitions and parameterized variants may reuse authored names such as `Profile` without requiring assembly-global naming in consumer code (#679).
+- Cone primitives now participate in native feature-compiler Boolean
+  join/cut/intersect operations instead of being limited to the primitive-only
+  CSG route (#746).
 
-- Forge long-lived branch integration now consumes the externally accepted
-  `tool.cad.ci 0.18.0` durable same-runner action. Generic durable scope/base
-  resolution and complete build-scope preparation/publication are no longer
-  duplicated in Forge workflow YAML; Forge retains lane policy, site generation
-  and Pages publication on the same runner (#662).
+- `Polygon2D` now lowers correctly inside explicit and face-attached Sketches,
+  including attached through-all cutter workflows (#747).
 
-### Changed
+- `run_script()` isolates model-local Python modules between independent model
+  roots so one CAD model cannot reuse another model's local import accidentally
+  (#749).
 
-- Forge CI now consumes externally accepted `tool.cad.ci 0.17.1` /
-  `lib.py.cad.ci 0.10.0` and projects shared model/reference/diagram batch
-  results with the library-owned dependency-output `copy:` action instead of
-  launching per-item materializer processes. Shared batches emit item-shaped
-  projection roots; real model contract tests remain executable steps (#261).
+- Standalone extruded Sketch cutters preserve an explicit rotated local Sketch
+  frame before normal Boolean CSG, enabling rotated cutter Shapes without a
+  consumer-local workaround (#750).
+
+
+## [0.12.0] - 2026-11-23
 
 ### Added
 
-- Added native `Shape.hem(...)` sheet-metal history on existing sheet
-  bodies. Hem length and optional gap remain parameterized in mm, the active
-  sheet rule continues to own material/bend properties, and the focused
-  regression fixture verifies saved-design mutation plus recoverable native
-  flat-pattern history (#773).
+- Standalone `Sketch(...).extrude(...)` results can be used directly as
+  Boolean join/cut/intersect operands without an attached Sketch or temporary
+  cutter body (#354).
 
-- Added native `Shape.path_flange(...)` on existing sheet bodies using the
-  reusable open connected Sketch-chain replay identity from #683. The initial
-  contract is line-only, supports an optional parameterized bend-radius
-  override, and keeps thickness/K-factor/material on the active sheet rule
-  (#776).
+- `Sketch.profile(...)` supports connected mixed straight-line and circular-arc
+  closed profiles with native connectivity and parameter-preserving lowering
+  (#567).
 
-- Standalone `Sketch(...).extrude(...)` can now be used directly as a Boolean
-  operand with `+`, `-` and `&`. Forge keeps the independent Sketch on its
-  authored plane and lowers the extrusion directly to native SolidCraft
-  `join`, `cut` or `intersect` against the existing body instead of requiring
-  an attached Sketch or temporary cutter body (issue #354).
+- Sheet bodies support native SolidCraft edge flanges with explicit edge
+  selection and rule-owned material properties (#682).
 
+- `Sketch.chain(...)` supports reusable open connected chains, including the
+  qualified line-to-tangent-arc path needed by sheet-metal consumers (#683).
+
+- Open Sketch chains can create native SolidCraft contour flanges without
+  extrude/fuse approximations (#684).
+
+### Changed
+
+- Forge owns one canonical reusable `model.yml` contract in
+  `scpf.model_metadata`, with an exact seven-field template and shared mapping
+  validator for Forge and CAD consumers (#703).
+
+- Assembly lowering gives component-local Sketch features deterministic
+  document-global native identities, so independent reusable component
+  definitions and variants may reuse authored names such as `Profile` (#679).
+
+- Forge CAD-CI now consumes the externally accepted owner stack
+  `tool.cad.ci v0.35.0`, `lib.py.cad.ci v0.18.2` and
+  `lib.py.cad.verification v0.16.0`. PR/durable workflows, generic build
+  storage/Page publication, built-in CadQuery/build123d reference execution and
+  reusable verification mechanics are owner-layer capabilities; Forge keeps
+  only repository-owned builders and Forge-specific expectations
+  (#261, #661, #662, #740).
+
+- Merge governance supports history-preserving permanent-lane promotion and
+  stable-to-lane synchronization, plus the reviewed `/merge-resolved`
+  conflict-recovery path through the released shared policy (#718, #743).
+
+### Fixed
+
+- Release result reporting and post-release reconciliation distinguish source
+  metadata from actual immutable tag/GitHub Release evidence (#655).
 ## [0.11.0] - 2026-11-22
 
 ### Added
