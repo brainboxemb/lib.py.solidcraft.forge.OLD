@@ -9,9 +9,24 @@ Generic CAD-CI, shared release mechanics, reusable verification, runtime
 packaging, generated build branches, Pages and merge policy stay in their
 owner repositories.
 
-## Current repository state
+## Current release
 
-Permanent source refs:
+Latest published Forge release: **v0.13.1**.
+
+- annotated tag: `v0.13.1`;
+- exact release source:
+  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- central release run: `45262594629`;
+- qualified SolidCraft: `0.45.0`.
+
+v0.13.1 adds no modelling behavior beyond v0.13.0. It corrects release
+guidance around the v0.12.0 -> v0.13.x boundary.
+
+v0.12.0 and v0.13.0 remain valid immutable releases. The important boundary is
+that #746, #747, #749 and #750 were not present in v0.12.0 and first reached a
+published release in v0.13.0.
+
+## Permanent branches
 
 ```text
 main
@@ -19,25 +34,20 @@ dev-cad
 dev-ci
 ```
 
-Current heads at the v0.13.0 release checkpoint:
+At v0.13.1 publication:
 
-- `main`: `733134e66283e57c65a608731c04945fbf177b60`;
-- `dev-cad`: `b83a53f60795ca8d08c452f132eab362974632e5`;
-- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+- `main` release source:
+  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- `dev-cad`:
+  `733134e66283e57c65a608731c04945fbf177b60`;
+- `dev-ci`:
+  `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-Published Forge package before this patch checkpoint: **v0.13.0** at exact
-`fc44eb8c3ccbf5f945f69bf68d6076a0a4294f63`.
+Branch rules:
 
-The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
-release does not contain #746, #747, #749 or #750. The original `Cone`
-primitive itself predates v0.12.0; #746 is specifically native Boolean feature
-compilation for Cone.
-
-## Permanent branch rule
-
-- `main`: stable integration only.
-- `dev-cad`: Forge API/compiler/model/verification/site-content work.
-- `dev-ci`: CI/release integration.
+- `main`: stable integration only;
+- `dev-cad`: Forge API/compiler/model/verification/site-content work;
+- `dev-ci`: CI/release integration;
 - short-lived work branches are squash-merged;
 - exact `main -> dev-cad|dev-ci`: history-preserving sync;
 - exact `dev-cad|dev-ci -> main`: history-preserving sync;
@@ -45,6 +55,9 @@ compilation for Cone.
   `/merge-resolved` path with a separate `resolve/` review branch;
 - generic owner behavior is changed, released and externally accepted in its
   owner repository before Forge consumes it.
+
+Do not use vague process names such as “promotion” or “reconciliation” where a
+concrete sync direction or build action is meant.
 
 ## Accepted shared stack
 
@@ -58,60 +71,116 @@ compilation for Cone.
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4`.
 
-The central release flow is proven by v0.12.0. Pages is web output and is not
-release evidence. The stable release evidence is the main **ci-build-record**.
+Pages is web output and is not release evidence. The stable release evidence is
+the main **ci-build-record**.
 
 ## Active work
 
-### Release — #789 Forge v0.13.1
+### #779 — native whole-sheet perforation
 
-Status: **now**.
+Status: **resume after v0.13.1**.
 
-v0.13.0 is published and contains the intended post-v0.12 CAD batch. Its
-release notes, however, did not explicitly explain that v0.12.0 had been cut
-before #746/#747/#749/#750 reached stable main.
+PR #780 is outside the v0.13.x release batch and must be refreshed from current
+`dev-cad` before completion.
 
-v0.13.1 is a documentation/release-metadata patch only:
+Required next steps:
 
-1. package version becomes `0.13.1`;
-2. changelog gets an explicit release-boundary explanation;
-3. no modelling behavior changes from v0.13.0;
-4. after merge, require the exact main branch build green;
-5. publish with `/release v0.13.1 <exact-main-sha>`;
-6. verify annotated tag and GitHub Release against that exact SHA;
-7. update this plan to the published state.
+1. refresh the branch from current `dev-cad`;
+2. finish native SolidCraft flat-pattern/perforation evidence;
+3. make perforation a visible **Sheet metal** Verification item;
+4. require exact-head green evidence;
+5. merge normally to `dev-cad`.
 
-Do not move or rewrite v0.12.0 or v0.13.0.
+Do not model perforations as repeated B-rep holes.
 
-### CAD — #779 whole-sheet perforation
+### #785 — Examples / Verification catalog split
 
-Status: **paused until the v0.13.0 release is complete**.
+Status: **active next**.
 
-PR #780 is intentionally outside the frozen v0.13.0 batch. Its branch must be
-refreshed from the current `dev-cad` after the release checkpoint. The feature
-must become a Sheet metal Verification item before completion.
+Restore the architectural boundary:
 
-### Documentation / Verification — #785 and #786
+- public Examples stays a small curated teaching catalog;
+- Verification becomes an independent growing capability catalog;
+- add a first-class **Sheet metal** Verification group;
+- new public feature cases belong under `verification/cases/`;
+- adding Verification coverage must not increase the public Example count.
 
-Status: **issues recorded; implementation resumes after v0.13.0**.
+Curated public Examples:
 
-- #785 restores the small curated public Examples catalog and introduces an
-  independent Verification catalog with a first-class **Sheet metal** group.
-- #786 makes Reference, API Guide, Cheatsheet and `docs/api.md` track new
-  public Forge capabilities.
-- new public modelling API is not considered documentation-complete without
-  normal user-facing API documentation and Verification coverage.
+- `simple-box`;
+- `anchored-holes`;
+- `components`;
+- `corner-anchor`.
 
-### Shared CAD-CI terminology
+The Sheet metal Verification group must include the existing sheet API family,
+including base/fold, edge flange, contour flange, hem and path flange, with
+perforation added when #779 is complete.
 
-`tool.cad.ci #180` tracks replacement of the public word `durable` with
-clear branch-build terminology. Forge must wait for a released/accepted shared
-change; do not add a local alias. The agreed release-evidence term
-`ci-build-record` remains unchanged.
+### #786 — API documentation completeness
 
-Exploded-view #751 remains deliberately lower priority.
+Status: **active next, parallel with #785**.
 
-## Completed CAD work awaiting v0.13.0 publication
+Make normal user-facing API documentation track new public Forge capabilities.
+
+Required surfaces:
+
+- implementation docstrings;
+- generated API Reference;
+- task-oriented API Guide;
+- Cheatsheet where appropriate;
+- `docs/api.md` for cross-object semantics;
+- Verification links/cases for behavior evidence.
+
+Sheet metal must become a first-class API documentation domain rather than a few
+isolated methods hidden in generic sections.
+
+### #788 — Forge CAD-CI performance
+
+Status: **measure before redesign**.
+
+Current full Forge graphs are again around 2m17–2m49 for the CAD graph.
+
+Important measured facts:
+
+- Forge currently runs with `jobs=2`;
+- the SolidCraft model batch has grown from 15 to about 45 cases;
+- `model-verification-batch:verify_models` alone takes about 53 seconds;
+- one of two parallel slots is therefore occupied by one large serial batch.
+
+First perform controlled jobs=2/4/6 measurements on the same graph. Only design
+bounded batch sharding if the model batch remains the critical path.
+
+### Shared CAD-CI follow-ups
+
+Owner issues:
+
+- `tool.cad.ci #180`: replace public `durable` terminology with clear
+  branch-build terminology;
+- `lib.py.cad.ci #139`: keep parallel command output attributable to its CAD
+  target while retaining live streaming and parallelism.
+
+Forge must consume released shared changes; do not add local aliases/workarounds.
+
+### Lower-priority Forge work
+
+- #753 component-local Cylinder joins;
+- #751 native exploded views;
+- #737 historical changelog alignment;
+- #713 audit/reduce Forge scripts;
+- #659 build/verification/results terminology;
+- #570 verification diagram source cleanup;
+- #349 remaining SOLID CREATE coverage;
+- #347 generalized pattern seeds;
+- #335 build123d Sheet Metal reference — blocked on a released upstream API;
+- #325 AnchorFrame root cause;
+- #82 Joints-folder visibility;
+- #81 rotated occurrence-local AnchorFrame references;
+- #9 first-class Sketch/constraints/workplanes;
+- #8 hollow primitives.
+
+## Completed release batch
+
+Released by v0.13.0/v0.13.1:
 
 - #746 Cone Boolean feature compilation;
 - #747 Polygon2D explicit/attached Sketch;
@@ -120,32 +189,8 @@ Exploded-view #751 remains deliberately lower priority.
 - #773 native sheet hem;
 - #776 native sheet path flange.
 
-## Other open work
-
-| Issue | Status | Next action |
-| --- | --- | --- |
-| #789 Release Forge v0.13.1 clarification patch | **now** | Merge metadata/docs patch, require exact main build, publish and verify v0.13.1. |
-| #785 Examples / Verification catalog split | **after release** | Restore four curated Examples and add Sheet metal Verification group. |
-| #786 API documentation completeness | **after release** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
-| #779 Native whole-sheet perforation | **after release** | Refresh from dev-cad, finish runtime evidence and publish as Verification case. |
-| #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
-| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
-| #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
-| #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates after owner migrations settle. |
-| #659 Build/verification/results terminology | **later / cross-repo** | Follow shared terminology work. |
-| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing source format. |
-| #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
-| #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
-| #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
-| #325 AnchorFrame root cause | **later** | Resume when an active model requires it. |
-| #82 Joints-folder visibility | **later** | Decide interaction/export policy separately. |
-| #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate with #325. |
-| #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused slices. |
-| #8 Hollow primitives | **later** | Reconcile with native shell/pipe support when needed. |
-
 ## Next checkpoint
 
-Finish #789 as Forge v0.13.1: merge the metadata/documentation patch to
-`main`, require the exact resulting main branch build green, publish through
-the central release flow, and verify the immutable tag/GitHub Release before
-resuming #779, #785 or #786.
+Resume #779, #785 and #786 from the post-v0.13.1 state. Keep exploded-view #751
+at lower priority. Measure #788 separately without weakening Verification
+coverage.
