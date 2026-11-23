@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "1b239cd7ec8d9da12e88d30552a72f7539ce3f3f3c7eb6ce5b2524471a2a6b0f",
+  "duration_seconds": 0.104,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T19:15:57.442Z",
+  "item": "rotated-sketch-cutter",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "65ecf830bd0f07775adbcb8c0d2e36cad72713faff523910e1d5a0f4391d861c"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "b4f3ade9f740457d9cdbdeedda6ebe3f10c17e9cd3f3ade745a415ca283a84a6"
+    }
+  },
+  "run_finished_at": "2026-11-23T19:15:59.797Z",
+  "run_started_at": "2026-11-23T19:13:35.270Z",
+  "schema": 6,
+  "started_at": "2026-11-23T19:15:57.337Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "0f8c63741e0671362c0448eea2df512236c883fe0ad67aafb6b87e000116481e",
+  "timeout_seconds": null
+}
