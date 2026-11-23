@@ -321,6 +321,26 @@ SolidCraft 0.45 explicitly supports `new|join|cut|intersect|auto` on
 `solid.extrude.operation`; Forge only exposes the deterministic operations
 required by the public Boolean operators.
 
+## Primitive Boolean operands
+
+Direct and positioned native primitives must use one Boolean lowering contract
+whether the existing body is a pure primitive CSG body or already contains
+ordered native features.
+
+Requirements:
+
+- direct and positioned `Cylinder` and `Cone` operands support native
+  `join`, `cut` and `intersect` operations when used with Forge Boolean
+  operators;
+- primitive-only expressions remain on the primitive CSG compiler;
+- when the existing body needs ordered feature compilation, the primitive
+  operand reuses the same native primitive operation code instead of duplicating
+  Cylinder/Cone command generation in the feature compiler;
+- Cone lowering preserves authored `diameter`, `top_diameter`, `height`,
+  axis and axial-anchor-derived base;
+- join/cut/intersect target the existing body directly through SolidCraft's
+  native `targets` field; Forge must not create a temporary second body.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
