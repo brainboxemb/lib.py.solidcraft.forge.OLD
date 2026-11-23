@@ -6,7 +6,7 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class AttachedThroughAllContractTests(unittest.TestCase):
