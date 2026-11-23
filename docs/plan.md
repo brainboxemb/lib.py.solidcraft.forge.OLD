@@ -66,6 +66,26 @@ release evidence. The stable release evidence is the main **ci-build-record**.
 
 ## Active work
 
+### #797 — symbolic primitive anchor arithmetic regression
+
+Status: **hotfix / first priority**.
+
+Forge v0.13.1 exposed a downstream regression in an existing HUB75 model:
+symbolic `Cylinder` height and symbolic `.at(..., anchor=BOTTOM)` placement
+could be converted to different internal representations before anchor
+arithmetic, causing `str + Expression`.
+
+Required order:
+
+1. keep placement/dimension values typed through anchor arithmetic;
+2. cover the downstream Cylinder join and equivalent Box/Cone paths;
+3. merge the exact green fix to `dev-cad`;
+4. sync the hotfix to `main`, require exact main build green;
+5. publish a patch release before asking CAD consumers to adopt it.
+
+Do not add a product-CAD workaround.
+
+
 ### Release — v0.13.1
 
 Status: **complete**.
@@ -81,7 +101,7 @@ No active Forge release work remains.
 
 ### CAD — #779 whole-sheet perforation
 
-Status: **resume now**.
+Status: **paused behind #797 hotfix**.
 
 PR #780 was intentionally kept outside the v0.13.x release batch. Refresh its
 branch from current `dev-cad`, finish the native perforation evidence, and make
@@ -89,7 +109,7 @@ the feature a Sheet metal Verification item before completion.
 
 ### Documentation / Verification — #785 and #786
 
-Status: **resume now in parallel with #779**.
+Status: **parallel preparation only until #797 hotfix is released**.
 
 - #785 restores the small curated public Examples catalog and introduces an
   independent Verification catalog with a first-class **Sheet metal** group.
@@ -142,7 +162,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-Resume #779, #785 and #786 from the current post-release refs. Keep #788 as a
+Fix and release #797 first. Then resume #779, #785 and #786 from the updated post-hotfix refs. Keep #788 as a
 separate measured performance lane and #751 exploded views at lower priority.
 Do not start another Forge release until a coherent new stable-main batch
 exists.
