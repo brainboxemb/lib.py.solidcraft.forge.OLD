@@ -167,6 +167,78 @@ class GeometryPrimitives(unittest.TestCase):
         self.assertIn("height", str(cylinder["base"][2]))
         self.assertNotEqual(cylinder["base"][2], -10)
 
+    def test_symbolic_cylinder_bottom_anchor_join_preserves_parameter_arithmetic(self):
+        from scpf import BOTTOM, Box, Cylinder, Parameter
+        from scpf.compiler import compile_model
+
+        depth = Parameter("depth", 80)
+        front_depth = Parameter("front_depth", 10)
+        height = depth + 5 - front_depth
+
+        commands = compile_model(
+            Box(120, 80, 4, anchor=BOTTOM)
+            + Cylinder(d=8, h=height, anchor=BOTTOM).at(
+                20,
+                15,
+                front_depth,
+                anchor=BOTTOM,
+            ),
+            "SymbolicCylinderJoin",
+        )["commands"]
+
+        cylinder = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cylinder"
+        )
+        self.assertEqual(cylinder["operation"], "join")
+        self.assertEqual(cylinder["base"], [20, 15, "front_depth"])
+        self.assertEqual(
+            cylinder["height"],
+            "(depth + 5 mm) - (front_depth)",
+        )
+        self.assertEqual(
+            [
+                row["params"]["name"]
+                for row in commands
+                if row["command"] == "parameters.add"
+            ],
+            ["depth", "front_depth"],
+        )
+
+    def test_symbolic_box_and_cone_placement_anchor_arithmetic_stays_symbolic(self):
+        from scpf import BOTTOM, Box, Cone, Parameter
+        from scpf.compiler import compile_model
+
+        height = Parameter("height", 20)
+        z = Parameter("z", 30)
+        body = Box(100, 80, 8, anchor=BOTTOM)
+
+        box_commands = compile_model(
+            body + Box(10, 12, height).at(5, 6, z),
+            "SymbolicBoxJoin",
+        )["commands"]
+        box = [
+            row["params"] for row in box_commands
+            if row["command"] == "solid.box"
+        ][-1]
+        self.assertEqual(box["operation"], "join")
+        self.assertEqual(box["corner"][:2], [0, 0])
+        self.assertIn("z", str(box["corner"][2]))
+        self.assertIn("height", str(box["corner"][2]))
+
+        cone_commands = compile_model(
+            body + Cone(d=12, top_d=8, h=height).at(5, 6, z),
+            "SymbolicConeJoin",
+        )["commands"]
+        cone = next(
+            row["params"] for row in cone_commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "join")
+        self.assertEqual(cone["base"][:2], [5, 6])
+        self.assertIn("z", str(cone["base"][2]))
+        self.assertIn("height", str(cone["base"][2]))
+
     def test_cylinder_has_no_type_specific_orient_shortcut(self):
         from scpf.core import Cylinder
         self.assertFalse(hasattr(Cylinder(d=8, h=20), "orient"))
