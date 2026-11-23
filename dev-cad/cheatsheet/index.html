@@ -116,6 +116,46 @@ Box(self.length, 30, 10)</code></pre>
 </div>
 </section>
 <section>
+<h2>Sheet metal</h2>
+<div class="reference-grid"><article class="reference" id="cheat-sheet-metal-sketch-sheet-metal">
+<h3><code>Sketch.sheet_metal(...)</code></h3>
+<p>Create a new native flat sheet body from one closed Sketch and define its shared material rule.</p>
+<pre><code>sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)</code></pre>
+
+</article>
+<article class="reference" id="cheat-sheet-metal-shape-fold">
+<h3><code>Shape.fold(...)</code></h3>
+<p>Fold existing sheet material along one straight line; material values come from the active sheet rule.</p>
+<pre><code>sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))</code></pre>
+
+</article>
+<article class="reference" id="cheat-sheet-metal-shape-flange">
+<h3><code>Shape.flange(...)</code></h3>
+<p>Grow a native flange from one or more fixed existing-sheet edge picks.</p>
+<pre><code>sheet = sheet.flange(edges=[(40,0,2)], height=20, angle=90)</code></pre>
+
+</article>
+<article class="reference" id="cheat-sheet-metal-shape-contour-flange">
+<h3><code>Shape.contour_flange(...)</code></h3>
+<p>Create a new native sheet body from a finished connected open Sketch chain.</p>
+<pre><code>sheet = contour.contour_flange(distance=50, thickness=2.5, bend_radius=2.5)</code></pre>
+
+</article>
+<article class="reference" id="cheat-sheet-metal-shape-hem">
+<h3><code>Shape.hem(...)</code></h3>
+<p>Fold an existing sheet edge back while inheriting the active material rule.</p>
+<pre><code>sheet = sheet.hem(edges=[(40,0,2)], length=12, gap=4)</code></pre>
+
+</article>
+<article class="reference" id="cheat-sheet-metal-shape-path-flange">
+<h3><code>Shape.path_flange(...)</code></h3>
+<p>Add a native flange to an existing edge using a finished line-only open Sketch path.</p>
+<pre><code>sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)</code></pre>
+
+</article>
+</div>
+</section>
+<section>
 <h2>Features and placement</h2>
 <div class="reference-grid"><article class="reference" id="cheat-features-and-placement-sketch-extrude-distance">
 <h3><code>sketch.extrude(distance)</code></h3>
@@ -129,18 +169,6 @@ plate = sketch.extrude(8)</code></pre>
 <h3><code>sketch.extrude(..., profiles=[...])</code></h3>
 <p>Extrude or cut only the closed Sketch regions selected by fixed sketch-local points.</p>
 <pre><code>cut = sketch.extrude(Depth.THROUGH_ALL, profiles=[(-30, 0), (30, 0)], exact_regions=True)</code></pre>
-
-</article>
-<article class="reference" id="cheat-features-and-placement-sketch-sheet-metal">
-<h3><code>Sketch.sheet_metal(...)</code></h3>
-<p>Create a native flat sheet from a closed XY Sketch with an explicit sheet rule.</p>
-<pre><code>sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)</code></pre>
-
-</article>
-<article class="reference" id="cheat-features-and-placement-shape-fold">
-<h3><code>Shape.fold(...)</code></h3>
-<p>Fold existing sheet material along one straight line while keeping native sheet history.</p>
-<pre><code>sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))</code></pre>
 
 </article>
 <article class="reference" id="cheat-features-and-placement-sketch-rectangular-pattern">

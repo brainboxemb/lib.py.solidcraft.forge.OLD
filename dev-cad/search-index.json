@@ -1230,7 +1230,7 @@
     {
       "title": "Shape.fold \u00b7 API Guide",
       "kind": "API Guide",
-      "url": "guide/features/#features",
+      "url": "guide/sheet-metal/#fold",
       "summary": "Fold existing sheet material along one straight line.",
       "aliases": [
         "Shape.fold",
@@ -1242,6 +1242,124 @@
         "position"
       ],
       "keywords": "Shape.fold(self, *, line, angle=90, fixed=None, position='centerline', flip=False) Bend material that already exists in a sheet blank. Dimensions and bend allowance come from the sheet's shared rule. This first qualified form supports one straight fold line. The line endpoints and fixed point are fixed finite coordinates. sheet.fold( line=((20, -20), (20, 20)), angle=90, fixed=(-20, 0, 0), ) line Two XY or XYZ points defining the fold line. angle Bend angle in degrees. Defaults to 90. fixed Optional XYZ point on the side that must stay fixed. position Native bend-line position: \"centerline\", \"start\", \"end\" or \"mould\". Defaults to \"centerline\". flip Fold to the opposite side when True. Defaults to False."
+    },
+    {
+      "title": "Shape.flange",
+      "kind": "API Reference",
+      "url": "reference/Shape.flange/",
+      "summary": "Add a native edge flange to existing sheet material.",
+      "aliases": [
+        "Shape.flange",
+        "angle",
+        "edges",
+        "flange",
+        "flip",
+        "height",
+        "height_from",
+        "position"
+      ],
+      "keywords": "Shape.flange(self, *, edges, height, angle=90, height_from=None, position=None, flip=False) Grow new sheet material from one or more existing sheet edges while inheriting thickness, K-factor and bend radius from the sheet rule. This first slice accepts explicit fixed XYZ edge pick points only. Per-edge segment dictionaries, corner relief overrides, chained bends and radius overrides are intentionally not exposed. edges Non-empty sequence of fixed XYZ pick points on sheet edges. height Positive flange height in mm. angle Bend angle in degrees. Defaults to 90. height_from Optional native height datum: \"outer\", \"inner\" or \"tangent\". position Optional native bend position: \"inside\", \"outside\", \"middle\", \"material_outside\" or \"tangent\". flip Reverse the flange side when True. Defaults to False.",
+      "symbol": "Shape.flange"
+    },
+    {
+      "title": "Shape.flange \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#edge-flange",
+      "summary": "Add a native edge flange to existing sheet material.",
+      "aliases": [
+        "Shape.flange",
+        "angle",
+        "edges",
+        "flange",
+        "flip",
+        "height",
+        "height_from",
+        "position"
+      ],
+      "keywords": "Shape.flange(self, *, edges, height, angle=90, height_from=None, position=None, flip=False) Grow new sheet material from one or more existing sheet edges while inheriting thickness, K-factor and bend radius from the sheet rule. This first slice accepts explicit fixed XYZ edge pick points only. Per-edge segment dictionaries, corner relief overrides, chained bends and radius overrides are intentionally not exposed. edges Non-empty sequence of fixed XYZ pick points on sheet edges. height Positive flange height in mm. angle Bend angle in degrees. Defaults to 90. height_from Optional native height datum: \"outer\", \"inner\" or \"tangent\". position Optional native bend position: \"inside\", \"outside\", \"middle\", \"material_outside\" or \"tangent\". flip Reverse the flange side when True. Defaults to False."
+    },
+    {
+      "title": "Shape.contour_flange",
+      "kind": "API Reference",
+      "url": "reference/Shape.contour_flange/",
+      "summary": "Create a native contour-flange sheet from an open Sketch chain. The receiver must be the Shape returned by Sketch.chain(...).finish(). Material dimensions define the sheet rule used by the new body; the contour feature itself receives only that rule name.",
+      "aliases": [
+        "Shape.contour_flange",
+        "contour_flange"
+      ],
+      "keywords": "Shape.contour_flange(self, *, distance, thickness, bend_radius, k_factor=0.5, rule_name='Forge Sheet', flip=False, reverse=False)",
+      "symbol": "Shape.contour_flange"
+    },
+    {
+      "title": "Shape.contour_flange \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#contour-flange",
+      "summary": "Create a native contour-flange sheet from an open Sketch chain. The receiver must be the Shape returned by Sketch.chain(...).finish(). Material dimensions define the sheet rule used by the new body; the contour feature itself receives only that rule name.",
+      "aliases": [
+        "Shape.contour_flange",
+        "contour_flange"
+      ],
+      "keywords": "Shape.contour_flange(self, *, distance, thickness, bend_radius, k_factor=0.5, rule_name='Forge Sheet', flip=False, reverse=False)"
+    },
+    {
+      "title": "Shape.hem",
+      "kind": "API Reference",
+      "url": "reference/Shape.hem/",
+      "summary": "Add a native hem to existing sheet material.",
+      "aliases": [
+        "Shape.hem",
+        "edges",
+        "flip",
+        "gap",
+        "hem",
+        "length"
+      ],
+      "keywords": "Shape.hem(self, *, edges, length, gap=None, flip=False) Fold one or more existing sheet edges back on the sheet while preserving native sheet-metal history and the inherited rule. This first slice accepts explicit fixed XYZ edge pick points only. Generic edge selectors and compound hem profiles are intentionally outside this contract. edges Non-empty sequence of fixed XYZ pick points on sheet edges. length Positive hem length in mm, measured to the outer face. gap Optional positive clearance in mm between the returned leg and the face it folds over. When omitted, SolidCraft uses the sheet rule. flip Reverse the hem side when True. Defaults to False.",
+      "symbol": "Shape.hem"
+    },
+    {
+      "title": "Shape.hem \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#hem",
+      "summary": "Add a native hem to existing sheet material.",
+      "aliases": [
+        "Shape.hem",
+        "edges",
+        "flip",
+        "gap",
+        "hem",
+        "length"
+      ],
+      "keywords": "Shape.hem(self, *, edges, length, gap=None, flip=False) Fold one or more existing sheet edges back on the sheet while preserving native sheet-metal history and the inherited rule. This first slice accepts explicit fixed XYZ edge pick points only. Generic edge selectors and compound hem profiles are intentionally outside this contract. edges Non-empty sequence of fixed XYZ pick points on sheet edges. length Positive hem length in mm, measured to the outer face. gap Optional positive clearance in mm between the returned leg and the face it folds over. When omitted, SolidCraft uses the sheet rule. flip Reverse the hem side when True. Defaults to False."
+    },
+    {
+      "title": "Shape.path_flange",
+      "kind": "API Reference",
+      "url": "reference/Shape.path_flange/",
+      "summary": "Add a native path flange to existing sheet material.",
+      "aliases": [
+        "Shape.path_flange",
+        "edge",
+        "path",
+        "path_flange",
+        "radius"
+      ],
+      "keywords": "Shape.path_flange(self, *, edge, path, radius=None) Create a multi-leg native flange from an existing sheet edge using one reusable open Sketch path. The initial SolidCraft 0.45 contract accepts line-only open chains. Tangent arcs and generic edge selectors are intentionally rejected until the native path-flange runtime proves those contracts. edge Fixed XYZ pick point on the existing sheet edge. path Finished open connected Sketch chain describing the flange path across that edge. radius Optional positive bend radius in mm. When omitted, SolidCraft inherits the active sheet rule.",
+      "symbol": "Shape.path_flange"
+    },
+    {
+      "title": "Shape.path_flange \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#path-flange",
+      "summary": "Add a native path flange to existing sheet material.",
+      "aliases": [
+        "Shape.path_flange",
+        "edge",
+        "path",
+        "path_flange",
+        "radius"
+      ],
+      "keywords": "Shape.path_flange(self, *, edge, path, radius=None) Create a multi-leg native flange from an existing sheet edge using one reusable open Sketch path. The initial SolidCraft 0.45 contract accepts line-only open chains. Tangent arcs and generic edge selectors are intentionally rejected until the native path-flange runtime proves those contracts. edge Fixed XYZ pick point on the existing sheet edge. path Finished open connected Sketch chain describing the flange path across that edge. radius Optional positive bend radius in mm. When omitted, SolidCraft inherits the active sheet rule."
     },
     {
       "title": "Shape.rectangular_pattern",
@@ -1480,7 +1598,7 @@
     {
       "title": "Sketch.sheet_metal \u00b7 API Guide",
       "kind": "API Guide",
-      "url": "guide/geometry/#profiles",
+      "url": "guide/sheet-metal/#base-sheet",
       "summary": "Create a native sheet-metal body from this closed flat Sketch.",
       "aliases": [
         "Sketch.sheet_metal",
@@ -2932,7 +3050,7 @@
       "aliases": [
         "geometry"
       ],
-      "keywords": "Start with a solid Box , Cylinder and Sphere are centred on their geometric CENTER by default. Use anchor=... when a face, axial end or tangent datum should lie at the origin. For Cylinder the anchor is resolved after choosing Axis.X , Axis.Y or Axis.Z ; for example LEFT/RIGHT are the axial ends of an X-axis cylinder and BOTTOM/TOP are the axial ends of a Z-axis cylinder. from scpf import ( BOTTOM, FRONT, LEFT, RIGHT, Axis, Box, Cylinder, Sphere, ) plate = Box(80, 50, 8) board = Box(80, 50, 12).at( 0, 0, 0, anchor=FRONT + BOTTOM, ).fillet( 4, edges=[BOTTOM + LEFT, BOTTOM + RIGHT], ) pin = Cylinder(d=8, h=20, axis=Axis.Z).at( 10, 10, 8, anchor=BOTTOM, ) side_pin = Cylinder(d=8, h=20, axis=Axis.X).at(-10, 0, 0) ball = Sphere(12) body = Sphere(20) & Box(30, 30, 30) centered_bore = Cylinder(d=8, h=30, axis=Axis.X).at(body) at(x, y, z) places CENTER at those coordinates unless another anchor=... is supplied. Passing another Shape instead uses shape-relative CENTER-to-CENTER placement. Forge derives the native Box corner, Cylinder base or Sphere center from the selected datum; callers do not add manual half-size corrections. Draw a 2D profile, then extrude it A Rectangle2D is a planar profile rather than a 3D body. 2D geometry is authored inside an explicit Sketch scope. Polygon2D can be created on the XY, XZ or YZ plane. from scpf import Sketch, Rectangle2D, Polygon2D with Sketch(plane=\"XY\") as plate_sketch: Rectangle2D(80, 50) plate = plate_sketch.extrude(8) with Sketch(plane=\"XZ\") as side_sketch: Polygon2D( [(0, 0), (40, 0), (40, 8), (8, 8), (8, 30), (0, 30)], plane=\"XZ\", world=True, ) side = side_sketch.extrude(10) # Signed distance chooses the side of the sketch plane. backward = plate_sketch.extrude(-8) centered = plate_sketch.extrude(8, sym=True) A sketch plane affects where its axes go; changing the camera does not rotate its geometry. Leave the with Sketch(...) scope, then call sketch.extrude(...) to create 3D material. A positive distance follows the sketch-plane normal, a negative distance goes the other way, and sym=True divides a positive distance equally over both sides. Direct Rectangle2D(...).extrude(...) syntax is intentionally not supported. Select profiles when extruding a Sketch By default Sketch.extrude() uses every closed profile in the Sketch. Use profiles=[(x, y), ...] when only some closed regions should be extruded or cut. The points are fixed coordinates in the Sketch itself; users do not need SolidCraft profile indices or curve ids. from scpf import Anchor, Axis, Box, Circle2D, Depth, Sketch board = Box(120, 80, 5, anchor=Anchor.BOTTOM) with Sketch(name=\"Selected holes\", on=board, parent=Anchor.TOP) as holes: seed = holes.add(Circle2D(d=8), offset=(-30, 0)) holes.rectangular_pattern( seed, count=4, spacing=20, direction=Axis.X, ) board = board - holes.extrude( Depth.THROUGH_ALL, profiles=[(-30, 0), (-10, 0), (30, 0)], exact_regions=True, ) SolidCraft 0.42 stores a successful point selection using the curves around the selected profile where possible. That lets the selection follow the profile when the saved design recomputes. exact_regions=True asks SolidCraft to use exactly the region containing each point. Profile points must be fixed finite numbers; Forge Parameters and expressions are not accepted in this field. Repeat and mirror profiles inside one Sketch Sketch.rectangular_pattern() makes a native SolidCraft sketch pattern from a profile that already belongs to the Sketch. Sketch.mirror() mirrors a profile, a pattern result or an earlier mirror result. Both methods return a Sketch result that can be passed to another supported Sketch operation. from scpf import Anchor, Axis, Box, Circle2D, Depth, Sketch board = Box(200, 120, 8) with Sketch(name=\"Dog holes\", on=board, parent=Anchor.TOP) as holes: seed = holes.add(Circle2D(d=8), offset=(-40, 20)) row = holes.rectangular_pattern( seed, count=4, spacing=25, direction=Axis.X, ) holes.mirror(row, axis=Axis.X) board = board - holes.extrude(Depth.THROUGH_ALL) The same operations work with native Slot profiles. A pattern or mirror result can be used as the source of the next operation. from scpf import Anchor, Axis, Sketch, SlotCenterToCenter2D with Sketch(name=\"Clamp slots\", on=board, parent=Anchor.TOP) as slots: seed = SlotCenterToCenter2D((20, 20), (40, 20), 8) arm = slots.rectangular_pattern( seed, count=2, spacing=50, direction=Axis.X, ) opposite = slots.mirror(arm, axis=Axis.Y) slots.mirror(arm, axis=Axis.X) slots.mirror(opposite, axis=Axis.X) count , count2 , spacing and spacing2 may use suitable model Parameters, so those values remain editable in the saved SolidCraft design. Current native qualification covers attached Sketch(on=...) use. Pattern directions support Axis.X , Axis.Y or a fixed 2D vector. Mirrors currently support the Sketch X or Y origin axis. Per-instance pattern suppression is not supported. SolidCraft 0.42 stores the curves selected when a mirror is created. If a pattern later creates extra curves after its count changes, those new curves are not added to that existing mirror automatically. Add, subtract and intersect body = Box(50, 50, 20) tool = Cylinder(d=12, h=22).at(0, 0, 0) joined = body + tool # union, where supported cut = body - tool # difference, where supported shared = body & tool # intersection, where supported The supported compiler path depends on the operands. Native feature history and CSG trees are not interchangeable for every operation. For manufacturing features such as holes, prefer the native feature operations ."
+      "keywords": "Start with a solid Box , Cylinder and Sphere are centred on their geometric CENTER by default. Use anchor=... when a face, axial end or tangent datum should lie at the origin. For Cylinder the anchor is resolved after choosing Axis.X , Axis.Y or Axis.Z ; for example LEFT/RIGHT are the axial ends of an X-axis cylinder and BOTTOM/TOP are the axial ends of a Z-axis cylinder. from scpf import ( BOTTOM, FRONT, LEFT, RIGHT, Axis, Box, Cylinder, Sphere, ) plate = Box(80, 50, 8) board = Box(80, 50, 12).at( 0, 0, 0, anchor=FRONT + BOTTOM, ).fillet( 4, edges=[BOTTOM + LEFT, BOTTOM + RIGHT], ) pin = Cylinder(d=8, h=20, axis=Axis.Z).at( 10, 10, 8, anchor=BOTTOM, ) side_pin = Cylinder(d=8, h=20, axis=Axis.X).at(-10, 0, 0) ball = Sphere(12) body = Sphere(20) & Box(30, 30, 30) centered_bore = Cylinder(d=8, h=30, axis=Axis.X).at(body) at(x, y, z) places CENTER at those coordinates unless another anchor=... is supplied. Passing another Shape instead uses shape-relative CENTER-to-CENTER placement. Forge derives the native Box corner, Cylinder base or Sphere center from the selected datum; callers do not add manual half-size corrections. Draw a 2D profile, then extrude it A Rectangle2D is a planar profile rather than a 3D body. 2D geometry is authored inside an explicit Sketch scope. Polygon2D can be created on the XY, XZ or YZ plane. from scpf import Sketch, Rectangle2D, Polygon2D with Sketch(plane=\"XY\") as plate_sketch: Rectangle2D(80, 50) plate = plate_sketch.extrude(8) with Sketch(plane=\"XZ\") as side_sketch: Polygon2D( [(0, 0), (40, 0), (40, 8), (8, 8), (8, 30), (0, 30)], plane=\"XZ\", world=True, ) side = side_sketch.extrude(10) # Signed distance chooses the side of the sketch plane. backward = plate_sketch.extrude(-8) centered = plate_sketch.extrude(8, sym=True) A sketch plane affects where its axes go; changing the camera does not rotate its geometry. Leave the with Sketch(...) scope, then call sketch.extrude(...) to create 3D material. A positive distance follows the sketch-plane normal, a negative distance goes the other way, and sym=True divides a positive distance equally over both sides. Direct Rectangle2D(...).extrude(...) syntax is intentionally not supported. Polygon2D works in standalone explicit Sketches and in face-attached explicit Sketches; its authored vertices stay sketch-local. Standalone Sketches may also use an explicit origin= and rotation=(rx, ry, rz) . An extrusion from that rotated local frame can participate directly in + , - or & CSG, including non-axis-aligned cutters. Select profiles when extruding a Sketch By default Sketch.extrude() uses every closed profile in the Sketch. Use profiles=[(x, y), ...] when only some closed regions should be extruded or cut. The points are fixed coordinates in the Sketch itself; users do not need SolidCraft profile indices or curve ids. from scpf import Anchor, Axis, Box, Circle2D, Depth, Sketch board = Box(120, 80, 5, anchor=Anchor.BOTTOM) with Sketch(name=\"Selected holes\", on=board, parent=Anchor.TOP) as holes: seed = holes.add(Circle2D(d=8), offset=(-30, 0)) holes.rectangular_pattern( seed, count=4, spacing=20, direction=Axis.X, ) board = board - holes.extrude( Depth.THROUGH_ALL, profiles=[(-30, 0), (-10, 0), (30, 0)], exact_regions=True, ) SolidCraft 0.42 stores a successful point selection using the curves around the selected profile where possible. That lets the selection follow the profile when the saved design recomputes. exact_regions=True asks SolidCraft to use exactly the region containing each point. Profile points must be fixed finite numbers; Forge Parameters and expressions are not accepted in this field. Repeat and mirror profiles inside one Sketch Sketch.rectangular_pattern() makes a native SolidCraft sketch pattern from a profile that already belongs to the Sketch. Sketch.mirror() mirrors a profile, a pattern result or an earlier mirror result. Both methods return a Sketch result that can be passed to another supported Sketch operation. from scpf import Anchor, Axis, Box, Circle2D, Depth, Sketch board = Box(200, 120, 8) with Sketch(name=\"Dog holes\", on=board, parent=Anchor.TOP) as holes: seed = holes.add(Circle2D(d=8), offset=(-40, 20)) row = holes.rectangular_pattern( seed, count=4, spacing=25, direction=Axis.X, ) holes.mirror(row, axis=Axis.X) board = board - holes.extrude(Depth.THROUGH_ALL) The same operations work with native Slot profiles. A pattern or mirror result can be used as the source of the next operation. from scpf import Anchor, Axis, Sketch, SlotCenterToCenter2D with Sketch(name=\"Clamp slots\", on=board, parent=Anchor.TOP) as slots: seed = SlotCenterToCenter2D((20, 20), (40, 20), 8) arm = slots.rectangular_pattern( seed, count=2, spacing=50, direction=Axis.X, ) opposite = slots.mirror(arm, axis=Axis.Y) slots.mirror(arm, axis=Axis.X) slots.mirror(opposite, axis=Axis.X) count , count2 , spacing and spacing2 may use suitable model Parameters, so those values remain editable in the saved SolidCraft design. Current native qualification covers attached Sketch(on=...) use. Pattern directions support Axis.X , Axis.Y or a fixed 2D vector. Mirrors currently support the Sketch X or Y origin axis. Per-instance pattern suppression is not supported. SolidCraft 0.42 stores the curves selected when a mirror is created. If a pattern later creates extra curves after its count changes, those new curves are not added to that existing mirror automatically. Add, subtract and intersect body = Box(50, 50, 20) tool = Cylinder(d=12, h=22).at(0, 0, 0) joined = body + tool # union, where supported cut = body - tool # difference, where supported shared = body & tool # intersection, where supported The supported compiler path depends on the operands. Native feature history and CSG trees are not interchangeable for every operation. For manufacturing features such as holes, prefer the native feature operations ."
     },
     {
       "title": "Start with a solid",
@@ -2952,7 +3070,7 @@
       "aliases": [
         "profiles"
       ],
-      "keywords": "Solids, 2D profiles, extrusions and the CSG operators. A Rectangle2D is a planar profile rather than a 3D body. 2D geometry is authored inside an explicit Sketch scope. Polygon2D can be created on the XY, XZ or YZ plane. from scpf import Sketch, Rectangle2D, Polygon2D with Sketch(plane=\"XY\") as plate_sketch: Rectangle2D(80, 50) plate = plate_sketch.extrude(8) with Sketch(plane=\"XZ\") as side_sketch: Polygon2D( [(0, 0), (40, 0), (40, 8), (8, 8), (8, 30), (0, 30)], plane=\"XZ\", world=True, ) side = side_sketch.extrude(10) # Signed distance chooses the side of the sketch plane. backward = plate_sketch.extrude(-8) centered = plate_sketch.extrude(8, sym=True) A sketch plane affects where its axes go; changing the camera does not rotate its geometry. Leave the with Sketch(...) scope, then call sketch.extrude(...) to create 3D material. A positive distance follows the sketch-plane normal, a negative distance goes the other way, and sym=True divides a positive distance equally over both sides. Direct Rectangle2D(...).extrude(...) syntax is intentionally not supported."
+      "keywords": "Solids, 2D profiles, extrusions and the CSG operators. A Rectangle2D is a planar profile rather than a 3D body. 2D geometry is authored inside an explicit Sketch scope. Polygon2D can be created on the XY, XZ or YZ plane. from scpf import Sketch, Rectangle2D, Polygon2D with Sketch(plane=\"XY\") as plate_sketch: Rectangle2D(80, 50) plate = plate_sketch.extrude(8) with Sketch(plane=\"XZ\") as side_sketch: Polygon2D( [(0, 0), (40, 0), (40, 8), (8, 8), (8, 30), (0, 30)], plane=\"XZ\", world=True, ) side = side_sketch.extrude(10) # Signed distance chooses the side of the sketch plane. backward = plate_sketch.extrude(-8) centered = plate_sketch.extrude(8, sym=True) A sketch plane affects where its axes go; changing the camera does not rotate its geometry. Leave the with Sketch(...) scope, then call sketch.extrude(...) to create 3D material. A positive distance follows the sketch-plane normal, a negative distance goes the other way, and sym=True divides a positive distance equally over both sides. Direct Rectangle2D(...).extrude(...) syntax is intentionally not supported. Polygon2D works in standalone explicit Sketches and in face-attached explicit Sketches; its authored vertices stay sketch-local. Standalone Sketches may also use an explicit origin= and rotation=(rx, ry, rz) . An extrusion from that rotated local frame can participate directly in + , - or & CSG, including non-axis-aligned cutters."
     },
     {
       "title": "Select profiles when extruding a Sketch",
@@ -3053,6 +3171,116 @@
         "anchors"
       ],
       "keywords": "Native holes, fillets, shells and relative positioning. from scpf import X, Y, Boss, Anchor boss = Boss(d=7, h=12, hole_d=2.5).attach( case, parent=Anchor.INNER_BOTTOM, offset=(X.MIN + 10, Y.MAX - 10), ) X.MIN and Y.MAX refer to the parent bounds and are not rotation-axis constants. Anchoring support currently focuses on rectangular bases and a documented set of faces. Do not assume every curved or lofted surface supports it."
+    },
+    {
+      "title": "Sheet metal",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/",
+      "summary": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns.",
+      "aliases": [
+        "sheet-metal"
+      ],
+      "keywords": "Sheet metal is native editable history Forge sheet-metal operations lower to SolidCraft sheet rules and native sheet features. Use them when the saved design must keep material thickness, bend allowance and a recoverable flat pattern. Do not replace these operations with fused solid envelopes when native history matters. One sheet rule owns the material A sheet body has one active rule. That rule owns thickness , k_factor and the default bend_radius . Operations on an existing sheet inherit those values instead of restating them. Feature-specific dimensions such as flange height, hem length or a path-flange radius override remain on the feature. Create a flat sheet body with Sketch(name=\"Blank\", plane=\"XY\") as sketch: Rectangle2D(80, 40) sheet = sketch.sheet_metal( thickness=2, bend_radius=2, k_factor=0.5, rule_name=\"Panel sheet\", ) Sketch.sheet_metal() creates a new sheet body from one closed Sketch. It is a body-creation operation, not a feature applied to an existing sheet. Fold existing material sheet = sheet.fold( line=((20, -20, 0), (20, 20, 0)), angle=90, fixed=(-30, 0, 0), ) Shape.fold() bends material that already belongs to the sheet. The initial contract uses one straight fixed-coordinate fold line. Thickness, K-factor and bend radius come from the active rule. Grow an edge flange sheet = sheet.flange( edges=[(40, 0, 2)], height=20, angle=90, ) Shape.flange() adds material to explicit existing sheet edges. Height and angle may remain parameterized. Edge selection is currently a non-empty set of fixed XYZ pick points; generic topology selectors are not yet part of this API. Create a sheet from an open contour with Sketch(name=\"Contour\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((35, 0)) chain.tangent_arc_to((40, 5)) chain.line_to((40, 30)) contour = chain.finish() sheet = contour.contour_flange( distance=50, thickness=2.5, bend_radius=2.5, k_factor=0.44, ) Shape.contour_flange() is the other body-creation operation. Its receiver is a finished connected open Sketch chain. Forge preserves chain order and replay-bound native curve identity; callers do not pass SolidCraft curve ids. Hem an existing edge sheet = sheet.hem( edges=[(40, 0, 2)], length=12, gap=4, ) Shape.hem() folds an existing edge back onto the sheet while inheriting the active material rule. The first contract uses fixed XYZ edge picks. Length and optional gap are feature dimensions and may be parameterized. Follow a reusable path with Sketch(name=\"Path\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((0, 14)) path = chain.finish() sheet = sheet.path_flange( edge=(40, 0, 2), path=path, radius=3, ) Shape.path_flange() adds a native flange to an existing edge using a finished open Sketch path. The qualified SolidCraft 0.45 contract is line-only. Omitting radius inherits the active rule; supplying it overrides only this feature's bend radius. Editable dimensions versus topology picks Keep design dimensions symbolic when the method accepts Parameter / Expression values. Current edge picks and straight fold-line coordinates are intentionally fixed finite coordinates. Forge rejects unsupported associative selectors instead of pretending a numeric pick is a stable topology reference. Verification and flat patterns Native sheet-metal verification is stronger than matching a formed bounding box. Verification cases inspect sheet-rule values, native bend/history records, saved-design parameter edits and the recoverable flat pattern. See the Verification catalog , especially the Sheet metal group."
+    },
+    {
+      "title": "Sheet metal is native editable history",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#overview",
+      "summary": "Sheet metal",
+      "aliases": [
+        "overview"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. Forge sheet-metal operations lower to SolidCraft sheet rules and native sheet features. Use them when the saved design must keep material thickness, bend allowance and a recoverable flat pattern. Do not replace these operations with fused solid envelopes when native history matters."
+    },
+    {
+      "title": "One sheet rule owns the material",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#rule-ownership",
+      "summary": "Sheet metal",
+      "aliases": [
+        "rule-ownership"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. A sheet body has one active rule. That rule owns thickness , k_factor and the default bend_radius . Operations on an existing sheet inherit those values instead of restating them. Feature-specific dimensions such as flange height, hem length or a path-flange radius override remain on the feature."
+    },
+    {
+      "title": "Create a flat sheet body",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#base-sheet",
+      "summary": "Sheet metal",
+      "aliases": [
+        "base-sheet"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. with Sketch(name=\"Blank\", plane=\"XY\") as sketch: Rectangle2D(80, 40) sheet = sketch.sheet_metal( thickness=2, bend_radius=2, k_factor=0.5, rule_name=\"Panel sheet\", ) Sketch.sheet_metal() creates a new sheet body from one closed Sketch. It is a body-creation operation, not a feature applied to an existing sheet."
+    },
+    {
+      "title": "Fold existing material",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#fold",
+      "summary": "Sheet metal",
+      "aliases": [
+        "fold"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. sheet = sheet.fold( line=((20, -20, 0), (20, 20, 0)), angle=90, fixed=(-30, 0, 0), ) Shape.fold() bends material that already belongs to the sheet. The initial contract uses one straight fixed-coordinate fold line. Thickness, K-factor and bend radius come from the active rule."
+    },
+    {
+      "title": "Grow an edge flange",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#edge-flange",
+      "summary": "Sheet metal",
+      "aliases": [
+        "edge-flange"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. sheet = sheet.flange( edges=[(40, 0, 2)], height=20, angle=90, ) Shape.flange() adds material to explicit existing sheet edges. Height and angle may remain parameterized. Edge selection is currently a non-empty set of fixed XYZ pick points; generic topology selectors are not yet part of this API."
+    },
+    {
+      "title": "Create a sheet from an open contour",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#contour-flange",
+      "summary": "Sheet metal",
+      "aliases": [
+        "contour-flange"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. with Sketch(name=\"Contour\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((35, 0)) chain.tangent_arc_to((40, 5)) chain.line_to((40, 30)) contour = chain.finish() sheet = contour.contour_flange( distance=50, thickness=2.5, bend_radius=2.5, k_factor=0.44, ) Shape.contour_flange() is the other body-creation operation. Its receiver is a finished connected open Sketch chain. Forge preserves chain order and replay-bound native curve identity; callers do not pass SolidCraft curve ids."
+    },
+    {
+      "title": "Hem an existing edge",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#hem",
+      "summary": "Sheet metal",
+      "aliases": [
+        "hem"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. sheet = sheet.hem( edges=[(40, 0, 2)], length=12, gap=4, ) Shape.hem() folds an existing edge back onto the sheet while inheriting the active material rule. The first contract uses fixed XYZ edge picks. Length and optional gap are feature dimensions and may be parameterized."
+    },
+    {
+      "title": "Follow a reusable path",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#path-flange",
+      "summary": "Sheet metal",
+      "aliases": [
+        "path-flange"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. with Sketch(name=\"Path\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((0, 14)) path = chain.finish() sheet = sheet.path_flange( edge=(40, 0, 2), path=path, radius=3, ) Shape.path_flange() adds a native flange to an existing edge using a finished open Sketch path. The qualified SolidCraft 0.45 contract is line-only. Omitting radius inherits the active rule; supplying it overrides only this feature's bend radius."
+    },
+    {
+      "title": "Editable dimensions versus topology picks",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#parameters-and-picks",
+      "summary": "Sheet metal",
+      "aliases": [
+        "parameters-and-picks"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. Keep design dimensions symbolic when the method accepts Parameter / Expression values. Current edge picks and straight fold-line coordinates are intentionally fixed finite coordinates. Forge rejects unsupported associative selectors instead of pretending a numeric pick is a stable topology reference."
+    },
+    {
+      "title": "Verification and flat patterns",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#flat-pattern",
+      "summary": "Sheet metal",
+      "aliases": [
+        "flat-pattern"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. Native sheet-metal verification is stronger than matching a formed bounding box. Verification cases inspect sheet-rule values, native bend/history records, saved-design parameter edits and the recoverable flat pattern. See the Verification catalog , especially the Sheet metal group."
     },
     {
       "title": "Components and assemblies",
@@ -3285,6 +3513,66 @@
       "keywords": "Sphere(12, anchor=LEFT)"
     },
     {
+      "title": "Sketch.sheet_metal(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-sketch-sheet-metal",
+      "summary": "Create a new native flat sheet body from one closed Sketch and define its shared material rule.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)"
+    },
+    {
+      "title": "Shape.fold(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-fold",
+      "summary": "Fold existing sheet material along one straight line; material values come from the active sheet rule.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))"
+    },
+    {
+      "title": "Shape.flange(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-flange",
+      "summary": "Grow a native flange from one or more fixed existing-sheet edge picks.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sheet.flange(edges=[(40,0,2)], height=20, angle=90)"
+    },
+    {
+      "title": "Shape.contour_flange(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-contour-flange",
+      "summary": "Create a new native sheet body from a finished connected open Sketch chain.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = contour.contour_flange(distance=50, thickness=2.5, bend_radius=2.5)"
+    },
+    {
+      "title": "Shape.hem(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-hem",
+      "summary": "Fold an existing sheet edge back while inheriting the active material rule.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sheet.hem(edges=[(40,0,2)], length=12, gap=4)"
+    },
+    {
+      "title": "Shape.path_flange(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-path-flange",
+      "summary": "Add a native flange to an existing edge using a finished line-only open Sketch path.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)"
+    },
+    {
       "title": "sketch.extrude(distance)",
       "kind": "Cheatsheet",
       "url": "cheatsheet/#cheat-features-and-placement-sketch-extrude-distance",
@@ -3303,26 +3591,6 @@
         "Features and placement"
       ],
       "keywords": "cut = sketch.extrude(Depth.THROUGH_ALL, profiles=[(-30, 0), (30, 0)], exact_regions=True)"
-    },
-    {
-      "title": "Sketch.sheet_metal(...)",
-      "kind": "Cheatsheet",
-      "url": "cheatsheet/#cheat-features-and-placement-sketch-sheet-metal",
-      "summary": "Create a native flat sheet from a closed XY Sketch with an explicit sheet rule.",
-      "aliases": [
-        "Features and placement"
-      ],
-      "keywords": "sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)"
-    },
-    {
-      "title": "Shape.fold(...)",
-      "kind": "Cheatsheet",
-      "url": "cheatsheet/#cheat-features-and-placement-shape-fold",
-      "summary": "Fold existing sheet material along one straight line while keeping native sheet history.",
-      "aliases": [
-        "Features and placement"
-      ],
-      "keywords": "sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))"
     },
     {
       "title": "Sketch.rectangular_pattern(...)",
