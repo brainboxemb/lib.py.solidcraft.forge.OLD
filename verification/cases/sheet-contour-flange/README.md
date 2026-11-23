@@ -1,53 +1,41 @@
-# Native sheet contour-flange regression fixture
+# Native contour flange
 
-This non-public regression fixture qualifies Forge issue #684 against the
-pinned SolidCraft 0.45 runtime.
+**Group:** `sheet-metal`
+**Saved-design required:** `true`
 
-## Intent
+> Documentation provenance: Forge #785 promotes the released #684 contour-flange fixture to public Verification.
 
-Create one native contour-flange sheet body from a reusable open XZ Sketch
-chain:
+## Goal
 
-- fixed first line feeding the native tangent arc;
-- one native tangent arc with the fixed endpoint required by SolidCraft 0.45;
-- one parameter-driven final line;
-- one parameter-driven contour distance.
+Prove that a reusable connected open Sketch chain can create one native contour-flange sheet body with an explicit material rule.
 
-The public Forge operation is:
+## Forge API
 
-```python
-sheet = contour.contour_flange(
-    distance=contour_width,
-    thickness=2.5,
-    bend_radius=2.5,
-    k_factor=0.44,
-    rule_name="Contour Flange Rule",
-)
-```
+`Sketch.chain(...)`, `line_to()`, `tangent_arc_to()`, `finish()` and `Shape.contour_flange(...)`.
 
-The sheet rule owns thickness, K-factor and bend radius. The native
-`sheet.flange(type=contour)` command receives only the rule name.
+## Forge model
 
-## Curve identity
+An XZ line/tangent-arc/line chain creates a 50 mm wide, 2.5 mm thick contour flange using R2.5 and K=0.44.
 
-The tangent arc has no authored native id. Forge therefore accumulates the
-ordered curve ids with SCPF replay bindings and passes that runtime list to the
-contour flange. No caller-visible or guessed SolidCraft ids are used.
+## How Forge builds it in SolidCraft
 
-## Saved-design qualification
+Forge authors the ordered open Sketch chain, retains replay-bound native curve identity and passes the exact chain to one native contour-flange operation with one sheet rule.
 
-Without rerunning Forge Python, the saved SolidCraft design changes:
+## SolidCraft result
 
-- `contour_width: 50 -> 60 mm`;
-- `end_height: 30 -> 35 mm`.
+One native contour-flange sheet body preserves the connected Sketch source and recoverable developed geometry.
 
-The rebuilt/reopened model must remain one connected closed sheet-metal body
-with the same open Sketch chain.
+## Saved-design test
 
-## Flat pattern
+Mutate sheet width from 50 to 60 mm and the authored contour end height from 30 to 35 mm, then verify the rebuilt native sheet history.
 
-Baseline inspection requires a recoverable flat pattern using the same sheet
-rule, thickness and K-factor. SolidCraft 0.45 reports the tangent-arc contour as
-continuous contour geometry rather than a discrete bend record, so this fixture
-expects `bends=[]`. Bend radius is separately proven in the emitted
-`sheet.manage_rules` command contract.
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #785 / #684 public capability promotion.
+**Bounds sufficient:** `false`
+
+Bounds cannot prove ordered-chain replay identity or sheet-rule ownership; native history and flat-pattern inspection are required.
+
+## Reference notes
+
+- **Native SolidCraft history** — This is a native-history capability; external solid references are optional and must not be invented when they cannot express the same intent.
