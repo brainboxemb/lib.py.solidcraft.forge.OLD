@@ -706,10 +706,14 @@
         {
           "name": "offset",
           "description": "Optional signed offset from a standalone origin plane, in mm."
+        },
+        {
+          "name": "rotation",
+          "description": "Optional fixed (x, y, z) rotation in degrees for an explicit world-frame Sketch. Rotations are applied X, then Y, then Z."
         }
       ],
       "example": "with Sketch(name=\"Base\", plane=\"XY\") as sketch:\nRectangle2D(80, 50)",
-      "signature": "Sketch(*, name='Profile', on=None, parent=<Anchor.TOP: 'top'>, plane=None, origin=None, offset=None)"
+      "signature": "Sketch(*, name='Profile', on=None, parent=<Anchor.TOP: 'top'>, plane=None, origin=None, offset=None, rotation=None)"
     },
     {
       "kind": "callable",
