@@ -113,9 +113,11 @@ Current order:
    prism/cutter Shapes, PR #771, merge
    `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`;
 3. **now — metal** — #773 native `sheet.hem` on existing sheet bodies;
-4. #753 component-local native Cylinder joins across copied/rotated
+4. **next metal candidate** — #776 native `sheet.path_flange`, reusing the
+   existing-sheet history and #683 open-chain contract;
+5. #753 component-local native Cylinder joins across copied/rotated
    occurrences;
-5. #751 native SolidCraft exploded views — deliberately lower priority.
+6. #751 native SolidCraft exploded views — deliberately lower priority.
 
 #335 build123d Sheet Metal reference is currently upstream-blocked: the latest
 released build123d v0.13.0 is otherwise identical to v0.12.0 and neither
@@ -137,7 +139,8 @@ Each issue uses its own branch from current `dev-cad` and returns to
 | #749 Isolate project-local modules between run_script roots | dev-cad | **implemented on dev-cad** | PR #770 is green and merged; keep open until the CAD batch reaches stable main/release. |
 | #750 Standalone Shape local transform/rotation | dev-cad | **implemented on dev-cad** | PR #771 is merged; keep open until the CAD batch reaches stable main/release. |
 | #773 Native sheet.hem | dev-cad | **now / metal** | Add the focused public API, native lowering, tests and SolidCraft regression without a solid approximation. |
-| #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after #773** | Refresh the existing focused draft against current dev-cad and qualify it. |
+| #776 Native sheet.path_flange | dev-cad | **after #773 / metal** | Reuse the existing sheet-history and open-chain contracts; keep it separate from #773. |
+| #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after metal slice** | Refresh the existing focused draft against current dev-cad and qualify it. |
 | #751 Native SolidCraft exploded views | dev-cad | **later / lower priority** | Resume after the higher-priority metal/runtime work. |
 | #713 Audit/reduce Forge scripts | repository | **later** | Remove only genuine duplicates after the release-flow migration. |
 | #737 Historical changelog alignment | docs | **later / docs-only** | Keep separate from functional work. |
