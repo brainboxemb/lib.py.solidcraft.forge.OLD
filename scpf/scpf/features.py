@@ -52,7 +52,7 @@ def _is_pure_csg_tree(shape):
     if shape.kind in CSG_PRIMITIVE_KINDS or shape.kind == "placed_box":
         return True
     if shape.kind == "placed3d":
-        return shape.data[0].kind == "cylinder"
+        return shape.data[0].kind in ("cylinder", "cone")
     if shape.kind == "translated":
         return _is_pure_csg_tree(shape.data[0])
     if shape.kind in ("union", "difference", "intersection"):
@@ -1680,27 +1680,18 @@ def _to_commands(shape, name):
             raise ModelError(
                 f"{added.kind} must be positioned with .attach() or .at()"
             )
-        if added.kind in ("cylinder", "placed3d"):
-            if added.kind == "placed3d":
-                primitive, x, y, z = added.data
-            else:
-                primitive, x, y, z = added, 0, 0, 0
-            if primitive.kind != "cylinder":
-                raise ModelError("boolean primitive requires Cylinder")
-            height, diameter, axis, anchor = primitive.data
-            _require_positive(height, "cylinder height")
-            _require_positive(diameter, "cylinder diameter")
-            native_base = _cylinder_base_from_anchor(
-                height, diameter, axis, (x, y, z), anchor
-            )
-            return steps + [
-                _command("solid.cylinder",
-                         height=command_value(height),
-                         diameter=command_value(diameter),
-                         base=[command_value(v) for v in native_base],
-                         axis=axis, operation="join" if shape.kind == "union" else "cut",
-                         targets=[name]),
-            ], base
+        primitive_kind = (
+            added.data[0].kind if added.kind == "placed3d" else added.kind
+        )
+        if primitive_kind in ("cylinder", "cone") and added.kind in (
+                "cylinder", "cone", "placed3d"):
+            from .csg import _csg_apply
+            operation = {
+                "union": "join",
+                "difference": "cut",
+                "intersection": "intersect",
+            }[shape.kind]
+            return steps + _csg_apply(added, name, operation), base
         raise ModelError(f"unsupported CAD feature {added.kind}")
     raise ModelError(f"unsupported CAD solid {shape.kind}")
 
