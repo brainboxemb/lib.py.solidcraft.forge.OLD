@@ -427,6 +427,164 @@ class SheetMetalTests(unittest.TestCase):
                 "NotSheet",
             )
 
+    def test_sheet_path_flange_uses_native_open_chain_and_curve_binding(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(
+            thickness=2,
+            bend_radius=2,
+            rule_name="Path Rule",
+        )
+
+        with Sketch(name="Path", plane="XZ") as sketch:
+            chain = sketch.chain(start=(40, 2))
+            chain.line_to((40, 14))
+            chain.line_to((52, 14))
+            path = chain.finish()
+
+        commands = compile_model(
+            sheet.path_flange(
+                edge=(40, 0, 2),
+                path=path,
+            ),
+            "PathSheet",
+        )["commands"]
+
+        self.assertEqual(
+            [row["command"] for row in commands],
+            [
+                "sheet.manage_rules",
+                "sketch.create",
+                "sketch.rectangle.two_point",
+                "sketch.finish",
+                "sheet.flange",
+                "sketch.create",
+                "sketch.line",
+                "sketch.line",
+                "sketch.finish",
+                "sheet.path_flange",
+            ],
+        )
+        self.assertEqual(
+            commands[6]["bind"],
+            {"$contour_curves_1": "curves"},
+        )
+        self.assertEqual(
+            commands[7]["bind"],
+            {
+                "$contour_curves_2": {
+                    "field": "curves",
+                    "prepend": "$contour_curves_1",
+                }
+            },
+        )
+        self.assertEqual(
+            commands[-1]["params"],
+            {
+                "edge": [40.0, 0.0, 2.0],
+                "sketch": "Path",
+                "curves": "$contour_curves_2",
+                "body": "PathSheet",
+            },
+        )
+
+    def test_sheet_path_flange_preserves_path_and_radius_parameters(self):
+        leg_height = Parameter("path_leg_height", 14)
+        radius = Parameter("path_radius", 3)
+
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        with Sketch(name="Path", plane="XZ") as sketch:
+            chain = sketch.chain(start=(40, 2))
+            chain.line_to((40, leg_height))
+            chain.line_to((52, leg_height))
+            path = chain.finish()
+
+        commands = compile_model(
+            sheet.path_flange(
+                edge=(40, 0, 2),
+                path=path,
+                radius=radius,
+            ),
+            "ParametricPathSheet",
+        )["commands"]
+
+        units = {
+            row["params"]["name"]: row["params"]["unit"]
+            for row in commands
+            if row["command"] == "parameters.add"
+        }
+        self.assertEqual(units["path_leg_height"], "mm")
+        self.assertEqual(units["path_radius"], "mm")
+
+        first_line = next(
+            row for row in commands
+            if row["command"] == "sketch.line"
+            and row["params"]["points"][0] == [40, 2]
+        )
+        self.assertEqual(
+            first_line["params"]["points"],
+            [[40, 2], [40, "path_leg_height"]],
+        )
+        self.assertEqual(commands[-1]["params"]["radius"], "path_radius")
+
+    def test_sheet_path_flange_validates_initial_contract(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        with Sketch(name="LinePath", plane="XZ") as sketch:
+            chain = sketch.chain(start=(40, 2))
+            chain.line_to((40, 14))
+            line_path = chain.finish()
+
+        invalid_edges = (
+            (0, 0),
+            (0, 0, 0, 0),
+            (True, 0, 0),
+            (float("nan"), 0, 0),
+            (Parameter("edge_x", 40), 0, 2),
+        )
+        for edge in invalid_edges:
+            with self.subTest(edge=edge), self.assertRaises(ValueError):
+                sheet.path_flange(edge=edge, path=line_path)
+
+        with self.assertRaisesRegex(ValueError, "finished open connected"):
+            sheet.path_flange(
+                edge=(40, 0, 2),
+                path=Box(10, 10, 10),
+            )
+
+        with Sketch(name="ArcPath", plane="XZ") as sketch:
+            chain = sketch.chain(start=(40, 2))
+            chain.line_to((40, 10))
+            chain.tangent_arc_to((45, 15))
+            arc_path = chain.finish()
+        with self.assertRaisesRegex(ValueError, "line-only"):
+            sheet.path_flange(edge=(40, 0, 2), path=arc_path)
+
+        for radius in (0, -1, float("nan")):
+            with self.subTest(radius=radius), self.assertRaisesRegex(
+                ValueError, "radius"
+            ):
+                sheet.path_flange(
+                    edge=(40, 0, 2),
+                    path=line_path,
+                    radius=radius,
+                )
+
+        ordinary = Box(80, 40, 2, anchor=Anchor.BOTTOM)
+        with self.assertRaisesRegex(ModelError, "existing sheet material"):
+            compile_model(
+                ordinary.path_flange(
+                    edge=(40, 0, 2),
+                    path=line_path,
+                ),
+                "NotSheet",
+            )
+
     def test_contour_flange_uses_native_open_chain_and_replay_curve_bindings(self):
         with Sketch(name="Contour", plane="XZ") as sketch:
             chain = sketch.chain(start=(0, 0))
