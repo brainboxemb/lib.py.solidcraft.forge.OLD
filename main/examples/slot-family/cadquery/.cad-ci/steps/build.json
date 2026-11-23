@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "86af8e3b9df86b72b2105ce19e25afff066c6143c80035e7f30292116cd1b200",
+  "duration_seconds": 0.015,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:43.372Z",
+  "item": "examples-slot-family-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "b6a93491701d7ea4b60fe4c636cce4e3081a448f93b104b460dd1812ab6a56b2"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:43.357Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "b467f1838ba9ed08890d7d46cbb99fdaa5105cdf109a816fb07bd9645f1469a3",
+  "timeout_seconds": null
+}

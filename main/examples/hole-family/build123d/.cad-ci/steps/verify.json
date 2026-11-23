@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "3e53a79478c12ae12097a294aef8f16f44e24bdefe654751ddf6e8c8fef9df12",
+  "duration_seconds": 0.022,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:40.516Z",
+  "item": "examples-hole-family-build123d",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "3321687196e1ef52c146cea446c771b3f63e6bdbad86c9b167670a398a9c2aa4"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:40.494Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "254f27426d26977a3f3e955ebdc430caa3c36e11c81075aa23cac88b6f887035",
+  "timeout_seconds": null
+}

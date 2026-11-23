@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "edf2fac9539051c5271386a9dd452b0aefb0f64d014ed9b953a947eea211c64b",
+  "duration_seconds": 0.014,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:38.311Z",
+  "item": "examples-anchored-holes-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "872c2a4efad24845348dc9e5a0c35edbb249f97b3d435e0baf96c00b62d663cc"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:38.297Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "8edc085d976f52e80efa90485798dba766e05f729dbf5777e67b1d156b3a1652",
+  "timeout_seconds": null
+}

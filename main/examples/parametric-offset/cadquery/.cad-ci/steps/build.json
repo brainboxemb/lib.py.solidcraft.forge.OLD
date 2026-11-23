@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "da0468136160e6615c71e4bb2bbc54a03dd3698be9ee0c25eb60eb00db77a88f",
+  "duration_seconds": 0.014,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:41.332Z",
+  "item": "examples-parametric-offset-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "1d2db8e92d12906aee2e187b41f41445f5fafb4fce9f31d4f6cd69a93c4aa5a9"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:41.318Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "65777872cb58385342e597a591412d3cac50af2a5f0d0f2e71a34f0b9c0170ac",
+  "timeout_seconds": null
+}

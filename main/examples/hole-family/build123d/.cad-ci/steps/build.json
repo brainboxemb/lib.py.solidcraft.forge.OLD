@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "4cee7da4d20b0a7982e0390496c19d58b532afa58d8587fe88e75997b85b2378",
+  "duration_seconds": 0.014,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:40.492Z",
+  "item": "examples-hole-family-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "c32c2986cfce593ed1b4653e35d757f885de7dacc2c85a11a1f0d895156adbee"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:40.478Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "5b40f34002f656e2ff8bf1ba6fd4b5c08af30940ecf045e5876002c5efbf6feb",
+  "timeout_seconds": null
+}

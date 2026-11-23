@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "116a4b9af0b2f4d0dd76d8ce2977b8a49d12b4bc0cfcb94a6d66adcb13f3573f",
+  "duration_seconds": 0.015,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:39.398Z",
+  "item": "examples-circular-feature-pattern-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "99395a0431bc3a084d13dc26b41e63b7e2ef6a8edcbebcd2d6b062a9ec125191"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:39.383Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "941e516697b374880b915de10700c8e5e638156261a993de2663ad5af4a6cc33",
+  "timeout_seconds": null
+}

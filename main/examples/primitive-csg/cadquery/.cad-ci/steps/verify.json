@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "a0e9cb4834f5eadb117dcfd1f6aef613a3a88eb62255078457d9b1345018ca58",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:41.810Z",
+  "item": "examples-primitive-csg-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "64ddc0ba68332c30d2bae9c956e14158a4d8441a4ca4a78351c05bcb4608c56c"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:41.794Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "5a95251ecbbead328ff519b71501f637ee0a7be4064e2baa5923e1545c72af51",
+  "timeout_seconds": null
+}

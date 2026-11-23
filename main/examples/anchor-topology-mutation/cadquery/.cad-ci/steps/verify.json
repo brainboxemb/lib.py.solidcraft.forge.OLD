@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "3c3b61062bd03278e2e2e0e1dc363a1139d6e3f43e248d0e25c0ee23b41c1338",
+  "duration_seconds": 0.019,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:38.209Z",
+  "item": "examples-anchor-topology-mutation-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "1234f416b91de1423ca4ea6b18aa768dfbd42fa0a841bef77a988ae062ff6637"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:38.191Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "614546d8797832f85270bd6e0a16e923a81dbfc7941111eb4cbda9aeee8aa0ea",
+  "timeout_seconds": null
+}

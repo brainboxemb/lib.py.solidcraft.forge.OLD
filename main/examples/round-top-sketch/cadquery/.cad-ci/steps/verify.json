@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "80b0e42ca15d4efb0ddb30dc3fb341d6aaba1dd038a2024d7a1fd3ddb219b20d",
+  "duration_seconds": 0.017,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T17:17:42.447Z",
+  "item": "examples-round-top-sketch-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "f9fa6c5c5c3cbee00f0ffbf00febb2a64092ebc3868263f9473375c12b920e84"
+    }
+  },
+  "run_finished_at": "2026-11-23T17:18:28.775Z",
+  "run_started_at": "2026-11-23T17:16:19.861Z",
+  "schema": 6,
+  "started_at": "2026-11-23T17:17:42.430Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "ec0a47e391fe1e94768222cd3bda63473a130bf3b18ee84482cdb1a0ac162dc2",
+  "timeout_seconds": null
+}
