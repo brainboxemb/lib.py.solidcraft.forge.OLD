@@ -135,18 +135,19 @@ Requirements:
 Library ownership and runtime packaging are separate concerns.
 
 The released CAD runtime images must not embed `lib.py.cad.verification`.
-Forge supplies the exact released verification package through the CAD-CI
-dependency graph.
+Forge consumes the exact released verification package through CAD-CI's public
+verification-package capability.
 
 Requirements:
 
-- one `cad-verification-package` item prepares exactly one wheel from the
-  pinned released verification source;
-- the wheel is built/prepared once per selected graph, not once per model;
-- model verification depends on both `forge-package` and
-  `cad-verification-package`;
-- reference verification depends on `cad-verification-package`;
-- both runtime containers mount the dependency wheel read-only and add it to
+- root `cad-ci.yml` pins one exact released verification source;
+- CAD-CI materializes and validates that wheel once per selected graph;
+- Forge repository builders that need it declare `verification_package: true`;
+- those builders consume only the exact path in
+  `CAD_CI_VERIFICATION_WHEEL`;
+- model verification keeps only its explicit `forge-package` item dependency;
+- reference verification names no synthesized verification-package item;
+- runtime containers mount the exposed wheel read-only and add it to
   `PYTHONPATH`;
 - changing the verification-library pin must not require a Docker runtime
   release;
@@ -220,8 +221,8 @@ separate CAD-CI items.
 - release-candidate identity inputs, including `CHANGELOG.md`, must invalidate
   `forge-release` so the durable release-verification evidence is produced
   from the exact candidate SHA rather than reused from an older source commit.
-- model verification items depend on `forge-package` and
-  `cad-verification-package` only.
+- model verification items explicitly depend on `forge-package` only; their
+  builder requests the public verification-package capability.
 
 A model verification must not require `forge-tests` or `forge-release` to
 complete before its own model check can execute.
@@ -488,24 +489,26 @@ Merge method selection must be machine-controlled:
   synchronization;
 - every other supported PR -> squash merge.
 
-Repository automation must use exact externally accepted
-`tool.cad.ci 0.20.1` at
-`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, accepted in
-`tool.cad.ci.test` run `45031453651`, rather than calling the merge API or
-deciding the merge method in Forge-local code.
+Repository merge automation must use exact externally accepted
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`, accepted through
+`tool.cad.ci.test` #223, rather than calling the merge API, constructing
+conflict-resolution commits or deciding the merge method in Forge-local code.
 
 Forge keeps only a thin `issue_comment` wrapper that supplies repository
 policy:
 
-- stable ref `main`;
-- long-lived lanes `dev-cad` and `dev-ci`;
-- permanent generated refs `build` and `gh-pages`;
-- the conservative temporary-prefix allow-list;
+- stable branch `main`;
+- development branches `dev-cad` and `dev-ci`;
+- permanent generated branches `build` and `gh-pages`;
+- the conservative temporary-branch-prefix allow-list;
 - Forge integration workflow `scpf.yml`.
 
 The released shared workflow must reject draft, unmergeable or non-green PR
-heads, verify the immutable current head SHA, derive the merge class/method and
-require same-repository heads for permanent-direction operations.
+heads, verify the immutable current head SHA, derive the merge class/method,
+require same-repository heads for permanent-direction operations and provide
+the reviewed `/merge-resolved` path when a permanent-direction merge is
+genuinely conflicted.
 
 For lane-to-main promotion it preserves/advances the promoted lane at the
 resulting main merge commit and dispatches configured integration for both
@@ -1112,3 +1115,67 @@ released-stack acceptance chain before Forge adoption.
 Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
+
+## CAD-CI v0.35.0 consumer cut-over
+
+This section supersedes older shared-batch/root-action requirements above where
+they describe Forge-owned generic mechanics.
+
+Forge consumes only the exact externally accepted owner stack:
+
+- tool.cad.ci v0.35.0 @
+  `9fcad92b7c5f10ae29a9cb085a4f25bb38ed00f9`;
+- lib.py.cad.ci v0.18.2 @
+  `088644a05ff698957aef2ddc6cc5de037ddfa158`;
+- lib.py.cad.verification v0.16.0;
+- docker.cad.solidcraft v0.3.4.
+
+Requirements:
+
+- normal PR validation delegates to the released reusable workflow and does not
+  query PR files or classify docs/full-run locally;
+- durable main/dev-cad/dev-ci integration delegates to the released durable
+  workflow with jobs=2;
+- Pages generation is a repository-owned post-build Pages builder selected by
+  root cad-ci.yml; Forge does not publish Pages itself;
+- normal item and root-template ci.yml files are declarative and contain no
+  executable steps/run/copy definitions;
+- Forge-specific executable commands live once under ci/builders/<name>/;
+- built-in build123d and cadquery names are used directly and cannot be
+  shadowed by Forge aliases;
+- root cad-ci.yml pins the exact reusable verification package independently of
+  runtime images;
+- Forge does not own a verification-wheel producer or wheel transport helper;
+- build123d/CadQuery STL export, compatible shared-runtime batching and
+  mesh-geometry verification are owner-library behavior;
+- model-local reference_geometry.json remains Forge-owned verification data;
+- SolidCraft model verification definitions, visual checks and presentation
+  policy remain Forge-owned;
+- PythonSCAD/pyBOSL2 remain Forge-owned execution until a released generic owner
+  contract exists;
+- presentation is not semantic geometry verification: Forge may render a
+  presentation preview from an already accepted durable STL without retaining a
+  duplicate CAD runtime solely for rendering;
+- CURRENT/cache/rebuild behavior remains exclusively SCons/library-owned;
+- a change in verification data must rebuild through the generic graph without
+  Forge-owned selection or cleanup logic.
+
+The durable site must retain immutable links to accepted source/build artifacts.
+The Pages builder receives the complete prepared scope and exact source/build
+provenance from CAD-CI; it must not read generated branches itself.
+
+
+## Staged migration qualification
+
+A generic CAD-CI migration must be qualifiable without changing item
+`process` state merely to reduce test scope.
+
+- Forge consumes released tool.cad.ci v0.35.0 targeted read-only selection.
+- One-item qualification uses public `item`.
+- Multi-item gates use public JSON-list `changed_paths` and the normal
+  library-owned affected-item/dependency closure.
+- Targeted probes must not publish durable build or Pages state.
+- The #740 cut-over advances 1 -> 5 -> 10 -> full only after each preceding
+  gate is green.
+- The final PR gate removes the temporary targeted selector and runs normal
+  repository selection.
