@@ -1,6 +1,9 @@
 # template: tool.cad.ci/merge-policy
 # template-version: 4
 # tool-release: v0.33.2
+#
+# Copied from the released tool.cad.ci consumer template.
+# Forge changes only the explicitly repository-owned policy below.
 
 name: Merge policy
 
@@ -28,6 +31,8 @@ jobs:
     with:
       command: ${{ github.event.comment.body }}
       pull_request_number: ${{ github.event.issue.number }}
+
+      # Repository policy.
       stable_branch: main
       development_branches: '["dev-cad","dev-ci"]'
       permanent_branches: '["build","gh-pages"]'
