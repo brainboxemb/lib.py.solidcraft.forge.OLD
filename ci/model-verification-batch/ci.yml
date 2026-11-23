@@ -14,18 +14,4 @@ watch:
   - scripts/model_visual.py
 strategy:
   reuse: true
-steps:
-  - id: verify_models
-    selection_context: direct_dependents
-    inputs:
-      - examples/*/ci.yml
-      - examples/*/scpf/**
-      - examples/*/verification/**
-      - scripts/forge_example.py
-      - scripts/model_verify_declarative.py
-      - scripts/model_verification_batch.py
-      - scripts/model_visual.py
-      - scpf/scpf/version.py
-    run: [python, ../../scripts/model_verification_batch.py, batch]
-    outputs:
-      - items
+builder: model-verification-batch
