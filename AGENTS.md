@@ -334,8 +334,8 @@ Generated Pages lives on one `gh-pages` branch:
 ```
 
 Merge governance and normal Forge PR/durable CAD-CI execution consume exact
-externally accepted `tool.cad.ci v0.34.2` at
-`37f7a82c6769279d33367144c56976da89bb1a5d`, which pins
+externally accepted `tool.cad.ci v0.35.0` at
+`9fcad92b7c5f10ae29a9cb085a4f25bb38ed00f9`, which pins
 `lib.py.cad.ci v0.18.2` at
 `088644a05ff698957aef2ddc6cc5de037ddfa158`. Merge governance keeps the
 public branch-role inputs and supports both normal `/merge` and reviewed

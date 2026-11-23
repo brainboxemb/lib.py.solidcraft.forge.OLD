@@ -1116,15 +1116,15 @@ Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
 
-## CAD-CI v0.34.2 consumer cut-over
+## CAD-CI v0.35.0 consumer cut-over
 
 This section supersedes older shared-batch/root-action requirements above where
 they describe Forge-owned generic mechanics.
 
 Forge consumes only the exact externally accepted owner stack:
 
-- tool.cad.ci v0.34.2 @
-  `37f7a82c6769279d33367144c56976da89bb1a5d`;
+- tool.cad.ci v0.35.0 @
+  `9fcad92b7c5f10ae29a9cb085a4f25bb38ed00f9`;
 - lib.py.cad.ci v0.18.2 @
   `088644a05ff698957aef2ddc6cc5de037ddfa158`;
 - lib.py.cad.verification v0.16.0;
@@ -1163,3 +1163,19 @@ Requirements:
 The durable site must retain immutable links to accepted source/build artifacts.
 The Pages builder receives the complete prepared scope and exact source/build
 provenance from CAD-CI; it must not read generated branches itself.
+
+
+## Staged migration qualification
+
+A generic CAD-CI migration must be qualifiable without changing item
+`process` state merely to reduce test scope.
+
+- Forge consumes released tool.cad.ci v0.35.0 targeted read-only selection.
+- One-item qualification uses public `item`.
+- Multi-item gates use public JSON-list `changed_paths` and the normal
+  library-owned affected-item/dependency closure.
+- Targeted probes must not publish durable build or Pages state.
+- The #740 cut-over advances 1 -> 5 -> 10 -> full only after each preceding
+  gate is green.
+- The final PR gate removes the temporary targeted selector and runs normal
+  repository selection.

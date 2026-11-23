@@ -13,7 +13,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "scpf.yml"
 MODEL_VERIFY = ROOT / "scripts" / "model_verify_declarative.py"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
-TOOL_RELEASE = "v0.34.2"
+TOOL_RELEASE = "v0.35.0"
 
 
 def configured_variable(name: str) -> str:
@@ -133,6 +133,9 @@ class CiRuntimeContractTests(unittest.TestCase):
         self.assertIn("types: [opened, synchronize, reopened]", text)
         self.assertIn("branches: [main, dev-cad, dev-ci]", text)
         self.assertIn("workflow_dispatch:", text)
+        self.assertIn("# template-version: 5", text)
+        self.assertIn("item: simple-box", text)
+        self.assertIn("changed_paths:", text)
         self.assertIn(
             f"reusable-ci.yml@{TOOL_RELEASE}",
             text,
@@ -141,7 +144,7 @@ class CiRuntimeContractTests(unittest.TestCase):
             f"reusable-durable.yml@{TOOL_RELEASE}",
             text,
         )
-        self.assertEqual(text.count("jobs: 2"), 2)
+        self.assertEqual(text.count("jobs: 2"), 3)
         self.assertIn('"stable_branch":"main"', text)
         self.assertIn(
             '"development_branches":["dev-cad","dev-ci"]',

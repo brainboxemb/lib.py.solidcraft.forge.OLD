@@ -427,11 +427,11 @@ class SiteSourceTests(unittest.TestCase):
             ROOT / ".github" / "workflows" / "scpf.yml"
         ).read_text(encoding="utf-8")
         self.assertIn(
-            "reusable-ci.yml@v0.34.2",
+            "reusable-ci.yml@v0.35.0",
             workflow,
         )
         self.assertIn(
-            "reusable-durable.yml@v0.34.2",
+            "reusable-durable.yml@v0.35.0",
             workflow,
         )
         self.assertEqual(workflow.count("jobs: 2"), 2)

@@ -1646,7 +1646,7 @@ This cut-over deliberately does not use a reusable workflow job for the durable
 push path: site generation must continue immediately after CAD/build publication
 in the same workspace without artifact transport or a second bootstrap.
 
-## CAD-CI v0.34.2 Forge integration
+## CAD-CI v0.35.0 Forge integration
 
 This design supersedes the historical root-composite-action and Forge-owned
 shared-batch integration sections above.
@@ -1657,11 +1657,11 @@ shared-batch integration sections above.
 
 ```text
 PR
-  -> tool.cad.ci reusable-ci@v0.34.2
+  -> tool.cad.ci reusable-ci@v0.35.0
      -> released PR policy + one CAD-CI/SCons graph
 
 main/dev-cad/dev-ci push or dispatch
-  -> tool.cad.ci reusable-durable@v0.34.2
+  -> tool.cad.ci reusable-durable@v0.35.0
      -> resolve durable scope
      -> one CAD-CI/SCons graph
      -> publish complete build scope
@@ -1742,3 +1742,22 @@ It invokes `site/build.py` with that exact complete-scope/source/build
 evidence and writes only the configured site directory below
 `CAD_CI_OUTPUT`. CAD-CI owns stable/named Pages placement and branch
 publication.
+
+
+### Staged migration probes
+
+The v0.35.0 lane wrapper supports read-only targeted qualification. During
+#740, the PR call temporarily supplies the same public selector so each branch
+update executes only the current migration gate:
+
+```text
+item: simple-box
+  -> changed_paths: 5 model source paths
+  -> changed_paths: 10 model source paths
+  -> selector removed: normal full catalog gate
+```
+
+No model `ci.yml` participation state changes between these gates. The
+selector is an invocation parameter only. `lib.py.cad.ci` still owns affected
+item selection, dependency closure, direct-dependent batch context and SCons
+execution.
