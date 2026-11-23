@@ -78,11 +78,11 @@
       "engine": "scons",
       "engine_schema": 6,
       "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
-      "final_step": "test_release_publisher",
-      "final_target_spec_digest": "1119992cd96cf32946a42295f9f8635b91de85475e9d9b8a588f95a47e5373f2",
+      "final_step": "test_release_validator",
+      "final_target_spec_digest": "3fc64841c1dc34e42a423af4f87cdfc855c96b976ec5199e155f4f2033b28f26",
       "item_id": "release-policy",
       "outputs": [],
-      "source_commit": "90ac473473ab954103190ba426b350852b380fc0"
+      "source_commit": "68905bdbd4d999d73248858b4c3f9336ad47cf6e"
     },
     "ci/site-source": {
       "engine": "scons",
@@ -2464,5 +2464,5 @@
   },
   "schema": 1,
   "scope": "main",
-  "source_commit": "74e44e98bb561992547609b24b2e2664356423a1"
+  "source_commit": "68905bdbd4d999d73248858b4c3f9336ad47cf6e"
 }
