@@ -1,3 +1,10 @@
+# template: tool.cad.ci/cad-ci-lanes
+# template-version: 4
+# tool-release: v0.33.2
+#
+# Copied from the released tool.cad.ci consumer template.
+# Forge changes only repository-owned policy values and jobs=2.
+
 name: Forge
 
 on:
