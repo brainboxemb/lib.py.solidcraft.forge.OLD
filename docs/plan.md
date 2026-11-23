@@ -19,21 +19,19 @@ dev-cad
 dev-ci
 ```
 
-Current heads before the #781 synchronization completes:
+Current heads at the v0.13.0 release checkpoint:
 
-- `main`: `c8677ac945f22495b04da7c2cef9dd06595c9cec`;
-- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
-- `dev-cad`: `cc7ab64e02a277c1705bcfcd9f96cc6f16c53fab`.
+- `main`: `733134e66283e57c65a608731c04945fbf177b60`;
+- `dev-cad`: `b83a53f60795ca8d08c452f132eab362974632e5`;
+- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-Published Forge package: **v0.12.0** at exact
+Published Forge package before this checkpoint: **v0.12.0** at exact
 `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-The annotated `v0.12.0` tag and GitHub Release are valid and immutable.
-However, that tag predates the later `dev-cad` model-unblocking batch. Do not
-tell downstream users that v0.12.0 contains #746, #747, #749 or #750.
-
-The original `Cone` primitive itself predates v0.12.0; the missing Cone change
-is specifically #746 native Boolean feature compilation.
+The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
+release does not contain #746, #747, #749 or #750. The original `Cone`
+primitive itself predates v0.12.0; #746 is specifically native Boolean feature
+compilation for Cone.
 
 ## Permanent branch rule
 
@@ -41,9 +39,9 @@ is specifically #746 native Boolean feature compilation.
 - `dev-cad`: Forge API/compiler/model/verification/site-content work.
 - `dev-ci`: CI/release integration.
 - short-lived work branches are squash-merged;
-- exact `dev-cad|dev-ci -> main`: history-preserving normal merge;
-- exact `main -> dev-cad|dev-ci`: history-preserving normal merge;
-- conflicted permanent-ref sync/promotion uses the released reviewed
+- exact `main -> dev-cad|dev-ci`: history-preserving sync;
+- exact `dev-cad|dev-ci -> main`: history-preserving sync;
+- conflicted permanent-ref sync uses the released reviewed
   `/merge-resolved` path with a separate `resolve/` review branch;
 - generic owner behavior is changed, released and externally accepted in its
   owner repository before Forge consumes it.
@@ -60,121 +58,107 @@ is specifically #746 native Boolean feature compilation.
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4`.
 
-The central release flow is already proven by the successful v0.12.0
-publication. Pages is web output and is not release evidence.
+The central release flow is proven by v0.12.0. Pages is web output and is not
+release evidence. The stable release evidence is the main **ci-build-record**.
 
 ## Active work
 
-### Release lane — #781 Forge v0.13.0
+### Release — #781 Forge v0.13.0
 
-Status: **now, parallel with CAD work**.
+Status: **now**.
 
 Reason for v0.13.0:
 
-- #746 Cone Boolean/native-feature support was merged after the v0.12.0 tag;
-- #747 Polygon2D explicit/attached Sketch support was merged after the tag;
-- #749 model-local import isolation was merged after the tag;
-- #750 rotated standalone Sketch cutter support was merged after the tag;
-- current dev-cad also contains new public sheet API (#773 and #776).
+- #746 Cone native Boolean feature compilation;
+- #747 Polygon2D in explicit/attached Sketches;
+- #749 model-local import isolation;
+- #750 rotated standalone Sketch cutters;
+- #773 native sheet hem;
+- #776 native sheet path flange.
 
-Required order:
+Completed release steps:
 
-1. **now** — resolve conflicted permanent sync PR #782 (`main -> dev-cad`)
-   through the released reviewed `/merge-resolved` path;
-2. require the resulting exact `dev-cad` durable run green;
-3. promote exact `dev-cad -> main` history-preserving;
-4. require the exact resulting main build green;
-5. prepare v0.13.0 package metadata and dated changelog from that stable
-   candidate on a dedicated #781 release-preparation branch/PR;
-6. require the release-preparation main result green;
-7. publish only through `/release v0.13.0 <exact-main-sha>`;
-8. verify the annotated tag and GitHub Release resolve to that exact SHA;
-9. reconcile this plan after publication.
+1. #782 synced exact `main -> dev-cad` through the reviewed
+   `/merge-resolved` path;
+2. exact `dev-cad` branch build `45256578230` passed;
+3. #784 synced exact `dev-cad -> main`;
+4. exact main branch build `45258575394` passed at
+   `733134e66283e57c65a608731c04945fbf177b60`.
+
+Current release steps:
+
+5. **now** — #781 prepares package version `0.13.0` and the dated changelog
+   section on a short-lived release branch;
+6. merge that preparation to `main` and require the exact resulting main
+   branch build green;
+7. publish only with `/release v0.13.0 <exact-main-sha>`;
+8. verify the annotated tag and GitHub Release both resolve to that exact SHA;
+9. update this plan to the published release state.
 
 Do not retag or move v0.12.0.
 
-### CAD lane — #779 whole-sheet perforation
+### CAD — #779 whole-sheet perforation
 
-Status: **active in parallel; PR #780 exact-head green**.
+Status: **paused until the v0.13.0 release is complete**.
 
-#779 adds native whole-sheet `sheet.perforate` semantics without repeated
-B-rep-hole approximation.
+PR #780 is intentionally outside the frozen v0.13.0 batch. Its branch must be
+refreshed from the current `dev-cad` after the release checkpoint. The feature
+must become a Sheet metal Verification item before completion.
 
-PR #780 at `9deca3a69d4ed599a756b58b8f59f748ce27c8ec` is green. Keep it open while
-#782's reviewed conflict-resolution base is fixed; merging #780 first would move
-`dev-cad` and invalidate the reviewed #782 base SHA. After #782 is complete,
-refresh #780 against the synchronized lane if needed, then merge it normally
-after exact-head green evidence.
+### Documentation / Verification — #785 and #786
+
+Status: **issues recorded; implementation resumes after v0.13.0**.
+
+- #785 restores the small curated public Examples catalog and introduces an
+  independent Verification catalog with a first-class **Sheet metal** group.
+- #786 makes Reference, API Guide, Cheatsheet and `docs/api.md` track new
+  public Forge capabilities.
+- new public modelling API is not considered documentation-complete without
+  normal user-facing API documentation and Verification coverage.
+
+### Shared CAD-CI terminology
+
+`tool.cad.ci #180` tracks replacement of the public word `durable` with
+clear branch-build terminology. Forge must wait for a released/accepted shared
+change; do not add a local alias. The agreed release-evidence term
+`ci-build-record` remains unchanged.
 
 Exploded-view #751 remains deliberately lower priority.
 
-### Completed CAD work awaiting stable release
+## Completed CAD work awaiting v0.13.0 publication
 
-- #746 Cone Boolean feature compilation — dev-cad merge
-  `611762e4f2eb1be02ec758f4a86cb519f1419fbc`;
-- #747 Polygon2D explicit/attached Sketch — dev-cad merge
-  `4625e57b39b344cb64ed4063cb7ea7c933fa7b15`;
-- #749 model-local import isolation — dev-cad merge
-  `fd836e4797a7672497fc63978902ff2306fd9b7a`;
-- #750 rotated standalone Sketch cutters — dev-cad merge
-  `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`;
-- #773 native sheet hem — dev-cad merge
-  `c5586872244fa19db54818acef5e55b1bc36d95d`, durable run
-  `45251444014` green;
-- #776 native sheet path flange — dev-cad merge
-  `cc7ab64e02a277c1705bcfcd9f96cc6f16c53fab`, durable run
-  `45253180169` green.
+- #746 Cone Boolean feature compilation;
+- #747 Polygon2D explicit/attached Sketch;
+- #749 model-local import isolation;
+- #750 rotated standalone Sketch cutters;
+- #773 native sheet hem;
+- #776 native sheet path flange.
 
-## Open issue assessment — 2026-11-23
+## Other open work
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #781 Release Forge v0.13.0 | **now / release** | Complete #782 sync, promote dev-cad, prepare and publish v0.13.0. |
-| #779 Native whole-sheet perforation | **now / CAD parallel** | Keep green PR #780 open until #782 fixes the lane base, then refresh/merge. |
-| #753 Component-local Cylinder joins | **next after current checkpoint** | Refresh focused work after release/perforation lane is stable. |
-| #751 Native exploded views | **later / lower priority** | Resume after higher-priority metal/release work. |
-| #750 Rotated standalone Shape cutters | **implemented, awaiting stable release** | Close after the post-v0.12 CAD batch is released. |
-| #749 Model-local import isolation | **implemented, awaiting stable release** | Close after the post-v0.12 CAD batch is released. |
-| #747 Polygon2D explicit/attached Sketch | **implemented, awaiting stable release** | Close after the post-v0.12 CAD batch is released. |
-| #746 Cone Boolean feature compilation | **implemented, awaiting stable release** | Close after the post-v0.12 CAD batch is released. |
-| #737 Historical changelog alignment | **later / docs-only** | Keep separate from release/CAD behavior. |
-| #713 Audit/reduce Forge scripts | **later** | Remove only genuine duplicates after owner migrations settle. |
-| #659 Build/verification/results terminology | **later / cross-repo** | Follow shared terminology work; do not mix into release. |
-| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation behavior while replacing source format. |
+| #781 Release Forge v0.13.0 | **now** | Finish release preparation, exact main build, publication and tag verification. |
+| #785 Examples / Verification catalog split | **after release** | Restore four curated Examples and add Sheet metal Verification group. |
+| #786 API documentation completeness | **after release** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
+| #779 Native whole-sheet perforation | **after release** | Refresh from dev-cad, finish runtime evidence and publish as Verification case. |
+| #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
+| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
+| #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
+| #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates after owner migrations settle. |
+| #659 Build/verification/results terminology | **later / cross-repo** | Follow shared terminology work. |
+| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing source format. |
 | #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
 | #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
-| #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released build123d Sheet Metal API; no unreleased pin or solid workaround. |
+| #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later** | Resume when an active model requires it. |
-| #175 HUB75-like AnchorFrame diagnostic | **probably obsolete** | Move unique evidence into #325 if any remains. |
 | #82 Joints-folder visibility | **later** | Decide interaction/export policy separately. |
 | #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate with #325. |
 | #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused slices. |
 | #8 Hollow primitives | **later** | Reconcile with native shell/pipe support when needed. |
-| #5 Generic anchors/parametric constraints | **probably obsolete** | Split useful remaining scope into focused issues if needed. |
-
-## Boundary
-
-Forge may own:
-
-- reusable CAD API/compiler behavior;
-- `run_script()` model loading;
-- Forge-specific builder commands;
-- model-specific SolidCraft verification definitions;
-- public Forge documentation;
-- repository-specific release validation.
-
-Forge must not own:
-
-- generic CAD-CI planning/build-store behavior;
-- generic build-record validation;
-- generic tag/GitHub Release mechanics;
-- Pages publication mechanics;
-- reusable CAD verification internals;
-- generic merge policy.
 
 ## Next checkpoint
 
-Finish the reviewed #782 permanent-branch synchronization without moving its
-base in parallel. Keep #780 green but unmerged until that synchronization
-completes. Then resume both v0.13.0 promotion and #779 from the synchronized
-`dev-cad` head.
+Merge the #781 v0.13.0 preparation to `main`, require the exact resulting main
+branch build green, publish through the central release flow, and verify the
+immutable tag/GitHub Release before resuming #779, #785 or #786.
