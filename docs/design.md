@@ -1519,6 +1519,32 @@ This preserves one editable native Sketch + Extrude history and keeps authored
 Sketch coordinates/parameters unchanged.
 
 
+## Primitive Boolean lowering
+
+Primitive Boolean operations have one implementation boundary in `scpf/csg.py`.
+
+```text
+pure primitive expression
+  -> CSG compiler
+  -> _csg_apply()
+  -> solid.cylinder / solid.cone
+
+ordered feature body + primitive operand
+  -> feature compiler builds the existing body
+  -> delegate the primitive operand to _csg_apply()
+  -> solid.cylinder / solid.cone with operation + targets
+```
+
+The feature compiler decides ordering only. It does not reimplement native
+Cylinder or Cone validation, base calculation or command fields. This keeps
+direct and positioned primitives consistent with the pure CSG path and ensures
+Cone parameters and axial anchors follow the same code in both cases.
+
+`_is_pure_csg_tree()` therefore recognizes positioned Cone as well as
+positioned Cylinder. A later non-primitive feature still moves the full
+expression to ordered feature compilation, where only the primitive operand is
+delegated back to the shared CSG primitive operation.
+
 ## Shared-batch item projection with CAD-CI copy
 
 The shared batch remains the expensive producer. The change is only the shape
