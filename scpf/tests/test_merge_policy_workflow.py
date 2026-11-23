@@ -6,7 +6,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "merge-policy.yml"
-RELEASE = "b1474f6be66dc0236f2a5c2555af07a100447255"
+RELEASE = "27bdf67077ddd485cea95ba199069249c20c2a46"
 
 
 class MergePolicyWorkflowTests(unittest.TestCase):
@@ -15,6 +15,10 @@ class MergePolicyWorkflowTests(unittest.TestCase):
 
         self.assertIn("issue_comment:", text)
         self.assertIn("github.event.comment.body == '/merge'", text)
+        self.assertIn(
+            "startsWith(github.event.comment.body, '/merge-resolved')",
+            text,
+        )
         self.assertIn("github.actor == github.repository_owner", text)
         self.assertIn(
             "uses: brainboxemb/tool.cad.ci/.github/workflows/"
@@ -22,19 +26,27 @@ class MergePolicyWorkflowTests(unittest.TestCase):
             text,
         )
 
-        self.assertIn("stable_ref: main", text)
-        self.assertIn("lane_refs_json: '[\"dev-cad\",\"dev-ci\"]'", text)
+        self.assertIn("stable_branch: main", text)
+        self.assertIn("development_branches: '[\"dev-cad\",\"dev-ci\"]'", text)
         self.assertIn(
-            "permanent_refs_json: '[\"build\",\"gh-pages\"]'",
+            "permanent_branches: '[\"build\",\"gh-pages\"]'",
             text,
         )
         self.assertIn(
-            "temporary_prefixes_json: "
+            "temporary_branch_prefixes: "
             "'[\"issue/\",\"fix/\",\"feature/\",\"accept/\","
             "\"promote/\",\"docs/\",\"chore/\"]'",
             text,
         )
         self.assertIn("integration_workflow: scpf.yml", text)
+
+        for retired in (
+            "stable_ref:",
+            "lane_refs_json:",
+            "permanent_refs_json:",
+            "temporary_prefixes_json:",
+        ):
+            self.assertNotIn(retired, text)
 
         for value in (
             "pull-requests: write",

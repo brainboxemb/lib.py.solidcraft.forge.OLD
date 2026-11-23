@@ -219,6 +219,9 @@ Historical documentation-architecture discussion is preserved under
 
 ## Current work and handoff protocol
 
+The canonical session handoff is `docs/handoff.md`, following the shared
+`brainboxemb/meta.cad.solidcraft/templates/docs/handoff.md` structure.
+
 A handoff is only an entrypoint. Never treat copied handoff text as fresher than
 GitHub or the repository plan. A handoff must also keep both active repository
 areas visible: CAD-library work and CI/infrastructure work. Do not describe the
@@ -266,7 +269,8 @@ Branch roles are fixed:
 
 Generic CAD-CI behavior still belongs in `lib.py.cad.ci` /
 `tool.cad.ci` first. Forge consumes exact released generic behavior; do not
-implement a Forge-local planner, build store or generated-branch mutator.
+implement a Forge-local planner, build store, merge policy or generated-branch
+mutator.
 
 Short-lived work branches target one dev lane and are squash-merged. Their PRs
 are verification-only and must not publish durable PR build/Page state.
@@ -281,11 +285,22 @@ Do not select a PR merge method manually. Use the repository `/merge`
 wrapper, which delegates the mechanical policy to the exact externally
 accepted tool.cad.ci reusable merge-policy workflow.
 
-The released policy is mechanical:
-- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge commit;
-- every other PR -> squash merge;
-- Forge supplies branch names, permanent refs, cleanup prefixes and `scpf.yml`
-  integration dispatch only; it does not implement the decision/API calls locally.
+The released policy has three explicit classes:
+
+- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge
+  promotion; the promoted lane is preserved/advanced at the resulting main
+  merge commit;
+- base exactly `dev-cad` or `dev-ci` + head `main` -> normal
+  history-preserving stable-to-lane synchronization; `main` is not mutated by
+  branch-lifecycle handling;
+- every other supported PR -> squash merge.
+
+Forge supplies branch names, permanent refs, cleanup prefixes and `scpf.yml`
+integration dispatch only; it does not implement the decision/API calls locally.
+Both permanent-direction operations require a same-repository head.
+Same-head GitHub Actions runs triggered by `issue_comment` are command workflows,
+not PR validation checks; the released policy filters them by Actions-run identity
+while keeping normal validation checks and commit statuses mandatory.
 
 Temporary `promote/*` heads are not part of the supported promotion flow.
 Merged short-lived branches are removed only through the policy cleanup
@@ -307,32 +322,43 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The active stack is exact externally accepted `tool.cad.ci 0.19.0` backed by
-`lib.py.cad.ci 0.11.0`, with Forge explicitly using `jobs=2`. The released
-same-runner durable action owns scope/base resolution plus complete build-scope
-preparation/publication. The same caller-owned runner then builds the Forge site
-from that returned prepared scope and publishes only the matching Pages
-root/subtree.
+Merge governance consumes exact externally accepted
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`. The wrapper uses the public
+branch-role inputs and supports both normal `/merge` and reviewed
+`/merge-resolved` conflict recovery.
+
+Normal Forge PR/durable CAD-CI execution is still on the historical root
+composite-action path until #740 completes. Forge explicitly uses `jobs=2`.
+Do not treat the governance adoption as the CAD-CI execution cut-over.
 
 Do not reintroduce Actions artifact transport, a second publication runner, a
 second tool/library bootstrap, or Forge-owned selection/build-store logic.
 
-For named dev lanes, incremental selection uses the previous
-`source_commit` recorded in that lane's durable `build.json` manifest as
-the base. Do not assume `github.event.before` is valid: branch recreation
-events use an all-zero before SHA.
+For named dev lanes, incremental selection uses the previous `source_commit`
+recorded in that lane's durable `build.json` manifest as the base. Do not assume
+`github.event.before` is valid: branch recreation events use an all-zero
+before SHA.
 
-Promotion is direct from the accepted long-lived lane:
+Promotion remains direct from the accepted long-lived lane:
 
 ```text
 dev-cad -> PR main
 dev-ci  -> PR main
 ```
 
-The PR runs complete validation. Merge it only through `/merge`; the policy
-workflow selects a normal merge commit for exactly those two long-lived heads
-and restores/advances the lane ref to the resulting main merge commit if
-GitHub's automatic head deletion removed it.
+When a lane has fallen behind `main` and ancestry must be restored before
+promotion, synchronization is also direct between permanent refs:
+
+```text
+main -> PR dev-cad
+main -> PR dev-ci
+```
+
+Both paths run normal PR validation and are merged only through `/merge`.
+Promotion advances/preserves the promoted lane at the main merge commit.
+Stable-to-lane synchronization updates the lane by normal merge and leaves the
+stable source ref unchanged.
 
 All other PRs, including governance and any temporary `promote/*` heads, are
 squash-merged by the same policy workflow.

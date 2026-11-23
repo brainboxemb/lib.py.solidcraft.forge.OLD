@@ -11,7 +11,8 @@ jobs:
   merge:
     if: >-
       github.event.issue.pull_request &&
-      github.event.comment.body == '/merge' &&
+      (github.event.comment.body == '/merge' ||
+       startsWith(github.event.comment.body, '/merge-resolved')) &&
       github.actor == github.repository_owner
     permissions:
       actions: write
@@ -20,12 +21,12 @@ jobs:
       issues: write
       checks: read
       statuses: read
-    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@b1474f6be66dc0236f2a5c2555af07a100447255
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-merge-policy.yml@27bdf67077ddd485cea95ba199069249c20c2a46
     with:
       command: ${{ github.event.comment.body }}
       pull_request_number: ${{ github.event.issue.number }}
-      stable_ref: main
-      lane_refs_json: '["dev-cad","dev-ci"]'
-      permanent_refs_json: '["build","gh-pages"]'
-      temporary_prefixes_json: '["issue/","fix/","feature/","accept/","promote/","docs/","chore/"]'
+      stable_branch: main
+      development_branches: '["dev-cad","dev-ci"]'
+      permanent_branches: '["build","gh-pages"]'
+      temporary_branch_prefixes: '["issue/","fix/","feature/","accept/","promote/","docs/","chore/"]'
       integration_workflow: scpf.yml

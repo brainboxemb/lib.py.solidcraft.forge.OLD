@@ -476,40 +476,64 @@ dev-cad -> PR main
 dev-ci  -> PR main
 ```
 
-The promotion PR requests complete validation.
+History synchronization uses the stable branch itself as PR head:
+
+```text
+main -> PR dev-cad
+main -> PR dev-ci
+```
+
+Both permanent-direction PRs use normal merge commits. Promotion is the
+lane-to-stable class; synchronization is the stable-to-lane class. Ordinary
+short-lived PRs remain squash merges.
 
 Forge does not implement merge-method or branch-lifecycle mechanics locally.
-`.github/workflows/merge-policy.yml` is a thin owner-only `/merge` trigger
-that calls the exact released reusable workflow from tool.cad.ci 0.19.0 at
-`5677c41a61929b32ab2cb07087a6505f7b9347d8`.
+`.github/workflows/merge-policy.yml` is a thin owner-only trigger for
+`/merge` and reviewed `/merge-resolved` commands. It calls exact released
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`, externally accepted through
+`tool.cad.ci.test` #223.
 
 Forge supplies only consumer configuration:
 
 ```text
-stable_ref = main
-lane_refs = [dev-cad, dev-ci]
-permanent_refs = [build, gh-pages]
-temporary_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
+stable_branch = main
+development_branches = [dev-cad, dev-ci]
+permanent_branches = [build, gh-pages]
+temporary_branch_prefixes = [issue/, fix/, feature/, accept/, promote/, docs/, chore/]
 integration_workflow = scpf.yml
 ```
 
-The released workflow owns current-head/check/status validation, merge-method
-selection, GitHub merge execution, allow-listed temporary-head cleanup,
-long-lived-lane preservation after promotion and optional integration dispatch.
+The released workflow owns current-head/check/status validation, merge-class
+selection, GitHub merge execution, allow-listed temporary-head cleanup and
+optional integration dispatch.
+
+For stable-to-development synchronization the stable branch is also the PR
+head. The released v0.31 workflow removes same-head `issue_comment`
+command-workflow checks from the validation set by Actions-run identity before
+latest-check evaluation. It also owns reviewed conflict recovery through
+`/merge-resolved`. Forge does not synthesize merge trees or mutate permanent
+refs outside that released policy.
+
+For `lane -> main` promotion it preserves/advances the lane at the resulting
+stable merge commit. For `main -> lane` synchronization it performs no
+source-ref lifecycle mutation; the normal merge itself updates the lane and
+preserves both histories. Both permanent-direction classes require the head to
+belong to the same repository.
 
 The consumer wrapper contains no GitHub API calls and no Python merge-policy
-helper. `scripts/merge_policy.py` and its Forge-local unit tests are removed
-after released equivalence is qualified.
+helper. Generic merge mechanics remain owned and released by `tool.cad.ci`.
 
 The historical `/cleanup-branches` bulk maintenance job is retired rather than
 moved into shared tooling. Its final audit deleted the one integrated temporary
-head and retained only an active PR head plus unique/unmerged historical refs.
-Those retained refs require explicit exact-SHA retirement decisions and must not
-become broader generic cleanup exceptions.
+head and retained only active or unique/unmerged historical refs. Those retained
+refs require explicit exact-SHA retirement decisions and must not become broader
+generic cleanup exceptions.
 
 After promotion, main publishes stable output from main itself. The other
-development lane incorporates main separately. A development preview is never
-promoted by copying its generated build/Page scope into stable output.
+development lane incorporates main through the same history-preserving
+stable-to-lane policy when needed. A development preview is never promoted by
+copying its generated build/Page scope into stable output.
 
 ## Nested reference-item migration
 
