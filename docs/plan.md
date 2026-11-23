@@ -21,9 +21,9 @@ dev-ci
 
 Current heads:
 
-- `main`: `74e44e98bb561992547609b24b2e2664356423a1`;
-- `dev-ci`: `8d8bf2ad7e229500a75f8c1e3043cb8245de01d6`;
-- `dev-cad`: `4625e57b39b344cb64ed4063cb7ea7c933fa7b15`.
+- `main`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+- `dev-cad`: `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`.
 
 The two development branches now have separate jobs:
 
@@ -34,21 +34,21 @@ Do not mix those two kinds of change in one branch.
 
 ### Forge package release
 
-Current published Forge package: **v0.11.0** at
-`9258d54079981604b6dd777a4c4face897c190fe`.
+Current published Forge package: **v0.12.0** at
+`68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-The v0.12.0 source preparation is already on `main`. Publication is blocked
-only by the release-flow migration in #739.
-
-The failed old release run created no `v0.12.0` tag or GitHub Release.
+#739 is promoted to stable `main` and #714 published v0.12.0 through the
+central CAD release flow. Release run `45250563106` succeeded; the annotated
+`v0.12.0` tag resolves to the exact source above and the GitHub Release is
+published.
 
 ### Shared CI/release stack
 
 - `lib.py.cad.ci v0.18.2` @
   `088644a05ff698957aef2ddc6cc5de037ddfa158`;
-- `tool.cad.ci v0.36.0` @
-  `093eafb0eabf6b6617ec82dde17a76fdc718ae12` is released;
-- v0.36.0 central CAD release-flow external acceptance is running in
+- `tool.cad.ci v0.36.1` @
+  `8a9acb8ea69581728a3850c658b4c1ae2db6ff5a` is released;
+- v0.36.1 central CAD release-flow external acceptance is complete in
   `tool.cad.ci.test #256`;
 - `tool.py.lib.ci v0.2.1` @
   `58ead6897a4ac8cafef22a3c1f834491bf61568d` owns the generic
@@ -72,22 +72,24 @@ The failed old release run created no `v0.12.0` tag or GitHub Release.
 
 ### dev-ci — central release flow
 
-Status: **blocked only on external acceptance**.
+Status: **complete on stable main**.
 
 1. **complete** — remove the Forge-local CAD build/Page release check (#763,
    PR #769);
-2. **complete upstream** — `tool.cad.ci v0.36.0` now provides the central
-   CAD release workflow and checks the stable main `ci-build-record`;
-3. **now outside Forge** — finish black-box v0.36.0 acceptance in
+2. **complete upstream** — `tool.cad.ci v0.36.1` provides the central CAD
+   release workflow;
+3. **complete upstream** — black-box v0.36.1 acceptance in
    `tool.cad.ci.test #256`;
-4. after #256 passes, #739 replaces Forge's local generic release workflow
-   with the exact released `tool.cad.ci v0.36.0` consumer template;
-5. require `dev-ci` green, then merge exact `dev-ci -> main`;
-6. require the resulting main build green;
-7. publish Forge v0.12.0 through the central CAD release flow and verify the
-   exact tag/GitHub Release.
+4. **complete** — #739 / PR #772 adopted the exact released central release
+   wrapper;
+5. **complete** — PR #774 promoted exact `dev-ci -> main` through the shared
+   history-preserving merge policy at
+   `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+6. **complete** — exact main durable run `45250190637` succeeded;
+7. **complete** — #714 published and verified Forge v0.12.0 through the central
+   flow.
 
-Pages is web output and is not release evidence.
+Pages remains web output and is not release evidence.
 
 ### dev-cad — Forge API/compiler work
 
@@ -107,10 +109,21 @@ Current order:
 
 1. **complete on dev-cad** — #749 model-local import isolation, PR #770,
    merge `fd836e4797a7672497fc63978902ff2306fd9b7a`;
-2. **now** — #750 rotated local Sketch frame for standalone prism/cutter Shapes;
-3. #751 native SolidCraft exploded views;
-4. #753 component-local native Cylinder joins across copied/rotated
-   occurrences.
+2. **complete on dev-cad** — #750 rotated local Sketch frame for standalone
+   prism/cutter Shapes, PR #771, merge
+   `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`;
+3. **now — metal** — #773 native `sheet.hem` on existing sheet bodies;
+4. **next metal candidate** — #776 native `sheet.path_flange`, reusing the
+   existing-sheet history and #683 open-chain contract;
+5. #753 component-local native Cylinder joins across copied/rotated
+   occurrences;
+6. #751 native SolidCraft exploded views — deliberately lower priority.
+
+#335 build123d Sheet Metal reference is currently upstream-blocked: the latest
+released build123d v0.13.0 is otherwise identical to v0.12.0 and neither
+released tag contains the newer Sheet Metal API shown by current development
+documentation. Do not replace the reference with another solid approximation or
+pin an unreleased upstream revision.
 
 Each issue uses its own branch from current `dev-cad` and returns to
 `dev-cad` only after focused tests are green.
@@ -119,21 +132,23 @@ Each issue uses its own branch from current `dev-cad` and returns to
 
 | Issue | Owner/branch | Status | Next action |
 | --- | --- | --- | --- |
-| #739 Adopt central CAD release flow | dev-ci | **blocked on tool.cad.ci.test #256** | After external v0.36.0 acceptance, copy the released CAD release template and remove Forge-local generic release code. |
-| #714 Release Forge 0.12.0 | main/release | **blocked on #739** | Publish only after #739 reaches main and the exact main build is green. |
+| #739 Adopt central CAD release flow | dev-ci/main | **complete** | PR #772 plus permanent-lane PR #774 put the released wrapper on stable main. |
+| #714 Release Forge 0.12.0 | main/release | **complete** | v0.12.0 is published and verified at exact `68905bdbd4d999d73248858b4c3f9336ad47cf6e`. |
 | #746 Cone boolean feature compilation | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #749 Isolate project-local modules between run_script roots | dev-cad | **implemented on dev-cad** | PR #770 is green and merged; keep open until the CAD batch reaches stable main/release. |
-| #750 Standalone Shape local transform/rotation | dev-cad | **now** | Add a rotated explicit Sketch frame so standalone extruded cutters can be translated/rotated before normal CSG. |
-| #751 Native SolidCraft exploded views | dev-cad | **next** | Wrap and qualify native explode behavior after #750. |
-| #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after #751** | Refresh the existing focused draft against current dev-cad and qualify it. |
+| #750 Standalone Shape local transform/rotation | dev-cad | **implemented on dev-cad** | PR #771 is merged; keep open until the CAD batch reaches stable main/release. |
+| #773 Native sheet.hem | dev-cad | **now / metal** | Add the focused public API, native lowering, tests and SolidCraft regression without a solid approximation. |
+| #776 Native sheet.path_flange | dev-cad | **after #773 / metal** | Reuse the existing sheet-history and open-chain contracts; keep it separate from #773. |
+| #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after metal slice** | Refresh the existing focused draft against current dev-cad and qualify it. |
+| #751 Native SolidCraft exploded views | dev-cad | **later / lower priority** | Resume after the higher-priority metal/runtime work. |
 | #713 Audit/reduce Forge scripts | repository | **later** | Remove only genuine duplicates after the release-flow migration. |
 | #737 Historical changelog alignment | docs | **later / docs-only** | Keep separate from functional work. |
 | #659 Standardize build/verification/results terminology | cross-repo | **later** | Follow the shared plain-language work; do not mix into #749. |
 | #570 Remove CADCraft from verification diagrams | dev-cad | **later** | Replace source format while preserving presentation behavior. |
 | #349 Remaining SOLID CREATE coverage | dev-cad | **later** | Deliver focused features only when required. |
 | #347 Generalized pattern seeds | dev-cad | **later** | Generalize by native feature identity. |
-| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace the current reference approximation. |
+| #335 build123d Sheet Metal reference | dev-cad/upstream | **blocked on released build123d Sheet Metal API** | Keep the current limitation explicit; use the first suitable released upstream version, never an unreleased pin or another solid approximation. |
 | #325 AnchorFrame root cause | dev-cad | **later** | Resume when an active model requires it. |
 | #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Move any unique evidence into #325. |
 | #82 Joints-folder visibility | dev-cad | **later** | Decide interaction/export policy later. |
@@ -164,6 +179,6 @@ Forge must not own:
 
 ## Next checkpoint
 
-Continue #750 on `dev-cad` while `tool.cad.ci.test #256` runs independently.
-When #256 passes, finish #739 on `dev-ci` and release Forge v0.12.0 through
-the central CAD release flow.
+Continue #773 on `dev-cad`; after its exact-head and durable lane evidence are
+green, continue with #776 as the next metal slice. Forge v0.12.0 and the central
+release-flow migration are complete. Exploded-view #751 stays lower priority.

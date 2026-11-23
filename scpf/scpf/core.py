@@ -1442,6 +1442,77 @@ class Shape:
             ),
         )
 
+    def hem(
+        self,
+        *,
+        edges,
+        length,
+        gap=None,
+        flip=False,
+    ):
+        """Add a native hem to existing sheet material.
+
+        Parameters:
+            edges: Non-empty sequence of fixed XYZ pick points on sheet edges.
+            length: Positive hem length in mm, measured to the outer face.
+            gap: Optional positive clearance in mm between the returned leg and
+                the face it folds over. When omitted, SolidCraft uses the sheet
+                rule.
+            flip: Reverse the hem side when True. Defaults to False.
+
+        Use when:
+            Fold one or more existing sheet edges back on the sheet while
+            preserving native sheet-metal history and the inherited rule.
+
+        Limits:
+            This first slice accepts explicit fixed XYZ edge pick points only.
+            Generic edge selectors and compound hem profiles are intentionally
+            outside this contract.
+        """
+        if not isinstance(edges, (list, tuple)) or not edges:
+            raise ValueError(
+                "sheet hem edges must be a non-empty sequence of XYZ points"
+            )
+        normalized_edges = []
+        for point in edges:
+            if not isinstance(point, (list, tuple)) or len(point) != 3:
+                raise ValueError("each sheet hem edge pick must have x, y and z")
+            values = []
+            for coordinate in point:
+                if (
+                    isinstance(coordinate, bool)
+                    or not isinstance(coordinate, (int, float))
+                    or not isfinite(coordinate)
+                ):
+                    raise ValueError(
+                        "sheet hem edge picks must contain fixed finite numbers"
+                    )
+                values.append(float(coordinate))
+            normalized_edges.append(tuple(values))
+
+        length_value = _pv(length)
+        if not isfinite(length_value) or length_value <= 0:
+            raise ValueError("sheet hem length must be positive")
+
+        if gap is not None:
+            gap_value = _pv(gap)
+            if not isfinite(gap_value) or gap_value <= 0:
+                raise ValueError("sheet hem gap must be positive when provided")
+
+        if not isinstance(flip, bool):
+            raise TypeError("sheet hem flip must be True or False")
+
+        return Shape(
+            "sheet_hem",
+            (
+                self,
+                tuple(normalized_edges),
+                length,
+                gap,
+                flip,
+            ),
+        )
+
     def fold(
         self,
         *,

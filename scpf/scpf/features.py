@@ -88,6 +88,7 @@ def _is_feature_tree(shape):
         "sheet_base",
         "sheet_contour_flange",
         "sheet_edge_flange",
+        "sheet_hem",
         "sheet_fold",
     ):
         return True
@@ -1278,6 +1279,11 @@ def _non_count_parameter_names(node, found=None):
                 found,
             )
             return found
+        if node.kind == "sheet_hem":
+            original, edges, length, gap, flip = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names((edges, length, gap, flip), found)
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1531,6 +1537,25 @@ def _to_commands(shape, name):
         if flip:
             params["flip"] = True
         return steps + [_command("sheet.flange", **params)], base
+
+    if shape.kind == "sheet_hem":
+        original, edges, length, gap, flip = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError("sheet hem requires existing sheet material")
+        params = {
+            "edges": [
+                [command_value(value) for value in point]
+                for point in edges
+            ],
+            "length": command_value(length),
+            "body": name,
+        }
+        if gap is not None:
+            params["gap"] = command_value(gap)
+        if flip:
+            params["flip"] = True
+        return steps + [_command("sheet.hem", **params)], base
 
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data

@@ -2056,6 +2056,41 @@ Height and angle stay as authored Forge Parameter/Expression values and lower vi
 `command_value()`. XYZ selection points are fixed finite pick coordinates because
 they identify topology rather than drive geometry.
 
+## Native sheet-hem lowering
+
+`Shape.hem()` follows the same existing-sheet feature-history boundary as
+`Shape.flange()` and `Shape.fold()`.
+
+```text
+sheet_base / later sheet history
+  -> Shape(kind="sheet_hem", ...)
+  -> recurse existing history
+  -> require base metadata sheet=True
+  -> sheet.hem(
+       edges=[[x,y,z], ...],
+       length=<expression>,
+       gap?=<expression>,
+       body=<current body name>,
+       flip?=true
+     )
+```
+
+The feature does not create a second sheet rule and does not repeat thickness,
+K-factor or bend radius. SolidCraft owns hem geometry and flat-pattern
+development.
+
+### Selection and parameter boundary
+
+The initial hem slice reuses the explicit finite XYZ topology-pick vocabulary
+already qualified for edge flange. `length` and optional `gap` are ordinary
+mm-valued Forge Parameter/Expression fields. `gap=None` is semantically
+different from an explicit value and is therefore omitted from the native
+command, allowing the active sheet rule to supply its default.
+
+A generic sheet-edge selector, multiple hem profile types and rule/material
+authoring are separate future API decisions and are not inferred by this
+feature.
+
 ## Open connected Sketch-chain design
 
 #683 deliberately does not reuse `connected_profile`. A closed selectable

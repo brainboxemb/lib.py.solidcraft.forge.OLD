@@ -1392,6 +1392,43 @@ Qualification must include a native sheet base plus edge flange, saved-design
 mutation of both flange height and angle, save/reopen verification and native
 flat-pattern evidence proving one connected sheet body remains.
 
+## Native sheet hem
+
+An existing Forge sheet body supports one focused native hem operation:
+
+```python
+sheet.hem(
+    edges=[(40, 0, 2)],
+    length=12,
+    gap=None,
+    flip=False,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.hem`;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ points
+  selecting existing sheet edges;
+- `length` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression in the native command;
+- `gap=None` omits the native field so the sheet rule supplies the default;
+  an explicit `gap` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression;
+- `flip` is boolean and is emitted only when true;
+- Forge supplies the current sheet body name;
+- thickness, K-factor, bend radius and material remain inherited from the
+  existing sheet rule and are not hem arguments;
+- the operation is valid only on feature history known by Forge to be sheet
+  material;
+- this first slice does not accept generic edge selectors or compound native
+  edge descriptors;
+- no extruded, revolved or fused-solid approximation is permitted.
+
+Qualification must include saved-design mutation of hem length/gap, save/reopen
+verification and native flat-pattern bend evidence proving one connected closed
+sheet-metal body remains.
+
 ## Reusable open connected Sketch chains
 
 Forge supports a standalone open Sketch chain as a distinct authoring concept
