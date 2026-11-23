@@ -45,16 +45,17 @@ is synchronized/restored and durable main/Pages evidence is green.
 
 ### Accepted generic owner stack
 
-- `lib.py.cad.ci v0.17.2` @
-  `d4e8140d988be06460326fda802e514b6b306d64`;
-- `tool.cad.ci v0.33.2` @
-  `4812d87304109a68538d844e8baa5bacdbbc198d`;
+- `lib.py.cad.ci v0.18.2` @
+  `088644a05ff698957aef2ddc6cc5de037ddfa158`;
+- `tool.cad.ci v0.34.2` @
+  `37f7a82c6769279d33367144c56976da89bb1a5d`;
 - `lib.py.cad.verification v0.16.0` @
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4` immutable SolidCraft/reference runtimes;
-- external acceptance complete in `tool.cad.ci.test #240`, including real
-  build123d/CadQuery execution, shared runtime batching, verification,
-  CURRENT reuse and changed-verification rebuild.
+- external acceptance complete through `tool.cad.ci.test #248`: existing
+  CadQuery Workplane root 017 and new Assembly root 019 both pass on the
+  released v0.34.2/v0.18.2 stack, followed by green dev-ci, main and dev-cad
+  durable provenance.
 
 ## Permanent branch rule
 
@@ -70,13 +71,13 @@ is synchronized/restored and durable main/Pages evidence is green.
 
 ## Active workstreams
 
-### WS1 — #740 CAD-CI v0.33.2 cut-over
+### WS1 — #740 CAD-CI v0.34.2 cut-over
 
 Status: **now**. Lane: `dev-ci`.
 
 Required order:
 
-1. replace `.github/workflows/scpf.yml` with the released v0.33.2 lane
+1. replace `.github/workflows/scpf.yml` with the released v0.34.2 lane
    workflow shape, preserving `jobs=2`;
 2. move Forge Pages generation to a repository-owned post-build Pages builder
    using the CAD-CI complete-scope/source/build provenance environment;
@@ -136,7 +137,7 @@ Other longer-term API/research work remains later: #349, #347, #325, #81, #82,
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
-| #740 CAD-CI v0.33.2 workflow/config + generic builder migration | dev-ci | **now** | Complete owner-stack cut-over, durable dev-ci acceptance, then stable promotion. |
+| #740 CAD-CI v0.34.2 workflow/config + generic builder migration | dev-ci | **now** | Complete owner-stack cut-over on the externally accepted v0.34.2/v0.18.2 pair, durable dev-ci acceptance, then stable promotion. |
 | #739 Adopt tool.py.lib.ci release template | dev-ci | **next after #740** | Keep separate from CAD-CI migration. |
 | #722 Normalize/restore shared docs around dev-cad sync | dev-cad | **blocked on #740 stable cut-over** | Refresh once against final stable CI baseline, then restore after #721. |
 | #717 Reconcile main/dev-cad history | dev-cad | **blocked on #740** | Complete #722/#721 after CI migration reaches main. |

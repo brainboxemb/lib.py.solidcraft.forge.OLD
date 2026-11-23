@@ -209,13 +209,17 @@ checks live under `ci/forge-tests/ci.yml` and
 `ci/forge-release/ci.yml`; root `cad-ci.yml` discovers those CI items
 explicitly.
 
-The consumer boundary is the generic `CAD_CI_DEPENDENCIES_JSON` mapping.
+The package boundaries use two public CAD-CI contracts:
 
-- `forge-package` exposes the exact Forge wheel;
-- `cad-verification-package` exposes the exact released verification wheel.
+- `forge-package` exposes the exact Forge wheel through
+  `CAD_CI_DEPENDENCIES_JSON`;
+- repository builders declaring `verification_package: true` receive the exact
+  released verification wheel through `CAD_CI_VERIFICATION_WHEEL`.
 
-`forge_example.dependency_wheel(...)` resolves a wheel from the dependency
-item's output root.
+`forge_example.dependency_wheel(...)` resolves normal repository dependency
+wheels. `forge_example.verification_wheel()` resolves only the public
+verification-wheel environment contract; Forge never addresses CAD-CI's
+internal synthesized package item.
 
 Model verification mounts both wheels read-only into `cad-solidcraft` and
 sets `PYTHONPATH` to those wheel paths. Reference verification mounts only the
@@ -320,7 +324,7 @@ Each processed declarative model item exposes Q2 and native verification as
 separate ordered CAD-CI steps:
 
 ```text
-forge-package wheel + cad-verification-package wheel
+forge-package wheel + CAD_CI_VERIFICATION_WHEEL
   -> contract_test
      -> run model-owned examples/<model>/tests against the Forge wheel
   -> model_verify
@@ -1642,7 +1646,7 @@ This cut-over deliberately does not use a reusable workflow job for the durable
 push path: site generation must continue immediately after CAD/build publication
 in the same workspace without artifact transport or a second bootstrap.
 
-## CAD-CI v0.33.2 Forge integration
+## CAD-CI v0.34.2 Forge integration
 
 This design supersedes the historical root-composite-action and Forge-owned
 shared-batch integration sections above.
@@ -1653,11 +1657,11 @@ shared-batch integration sections above.
 
 ```text
 PR
-  -> tool.cad.ci reusable-ci@v0.33.2
+  -> tool.cad.ci reusable-ci@v0.34.2
      -> released PR policy + one CAD-CI/SCons graph
 
 main/dev-cad/dev-ci push or dispatch
-  -> tool.cad.ci reusable-durable@v0.33.2
+  -> tool.cad.ci reusable-durable@v0.34.2
      -> resolve durable scope
      -> one CAD-CI/SCons graph
      -> publish complete build scope
@@ -1704,8 +1708,11 @@ examples/<slug>/<implementation>/model.py
   -> verification/verification.json
 ```
 
-The root verification package pin materializes one exact verification wheel.
-Forge does not create/mount/install that wheel itself.
+The root verification package pin causes CAD-CI to materialize one exact
+verification wheel. Forge repository builders opt in with
+`verification_package: true` and receive its path through
+`CAD_CI_VERIFICATION_WHEEL`; Forge does not know or address the internal
+package node.
 
 Forge-owned presentation consumes the already accepted durable STL. It may
 produce preview PNG/metadata during the Pages rendering boundary because those

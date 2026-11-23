@@ -68,9 +68,9 @@ forge-package
   └─ model-verification-batch
        └─ examples/<model> native SolidCraft verification
 
-CAD-CI internal cad-ci-verification-package
-  ├─ model-verification-batch
-  ├─ reference-verification-batch (PythonSCAD/pyBOSL2 only)
+CAD-CI verification-package capability
+  ├─ model-verification-batch builder (verification_package: true)
+  ├─ reference-verification-batch builder (verification_package: true)
   └─ built-in reference runtime
        ├─ CadQuery reference items
        └─ build123d reference items
@@ -184,10 +184,11 @@ release workflow. Runtime package composition, role boundaries and release
 management belong in `docker.cad.solidcraft`.
 
 The runtime images must not embed `lib.py.cad.verification`. Root `cad-ci.yml`
-pins the exact released verification package; released `lib.py.cad.ci`
-materializes one internal `cad-ci-verification-package` and injects it into the
-built-in runtime. Forge-owned SolidCraft/PythonSCAD/pyBOSL2 consumers may use
-that same direct dependency but must not build or transport another wheel.
+pins the exact released verification package. Forge-owned repository builders
+request the released `verification_package: true` capability and consume the
+validated wheel only through `CAD_CI_VERIFICATION_WHEEL`. Built-in CAD
+verification uses the same owner-managed package. Forge must not name CAD-CI's
+internal synthesized item or build/transport another verification wheel.
 
 Changing the verification-library pin or a model-local `verification/verify.py`
 must not require a Docker runtime release.
@@ -333,8 +334,10 @@ Generated Pages lives on one `gh-pages` branch:
 ```
 
 Merge governance and normal Forge PR/durable CAD-CI execution consume exact
-externally accepted `tool.cad.ci v0.33.2` at
-`4812d87304109a68538d844e8baa5bacdbbc198d`. Merge governance keeps the
+externally accepted `tool.cad.ci v0.34.2` at
+`37f7a82c6769279d33367144c56976da89bb1a5d`, which pins
+`lib.py.cad.ci v0.18.2` at
+`088644a05ff698957aef2ddc6cc5de037ddfa158`. Merge governance keeps the
 public branch-role inputs and supports both normal `/merge` and reviewed
 `/merge-resolved` conflict recovery. Normal CI uses the released reusable
 PR/durable workflows with `jobs=2`; Forge does not own PR classification,

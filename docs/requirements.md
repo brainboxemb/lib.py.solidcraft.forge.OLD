@@ -135,18 +135,19 @@ Requirements:
 Library ownership and runtime packaging are separate concerns.
 
 The released CAD runtime images must not embed `lib.py.cad.verification`.
-Forge supplies the exact released verification package through the CAD-CI
-dependency graph.
+Forge consumes the exact released verification package through CAD-CI's public
+verification-package capability.
 
 Requirements:
 
-- one `cad-verification-package` item prepares exactly one wheel from the
-  pinned released verification source;
-- the wheel is built/prepared once per selected graph, not once per model;
-- model verification depends on both `forge-package` and
-  `cad-verification-package`;
-- reference verification depends on `cad-verification-package`;
-- both runtime containers mount the dependency wheel read-only and add it to
+- root `cad-ci.yml` pins one exact released verification source;
+- CAD-CI materializes and validates that wheel once per selected graph;
+- Forge repository builders that need it declare `verification_package: true`;
+- those builders consume only the exact path in
+  `CAD_CI_VERIFICATION_WHEEL`;
+- model verification keeps only its explicit `forge-package` item dependency;
+- reference verification names no synthesized verification-package item;
+- runtime containers mount the exposed wheel read-only and add it to
   `PYTHONPATH`;
 - changing the verification-library pin must not require a Docker runtime
   release;
@@ -220,8 +221,8 @@ separate CAD-CI items.
 - release-candidate identity inputs, including `CHANGELOG.md`, must invalidate
   `forge-release` so the durable release-verification evidence is produced
   from the exact candidate SHA rather than reused from an older source commit.
-- model verification items depend on `forge-package` and
-  `cad-verification-package` only.
+- model verification items explicitly depend on `forge-package` only; their
+  builder requests the public verification-package capability.
 
 A model verification must not require `forge-tests` or `forge-release` to
 complete before its own model check can execute.
@@ -1115,15 +1116,17 @@ Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
 
-## CAD-CI v0.33.2 consumer cut-over
+## CAD-CI v0.34.2 consumer cut-over
 
 This section supersedes older shared-batch/root-action requirements above where
 they describe Forge-owned generic mechanics.
 
 Forge consumes only the exact externally accepted owner stack:
 
-- tool.cad.ci v0.33.2;
-- lib.py.cad.ci v0.17.2;
+- tool.cad.ci v0.34.2 @
+  `37f7a82c6769279d33367144c56976da89bb1a5d`;
+- lib.py.cad.ci v0.18.2 @
+  `088644a05ff698957aef2ddc6cc5de037ddfa158`;
 - lib.py.cad.verification v0.16.0;
 - docker.cad.solidcraft v0.3.4.
 

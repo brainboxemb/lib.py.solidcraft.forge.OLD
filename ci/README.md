@@ -17,8 +17,8 @@ normal item `ci.yml` files select a builder and remain declarative.
 | --- | --- | --- | --- |
 | `forge-tests` | Run the Forge Python unit/integration suite against the exact built Forge package. | `forge-package` | `ci/builders/forge-tests`, `scripts/tool_ci.py`. |
 | `forge-release` | Release-level verification of the exact built Forge package. | `forge-package` | `ci/builders/forge-release`, `scripts/tool_verify.py`. |
-| `model-verification-batch` | Produce native SolidCraft verification for active Forge model consumers in one shared runtime batch. | `forge-package`, internal `cad-ci-verification-package` | `ci/builders/model-verification-batch`, model verification scripts. |
-| `reference-verification-batch` | Produce only the remaining Forge-owned PythonSCAD/pyBOSL2 reference evidence plus diagram working output. | internal `cad-ci-verification-package` | `ci/builders/reference-verification-batch`, `scripts/reference_verification_batch.py`, presentation helpers. |
+| `model-verification-batch` | Produce native SolidCraft verification for active Forge model consumers in one shared runtime batch. | `forge-package` plus builder capability `verification_package: true` | `ci/builders/model-verification-batch`, model verification scripts. |
+| `reference-verification-batch` | Produce only the remaining Forge-owned PythonSCAD/pyBOSL2 reference evidence plus diagram working output. | builder capability `verification_package: true` | `ci/builders/reference-verification-batch`, `scripts/reference_verification_batch.py`, presentation helpers. |
 | `release-policy` | Validate Forge release-candidate/publication policy without CAD runtimes. | none | `ci/builders/release-policy`, `scripts/release/*`. |
 | `site-source` | Validate Forge site source, metadata and evidence adapters without CAD runtimes. | none | `ci/builders/site-source`, `site/test_*.py`. |
 | `solidcraft-reference` | Verify the checked SolidCraft command-registry snapshot against the pinned immutable runtime. | none | `ci/builders/solidcraft-reference`, `scripts/verify_solidcraft_reference_runtime.py`. |
@@ -33,14 +33,18 @@ CadQuery and build123d are **not** repository-level Forge batch work anymore.
 
 Each `examples/<slug>/cadquery` or `build123d` item selects the released
 built-in builder and the first-class `mesh-geometry` verification adapter.
-The released library synthesizes:
+The released library owns verification-package materialization and its internal
+graph nodes. Forge consumes only public contracts:
 
 ```text
-cad-ci-verification-package
-  -> cad-ci-runtime-reference
-       -> examples/<slug>/cadquery
-       -> examples/<slug>/build123d
+root verification.package pin
+  -> built-in CadQuery/build123d verification
+  -> Forge repository builders declaring verification_package: true
+       -> CAD_CI_VERIFICATION_WHEEL
 ```
+
+Forge configuration and scripts must not name the synthesized internal package
+item.
 
 One compatible reference container is shared by active built-in items;
 build123d rows share one runtime-owned isolated interpreter process. Forge owns
