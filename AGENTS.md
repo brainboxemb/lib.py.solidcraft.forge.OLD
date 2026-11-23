@@ -322,13 +322,15 @@ Generated Pages lives on one `gh-pages` branch:
 /dev-ci/    <- dev-ci preview
 ```
 
-The accepted owner stack is exact `tool.cad.ci 0.20.1` at
-`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, externally accepted by
-`tool.cad.ci.test` run `45031453651`, backed by `lib.py.cad.ci 0.11.0`.
-Forge explicitly uses `jobs=2`. The released same-runner durable action owns
-scope/base resolution plus complete build-scope preparation/publication. The
-same caller-owned runner then builds the Forge site from that returned prepared
-scope and publishes only the matching Pages root/subtree.
+Merge governance consumes exact externally accepted
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`. The wrapper uses the public
+branch-role inputs and supports both normal `/merge` and reviewed
+`/merge-resolved` conflict recovery.
+
+Normal Forge PR/durable CAD-CI execution is still on the historical root
+composite-action path until #740 completes. Forge explicitly uses `jobs=2`.
+Do not treat the governance adoption as the CAD-CI execution cut-over.
 
 Do not reintroduce Actions artifact transport, a second publication runner, a
 second tool/library bootstrap, or Forge-owned selection/build-store logic.
