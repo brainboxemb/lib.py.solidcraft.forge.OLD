@@ -149,7 +149,7 @@ def _csg_apply(shape, name, operation, offset=(0, 0, 0)):
             placed,
             name,
             operation,
-            (command_value(x), command_value(y), command_value(z)),
+            (x, y, z),
         )
     if shape.kind == "placed3d":
         child, x, y, z = shape.data
@@ -157,7 +157,7 @@ def _csg_apply(shape, name, operation, offset=(0, 0, 0)):
             raise ModelError("Only Cylinder and Cone support 3D CSG placement")
         return _csg_apply(
             child, name, operation,
-            (command_value(x), command_value(y), command_value(z)),
+            (x, y, z),
         )
     if shape.kind == "translated":
         child, delta = shape.data
@@ -178,13 +178,13 @@ def _csg_new(shape, name, offset=(0, 0, 0)):
         return _csg_new(
             placed,
             name,
-            (command_value(x), command_value(y), command_value(z)),
+            (x, y, z),
         )
     if shape.kind == "placed3d":
         child, x, y, z = shape.data
         if child.kind not in ("cylinder", "cone"):
             raise ModelError("Only Cylinder and Cone are supported by 3D placement")
-        return _csg_new(child, name, (command_value(x), command_value(y), command_value(z)))
+        return _csg_new(child, name, (x, y, z))
     if shape.kind == "translated":
         child, delta = shape.data
         return _csg_new(child, name, _shift(offset, delta))
