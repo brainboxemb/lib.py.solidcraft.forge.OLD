@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/sheet-path-flange/verification/verify.py
+reason: >
+  Issue #776 requires focused native SolidCraft qualification for path-flange
+  authoring, open-chain replay identity, radius override, saved-design rebuild
+  and flat-pattern continuity. This fixture deliberately stays outside the
+  public Verification catalog.
