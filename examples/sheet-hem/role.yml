@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/sheet-hem/verification/verify.py
+reason: >
+  Issue #773 requires focused native SolidCraft qualification for hem
+  authoring, rule inheritance, flat-pattern continuity and saved-design
+  length/gap mutation. This fixture deliberately stays outside the public
+  Verification catalog.
