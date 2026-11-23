@@ -1,0 +1,10 @@
+schema: 1
+description: Project verification diagrams produced by the Forge reference batch.
+
+steps:
+  - id: build_diagrams
+    copy:
+      dependency: reference-verification-batch
+      source: .
+    outputs:
+      - diagrams
