@@ -1,0 +1,24 @@
+schema: 1
+description: Produce Forge-owned independent reference/presentation batch output.
+
+steps:
+  - id: verify_references
+    inputs:
+      - examples/*/ci.yml
+      - examples/*/verification/reference_geometry.json
+      - examples/*/build123d/**
+      - examples/*/cadquery/**
+      - examples/*/pybosl2/**
+      - examples/*/pythonscad/**
+      - scripts/forge_example.py
+      - scripts/reference_verification_batch.py
+      - verification/reference_validation.py
+      - verification/reference_preview.py
+      - verification/tests/test_reference_preview.py
+      - verification/build123d_export.py
+      - scripts/build_diagrams.py
+      - verification/diagrams/sources/**
+    run: [python, ../../scripts/reference_verification_batch.py, batch]
+    outputs:
+      - items
+      - diagrams
