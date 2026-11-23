@@ -23,23 +23,4 @@ watch:
   - examples/custom-anchor/scpf/**
 strategy:
   reuse: true
-steps:
-  - id: tool_verify
-    inputs:
-      - ci/forge-release/ci.yml
-      - CHANGELOG.md
-      - scpf/scpf/**
-      - scpf/pyproject.toml
-      - scripts/tool_verify.py
-      - scripts/forge_example.py
-      - examples/simple-box/scpf/**
-      - examples/simple-box/tests/**
-      - examples/anchored-holes/scpf/**
-      - examples/anchored-holes/tests/**
-      - examples/components/scpf/**
-      - examples/components/tests/**
-      - examples/corner-anchor/scpf/**
-      - examples/corner-anchor/tests/**
-      - examples/custom-anchor/scpf/**
-    run: [python, ../../scripts/tool_verify.py]
-    outputs: [tool_verify]
+builder: forge-release
