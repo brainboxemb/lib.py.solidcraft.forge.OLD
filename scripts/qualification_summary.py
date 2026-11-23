@@ -282,12 +282,18 @@ def _reference_check(evidence_root: Path, slug: str):
                     ),
                     None,
                 )
+                geometry_status = (
+                    geometry.get("status")
+                    if isinstance(geometry, dict)
+                    else None
+                )
                 if (
                     report.get("schema") != "cad-verification"
                     or report.get("schema_version") != 1
-                    or not isinstance(geometry, dict)
-                    or geometry.get("status") != "pass"
+                    or geometry_status not in {"pass", "fail", "error"}
                 ):
+                    status = "error"
+                elif status == "pass" and geometry_status != "pass":
                     status = "error"
             elif report.get("implementation") != implementation:
                 status = "error"
