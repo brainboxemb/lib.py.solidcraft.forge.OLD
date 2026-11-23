@@ -12,10 +12,4 @@ watch:
   - scripts/reference_verification_batch.py
 strategy:
   reuse: true
-steps:
-  - id: build_diagrams
-    copy:
-      dependency: reference-verification-batch
-      source: .
-    outputs:
-      - diagrams
+builder: verification-diagrams

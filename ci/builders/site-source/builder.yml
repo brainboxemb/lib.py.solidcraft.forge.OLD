@@ -1,0 +1,29 @@
+schema: 1
+description: Validate Forge site source and distributed model metadata.
+
+steps:
+  - id: test_build_evidence
+    inputs:
+      - site/**
+      - .github/workflows/scpf.yml
+    run: [python, ../../site/test_build_evidence.py]
+  - id: test_example_metadata
+    inputs:
+      - site/**
+      - .github/workflows/scpf.yml
+      - examples/*/model.yml
+      - examples/*/README.md
+      - examples/*/role.yml
+      - examples/README.md
+      - examples/*/verification/verify.py
+      - examples/*/scpf/model.py
+    run: [python, ../../site/test_example_metadata.py]
+  - id: test_site_source
+    inputs:
+      - site/**
+      - .github/workflows/scpf.yml
+      - examples/*/model.yml
+      - examples/*/README.md
+      - examples/*/verification/verify.py
+      - examples/*/scpf/**
+    run: [python, ../../site/test_site.py]

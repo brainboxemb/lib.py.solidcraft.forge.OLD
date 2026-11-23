@@ -34,15 +34,17 @@ that every script is a stable public API.
 
 | Script | Responsibility | Current caller / consumer |
 | --- | --- | --- |
-| `reference_verification_batch.py` | Run all active independent reference implementations in one shared reference runtime and write per-reference evidence. | `reference-verification-batch` CAD-CI item. |
+| `reference_verification_batch.py` | Run the remaining Forge-owned PythonSCAD/pyBOSL2 references and diagram work in one shared reference runtime. Built-in CadQuery/build123d are explicitly excluded. | `reference-verification-batch` builder/item. |
 | `verification_evidence.py` | Single-reference evidence launcher for the released reference runtime. | Compatibility/support helper; the current repository-level entrypoint is the shared reference batch. Review call sites before modifying/removing it. |
 | `build_diagrams.py` | Render the versioned Forge verification-diagram sources. | Shared reference batch; diagram sources live under `verification/diagrams/sources/`. |
 
 ## Verification dependency packaging
 
-| Script | Responsibility | Current caller / consumer |
-| --- | --- | --- |
-| `verification_package.py` | Fetch/build/check the exact released `lib.py.cad.verification` wheel and provenance used by Forge CI. | `cad-verification-package` CAD-CI item; configuration in `ci/cad-verification-package/package.json`. |
+Forge has no verification-package producer or internal package-id dependency.
+Root `cad-ci.yml` pins the exact released verification package. Repository
+builders that need it declare `verification_package: true`; released
+`lib.py.cad.ci` materializes and validates the wheel and exposes its exact
+path through the public `CAD_CI_VERIFICATION_WHEEL` environment contract.
 
 ## SolidCraft runtime reference
 

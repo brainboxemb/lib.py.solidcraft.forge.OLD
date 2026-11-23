@@ -2,8 +2,8 @@
 """Produce one Forge native model and delegate its checks to the library.
 
 This is the staged declarative model-verification launcher. Host-side execution
-consumes the `forge-package` and `cad-verification-package` CAD-CI
-dependencies, compiles the selected Forge model with the exact Forge wheel and
+consumes the `forge-package` dependency plus CAD-CI's public verification-wheel
+capability, compiles the selected Forge model with the exact Forge wheel and
 starts the released SolidCraft runtime with the verification wheel mounted
 read-only. Inside that runtime the launcher performs only
 the Forge-owned producer step: replay the compiled command document into the
@@ -21,7 +21,12 @@ import runpy
 import subprocess
 import time
 
-from forge_example import compile_commands, dependency_wheel, write_commands
+from forge_example import (
+    compile_commands,
+    dependency_wheel,
+    verification_wheel,
+    write_commands,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -239,10 +244,7 @@ def run_host() -> int:
     slug = item_slug()
     output = output_root()
     wheel = dependency_wheel()
-    verification_wheel = dependency_wheel(
-        "cad-verification-package",
-        "brainboxemb_cad_verification_lib-*.whl",
-    )
+    verification_package = verification_wheel()
     image = runtime_image()
 
     if not verify_path(slug).is_file():
@@ -269,7 +271,7 @@ def run_host() -> int:
 
     container_wheel = f"/forge-package/{wheel.name}"
     container_verification_wheel = (
-        f"/cad-verification/{verification_wheel.name}"
+        f"/cad-verification/{verification_package.name}"
     )
     container_started = time.perf_counter()
     container_launch_ms = time.time_ns() // 1_000_000
@@ -302,7 +304,7 @@ exec python "$@"
             "-v",
             f"{wheel.parent}:/forge-package:ro",
             "-v",
-            f"{verification_wheel.parent}:/cad-verification:ro",
+            f"{verification_package.parent}:/cad-verification:ro",
             "-w",
             "/workspace",
             image,

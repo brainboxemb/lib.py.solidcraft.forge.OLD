@@ -1,4 +1,4 @@
-"""Guard Forge-owned runtime batching and generic output projection."""
+"""Guard Forge-owned batches and generic built-in reference ownership."""
 
 from pathlib import Path
 import unittest
@@ -9,104 +9,118 @@ CAD_CI = ROOT / "cad-ci.yml"
 MODEL_BATCH_CI = ROOT / "ci" / "model-verification-batch" / "ci.yml"
 REFERENCE_BATCH_CI = ROOT / "ci" / "reference-verification-batch" / "ci.yml"
 DIAGRAM_CI = ROOT / "ci" / "verification-diagrams" / "ci.yml"
+BUILDERS = ROOT / "ci" / "builders"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
 REFERENCE_VALIDATION = ROOT / "verification" / "reference_validation.py"
-BUILD123D_EXPORT = ROOT / "verification" / "build123d_export.py"
 
 
 class VerificationBatchContractTests(unittest.TestCase):
-    """Keep logical child items separate from expensive runtime startup."""
+    """Keep expensive Forge work separate from generic built-in execution."""
 
-    def test_case_templates_use_generic_dependency_copy(self):
-        text = CAD_CI.read_text(encoding="utf-8")
-        self.assertIn("- model-verification-batch", text)
-        self.assertIn("- reference-verification-batch", text)
-        self.assertEqual(text.count("copy:"), 3)
-        self.assertIn("dependency: model-verification-batch", text)
-        self.assertEqual(
-            text.count("dependency: reference-verification-batch"),
-            2,
-        )
-        self.assertEqual(text.count("source: items/{item_path}"), 3)
-        self.assertNotIn("materialize]", text)
+    def test_model_template_projects_through_repository_builder(self):
+        config = CAD_CI.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "forge-model" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("builder: forge-model", config)
+        self.assertIn("dependency: model-verification-batch", builder)
+        self.assertIn("source: items/{item_path}", builder)
+        self.assertNotIn("copy:", config)
 
-    def test_no_model_item_overrides_copy_with_materializer(self):
+    def test_reference_templates_split_generic_and_forge_owners(self):
+        config = CAD_CI.read_text(encoding="utf-8")
+        projection = (
+            BUILDERS / "forge-reference-projection" / "builder.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("builder: forge-reference-projection", config)
+        self.assertIn("dependency: reference-verification-batch", projection)
+        self.assertIn("source: items/{item_path}", projection)
+        self.assertIn("builder: cadquery", config)
+        self.assertIn("builder: build123d", config)
+        self.assertEqual(config.count("adapter: mesh-geometry"), 2)
+
+    def test_normal_item_configs_have_no_execution_plumbing(self):
         for path in sorted((ROOT / "examples").glob("*/ci.yml")):
             text = path.read_text(encoding="utf-8")
-            self.assertNotIn(
-                "model_verification_batch.py, materialize",
-                text,
-                path.as_posix(),
-            )
+            self.assertNotIn("steps:", text, path.as_posix())
+            self.assertNotIn("run:", text, path.as_posix())
+            self.assertNotIn("copy:", text, path.as_posix())
 
-    def test_batch_items_publish_item_projection_roots(self):
+        for path in sorted((ROOT / "examples").glob("*/*/ci.yml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn("steps:", text, path.as_posix())
+            self.assertNotIn("run:", text, path.as_posix())
+            self.assertNotIn("copy:", text, path.as_posix())
+
+    def test_batch_items_select_repository_builders(self):
         model = MODEL_BATCH_CI.read_text(encoding="utf-8")
         reference = REFERENCE_BATCH_CI.read_text(encoding="utf-8")
-        self.assertIn("- items", model)
-        self.assertNotIn("- models", model)
-        self.assertIn("- items", reference)
-        self.assertIn("- diagrams", reference)
-        self.assertNotIn("- references", reference)
+        self.assertIn("builder: model-verification-batch", model)
+        self.assertIn("builder: reference-verification-batch", reference)
+        self.assertNotIn("steps:", model)
+        self.assertNotIn("steps:", reference)
 
-    def test_reference_batch_groups_all_four_engines(self):
-        text = REFERENCE_VALIDATION.read_text(encoding="utf-8")
-        self.assertIn(
-            'IMPLEMENTATIONS = ("pythonscad", "pybosl2", "cadquery", "build123d")',
-            text,
-        )
-        self.assertIn("for implementation in implementations:", text)
-        self.assertIn("for slug in slugs:", text)
-        self.assertIn("export_build123d_batch", text)
-
-    def test_build123d_batch_imports_once_and_continues_cases(self):
-        text = BUILD123D_EXPORT.read_text(encoding="utf-8")
-        self.assertEqual(text.count("from build123d import export_stl"), 1)
-        self.assertIn("for row in rows:", text)
-        self.assertIn("continue so every case gets a result", text)
-        self.assertIn("return 1 if failed else 0", text)
-
-    def test_model_batch_writes_selected_child_owned_paths_directly(self):
+    def test_model_batch_keeps_active_direct_dependent_context(self):
+        builder = (
+            BUILDERS / "model-verification-batch" / "builder.yml"
+        ).read_text(encoding="utf-8")
         text = MODEL_BATCH.read_text(encoding="utf-8")
-        ci_text = MODEL_BATCH_CI.read_text(encoding="utf-8")
-        self.assertIn("selection_context: direct_dependents", ci_text)
+        self.assertIn("selection_context: direct_dependents", builder)
         self.assertIn("def active_declarative_slugs(", text)
         self.assertIn('os.environ.get("CAD_CI_ACTIVE_DEPENDENTS_JSON")', text)
         self.assertIn("for slug in slugs:", text)
         self.assertIn(
-            'case_root = batch_root / "examples" / slug',
-            text,
-        )
-        self.assertIn(
             '"output": f"/output/items/examples/{slug}/model_verify"',
             text,
         )
-        self.assertIn("for row in rows:", text)
         self.assertNotIn("materialize_case", text)
         self.assertNotIn("dependency_output_root", text)
 
-    def test_reference_batch_builds_child_projection_once(self):
+    def test_forge_reference_batch_owns_only_pythonscad_and_pybosl2(self):
+        batch = REFERENCE_BATCH.read_text(encoding="utf-8")
+        validation = REFERENCE_VALIDATION.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "reference-verification-batch" / "builder.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            'IMPLEMENTATIONS = ("pythonscad", "pybosl2")',
+            batch,
+        )
+        self.assertIn(
+            'IMPLEMENTATIONS = ("pythonscad", "pybosl2")',
+            validation,
+        )
+        self.assertNotIn("examples/*/build123d/**", builder)
+        self.assertNotIn("examples/*/cadquery/**", builder)
+        self.assertNotIn("export_build123d", validation)
+        self.assertFalse(
+            (ROOT / "verification" / "build123d_export.py").exists()
+        )
+
+    def test_reference_batch_builds_remaining_child_projections_once(self):
         text = REFERENCE_BATCH.read_text(encoding="utf-8")
         self.assertEqual(text.count('"docker",\n            "run"'), 1)
         self.assertIn("/workspace/scripts/build_diagrams.py", text)
         self.assertIn("/output/diagrams", text)
         self.assertIn("def build_item_projections(", text)
-        self.assertIn('/ "examples"\n                / slug', text)
         self.assertIn('/ implementation\n                / "references"', text)
         self.assertIn('"implementations": [implementation_row]', text)
-        self.assertIn('Path("/output") / name', text)
-        self.assertIn('for name in ("references", "diagrams")', text)
-        self.assertNotIn('shutil.rmtree(output / "references")', text)
         self.assertNotIn("materialize_case", text)
-        self.assertNotIn("materialize_diagrams", text)
         self.assertNotIn("dependency_output_root", text)
 
-    def test_diagram_item_uses_generic_copy(self):
-        text = DIAGRAM_CI.read_text(encoding="utf-8")
-        self.assertIn("copy:", text)
-        self.assertIn("dependency: reference-verification-batch", text)
-        self.assertIn("source: .", text)
-        self.assertNotIn("run:", text)
+    def test_diagram_item_uses_repository_copy_builder(self):
+        item = DIAGRAM_CI.read_text(encoding="utf-8")
+        builder = (
+            BUILDERS / "verification-diagrams" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("builder: verification-diagrams", item)
+        self.assertNotIn("steps:", item)
+        self.assertIn("copy:", builder)
+        self.assertIn("dependency: reference-verification-batch", builder)
+        self.assertIn("source: .", builder)
 
 
 if __name__ == "__main__":
