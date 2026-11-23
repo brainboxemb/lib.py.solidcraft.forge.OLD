@@ -341,6 +341,24 @@ Requirements:
 - join/cut/intersect target the existing body directly through SolidCraft's
   native `targets` field; Forge must not create a temporary second body.
 
+## Polygon2D in explicit and attached Sketches
+
+A closed `Polygon2D` is a normal Sketch profile. It must work in an explicit
+or body-attached `Sketch` wherever other closed straight-edged profiles work.
+
+Requirements:
+
+- the explicit/attached Sketch compiler accepts `Polygon2D`;
+- Polygon2D lowers to one native `sketch.line` command with `closed=true`;
+- authored vertex order and optional edge ids are preserved;
+- Sketch-local placement offsets are applied to authored polygon coordinates;
+- the Polygon2D plane must match the explicit Sketch plane;
+- extrusion uses the existing native Sketch extrusion path, including
+  `join` and `cut` on an existing body;
+- standalone and explicit/attached Polygon2D use one shared command builder;
+- Forge keeps a focused attached Polygon2D regression fixture that is replayed
+  in the released SolidCraft runtime, not only compiled to a command document.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split

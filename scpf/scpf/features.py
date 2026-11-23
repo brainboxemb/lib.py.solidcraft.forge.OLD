@@ -41,6 +41,7 @@ from .sketches import (
     compile_open_chain_with_curves,
     compile_standalone_sketch,
     _extrude_profile_params,
+    _polygon_profile_command,
 )
 
 
@@ -790,6 +791,22 @@ def _explicit_sketch_commands(
             append_profile(_command(command, **params), profile)
             continue
 
+        if profile.kind == "polygon":
+            if profile_anchor is not None:
+                raise ModelError(
+                    "Polygon2D uses authored sketch coordinates; "
+                    "semantic CENTER is not supported yet"
+                )
+            append_profile(
+                _polygon_profile_command(
+                    profile,
+                    plane=plane_name or "XY",
+                    offset=(ox, oy),
+                ),
+                profile,
+            )
+            continue
+
         if profile.kind == "text":
             if profile_anchor is not None:
                 raise ModelError(
@@ -1045,7 +1062,7 @@ def _explicit_sketch_commands(
 
         raise ModelError(
             "explicit Sketch supports Circle2D, Rectangle2D, RoundedRectangle2D, "
-            "connected profiles, Text2D or native Slot*2D profiles"
+            "Polygon2D, connected profiles, Text2D or native Slot*2D profiles"
         )
 
     for operation in sketch_operations:

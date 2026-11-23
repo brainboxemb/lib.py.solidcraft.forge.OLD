@@ -1545,6 +1545,34 @@ positioned Cylinder. A later non-primitive feature still moves the full
 expression to ordered feature compilation, where only the primitive operand is
 delegated back to the shared CSG primitive operation.
 
+## Polygon2D Sketch lowering
+
+Polygon2D command creation is shared between standalone and explicit/attached
+Sketch compilation:
+
+```text
+Polygon2D
+  -> _polygon_profile_command()
+  -> sketch.line(points=..., closed=true, ids=...)
+
+standalone Sketch
+  -> same helper at the standalone Sketch origin
+
+explicit/attached Sketch
+  -> same helper with the Sketch-local offset
+  -> sketch.finish
+  -> solid.extrude(operation=join|cut, targets=[body])
+```
+
+The feature compiler owns Sketch order and target selection only. It does not
+carry a second Polygon2D validation or command implementation.
+
+The existing `attached-through-all` regression fixture is the native runtime
+proof for this path. Its model uses one closed Polygon2D cut on the top face of
+a Box. The ordinary Forge tests inspect the command plan; the declarative
+model-verification batch replays the same source in the released SolidCraft
+runtime and verifies the resulting body.
+
 ## Shared-batch item projection with CAD-CI copy
 
 The shared batch remains the expensive producer. The change is only the shape
