@@ -471,28 +471,49 @@ dev-cad -> main
 dev-ci  -> main
 ```
 
-Promotion PRs require complete validation.
+A long-lived lane may first need stable history synchronized into it:
+
+```text
+main -> dev-cad
+main -> dev-ci
+```
+
+Both permanent-direction PRs require normal PR validation.
 
 Merge method selection must be machine-controlled:
 
-- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge commit;
-- every other PR -> squash merge.
+- base `main` + head exactly `dev-cad` or `dev-ci` -> normal merge
+  promotion;
+- base exactly `dev-cad` or `dev-ci` + head `main` -> normal merge
+  synchronization;
+- every other supported PR -> squash merge.
 
-Repository automation must use the exact externally accepted reusable merge-policy
-workflow from tool.cad.ci 0.19.0 rather than calling the merge API or deciding
-the merge method in Forge-local code.
+Repository merge automation must use exact externally accepted
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`, accepted through
+`tool.cad.ci.test` #223, rather than calling the merge API, constructing
+conflict-resolution commits or deciding the merge method in Forge-local code.
 
-Forge keeps only a thin `issue_comment` wrapper that supplies repository policy:
+Forge keeps only a thin `issue_comment` wrapper that supplies repository
+policy:
 
-- stable ref `main`;
-- long-lived lanes `dev-cad` and `dev-ci`;
-- permanent generated refs `build` and `gh-pages`;
-- the conservative temporary-prefix allow-list;
+- stable branch `main`;
+- development branches `dev-cad` and `dev-ci`;
+- permanent generated branches `build` and `gh-pages`;
+- the conservative temporary-branch-prefix allow-list;
 - Forge integration workflow `scpf.yml`.
 
 The released shared workflow must reject draft, unmergeable or non-green PR
-heads, verify the immutable current head SHA, derive the merge method, preserve
-promoted long-lived lanes and dispatch configured consumer integration.
+heads, verify the immutable current head SHA, derive the merge class/method,
+require same-repository heads for permanent-direction operations and provide
+the reviewed `/merge-resolved` path when a permanent-direction merge is
+genuinely conflicted.
+
+For lane-to-main promotion it preserves/advances the promoted lane at the
+resulting main merge commit and dispatches configured integration for both
+stable and retained lane. For main-to-lane synchronization it must not mutate
+the stable source ref; the normal merge updates the lane base and integration is
+dispatched for that updated lane.
 
 Merged source-branch cleanup is allow-list based. Only explicitly temporary
 prefixes may be deleted automatically. `main`, `dev-cad`, `dev-ci`,
@@ -505,7 +526,9 @@ a separately reviewed exact-SHA decision. Future ordinary merged temporary heads
 are cleaned by the released shared merge workflow.
 
 After promotion the other dev lane incorporates main separately; unpromoted
-work in that lane must never be overwritten.
+work in that lane must never be overwritten. Stable-to-lane synchronization is
+the supported history-preserving path when that incorporation needs a real
+merge.
 
 Generic source-freshness, complete-scope reconciliation and generated-branch
 retry behavior remain CAD-CI responsibilities.

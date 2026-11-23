@@ -186,6 +186,7 @@ live cut-over.
 
 Primary repository documents:
 
+- `docs/handoff.md` — easy-to-find session entrypoint; current work still comes from GitHub and `docs/plan.md`.
 - `docs/api.md` — cross-object Forge API semantics.
 - `docs/design.md` — repository-wide architecture and responsibility boundaries.
 - `docs/development.md` — working on Forge itself.
