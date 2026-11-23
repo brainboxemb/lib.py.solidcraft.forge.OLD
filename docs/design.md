@@ -25,6 +25,35 @@ Promotion pull requests from `dev-cad` or `dev-ci` to `main` request a
 complete processed run. The GitHub workflow does not understand runtime
 packaging or selected item kinds.
 
+## Shared CAD release path
+
+Forge does not implement a generic release transaction.
+
+```text
+Forge .github/workflows/release.yml
+  -> tool.cad.ci v0.36.1 reusable-release.yml
+       -> stable main ci-build-record check
+       -> tool.py.lib.ci v0.2.1 reusable-release.yml
+            -> exact source checkout
+            -> Forge scripts/release/validate_release.py
+                 package version
+                 changelog/release notes
+                 release blockers
+                 tested SolidCraft version
+            -> annotated tag + GitHub Release
+            -> idempotent issue report
+```
+
+The generated `build` branch is read only by the released CAD release flow.
+Forge's validator reads only the exact checked-out source tree.
+
+Pages is outside the release decision. Forge does not inspect `gh-pages` or a
+Pages manifest to decide whether a release may be published.
+
+The local `scripts/release/publish_release.py` implementation is removed;
+generic command parsing, tag policy, GitHub Release handling and idempotency
+stay in the released shared workflows.
+
 ## Runtime lifecycle
 
 Runtime construction and release are external to Forge:
