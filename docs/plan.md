@@ -134,6 +134,11 @@ until the stable CI cut-over is complete.
 
 ### WS4 — API coverage and research
 
+- #747 explicit/attached Sketch Polygon2D lowering — **blocked on v0.12 checkpoint**;
+  downstream CAD #348 already owns the temporary compatibility workaround.
+- #749 `run_script()` model-local import isolation — **blocked on v0.12 checkpoint**;
+  downstream CAD #154 / draft PR #349 is the concrete consumer and must not
+  carry a local `sys.modules` workaround.
 - #349 remaining SOLID › CREATE coverage — **later**.
 - #347 generalized pattern seeds — **later**.
 - #325 AnchorFrame root-cause research — **later**.
@@ -149,6 +154,8 @@ until the stable CI cut-over is complete.
 
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
+| #747 Support Polygon2D in explicit/attached Sketch compilation | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #348 to remove the temporary FlexBenchDog per-rib Slot workaround; implement only after current CI/history/release checkpoint permits a new CAD/API batch. |
+| #749 Isolate project-local modules between run_script roots | dev-cad | **blocked on v0.12 checkpoint** | Required by CAD #154 / draft PR #349; do not add consumer-local sys.modules cleanup. Implement after the current CI/history/release checkpoint permits a new CAD/API batch. |
 | #743 Adopt tool.cad.ci v0.31.0 merge governance | governance/main | **now** | Repin thin wrapper/test to v0.31 public names; merge to main. |
 | #741 Synchronize main into dev-ci before #740 | repository/dev-ci | **blocked on #743** | Resolve PR #742 through v0.31 reviewed conflict recovery, then require dev-ci integration green. |
 | #740 Migrate historical root action to workflow/config model | dev-ci | **blocked on #741** | Implement against synchronized dev-ci using exact accepted v0.31 workflows and publication config. |
