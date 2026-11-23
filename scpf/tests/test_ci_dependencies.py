@@ -24,30 +24,28 @@ forge_example = load_script("forge_example_ci_test", "scripts/forge_example.py")
 
 
 class CiDependencyTests(unittest.TestCase):
-    def test_dependency_wheel_supports_owner_package_dependency(self):
+    def test_owner_wheels_use_public_cad_ci_contracts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             forge = root / "forge"
-            verification = root / "verification"
-            (forge / "dist").mkdir(parents=True)
-            (verification / "dist").mkdir(parents=True)
-            forge_wheel = forge / "dist" / "scpf-0.11.0-py3-none-any.whl"
+            forge_dist = forge / "dist"
+            forge_dist.mkdir(parents=True)
+            forge_wheel = forge_dist / "scpf-0.11.0-py3-none-any.whl"
             verification_wheel = (
-                verification
-                / "dist"
+                root
                 / "brainboxemb_cad_verification_lib-0.16.0-py3-none-any.whl"
             )
             forge_wheel.write_bytes(b"forge")
             verification_wheel.write_bytes(b"verification")
             dependencies = {
                 "forge-package": {"output_root": str(forge)},
-                "cad-ci-verification-package": {
-                    "output_root": str(verification)
-                },
             }
             with patch.dict(
                 os.environ,
-                {"CAD_CI_DEPENDENCIES_JSON": json.dumps(dependencies)},
+                {
+                    "CAD_CI_DEPENDENCIES_JSON": json.dumps(dependencies),
+                    "CAD_CI_VERIFICATION_WHEEL": str(verification_wheel),
+                },
                 clear=False,
             ):
                 self.assertEqual(
@@ -55,10 +53,7 @@ class CiDependencyTests(unittest.TestCase):
                     forge_wheel.resolve(),
                 )
                 self.assertEqual(
-                    forge_example.dependency_wheel(
-                        "cad-ci-verification-package",
-                        "brainboxemb_cad_verification_lib-*.whl",
-                    ),
+                    forge_example.verification_wheel(),
                     verification_wheel.resolve(),
                 )
 

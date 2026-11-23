@@ -40,10 +40,11 @@ that every script is a stable public API.
 
 ## Verification dependency packaging
 
-Forge has no verification-package helper. Root `cad-ci.yml` pins the exact
-released verification package and `lib.py.cad.ci` owns materialization,
-provenance and runtime injection through its internal
-`cad-ci-verification-package` item.
+Forge has no verification-package producer or internal package-id dependency.
+Root `cad-ci.yml` pins the exact released verification package. Repository
+builders that need it declare `verification_package: true`; released
+`lib.py.cad.ci` materializes and validates the wheel and exposes its exact
+path through the public `CAD_CI_VERIFICATION_WHEEL` environment contract.
 
 ## SolidCraft runtime reference
 

@@ -94,22 +94,26 @@ class CiPackageDependencyContractTests(unittest.TestCase):
                 self.assertNotIn("run:", text)
                 self.assertNotIn("copy:", text)
 
-    def test_verification_batches_consume_owner_package(self):
+    def test_verification_batches_request_public_owner_package(self):
         model_batch = (
             ROOT / "ci" / "model-verification-batch" / "ci.yml"
         ).read_text(encoding="utf-8")
         reference_batch = (
             ROOT / "ci" / "reference-verification-batch" / "ci.yml"
         ).read_text(encoding="utf-8")
+        model_builder = (
+            BUILDERS / "model-verification-batch" / "builder.yml"
+        ).read_text(encoding="utf-8")
+        reference_builder = (
+            BUILDERS / "reference-verification-batch" / "builder.yml"
+        ).read_text(encoding="utf-8")
 
-        self.assertEqual(
-            needs(model_batch),
-            {"forge-package", "cad-ci-verification-package"},
-        )
-        self.assertEqual(
-            needs(reference_batch),
-            {"cad-ci-verification-package"},
-        )
+        self.assertEqual(needs(model_batch), {"forge-package"})
+        self.assertEqual(needs(reference_batch), set())
+        self.assertNotIn("cad-ci-verification-package", model_batch)
+        self.assertNotIn("cad-ci-verification-package", reference_batch)
+        self.assertIn("verification_package: true", model_builder)
+        self.assertIn("verification_package: true", reference_builder)
         self.assertFalse((ROOT / "ci" / "cad-verification-package").exists())
 
     def test_root_manifest_owns_builders_and_generic_verification(self):
@@ -134,6 +138,8 @@ class CiPackageDependencyContractTests(unittest.TestCase):
         self.assertIn('dependency_wheel("forge-package")', tool_ci)
         self.assertIn('dependency_wheel("forge-package")', tool_verify)
         self.assertIn("def dependency_wheel(", forge_example)
+        self.assertIn("def verification_wheel(", forge_example)
+        self.assertIn("CAD_CI_VERIFICATION_WHEEL", forge_example)
         self.assertFalse((ROOT / "scripts" / "verification_package.py").exists())
 
 
