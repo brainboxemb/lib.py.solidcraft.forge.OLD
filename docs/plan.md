@@ -19,17 +19,18 @@ dev-cad
 dev-ci
 ```
 
-Current heads after v0.13.1 publication:
+Current heads after v0.13.2 publication:
 
-- `main`: `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
-- `dev-cad`: `ee7f8ef6ff4e9942310d82f50f8be6b93714ef51`;
+- `main`: `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
+- `dev-cad`: `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-Latest published Forge package: **v0.13.1** at exact
-`17a4e1d0e2edf0124d40daf5425891fdf65c24be`.
+Latest published Forge package: **v0.13.2** at exact
+`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
 
-Central release run `45262594629` succeeded; the annotated `v0.13.1` tag and
-GitHub Release both resolve to that exact commit.
+Exact main branch build `45269510406` and central release run
+`45269991837` succeeded; the annotated `v0.13.2` tag and GitHub Release both
+resolve to that exact commit.
 
 The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
 release does not contain #746, #747, #749 or #750. The original `Cone`
@@ -68,7 +69,7 @@ release evidence. The stable release evidence is the main **ci-build-record**.
 
 ### CAD regression — #796 symbolic placed-Cylinder anchors
 
-Status: **implemented and qualified; awaiting #800 release**.
+Status: **complete; released in v0.13.2**.
 
 The generic Forge fix is merged and qualified:
 
@@ -83,18 +84,17 @@ product-CAD workaround was added.
 
 ### Release — v0.13.2
 
-Status: **now / #800**.
+Status: **complete**.
 
-Prepare the smallest patch release on the exact qualified #796 main baseline:
+- exact release source:
+  `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
+- exact main branch build: `45269510406` green;
+- central release run: `45269991837` green;
+- annotated `v0.13.2` tag resolves exactly to the release source;
+- GitHub Release `v0.13.2` is published and verified;
+- v0.13.2 is the corrected consumer target for the #796 regression.
 
-1. set package version to `0.13.2`;
-2. move the #796 changelog entry into a dated v0.13.2 hotfix section;
-3. make no new CAD/API behavior changes;
-4. merge the release preparation to stable `main`;
-5. require the exact resulting main branch build green;
-6. publish with `/release v0.13.2 <exact-main-sha>`;
-7. verify the annotated tag and GitHub Release against that exact SHA;
-8. update this plan to the published state.
+No active Forge release work remains.
 
 ### Release — v0.13.1
 
@@ -107,7 +107,7 @@ Status: **complete**.
 - central release run `45262594629` published and verified v0.13.1;
 - v0.12.0, v0.13.0 and v0.13.1 remain immutable.
 
-v0.13.1 is complete and immutable. v0.13.2 is now the active hotfix release checkpoint under #800.
+v0.13.1 and v0.13.2 are complete and immutable. No Forge release is currently active.
 
 ### CAD — #779 whole-sheet perforation
 
@@ -150,8 +150,8 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #796 Symbolic placed-Cylinder anchor arithmetic | **qualified / awaiting release** | Fix is green on dev-cad and stable main; consume it through #800. |
-| #800 Forge v0.13.2 hotfix release | **now / release** | Merge release metadata, require exact main build green, publish and verify v0.13.2 for CAD #405/#406. |
+| #796 Symbolic placed-Cylinder anchor arithmetic | **complete / v0.13.2** | Released and verified; downstream CAD should consume v0.13.2 without a model workaround. |
+| #800 Forge v0.13.2 hotfix release | **complete** | Published and verified at exact `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
 | #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
 | #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
@@ -174,11 +174,8 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-1. complete #800 and publish v0.13.2 from the qualified #796 stable-main
-   baseline;
-2. verify the immutable tag/GitHub Release against the exact released main SHA;
-3. let product-CAD PR #406 adopt the exact released v0.13.2 commit and re-enable
+1. let product-CAD PR #406 adopt the exact released v0.13.2 commit and re-enable
    the existing `hub75-panel` without a model workaround;
-4. resume #779, #785 and #786 from the post-release refs in parallel;
-5. keep #788 as a separate measured performance lane and #751 exploded views at
+2. resume #779, #785 and #786 from the post-v0.13.2 refs in parallel;
+3. keep #788 as a separate measured performance lane and #751 exploded views at
    lower priority.
