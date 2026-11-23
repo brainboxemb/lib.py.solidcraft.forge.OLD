@@ -1114,3 +1114,49 @@ released-stack acceptance chain before Forge adoption.
 Performance evidence is diagnostic, not an SLA. #261 must compare the
 promotion-equivalent jobs=2 post-batch tail before and after migration, and must
 not increase jobs beyond 2 merely to hide projection overhead.
+
+## CAD-CI v0.33.2 consumer cut-over
+
+This section supersedes older shared-batch/root-action requirements above where
+they describe Forge-owned generic mechanics.
+
+Forge consumes only the exact externally accepted owner stack:
+
+- tool.cad.ci v0.33.2;
+- lib.py.cad.ci v0.17.2;
+- lib.py.cad.verification v0.16.0;
+- docker.cad.solidcraft v0.3.4.
+
+Requirements:
+
+- normal PR validation delegates to the released reusable workflow and does not
+  query PR files or classify docs/full-run locally;
+- durable main/dev-cad/dev-ci integration delegates to the released durable
+  workflow with jobs=2;
+- Pages generation is a repository-owned post-build Pages builder selected by
+  root cad-ci.yml; Forge does not publish Pages itself;
+- normal item and root-template ci.yml files are declarative and contain no
+  executable steps/run/copy definitions;
+- Forge-specific executable commands live once under ci/builders/<name>/;
+- built-in build123d and cadquery names are used directly and cannot be
+  shadowed by Forge aliases;
+- root cad-ci.yml pins the exact reusable verification package independently of
+  runtime images;
+- Forge does not own a verification-wheel producer or wheel transport helper;
+- build123d/CadQuery STL export, compatible shared-runtime batching and
+  mesh-geometry verification are owner-library behavior;
+- model-local reference_geometry.json remains Forge-owned verification data;
+- SolidCraft model verification definitions, visual checks and presentation
+  policy remain Forge-owned;
+- PythonSCAD/pyBOSL2 remain Forge-owned execution until a released generic owner
+  contract exists;
+- presentation is not semantic geometry verification: Forge may render a
+  presentation preview from an already accepted durable STL without retaining a
+  duplicate CAD runtime solely for rendering;
+- CURRENT/cache/rebuild behavior remains exclusively SCons/library-owned;
+- a change in verification data must rebuild through the generic graph without
+  Forge-owned selection or cleanup logic.
+
+The durable site must retain immutable links to accepted source/build artifacts.
+The Pages builder receives the complete prepared scope and exact source/build
+provenance from CAD-CI; it must not read generated branches itself.
