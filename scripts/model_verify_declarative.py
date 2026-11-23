@@ -2,7 +2,7 @@
 """Produce one Forge native model and delegate its checks to the library.
 
 This is the staged declarative model-verification launcher. Host-side execution
-consumes the `forge-package` and `cad-verification-package` CAD-CI
+consumes the `forge-package` and `cad-ci-verification-package` CAD-CI
 dependencies, compiles the selected Forge model with the exact Forge wheel and
 starts the released SolidCraft runtime with the verification wheel mounted
 read-only. Inside that runtime the launcher performs only
@@ -240,7 +240,7 @@ def run_host() -> int:
     output = output_root()
     wheel = dependency_wheel()
     verification_wheel = dependency_wheel(
-        "cad-verification-package",
+        "cad-ci-verification-package",
         "brainboxemb_cad_verification_lib-*.whl",
     )
     image = runtime_image()
