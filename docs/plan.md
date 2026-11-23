@@ -19,14 +19,17 @@ dev-cad
 dev-ci
 ```
 
-Current heads at the v0.13.0 release checkpoint:
+Current heads after v0.13.1 publication:
 
-- `main`: `733134e66283e57c65a608731c04945fbf177b60`;
-- `dev-cad`: `b83a53f60795ca8d08c452f132eab362974632e5`;
+- `main`: `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- `dev-cad`: `733134e66283e57c65a608731c04945fbf177b60`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-Published Forge package before this patch checkpoint: **v0.13.0** at exact
-`fc44eb8c3ccbf5f945f69bf68d6076a0a4294f63`.
+Latest published Forge package: **v0.13.1** at exact
+`17a4e1d0e2edf0124d40daf5425891fdf65c24be`.
+
+Central release run `45262594629` succeeded; the annotated `v0.13.1` tag and
+GitHub Release both resolve to that exact commit.
 
 The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
 release does not contain #746, #747, #749 or #750. The original `Cone`
@@ -63,37 +66,30 @@ release evidence. The stable release evidence is the main **ci-build-record**.
 
 ## Active work
 
-### Release — #789 Forge v0.13.1
+### Release — v0.13.1
 
-Status: **now**.
+Status: **complete**.
 
-v0.13.0 is published and contains the intended post-v0.12 CAD batch. Its
-release notes, however, did not explicitly explain that v0.12.0 had been cut
-before #746/#747/#749/#750 reached stable main.
+- v0.13.0 published the intended post-v0.12 CAD batch;
+- #789 added the missing release-boundary explanation as patch release v0.13.1;
+- exact main branch build `45262080873` passed at
+  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- central release run `45262594629` published and verified v0.13.1;
+- v0.12.0, v0.13.0 and v0.13.1 remain immutable.
 
-v0.13.1 is a documentation/release-metadata patch only:
-
-1. package version becomes `0.13.1`;
-2. changelog gets an explicit release-boundary explanation;
-3. no modelling behavior changes from v0.13.0;
-4. after merge, require the exact main branch build green;
-5. publish with `/release v0.13.1 <exact-main-sha>`;
-6. verify annotated tag and GitHub Release against that exact SHA;
-7. update this plan to the published state.
-
-Do not move or rewrite v0.12.0 or v0.13.0.
+No active Forge release work remains.
 
 ### CAD — #779 whole-sheet perforation
 
-Status: **paused until the v0.13.0 release is complete**.
+Status: **resume now**.
 
-PR #780 is intentionally outside the frozen v0.13.0 batch. Its branch must be
-refreshed from the current `dev-cad` after the release checkpoint. The feature
-must become a Sheet metal Verification item before completion.
+PR #780 was intentionally kept outside the v0.13.x release batch. Refresh its
+branch from current `dev-cad`, finish the native perforation evidence, and make
+the feature a Sheet metal Verification item before completion.
 
 ### Documentation / Verification — #785 and #786
 
-Status: **issues recorded; implementation resumes after v0.13.0**.
+Status: **resume now in parallel with #779**.
 
 - #785 restores the small curated public Examples catalog and introduces an
   independent Verification catalog with a first-class **Sheet metal** group.
@@ -111,7 +107,7 @@ change; do not add a local alias. The agreed release-evidence term
 
 Exploded-view #751 remains deliberately lower priority.
 
-## Completed CAD work awaiting v0.13.0 publication
+## CAD work released in v0.13.0+
 
 - #746 Cone Boolean feature compilation;
 - #747 Polygon2D explicit/attached Sketch;
@@ -124,10 +120,11 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #789 Release Forge v0.13.1 clarification patch | **now** | Merge metadata/docs patch, require exact main build, publish and verify v0.13.1. |
-| #785 Examples / Verification catalog split | **after release** | Restore four curated Examples and add Sheet metal Verification group. |
-| #786 API documentation completeness | **after release** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
-| #779 Native whole-sheet perforation | **after release** | Refresh from dev-cad, finish runtime evidence and publish as Verification case. |
+| #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
+| #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
+| #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
+| #786 API documentation completeness | **now / docs** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
+| #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
 | #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
@@ -145,7 +142,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-Finish #789 as Forge v0.13.1: merge the metadata/documentation patch to
-`main`, require the exact resulting main branch build green, publish through
-the central release flow, and verify the immutable tag/GitHub Release before
-resuming #779, #785 or #786.
+Resume #779, #785 and #786 from the current post-release refs. Keep #788 as a
+separate measured performance lane and #751 exploded views at lower priority.
+Do not start another Forge release until a coherent new stable-main batch
+exists.
