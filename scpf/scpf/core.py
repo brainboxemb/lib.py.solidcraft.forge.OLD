@@ -1283,6 +1283,165 @@ class Shape:
             raise ValueError("taper inset must be below half the footprint")
         return Shape("tapered_box", (self, from_z, inset))
 
+    def contour_flange(
+        self,
+        *,
+        distance,
+        thickness,
+        bend_radius,
+        k_factor=0.5,
+        rule_name="Forge Sheet",
+        flip=False,
+        reverse=False,
+    ):
+        """Create a native contour-flange sheet from an open Sketch chain.
+
+        The receiver must be the Shape returned by Sketch.chain(...).finish().
+        Material dimensions define the sheet rule used by the new body; the
+        contour feature itself receives only that rule name.
+        """
+        if self.kind != "sketch_open_chain":
+            raise ValueError(
+                "contour_flange() requires a finished open connected Sketch chain"
+            )
+
+        distance_value = _pv(distance)
+        if not isfinite(distance_value) or distance_value <= 0:
+            raise ValueError("contour flange distance must be positive")
+
+        thickness_value = _pv(thickness)
+        if not isfinite(thickness_value) or thickness_value <= 0:
+            raise ValueError("contour flange thickness must be positive")
+
+        radius_value = _pv(bend_radius)
+        if not isfinite(radius_value) or radius_value <= 0:
+            raise ValueError("contour flange bend_radius must be positive")
+
+        k_value = _pv(k_factor)
+        if not isfinite(k_value) or not 0 < k_value < 1:
+            raise ValueError(
+                "contour flange k_factor must be between 0 and 1"
+            )
+
+        if not isinstance(rule_name, str) or not rule_name.strip():
+            raise ValueError("contour flange rule_name must be non-empty")
+        if not isinstance(flip, bool):
+            raise TypeError("contour flange flip must be True or False")
+        if not isinstance(reverse, bool):
+            raise TypeError("contour flange reverse must be True or False")
+
+        return Shape(
+            "sheet_contour_flange",
+            (
+                self,
+                distance,
+                thickness,
+                bend_radius,
+                k_factor,
+                rule_name,
+                flip,
+                reverse,
+            ),
+        )
+
+    def flange(
+        self,
+        *,
+        edges,
+        height,
+        angle=90,
+        height_from=None,
+        position=None,
+        flip=False,
+    ):
+        """Add a native edge flange to existing sheet material.
+
+        Parameters:
+            edges: Non-empty sequence of fixed XYZ pick points on sheet edges.
+            height: Positive flange height in mm.
+            angle: Bend angle in degrees. Defaults to 90.
+            height_from: Optional native height datum: "outer", "inner" or "tangent".
+            position: Optional native bend position: "inside", "outside", "middle", "material_outside" or "tangent".
+            flip: Reverse the flange side when True. Defaults to False.
+
+        Use when:
+            Grow new sheet material from one or more existing sheet edges while
+            inheriting thickness, K-factor and bend radius from the sheet rule.
+
+        Limits:
+            This first slice accepts explicit fixed XYZ edge pick points only.
+            Per-edge segment dictionaries, corner relief overrides, chained
+            bends and radius overrides are intentionally not exposed.
+        """
+        if not isinstance(edges, (list, tuple)) or not edges:
+            raise ValueError(
+                "sheet flange edges must be a non-empty sequence of XYZ points"
+            )
+        normalized_edges = []
+        for point in edges:
+            if not isinstance(point, (list, tuple)) or len(point) != 3:
+                raise ValueError(
+                    "each sheet flange edge pick must have x, y and z"
+                )
+            values = []
+            for coordinate in point:
+                if (
+                    isinstance(coordinate, bool)
+                    or not isinstance(coordinate, (int, float))
+                    or not isfinite(coordinate)
+                ):
+                    raise ValueError(
+                        "sheet flange edge picks must contain fixed finite numbers"
+                    )
+                values.append(float(coordinate))
+            normalized_edges.append(tuple(values))
+
+        height_value = _pv(height)
+        if not isfinite(height_value) or height_value <= 0:
+            raise ValueError("sheet flange height must be positive")
+
+        angle_value = _pv(angle)
+        if (
+            not isfinite(angle_value)
+            or angle_value == 0
+            or abs(angle_value) >= 180
+        ):
+            raise ValueError(
+                "sheet flange angle must be non-zero and below 180 degrees"
+            )
+
+        if height_from not in (None, "outer", "inner", "tangent"):
+            raise ValueError(
+                "sheet flange height_from must be outer, inner, tangent or None"
+            )
+        if position not in (
+            None,
+            "inside",
+            "outside",
+            "middle",
+            "material_outside",
+            "tangent",
+        ):
+            raise ValueError(
+                "sheet flange position must be inside, outside, middle, "
+                "material_outside, tangent or None"
+            )
+        if not isinstance(flip, bool):
+            raise TypeError("sheet flange flip must be True or False")
+
+        return Shape(
+            "sheet_edge_flange",
+            (
+                self,
+                tuple(normalized_edges),
+                height,
+                angle,
+                height_from,
+                position,
+                flip,
+            ),
+        )
+
     def fold(
         self,
         *,

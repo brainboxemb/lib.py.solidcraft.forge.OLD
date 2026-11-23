@@ -1,0 +1,10 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/open-sketch-chain/verification/verify.py
+reason: >
+  Issue #683 requires focused SolidCraft qualification for one reusable open
+  connected Sketch chain, including native tangent-arc history and saved-design
+  parameter mutation. This fixture stays outside the public Verification catalog
+  because it is Forge API/compiler regression evidence rather than a new
+  documentation/reference case.

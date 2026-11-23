@@ -1,0 +1,10 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/connected-profile-sheet/verification/verify.py
+reason: >
+  Issue #567 requires focused native SolidCraft qualification for one closed
+  mixed line/arc Sketch profile feeding sheet_metal(), including saved-design
+  parameter mutation. This fixture deliberately stays outside the public
+  Verification catalog; its purpose is reusable Forge API/compiler regression
+  coverage, not a new documentation/reference case.

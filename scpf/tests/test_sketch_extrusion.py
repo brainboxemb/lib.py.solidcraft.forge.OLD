@@ -171,6 +171,95 @@ class SketchExtrusionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires profiles"):
             sketch.extrude(10, exact_regions=True)
 
+    def test_connected_profile_lowers_native_line_and_arc_commands(self):
+        width = Parameter("width", 40)
+        with Sketch(name="Mixed", plane="XY") as sketch:
+            contour = sketch.profile(start=(0, 0))
+            contour.line_to((width, 0))
+            contour.arc_through_to(
+                (width, 20),
+                through=(width + 10, 10),
+            )
+            contour.line_to((0, 20))
+            contour.line_to((0, 0))
+            contour.close()
+
+        commands = compile_model(sketch.extrude(8), "Mixed")["commands"]
+        native = [
+            row for row in commands
+            if row["command"].startswith("sketch.")
+        ]
+        self.assertEqual(
+            [row["command"] for row in native],
+            [
+                "sketch.create",
+                "sketch.line",
+                "sketch.arc.three_point",
+                "sketch.line",
+                "sketch.line",
+                "sketch.finish",
+            ],
+        )
+        for row in native[1:-1]:
+            self.assertTrue(row["params"]["connect"])
+
+        first = native[1]["params"]["points"]
+        arc = native[2]["params"]
+        self.assertEqual(first[0], [0, 0])
+        self.assertEqual(first[1], ["width", 0])
+        self.assertEqual(arc["start"], ["width", 0])
+        self.assertEqual(arc["end"], ["width", 20])
+        self.assertIn("width", str(arc["through"][0]))
+
+    def test_connected_profile_center_arc_and_attached_lowering_share_native_form(self):
+        base = Box(100, 80, 5, anchor=Anchor.BOTTOM)
+        with Sketch(name="MixedCut", on=base, parent=Anchor.TOP) as sketch:
+            contour = sketch.profile(start=(-20, 0))
+            contour.line_to((-10, -10))
+            contour.arc_center_to(
+                (10, -10),
+                center=(0, -10),
+                clockwise=True,
+            )
+            contour.line_to((20, 0))
+            contour.line_to((-20, 0))
+            contour.close()
+
+        commands = compile_model(
+            base - sketch.extrude(5),
+            "MixedCut",
+        )["commands"]
+        arc = next(
+            row for row in commands
+            if row["command"] == "sketch.arc.center_point"
+        )
+        self.assertTrue(arc["params"]["clockwise"])
+        self.assertTrue(arc["params"]["connect"])
+        self.assertIn("sketch.line", [row["command"] for row in commands])
+
+    def test_connected_profile_requires_explicit_valid_closure(self):
+        with self.assertRaisesRegex(ValueError, "must be closed"):
+            with Sketch(name="Open", plane="XY") as sketch:
+                contour = sketch.profile(start=(0, 0))
+                contour.line_to((10, 0))
+
+        with Sketch(name="InvalidClose", plane="XY") as sketch:
+            contour = sketch.profile(start=(0, 0))
+            contour.line_to((10, 0))
+            contour.line_to((10, 10))
+            with self.assertRaisesRegex(ValueError, "final endpoint"):
+                contour.close()
+            contour.line_to((0, 0))
+            contour.close()
+
+        with Sketch(name="Degenerate", plane="XY") as sketch:
+            contour = sketch.profile(start=(0, 0))
+            with self.assertRaisesRegex(ValueError, "non-zero"):
+                contour.line_to((0, 0))
+            contour.line_to((10, 0))
+            contour.line_to((0, 0))
+            contour.close()
+
     def test_empty_sketch_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "at least one profile"):
             with Sketch(plane="XY"):

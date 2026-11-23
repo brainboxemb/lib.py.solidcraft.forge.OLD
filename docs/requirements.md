@@ -1179,3 +1179,332 @@ A generic CAD-CI migration must be qualifiable without changing item
   gate is green.
 - The final PR gate removes the temporary targeted selector and runs normal
   repository selection.
+
+## Connected mixed-curve Sketch profiles
+
+Forge supports one authored closed Sketch profile made from connected straight
+line and circular-arc segments without approximating arcs as polygon edges.
+
+Public authoring contract:
+
+```python
+with Sketch(name="Blank", plane="XY") as sketch:
+    contour = sketch.profile(start=(0, 0))
+    contour.line_to((40, 0))
+    contour.arc_through_to((40, 20), through=(50, 10))
+    contour.line_to((0, 20))
+    contour.line_to((0, 0))
+    contour.close()
+```
+
+Requirements:
+
+- `Sketch.profile(start=...)` creates one connected-profile builder owned by
+  that active Sketch;
+- `line_to(end)` authors one straight native segment from the builder's
+  current endpoint;
+- `arc_through_to(end, through=...)` authors one native three-point circular
+  arc from the current endpoint;
+- `arc_center_to(end, center=..., clockwise=False)` authors one native
+  center-point circular arc from the current endpoint;
+- segment point coordinates may contain the same Forge Parameter/Expression
+  values accepted by native Sketch point fields and must remain expressions in
+  the emitted SolidCraft design;
+- each segment's start is the previous segment's authored endpoint; callers do
+  not pass raw native curve/point ids or command dictionaries;
+- lowering uses SolidCraft `connect=true` so coincident connectivity is native
+  and survives parameter edits;
+- `close()` validates a closed authored loop and registers exactly one profile
+  in the owning Sketch; it must not silently invent a line or arc;
+- an unclosed builder is an authoring error when the Sketch scope exits;
+- zero-length lines, degenerate arcs and non-finite authored geometry are
+  rejected before replay;
+- the connected profile is accepted anywhere the existing one-profile
+  standalone Sketch contract is accepted, including ordinary
+  `Sketch.extrude()` and `Sketch.sheet_metal()`;
+- existing Rectangle2D/RoundedRectangle2D/Circle2D/Polygon2D/Slot APIs remain
+  unchanged convenience profiles;
+- no polygon approximation is permitted for an authored arc;
+- no raw SolidCraft dictionaries or generated curve ids become public API.
+
+The initial slice does not expose tangent-arc authoring. SolidCraft 0.45 has a
+native tangent-arc command, but that form depends on a previous native curve
+reference. Add it only after Forge has a deliberate public entity-reference
+contract rather than guessing runtime ids.
+
+Saved-design qualification must prove that editing at least one straight
+endpoint dependency and one arc dependency preserves one closed native profile
+and one valid resulting body after save/reopen.
+
+## SolidCraft 0.45 sheet flange family
+
+Forge's remaining sheet-metal coverage follows the pinned SolidCraft 0.45
+command registry, not the earlier 0.42 mental model.
+
+SolidCraft 0.45 exposes one `sheet.flange` feature family:
+
+- `type=base` creates sheet material from a closed Sketch profile and is already
+  consumed by `Sketch.sheet_metal()`;
+- `type=edge` creates flange material from selected edge(s) of an existing sheet body;
+- `type=contour` creates sheet material from an **open** Sketch curve chain and a distance.
+
+There is no standalone `sheet.contour` command in the current supported registry.
+
+Shared material properties remain rule-owned:
+
+- sheet thickness;
+- K-factor;
+- default bend radius.
+
+Forge must not expose those again as per-flange material overrides where the
+native command refuses them.
+
+The remaining work is deliberately split:
+
+- edge flange is one focused Shape/sheet feature contract;
+- open connected curve-chain authoring is a reusable Sketch contract, distinct
+  from #567's closed profile builder;
+- contour flange consumes that open-chain contract only after it is independently
+  qualified.
+
+No child may fall back to extruded/fused solid approximations or caller-authored
+raw SolidCraft command dictionaries.
+
+## Native sheet edge flange
+
+An existing Forge sheet body supports one focused native edge-flange operation:
+
+```python
+sheet.flange(
+    edges=[(40, -20, 2)],
+    height=20,
+    angle=90,
+    height_from=None,
+    position=None,
+    flip=False,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.flange(type=edge)`;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ points selecting
+  top/bottom sheet edges;
+- this first slice does not accept `Edges.*`, direction selectors, named profile
+  edges or native per-edge dictionaries;
+- `height` is positive and may remain a Forge Parameter/Expression in the native
+  command;
+- `angle` is finite, non-zero, below 180 degrees in magnitude and may remain a
+  Forge Parameter/Expression;
+- `height_from=None` omits the native field; otherwise it is exactly one of
+  `outer`, `inner`, `tangent`;
+- `position=None` omits the native field; otherwise it is exactly one of
+  `inside`, `outside`, `middle`, `material_outside`, `tangent`;
+- `flip` is boolean and is emitted only when true;
+- Forge supplies the current sheet body name; callers do not pass native `body`
+  or `body_name` fields;
+- thickness, K-factor and bend radius remain inherited from the existing sheet
+  rule and are not accepted as flange arguments;
+- the operation is valid only on feature history known by Forge to be sheet
+  material; applying it to an ordinary solid is a compiler error;
+- no extruded/fused-solid approximation is permitted.
+
+Qualification must include a native sheet base plus edge flange, saved-design
+mutation of both flange height and angle, save/reopen verification and native
+flat-pattern evidence proving one connected sheet body remains.
+
+## Reusable open connected Sketch chains
+
+Forge supports a standalone open Sketch chain as a distinct authoring concept
+from a closed Sketch profile.
+
+Public authoring contract:
+
+```python
+with Sketch(name="Contour", plane="XY") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((40, 0))
+    chain.tangent_arc_to((50, 10))
+    chain.line_to((50, 30))
+    contour = chain.finish()
+```
+
+Requirements:
+
+- `Sketch.chain(start=...)` starts one open connected chain owned by the active
+  Sketch;
+- the initial open chain requires a standalone XY/XZ/YZ Sketch; plane offset is
+  supported, while attached `on=` and explicit 3D `origin=` are outside this slice;
+- `line_to(end)` authors one native connected line segment;
+- `tangent_arc_to(end)` authors one native `sketch.arc.tangent` segment and
+  requires the immediately previous segment to be a line in this first slice;
+- Forge gives authored line segments deterministic internal native ids and uses
+  the previous line's `<id>.end` reference for tangent-arc creation;
+- those internal ids are compiler plumbing only and never become public API;
+- line endpoints preserve Forge Parameter/Expression values accepted by native
+  `sketch.line` point fields;
+- the initial `tangent_arc_to(end)` endpoint is fixed finite numeric geometry:
+  SolidCraft 0.45 rejects expressions in `sketch.arc.tangent.end`, so Forge
+  rejects parameterized tangent endpoints before replay;
+- `finish()` registers and returns one reusable open-chain Shape; it does not
+  close the geometry or register a closed profile;
+- leaving the Sketch with an unfinished chain is an authoring error;
+- an open-chain Sketch is valid without also containing a closed profile;
+- the returned chain can compile as a standalone native Sketch for generic
+  qualification and is the future input contract for #684 contour flange;
+- no raw SolidCraft command dictionaries or caller-authored curve ids are
+  accepted;
+- no hidden closing line is created;
+- arc-to-arc tangent continuation is outside this initial slice. Add it only
+  when a downstream requirement justifies additional internal curve-reference
+  plumbing.
+
+Qualification must prove a native line -> tangent arc -> line open chain,
+parameter mutation through the surrounding line endpoints, save/reopen stability
+and native Sketch geometry remaining open rather than becoming a closed profile.
+
+## Native sheet contour flange
+
+A reusable open connected Sketch-chain Shape can create one native SolidCraft
+contour-flange sheet body:
+
+```python
+with Sketch(name="Contour", plane="XZ") as sketch:
+    chain = sketch.chain(start=(0, 0))
+    chain.line_to((35, 0))
+    chain.tangent_arc_to((40, 5))
+    chain.line_to((40, 30))
+    contour = chain.finish()
+
+sheet = contour.contour_flange(
+    distance=50,
+    thickness=2.5,
+    bend_radius=2.5,
+    k_factor=0.44,
+    rule_name="Forge Sheet",
+    flip=False,
+    reverse=False,
+)
+```
+
+Requirements:
+
+- the receiver must be a qualified `Shape(kind="sketch_open_chain")`; ordinary
+  solids, closed profiles and arbitrary Sketch objects are rejected;
+- lowering uses SolidCraft 0.45 `sheet.flange(type=contour)`, never extrusion,
+  sweep, fused solids or another geometric approximation;
+- `distance` is positive and may remain a Forge Parameter/Expression in the
+  native command;
+- `thickness` and `bend_radius` are positive; `k_factor` is finite and
+  strictly between 0 and 1; `rule_name` is non-empty;
+- those material values exist only to create/update one
+  `sheet.manage_rules` entry, exactly as for `Sketch.sheet_metal()`;
+  `sheet.flange(type=contour)` receives only the rule name and must not repeat
+  thickness, K-factor or bend radius;
+- `flip` and `reverse` are booleans; false leaves the native field omitted,
+  true emits the corresponding native control;
+- the contour command receives the authored Sketch name and the exact ordered
+  native curve ids for the complete open chain;
+- line ids may remain compiler-owned deterministic ids, but curve ids returned
+  by commands such as `sketch.arc.tangent` must be captured through Forge's
+  existing replay-binding mechanism; callers never author or observe native ids;
+- runtime curve accumulation must preserve the authored segment order and must
+  not infer topology from coordinates;
+- the contour remains an independent sheet body, matching SolidCraft's native
+  contour-flange semantics;
+- the existing standalone open-chain lowering from #683 remains valid and is
+  not weakened merely to serve the sheet-metal consumer.
+
+Qualification must prove native `sheet.flange(type=contour)` history with a
+line/tangent-arc/line chain, save/reopen stability, mutation of `distance` and
+at least one parameterized line endpoint, one connected sheet body, and coherent
+flat-pattern evidence. The fixture must also prove that the command document uses
+replay bindings rather than guessed tangent-arc ids.
+
+## Canonical model.yml metadata contract
+
+Forge owns the reusable human-facing `model.yml` contract used by Forge examples
+and CAD consumer repositories.
+
+The canonical document contains exactly these seven fields:
+
+- `section`: non-empty string;
+- `priority`: positive integer;
+- `title`: non-empty string;
+- `tagline`: non-empty string;
+- `description`: non-empty string;
+- `parameters`: non-empty string;
+- `stages`: non-empty list of non-empty strings.
+
+The contract is exact: `model.yml` has no consumer-specific extension mechanism.
+Operational build/source inputs, dependency declarations, verification
+expectations, generated facts and consumer-only presentation controls must live
+in their owning files rather than extending `model.yml`.
+
+The reusable Forge library validates an already-parsed mapping and must not
+depend on a YAML implementation. Consumers remain free to choose their YAML
+loader but must call the same Forge validator instead of copying field/type
+rules.
+
+## Component-local native Sketch feature identity
+
+Reusable component definitions may author the same local Sketch feature name
+without knowing which other components will share the final SolidCraft document:
+
+```python
+@component
+class GlassStrip:
+    def build(self):
+        with Sketch(name="Profile", plane="XZ") as sketch:
+            ...
+
+@component
+class Hub75Panel:
+    def build(self):
+        with Sketch(name="Profile", plane="XY") as sketch:
+            ...
+```
+
+Forge assembly lowering must preserve that local authoring contract while
+satisfying SolidCraft 0.45's document-global native feature-name uniqueness.
+
+Requirements for #679:
+
+- every `sketch.create.name` emitted inside a reusable component definition is
+  treated as a component-local native feature identity;
+- the lowered SolidCraft name is deterministic per component definition and
+  includes the already-stable definition number/component namespace;
+- two different component definitions may both author `Profile` and must lower
+  to distinct native Sketch names;
+- repeated occurrences of the same reusable definition continue to share one
+  component definition and therefore one native Sketch identity;
+- two parameterized/fixed-input variants that become independent component
+  definitions receive independent native Sketch identities;
+- all semantic Sketch references emitted by Forge are rewritten to the matching
+  native identity, including direct `sketch` / `path_sketch` fields and
+  nested Sketch references such as loft sections, rails and
+  `{sketch, curve}` references;
+- ordinary strings, text/font values, material names, body names, rule names,
+  component names and parameter names are not rewritten merely because their
+  text happens to equal a local Sketch name;
+- parameter namespacing and replay-variable namespacing keep their existing
+  contracts and remain independent from feature-name mapping;
+- duplicate local Sketch names inside one single component definition remain an
+  authored ambiguity/conflict; #679 does not silently number two distinct local
+  features that have the same local name;
+- standalone/non-component model output keeps the user's authored Sketch name;
+  namespacing is an assembly-definition lowering concern, not a global public
+  API rename.
+
+Qualification must cover:
+
+1. two different component definitions, both using
+   `Sketch(name="Profile")`, in one assembly;
+2. one component class emitted as two independent parameter/fixed-input
+   definitions that both use the same local Sketch name;
+3. at least one generated command that references the Sketch by name after
+   creation, proving definition and references are rewritten together;
+4. unchanged literal strings/body names and existing parameter/replay-variable
+   namespace behavior;
+5. successful SolidCraft 0.45 replay/save for the focused multi-component
+   regression fixture.

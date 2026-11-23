@@ -36,6 +36,9 @@ from .placement import (
 )
 from .sketches import (
     compile_base,
+    compile_connected_profile,
+    compile_open_chain,
+    compile_open_chain_with_curves,
     compile_standalone_sketch,
     _extrude_profile_params,
 )
@@ -79,7 +82,10 @@ def _is_feature_tree(shape):
         "placed_box",
         "tapered_box",
         "sketch_base_extrusion",
+        "sketch_open_chain",
         "sheet_base",
+        "sheet_contour_flange",
+        "sheet_edge_flange",
         "sheet_fold",
     ):
         return True
@@ -802,6 +808,22 @@ def _explicit_sketch_commands(
             )
             continue
 
+        if profile.kind == "connected_profile":
+            if profile_anchor is not None:
+                raise ModelError(
+                    "connected profiles use authored sketch coordinates"
+                )
+            if id(profile) in referenced_sources:
+                raise ModelError(
+                    "sketch pattern/mirror does not yet support connected profiles"
+                )
+            connected, _meta = compile_connected_profile(
+                profile,
+                offset=(ox, oy),
+            )
+            commands.extend(connected)
+            continue
+
         if profile.kind in (
             "slot_center_to_center",
             "slot_overall",
@@ -1023,7 +1045,7 @@ def _explicit_sketch_commands(
 
         raise ModelError(
             "explicit Sketch supports Circle2D, Rectangle2D, RoundedRectangle2D, "
-            "Text2D or native Slot*2D profiles"
+            "connected profiles, Text2D or native Slot*2D profiles"
         )
 
     for operation in sketch_operations:
@@ -1209,6 +1231,38 @@ def _non_count_parameter_names(node, found=None):
                 found,
             )
             return found
+        if node.kind == "sheet_contour_flange":
+            (
+                contour,
+                distance,
+                thickness,
+                bend_radius,
+                _k_factor,
+                rule_name,
+                flip,
+                reverse,
+            ) = node.data
+            _non_count_parameter_names(
+                (
+                    contour,
+                    distance,
+                    thickness,
+                    bend_radius,
+                    rule_name,
+                    flip,
+                    reverse,
+                ),
+                found,
+            )
+            return found
+        if node.kind == "sheet_edge_flange":
+            original, edges, height, _angle, height_from, position, flip = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names(
+                (edges, height, height_from, position, flip),
+                found,
+            )
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1242,6 +1296,11 @@ def _pattern_angle_parameter_names(node, found=None):
     if found is None:
         found = set()
     if isinstance(node, Shape):
+        if node.kind == "sheet_edge_flange":
+            original, _edges, _height, angle, _height_from, _position, _flip = node.data
+            found.update(param.name for param in parameters_in(angle))
+            _pattern_angle_parameter_names(original, found)
+            return found
         if node.kind == "sheet_fold":
             original, _line, angle, _fixed, _position, _flip = node.data
             found.update(param.name for param in parameters_in(angle))
@@ -1282,6 +1341,19 @@ def _sheet_dimensionless_parameter_names(node, found=None):
             ) = node.data
             found.update(param.name for param in parameters_in(k_factor))
             return found
+        if node.kind == "sheet_contour_flange":
+            (
+                _contour,
+                _distance,
+                _thickness,
+                _bend_radius,
+                k_factor,
+                _rule_name,
+                _flip,
+                _reverse,
+            ) = node.data
+            found.update(param.name for param in parameters_in(k_factor))
+            return found
         _sheet_dimensionless_parameter_names(node.data, found)
     elif isinstance(node, (tuple, list)):
         for item in node:
@@ -1300,6 +1372,67 @@ def _native_feature_name(feature):
 
 
 def _to_commands(shape, name):
+    if shape.kind == "sketch_open_chain":
+        return compile_open_chain(shape)
+
+    if shape.kind == "sheet_contour_flange":
+        (
+            contour,
+            distance,
+            thickness,
+            bend_radius,
+            k_factor,
+            rule_name,
+            flip,
+            reverse,
+        ) = shape.data
+
+        _require_positive(distance, "contour flange distance")
+        _require_positive(thickness, "contour flange thickness")
+        _require_positive(bend_radius, "contour flange bend radius")
+        k = pv(k_factor)
+        if not 0 < k < 1:
+            raise ModelError(
+                "contour flange k_factor must be between 0 and 1"
+            )
+
+        sketch, meta, curves = compile_open_chain_with_curves(contour)
+        rule = _command(
+            "sheet.manage_rules",
+            name=rule_name,
+            thickness=command_value(thickness),
+            k_factor=command_value(k_factor),
+            bend_radius=command_value(bend_radius),
+            active=True,
+        )
+        params = {
+            "type": "contour",
+            "sketch": meta["sketch_name"],
+            "curves": curves,
+            "distance": command_value(distance),
+            "rule": rule_name,
+            "body_name": name,
+        }
+        if flip:
+            params["flip"] = True
+        if reverse:
+            params["reverse"] = True
+
+        meta.update(
+            {
+                "sheet": True,
+                "thickness": thickness,
+                "bend_radius": bend_radius,
+                "k_factor": k_factor,
+                "rule_name": rule_name,
+            }
+        )
+        return [
+            rule,
+            *sketch,
+            _command("sheet.flange", **params),
+        ], meta
+
     if shape.kind == "sheet_base":
         (
             sketch_name,
@@ -1352,6 +1485,37 @@ def _to_commands(shape, name):
             }
         )
         return [rule, *sketch, base], meta
+
+    if shape.kind == "sheet_edge_flange":
+        (
+            original,
+            edges,
+            height,
+            angle,
+            height_from,
+            position,
+            flip,
+        ) = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError("sheet flange requires existing sheet material")
+        params = {
+            "type": "edge",
+            "edges": [
+                [command_value(value) for value in point]
+                for point in edges
+            ],
+            "height": command_value(height),
+            "angle": command_value(angle),
+            "body": name,
+        }
+        if height_from is not None:
+            params["height_from"] = height_from
+        if position is not None:
+            params["position"] = position
+        if flip:
+            params["flip"] = True
+        return steps + [_command("sheet.flange", **params)], base
 
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data
