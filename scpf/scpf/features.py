@@ -42,6 +42,7 @@ from .sketches import (
     compile_standalone_sketch,
     _extrude_profile_params,
     _polygon_profile_command,
+    _sketch_plane_frame,
 )
 
 
@@ -627,23 +628,20 @@ def _explicit_sketch_commands(
         profile_picks,
         exact_regions,
     ) = feature.data
-    plane_name, sketch_origin = plane_info
+    plane_name, sketch_origin, sketch_rotation = plane_info
     if target != original:
         raise ModelError("explicit Sketch must target the body being modified")
     if shape.kind not in ("union", "difference"):
         raise ModelError("explicit Sketch extrusion must be added or subtracted")
 
     if plane_name is not None:
-        if sketch_origin is not None:
-            orientation = {
-                "XY": ([1, 0, 0], [0, 1, 0]),
-                "XZ": ([1, 0, 0], [0, 0, 1]),
-                "YZ": ([0, 1, 0], [0, 0, 1]),
-            }
-            x_dir, y_dir = orientation[plane_name]
+        if sketch_origin is not None or sketch_rotation is not None:
             plane = dict(
-                plane={"origin": [pv(v) for v in sketch_origin],
-                       "x_dir": x_dir, "y_dir": y_dir},
+                plane=_sketch_plane_frame(
+                    plane_name,
+                    origin=sketch_origin,
+                    rotation=sketch_rotation,
+                ),
                 name=sketch_name,
             )
         else:
