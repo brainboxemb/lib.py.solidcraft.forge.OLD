@@ -488,24 +488,26 @@ Merge method selection must be machine-controlled:
   synchronization;
 - every other supported PR -> squash merge.
 
-Repository automation must use exact externally accepted
-`tool.cad.ci 0.20.1` at
-`eb64a46b243db00e8dbb4b78b6643a2a7efa3fb9`, accepted in
-`tool.cad.ci.test` run `45031453651`, rather than calling the merge API or
-deciding the merge method in Forge-local code.
+Repository merge automation must use exact externally accepted
+`tool.cad.ci v0.31.0` at
+`27bdf67077ddd485cea95ba199069249c20c2a46`, accepted through
+`tool.cad.ci.test` #223, rather than calling the merge API, constructing
+conflict-resolution commits or deciding the merge method in Forge-local code.
 
 Forge keeps only a thin `issue_comment` wrapper that supplies repository
 policy:
 
-- stable ref `main`;
-- long-lived lanes `dev-cad` and `dev-ci`;
-- permanent generated refs `build` and `gh-pages`;
-- the conservative temporary-prefix allow-list;
+- stable branch `main`;
+- development branches `dev-cad` and `dev-ci`;
+- permanent generated branches `build` and `gh-pages`;
+- the conservative temporary-branch-prefix allow-list;
 - Forge integration workflow `scpf.yml`.
 
 The released shared workflow must reject draft, unmergeable or non-green PR
-heads, verify the immutable current head SHA, derive the merge class/method and
-require same-repository heads for permanent-direction operations.
+heads, verify the immutable current head SHA, derive the merge class/method,
+require same-repository heads for permanent-direction operations and provide
+the reviewed `/merge-resolved` path when a permanent-direction merge is
+genuinely conflicted.
 
 For lane-to-main promotion it preserves/advances the promoted lane at the
 resulting main merge commit and dispatches configured integration for both
