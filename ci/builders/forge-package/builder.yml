@@ -1,0 +1,11 @@
+schema: 1
+description: Build the exact Forge Python package.
+
+steps:
+  - id: tool_build
+    inputs:
+      - scpf/scpf/**
+      - scpf/pyproject.toml
+      - scripts/tool_ci.py
+    run: [python, ../scripts/tool_ci.py, tool_build]
+    outputs: [dist]
