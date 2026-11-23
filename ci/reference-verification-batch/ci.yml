@@ -12,7 +12,6 @@ watch:
   - verification/reference_validation.py
   - verification/reference_preview.py
   - verification/tests/test_reference_preview.py
-  - verification/build123d_export.py
   - scripts/build_diagrams.py
   - verification/diagrams/sources/**
 strategy:
