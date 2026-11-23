@@ -79,7 +79,7 @@ Expression height.
 Fix the generic conversion boundary in Forge, add focused Cylinder coverage and
 cover the shared placed Cone path where applicable. Do not require the consumer
 to bake parameter values or add a model-local workaround. After exact-head
-qualification, this fix needs a patch release before CAD #405 can proceed.
+qualification, #800 publishes the v0.13.2 patch release before CAD #405 can proceed.
 
 ### Release — v0.13.1
 
@@ -135,7 +135,8 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #796 Symbolic placed-Cylinder anchor arithmetic | **now / CAD regression** | Preserve Parameter/Expression values through anchor arithmetic; qualify Cylinder and shared placed primitive paths, then patch-release for CAD #405. |
+| #796 Symbolic placed-Cylinder anchor arithmetic | **now / CAD regression** | Preserve Parameter/Expression values through anchor arithmetic and qualify Cylinder/shared primitive paths. |
+| #800 Forge v0.13.2 hotfix release | **next / release** | After #796 reaches stable main with a green exact build, publish the smallest patch release for CAD #405/#406. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
 | #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
 | #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
@@ -160,7 +161,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 1. fix and qualify #796 first because it blocks adoption of the released
    capability batch in the product-CAD repository;
-2. publish the smallest appropriate patch release containing #796 so CAD #405
+2. complete #800 and publish v0.13.2 containing #796 so CAD #405
    can qualify a corrected exact Forge release;
 3. resume #779, #785 and #786 from the post-release refs in parallel where they
    do not depend on #796;
