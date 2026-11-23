@@ -434,7 +434,7 @@ class SiteSourceTests(unittest.TestCase):
             "reusable-durable.yml@v0.35.0",
             workflow,
         )
-        self.assertEqual(workflow.count("jobs: 2"), 2)
+        self.assertEqual(workflow.count("jobs: 2"), 3)
         self.assertIn("branches: [main, dev-cad, dev-ci]", workflow)
         self.assertIn("workflow_dispatch:", workflow)
         self.assertIn("types: [opened, synchronize, reopened]", workflow)
