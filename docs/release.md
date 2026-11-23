@@ -35,18 +35,22 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.12.0**.
+Latest actual Forge release: **v0.13.1**.
 
-- annotated tag: `v0.12.0`;
+- annotated tag: `v0.13.1`;
 - exact source:
-  `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
-- published GitHub Release: `v0.12.0`;
-- qualified SolidCraft: `0.45.0`.
+  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
+- published GitHub Release: `v0.13.1`;
+- qualified SolidCraft: `0.45.0`;
+- exact main branch build: `45262080873`;
+- central release run: `45262594629`.
 
-The central CAD release flow published and verified this release in run
-`45250563106`. The annotated tag resolves to the exact stable-main source
-above. The earlier failed v0.12.0 attempt did not create a competing tag or
-release.
+v0.13.1 is a release/documentation patch on the v0.13.0 modelling baseline.
+Its notes explicitly explain that v0.12.0 was published before
+#746/#747/#749/#750 reached stable main. Models depending on those fixes require
+v0.13.0 or newer; v0.13.1 is the recommended patch level.
+
+The v0.12.0 and v0.13.0 tags remain valid and immutable.
 
 ## Consumer workflow
 
@@ -115,6 +119,8 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-v0.12.0 is complete under #714. Keep future release preparation explicit and
-continue using the same central flow; choose the next version only when the
-next coherent stable-main batch is ready.
+No Forge release is currently active.
+
+Continue normal CAD/API/documentation work and choose the next release version
+only when a coherent stable-main batch is ready. The next release must continue
+to use the central flow and exact main `ci-build-record` evidence.

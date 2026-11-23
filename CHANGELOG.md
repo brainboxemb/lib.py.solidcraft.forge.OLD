@@ -8,6 +8,49 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+## [0.13.1] - 2026-11-23
+
+### Release clarification
+
+v0.13.1 is a patch release that corrects Forge release documentation and
+version guidance. It does **not** add new modelling behavior beyond v0.13.0.
+
+The important release boundary is:
+
+- v0.12.0 is a valid, immutable release, but it was published before the later
+  `dev-cad` model-unblocking batch reached stable `main`;
+- v0.13.0 is the first release that actually contains that post-v0.12 CAD
+  batch;
+- v0.13.1 republishes the same modelling baseline with corrected release notes
+  so downstream users are not told to upgrade only to v0.12.0 for fixes that
+  are absent from that tag.
+
+The post-v0.12 fixes first available in v0.13.0 are:
+
+- #746 Cone participation in native Boolean feature compilation;
+- #747 `Polygon2D` in explicit and face-attached Sketches;
+- #749 model-local Python import isolation;
+- #750 rotated standalone Sketch cutters.
+
+The original `Cone` primitive already existed before v0.12.0. The missing
+Cone change was specifically #746's native Boolean feature support.
+
+v0.13.0 also introduced the next native sheet-metal API slices:
+
+- #773 `Shape.hem(...)` on existing sheet bodies;
+- #776 `Shape.path_flange(...)` using reusable open Sketch-chain history.
+
+Downstream models that depend on #746, #747, #749 or #750 require
+**v0.13.0 or newer**. v0.13.1 is the recommended patch level because its
+release metadata now states that boundary explicitly.
+
+### Changed
+
+- Corrected the release documentation and version guidance for the v0.12.0 to
+  v0.13.x transition (#789).
+
+## [0.13.0] - 2026-11-23
+
 ### Added
 
 - Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
