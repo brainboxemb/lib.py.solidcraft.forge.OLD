@@ -1,4 +1,11 @@
-name: Publish Forge release
+# template: tool.cad.ci/cad-release
+# template-version: 1
+# tool-release: v0.36.1
+#
+# Forge adds only its repository-specific validator. CAD build qualification
+# and GitHub release mechanics stay in the released shared workflows.
+
+name: Publish CAD release
 
 on:
   issue_comment:
@@ -11,62 +18,14 @@ jobs:
   release:
     if: >-
       !github.event.issue.pull_request &&
-      startsWith(github.event.comment.body, '/release ') &&
-      github.actor == github.repository_owner
-    runs-on: ubuntu-latest
-    concurrency:
-      group: forge-release-${{ github.repository }}
-      cancel-in-progress: false
+      startsWith(github.event.comment.body, '/release ')
     permissions:
       contents: write
       issues: write
-    steps:
-      - name: Parse explicit release request
-        id: command
-        env:
-          COMMAND: ${{ github.event.comment.body }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          read -r verb tag sha extra <<<"$COMMAND"
-          [ "$verb" = "/release" ] || exit 2
-          [ -z "${extra:-}" ] || {
-            echo "usage: /release vX.Y.Z <40-character-main-sha>" >&2
-            exit 2
-          }
-          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
-            echo "release tag must be vX.Y.Z" >&2
-            exit 2
-          }
-          [[ "$sha" =~ ^[0-9a-f]{40}$ ]] || {
-            echo "release SHA must contain exactly 40 lowercase hex characters" >&2
-            exit 2
-          }
-          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
-          echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout exact requested candidate
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          ref: ${{ steps.command.outputs.sha }}
-          fetch-depth: 0
-
-      - name: Publish validated release
-        id: publish
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python scripts/release/publish_release.py             --repository "$GITHUB_REPOSITORY"             --version "${{ steps.command.outputs.version }}"             --target-sha "${{ steps.command.outputs.sha }}"             --github-output "$GITHUB_OUTPUT"
-
-      - name: Record publication on tracking issue
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          TAG: ${{ steps.publish.outputs.tag }}
-          TARGET_SHA: ${{ steps.command.outputs.sha }}
-          RELEASE_URL: ${{ steps.publish.outputs.url }}
-        shell: bash
-        run: |
-          printf -v body 'Published and verified `%s` at `%s`: %s' \
-            "$TAG" "$TARGET_SHA" "$RELEASE_URL"
-          gh api -X POST             "repos/$GITHUB_REPOSITORY/issues/$ISSUE_NUMBER/comments"             -f body="$body"             >/dev/null
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-release.yml@v0.36.1
+    with:
+      command: ${{ github.event.comment.body }}
+      issue_number: ${{ github.event.issue.number }}
+      stable_ref: main
+      build_branch: build
+      validator_path: scripts/release/validate_release.py
