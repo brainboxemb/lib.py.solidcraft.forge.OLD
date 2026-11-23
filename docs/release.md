@@ -35,38 +35,26 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.13.1**.
+Latest actual Forge release: **v0.13.2**.
 
-- annotated tag: `v0.13.1`;
+- annotated tag: `v0.13.2`;
 - exact source:
-  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
-- published GitHub Release: `v0.13.1`;
+  `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
+- published GitHub Release: `v0.13.2`;
 - qualified SolidCraft: `0.45.0`;
-- exact main branch build: `45262080873`;
-- central release run: `45262594629`.
+- exact main branch build: `45269510406`;
+- central release run: `45269991837`.
 
-v0.13.1 is a release/documentation patch on the v0.13.0 modelling baseline.
-Its notes explicitly explain that v0.12.0 was published before
-#746/#747/#749/#750 reached stable main. Models depending on those fixes require
-v0.13.0 or newer; v0.13.1 is the recommended patch level.
+The annotated tag resolves exactly to the release source above.
 
-The v0.12.0 and v0.13.0 tags remain valid and immutable.
+v0.13.2 is the consumer hotfix for #796. It preserves symbolic placed-primitive
+dimensions through Box/Cylinder/Cone anchor arithmetic and fixes the
+v0.13.1-adoption failure exposed by the existing `hub75-panel` model.
 
-## Active release checkpoint
+v0.13.2 adds no new public modelling API beyond v0.13.1. It is the recommended
+v0.13.x consumer baseline.
 
-Forge **v0.13.2** is the active hotfix release under #800.
-
-The #796 implementation is already qualified on both permanent lanes:
-
-- `dev-cad` source: `926feda24ee61c01ab5bfe00521b6aae0c4ede2a`;
-- exact dev-cad branch build: `45267112890`;
-- stable `main` hotfix source before release metadata:
-  `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
-- exact main branch build: `45268325135`.
-
-The v0.13.2 preparation changes only package/release metadata on top of that
-qualified hotfix baseline. After this preparation reaches `main`, require the
-exact resulting main branch build green before publishing.
+The v0.12.0, v0.13.0 and v0.13.1 tags remain valid and immutable.
 
 ## Consumer workflow
 
@@ -135,14 +123,8 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-Finish #800 as Forge v0.13.2.
+No Forge release is currently active.
 
-After the release-preparation PR reaches `main`, require the exact resulting
-main branch build green and publish only with:
-
-```text
-/release v0.13.2 <exact-40-character-main-sha>
-```
-
-Then verify that the annotated tag and GitHub Release resolve to that exact SHA
-before asking product-CAD PR #406 to adopt the hotfix.
+Resume the post-v0.13.2 CAD/API/documentation work. Product-CAD PR #406 should
+consume the exact released v0.13.2 source before any later Forge release is
+considered.
