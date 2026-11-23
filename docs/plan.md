@@ -19,27 +19,21 @@ dev-cad
 dev-ci
 ```
 
-Current heads after the #721 history-preserving synchronization:
+Current permanent heads after #716 promotion:
 
-- `main`: `3f8811b6cc7174af64f0ce45aad890051e3ccc40`;
-- `dev-ci`: `90ac473473ab954103190ba426b350852b380fc0`;
-- `dev-cad`: `1a751317b8f1901118084ecc6e9f6faa9b1adf6b` before this
-  documentation-restoration PR.
+- `main`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
+- `dev-cad`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
+- `dev-ci`: `90ac473473ab954103190ba426b350852b380fc0`.
 
-#740 is complete and closed. Stable CAD-CI is accepted on `main`; the later
-`3f8811b...` main commit is the plan-only reconciliation after that accepted
-cut-over.
+#716 promoted the reconciled post-v0.11 CAD batch through the released
+permanent-lane merge policy. Exact-head PR run `45228705759`, main durable run
+`45229452632` and dev-cad durable run `45229458378` are green. Stable
+`build/main`, Pages and Verification provenance all identify exact
+`5e63112...`.
 
-#721 completed the required real two-parent `main -> dev-cad`
-synchronization at `1a751317...`, with parents `eebff74...` and
-`3f8811b...`. Durable dev-cad run `45227292709` is green, and
-`build/dev-cad`, dev-cad Pages and Verification provenance all identify
-`1a751317...`.
-
-The active step is #722 phase B: restore only the preserved dev-cad CAD-library
-documentation on top of the synchronized v0.35/main baseline. After the
-restored lane is durable-green, #716 can resume as the exact
-`dev-cad -> main` promotion for the v0.12.0 candidate.
+#722 and #717 are complete and closed. The active gate is now #714:
+prepare one explicit v0.12.0 release candidate, then require all release
+evidence on the exact preparation commit before publication.
 
 ### Forge package release
 
@@ -78,20 +72,23 @@ is synchronized/restored and durable main/Pages evidence is green.
 
 ## Active workstreams
 
-### WS1 — reconcile dev-cad history and Forge v0.12.0
+### WS1 — prepare and publish Forge v0.12.0
 
-Status: **now**. The #740 stable cut-over is complete.
+Status: **now**. The CAD-CI cut-over, dev-cad history reconciliation and #716
+promotion are complete.
 
 Required order:
 
-1. **complete** — #722 phase A mirrored the final stable shared documents;
-2. **complete** — #721 / #717 synchronized exact `main -> dev-cad` as a
-   two-parent merge and durable dev-cad evidence is green;
-3. **now** — #722 phase B restores the preserved dev-cad-only CAD
-   documentation without restoring retired CI/governance text;
-4. after restored dev-cad durable evidence is green, resume #716 exact
-   `dev-cad -> main` promotion;
-5. #714 prepares/publishes Forge v0.12.0 through the explicit release gate.
+1. **complete** — #716 promoted exact `dev-cad -> main` at
+   `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
+2. **complete** — exact promoted main/dev-cad durable integration and stable
+   Pages/Verification provenance are green;
+3. **now** — #714 creates the explicit release-preparation commit: v0.12.0
+   changelog inventory, package version `0.12.0`, and exact candidate plan;
+4. require the resulting exact main SHA to have green `build/main`,
+   `forge-release`, `release-policy` and stable Pages evidence;
+5. publish only with `/release v0.12.0 <exact-main-sha>`, then independently
+   verify the annotated tag and GitHub Release.
 
 ### WS2 — subsequent infrastructure/documentation work
 
@@ -121,9 +118,7 @@ Other longer-term API/research work remains later: #349, #347, #325, #81, #82,
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
 | #739 Adopt tool.py.lib.ci release template | dev-ci | **blocked on v0.12 checkpoint** | Keep separate and avoid moving main again during #722/#721/#716 history reconciliation. |
-| #722 Normalize/restore shared docs around dev-cad sync | dev-cad | **now** | Phase A and #721 are complete; restore only preserved CAD-library docs on the synchronized baseline, then require restored dev-cad durable green and close #722. |
-| #717 Reconcile main/dev-cad history | dev-cad | **effectively complete but still open** | #721 is a verified two-parent sync and durable evidence is green; close after #722 restoration proves the final dev-cad lane and #716 re-evaluates cleanly. |
-| #714 Release Forge 0.12.0 | repository | **blocked on #717/#716** | Prepare/publish only after promoted main and durable evidence are green. |
+| #714 Release Forge 0.12.0 | repository | **now** | Promotion gate is green; prepare exact v0.12.0 candidate, qualify that exact main SHA, then publish through `/release`. |
 | #746 Cone join/cut feature compilation | dev-cad | **blocked on v0.12 checkpoint** | Reusable compiler gap; implement in the next CAD/API batch. |
 | #747 Polygon2D explicit/attached Sketch compilation | dev-cad | **blocked on v0.12 checkpoint** | Required by downstream CAD; no consumer workaround. |
 | #748 Qualified STL export path | dev-cad/runtime owner | **blocked on v0.12 checkpoint** | Determine native export owner, then qualify released path. |
@@ -167,9 +162,11 @@ Forge must not own:
 
 ## Next release checkpoint
 
-#740 is complete/closed. #721 synchronized `main -> dev-cad` at
-`1a751317b8f1901118084ecc6e9f6faa9b1adf6b` and durable evidence is green.
-Finish this #722 CAD-document restoration and require the restored dev-cad lane
-green. Then complete #716 -> #714. Do not start #739 or merge another CAD/API
-implementation batch before Forge v0.12.0 is published or explicitly deferred;
-keeping `main` fixed avoids another history synchronization cycle.
+The post-v0.11 CAD/CI batch is on stable `main` at
+`5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5` with exact durable/Page
+provenance green. #714 is now the only release checkpoint: merge the v0.12.0
+preparation, qualify that exact resulting main SHA, publish the immutable
+`v0.12.0` tag/GitHub Release, and reconcile the plan afterward.
+
+Do not start #739 or merge another CAD/API implementation batch before the
+release is published or explicitly deferred.
