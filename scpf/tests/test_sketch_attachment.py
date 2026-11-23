@@ -8,6 +8,7 @@ from scpf import (
     CENTER,
     Rectangle2D,
     Circle2D,
+    Polygon2D,
     Depth,
     Edges,
     Sketch,
@@ -48,10 +49,54 @@ class SketchAttachmentTests(unittest.TestCase):
                 self.assertEqual(extrude["operation"], "cut")
                 self.assertNotIn("distance", extrude)
 
+    def test_attached_polygon_lowers_closed_native_line_and_cut(self):
+        base = Box(80, 60, 5, anchor=Anchor.BOTTOM)
+        with Sketch(name="Polygon cut", on=base, parent=Anchor.TOP) as sketch:
+            Polygon2D([
+                (-10, -8),
+                (10, -8),
+                (10, 8),
+                (-10, 8),
+            ])
+
+        commands = compile_model(
+            base - sketch.extrude(Depth.THROUGH_ALL),
+            "PolygonCut",
+        )["commands"]
+
+        polygon = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.line"
+        )
+        self.assertTrue(polygon["closed"])
+        self.assertEqual(
+            polygon["points"],
+            [[-10, -8], [10, -8], [10, 8], [-10, 8]],
+        )
+        self.assertEqual(len(polygon["ids"]), 4)
+
+        extrude = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.extrude"
+        )
+        self.assertEqual(extrude["operation"], "cut")
+        self.assertTrue(extrude["through_all"])
+        self.assertEqual(extrude["direction"], "negative")
+
     def test_focused_attached_through_all_example_still_compiles(self):
         document = run_script(
             ROOT / "examples/attached-through-all/scpf/model.py"
         )
+        polygon = next(
+            row["params"]
+            for row in document["commands"]
+            if row["command"] == "sketch.line"
+        )
+        self.assertTrue(polygon["closed"])
+        self.assertEqual(len(polygon["points"]), 4)
+
         extrude = next(
             row["params"]
             for row in document["commands"]
