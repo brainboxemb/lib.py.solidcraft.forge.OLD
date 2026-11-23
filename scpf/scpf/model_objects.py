@@ -139,9 +139,9 @@ def _xz_polygon_rectangle_bounds(shape):
 
     (
         _, plane, origin, plane_offset, profiles, distance, direction,
-        _operations, _profile_picks, _exact_regions,
+        _operations, _profile_picks, _exact_regions, rotation,
     ) = shape.data
-    if plane != "XZ" or origin is not None:
+    if plane != "XZ" or origin is not None or rotation is not None:
         raise ValueError("not a supported XZ Sketch extrusion")
     if len(profiles) != 1:
         raise ValueError("XZ attachment rectangle requires one profile")
