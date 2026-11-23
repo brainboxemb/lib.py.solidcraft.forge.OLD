@@ -119,14 +119,16 @@ the feature a Sheet metal Verification item before completion.
 
 ### Documentation / Verification — #785 and #786
 
-Status: **resume now in parallel with #779**.
+Status: **#786 complete in this change; #785 remains active**.
 
 - #785 restores the small curated public Examples catalog and introduces an
   independent Verification catalog with a first-class **Sheet metal** group.
-- #786 makes Reference, API Guide, Cheatsheet and `docs/api.md` track new
-  public Forge capabilities.
-- new public modelling API is not considered documentation-complete without
-  normal user-facing API documentation and Verification coverage.
+- #786 adds a dedicated Sheet metal API Guide, registers the complete current
+  sheet API in generated Reference navigation, moves quick syntax into a
+  dedicated Cheatsheet group and documents cross-object sheet semantics in
+  `docs/api.md`.
+- future public modelling API is not documentation-complete without normal
+  user-facing API documentation and Verification coverage.
 
 ### Shared CAD-CI terminology
 
@@ -155,7 +157,7 @@ Exploded-view #751 remains deliberately lower priority.
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
 | #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
 | #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
-| #786 API documentation completeness | **now / docs** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
+| #786 API documentation completeness | **complete** | Sheet metal is first-class in Reference, Guide, Cheatsheet and cross-object API documentation. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
 | #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
