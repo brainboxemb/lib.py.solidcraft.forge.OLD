@@ -305,6 +305,7 @@ class Sketch:
         plane: Explicit sketch plane: "XY", "XZ" or "YZ". Defaults to "XY" when on= is not used. With on=, an explicit plane is world-based while on= still selects the body modified by the extrusion.
         origin: Optional explicit 3D origin for an explicit plane, in mm. May be used with on= when the Sketch should modify an existing body from a fixed world plane.
         offset: Optional signed offset from a standalone origin plane, in mm.
+        rotation: Optional fixed (x, y, z) rotation in degrees for an explicit world-frame Sketch. Rotations are applied X, then Y, then Z.
 
     Use when:
         Author one or more 2D profiles before creating a 3D extrusion. A
@@ -323,7 +324,7 @@ class Sketch:
             Rectangle2D(80, 50)
     """
 
-    def __init__(self, *, name="Profile", on=None, parent=Anchor.TOP, plane=None, origin=None, offset=None):
+    def __init__(self, *, name="Profile", on=None, parent=Anchor.TOP, plane=None, origin=None, offset=None, rotation=None):
         if not isinstance(name, str) or not name.strip():
             raise ValueError("Sketch name must be non-empty")
         if on is not None and not isinstance(on, Shape):
@@ -347,9 +348,28 @@ class Sketch:
             for coordinate in origin:
                 pv(coordinate)
         self.origin = tuple(origin) if origin is not None else None
+        if rotation is not None:
+            if plane not in ("XY", "XZ", "YZ"):
+                raise ValueError(
+                    "Sketch rotation requires an explicit XY, XZ or YZ plane"
+                )
+            if not isinstance(rotation, (list, tuple)) or len(rotation) != 3:
+                raise ValueError("Sketch rotation must be an (x, y, z) degree tuple")
+            normalized_rotation = []
+            for angle in rotation:
+                if isinstance(angle, bool) or not isinstance(angle, (int, float)):
+                    raise ValueError("Sketch rotation must contain fixed numeric degrees")
+                value = float(angle)
+                if not isfinite(value):
+                    raise ValueError("Sketch rotation must contain finite degrees")
+                normalized_rotation.append(value)
+            rotation = tuple(normalized_rotation)
+        self.rotation = rotation
         if offset is not None:
-            if on is not None or origin is not None:
-                raise ValueError("Sketch offset requires a standalone plane")
+            if on is not None or origin is not None or rotation is not None:
+                raise ValueError(
+                    "Sketch offset cannot be combined with on=, origin or rotation"
+                )
             pv(offset)
         self.offset = offset
         self.plane = plane
@@ -407,9 +427,9 @@ class Sketch:
             raise ValueError(
                 "open connected chain currently requires a standalone Sketch"
             )
-        if self.origin is not None:
+        if self.origin is not None or self.rotation is not None:
             raise ValueError(
-                "open connected chain does not yet support explicit Sketch origin"
+                "open connected chain does not yet support an explicit Sketch frame"
             )
         builder = _ConnectedChainBuilder(self, start)
         self._chain_builders.append(builder)
@@ -747,8 +767,10 @@ class Sketch:
             raise ValueError("leave the Sketch scope before creating sheet metal")
         if self.on is not None:
             raise ValueError("sheet_metal() requires a standalone Sketch")
-        if self.plane != "XY":
-            raise ValueError("sheet_metal() currently requires an XY Sketch")
+        if self.plane != "XY" or self.rotation is not None:
+            raise ValueError(
+                "sheet_metal() currently requires an unrotated XY Sketch"
+            )
         if len(self._profiles) != 1:
             raise ValueError(
                 "sheet_metal() currently requires exactly one closed profile"
@@ -902,6 +924,7 @@ class Sketch:
                 tuple(self._operations),
                 profile_picks,
                 exact_regions,
+                self.rotation,
             )
             return Shape("sketch_base_extrusion", data)
 
@@ -909,7 +932,7 @@ class Sketch:
             self.name,
             self.on,
             self.parent,
-            (self.plane, self.origin),
+            (self.plane, self.origin, self.rotation),
             tuple(self._profiles),
             native_distance,
             direction,
