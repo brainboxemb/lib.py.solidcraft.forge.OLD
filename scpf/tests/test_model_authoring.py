@@ -113,6 +113,63 @@ class ModelAuthoring(unittest.TestCase):
                 for module in ("models.components.tiny", "models.components", "models"):
                     sys.modules.pop(module, None)
 
+    def test_run_script_isolates_same_named_model_local_packages(self):
+        def write_model(root: Path, length: int) -> Path:
+            source = root / "scpf"
+            package = source / "assemblies"
+            package.mkdir(parents=True)
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            (package / "wood_frame.py").write_text(
+                "from scpf import Box\n"
+                "class WoodFrame:\n"
+                "    def build(self):\n"
+                f"        return Box({length}, 10, 2)\n",
+                encoding="utf-8",
+            )
+            model = source / "model.py"
+            model.write_text(
+                "from assemblies.wood_frame import WoodFrame\n"
+                "class LocalModel:\n"
+                "    def build(self):\n"
+                "        return WoodFrame().build()\n"
+                "LocalModel()\n",
+                encoding="utf-8",
+            )
+            return model
+
+        def box_length(model: Path) -> int:
+            document = run_script(model)
+            box = next(
+                row["params"]
+                for row in document["commands"]
+                if row["command"] == "solid.box"
+            )
+            return box["length"]
+
+        json_module = sys.modules["json"]
+        import scpf.core as core_module
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            model_a = write_model(root / "a", 11)
+            model_b = write_model(root / "b", 22)
+
+            self.assertEqual(box_length(model_a), 11)
+            self.assertEqual(box_length(model_b), 22)
+            self.assertEqual(box_length(model_b), 22)
+            self.assertEqual(box_length(model_a), 11)
+            self.assertEqual(box_length(model_a), 11)
+
+            leaked = sorted(
+                name
+                for name in sys.modules
+                if name == "assemblies" or name.startswith("assemblies.")
+            )
+            self.assertEqual(leaked, [])
+
+        self.assertIs(sys.modules["json"], json_module)
+        self.assertIs(sys.modules["scpf.core"], core_module)
+
     def test_removed_aliases_are_not_exposed(self):
         import scpf
         for name in (

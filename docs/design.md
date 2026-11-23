@@ -1573,6 +1573,37 @@ a Box. The ordinary Forge tests inspect the command plan; the declarative
 model-verification batch replays the same source in the released SolidCraft
 runtime and verifies the resulting body.
 
+## run_script model-local import isolation
+
+`run_script()` temporarily adds two kinds of import path:
+
+```text
+model.py parent directory   -> model-local helpers/packages
+project root                -> shared models.components.* imports
+```
+
+Only top-level Python names that are physically present beside `model.py` are
+isolated. Before execution, any already-loaded modules under those names are
+saved and temporarily removed from `sys.modules`. After execution, modules
+loaded under those local names are removed and the caller's saved modules are
+restored.
+
+```text
+discover local names beside model.py
+  -> save matching sys.modules entries
+  -> remove matching entries
+  -> add temporary import paths
+  -> execute model
+  -> remove newly loaded local-name modules
+  -> restore saved modules
+  -> restore sys.path
+```
+
+The broader project-root import path is deliberately not used to choose module
+names for removal. This preserves legitimate shared packages such as
+`models.components.*` while preventing independent model roots from sharing a
+cached `assemblies.*`, `parts.*` or other local package by accident.
+
 ## Shared-batch item projection with CAD-CI copy
 
 The shared batch remains the expensive producer. The change is only the shape

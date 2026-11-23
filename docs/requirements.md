@@ -359,6 +359,27 @@ Requirements:
 - Forge keeps a focused attached Polygon2D regression fixture that is replayed
   in the released SolidCraft runtime, not only compiled to a command document.
 
+## Model-local Python import isolation
+
+Each `run_script(path)` call must resolve Python modules owned beside that
+model's `model.py` independently from earlier model executions in the same
+Python process.
+
+Requirements:
+
+- two model roots may use the same local top-level package/module name and each
+  run resolves its own source;
+- local modules loaded during one run do not remain available to a later model
+  root through `sys.modules`;
+- a module that existed under the same name before `run_script()` is restored
+  after the run;
+- the temporary model import path is removed after execution;
+- project-shared imports such as `models.components.*` remain shared and are
+  not broadly purged;
+- installed Forge modules and Python standard-library modules are not broadly
+  removed from `sys.modules`;
+- repeated execution of one model root is deterministic.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
