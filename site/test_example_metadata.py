@@ -4,14 +4,16 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scpf"))
 
 from example_metadata import discover_example_metadata, load_section_presentation
 from scpf.model_metadata import MODEL_METADATA_FIELDS
 from example_documentation import discover_example_documentation
-
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 class ExampleMetadataTests(unittest.TestCase):
