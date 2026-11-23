@@ -115,16 +115,15 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-Forge v0.13.0 is the active release checkpoint under #781.
+Forge **v0.13.1** is the active patch-release checkpoint under #789.
 
-The post-v0.12 CAD batch is on stable `main` at
-`733134e66283e57c65a608731c04945fbf177b60` and its exact main branch build
-`45258575394` is green. Prepare version/changelog metadata on a short-lived
-branch, merge that preparation to `main`, require the exact resulting main
-branch build green, then publish only with:
+This patch changes release/documentation metadata only. After the preparation
+PR reaches `main`, require the exact resulting main branch build green, then
+publish only with:
 
 ```text
-/release v0.13.0 <exact-40-character-main-sha>
+/release v0.13.1 <exact-40-character-main-sha>
 ```
 
-v0.12.0 remains immutable and must not be moved or retagged.
+Verify that the annotated tag and GitHub Release resolve to the exact prepared
+main SHA. Do not move or rewrite v0.12.0 or v0.13.0.
