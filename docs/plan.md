@@ -97,7 +97,7 @@ Status: **complete**.
 - central release run `45262594629` published and verified v0.13.1;
 - v0.12.0, v0.13.0 and v0.13.1 remain immutable.
 
-No active Forge release work remains.
+v0.13.1 is complete. A new patch release is required after #797 is merged and proven on stable `main`; release preparation remains separate from this implementation PR.
 
 ### CAD — #779 whole-sheet perforation
 
@@ -140,10 +140,11 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
+| #797 Symbolic primitive anchor arithmetic regression | **now / hotfix** | Merge exact green fix to dev-cad, sync to main, prove stable build, then prepare a patch release. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
-| #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
-| #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
-| #786 API documentation completeness | **now / docs** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
+| #779 Native whole-sheet perforation | **paused behind #797** | Resume after the hotfix release; refresh from the new dev-cad baseline and publish as a Sheet metal Verification case. |
+| #785 Examples / Verification catalog split | **paused behind #797** | Resume after the hotfix release; restore four curated Examples and add a Sheet metal Verification group. |
+| #786 API documentation completeness | **paused behind #797** | Resume after the hotfix release; add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
 | #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
