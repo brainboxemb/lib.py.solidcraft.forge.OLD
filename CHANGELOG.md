@@ -40,6 +40,12 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
   regression fixture verifies saved-design mutation plus recoverable native
   flat-pattern history (#773).
 
+- Added native `Shape.path_flange(...)` on existing sheet bodies using the
+  reusable open connected Sketch-chain replay identity from #683. The initial
+  contract is line-only, supports an optional parameterized bend-radius
+  override, and keeps thickness/K-factor/material on the active sheet rule
+  (#776).
+
 - Standalone `Sketch(...).extrude(...)` can now be used directly as a Boolean
   operand with `+`, `-` and `&`. Forge keeps the independent Sketch on its
   authored plane and lowers the extrusion directly to native SolidCraft

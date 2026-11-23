@@ -112,9 +112,10 @@ Current order:
 2. **complete on dev-cad** — #750 rotated local Sketch frame for standalone
    prism/cutter Shapes, PR #771, merge
    `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`;
-3. **now — metal** — #773 native `sheet.hem` on existing sheet bodies;
-4. **next metal candidate** — #776 native `sheet.path_flange`, reusing the
-   existing-sheet history and #683 open-chain contract;
+3. **complete on dev-cad** — #773 native `sheet.hem`, PR #775, merge
+   `c5586872244fa19db54818acef5e55b1bc36d95d`, durable run `45251444014`;
+4. **now — metal** — #776 native `sheet.path_flange`, reusing the existing-sheet
+   history and #683 open-chain contract;
 5. #753 component-local native Cylinder joins across copied/rotated
    occurrences;
 6. #751 native SolidCraft exploded views — deliberately lower priority.
@@ -138,8 +139,8 @@ Each issue uses its own branch from current `dev-cad` and returns to
 | #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #749 Isolate project-local modules between run_script roots | dev-cad | **implemented on dev-cad** | PR #770 is green and merged; keep open until the CAD batch reaches stable main/release. |
 | #750 Standalone Shape local transform/rotation | dev-cad | **implemented on dev-cad** | PR #771 is merged; keep open until the CAD batch reaches stable main/release. |
-| #773 Native sheet.hem | dev-cad | **now / metal** | Add the focused public API, native lowering, tests and SolidCraft regression without a solid approximation. |
-| #776 Native sheet.path_flange | dev-cad | **after #773 / metal** | Reuse the existing sheet-history and open-chain contracts; keep it separate from #773. |
+| #773 Native sheet.hem | dev-cad | **complete** | PR #775 merged at `c5586872244fa19db54818acef5e55b1bc36d95d`; durable run `45251444014` succeeded. |
+| #776 Native sheet.path_flange | dev-cad | **now / metal** | Reuse the existing sheet-history and #683 open-chain contracts; start with a line-only runtime fixture and no new Sketch abstraction. |
 | #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after metal slice** | Refresh the existing focused draft against current dev-cad and qualify it. |
 | #751 Native SolidCraft exploded views | dev-cad | **later / lower priority** | Resume after the higher-priority metal/runtime work. |
 | #713 Audit/reduce Forge scripts | repository | **later** | Remove only genuine duplicates after the release-flow migration. |
@@ -179,6 +180,7 @@ Forge must not own:
 
 ## Next checkpoint
 
-Continue #773 on `dev-cad`; after its exact-head and durable lane evidence are
-green, continue with #776 as the next metal slice. Forge v0.12.0 and the central
-release-flow migration are complete. Exploded-view #751 stays lower priority.
+Continue #776 on `dev-cad` from exact `c5586872244fa19db54818acef5e55b1bc36d95d`.
+Reuse the existing #683 open-chain replay identity and existing-sheet history;
+do not introduce a second path representation. Forge v0.12.0 and #773 are
+complete. Exploded-view #751 stays lower priority.
