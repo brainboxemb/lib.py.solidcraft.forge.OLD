@@ -21,8 +21,8 @@ dev-ci
 
 Current heads:
 
-- `main`: `74e44e98bb561992547609b24b2e2664356423a1`;
-- `dev-ci`: `ed57a09b10db616242483ff02c486a2b73ebacd7`;
+- `main`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
 - `dev-cad`: `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`.
 
 The two development branches now have separate jobs:
@@ -34,14 +34,13 @@ Do not mix those two kinds of change in one branch.
 
 ### Forge package release
 
-Current published Forge package: **v0.11.0** at
-`9258d54079981604b6dd777a4c4face897c190fe`.
+Current published Forge package: **v0.12.0** at
+`68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-The v0.12.0 source preparation is already on `main`. The release-flow migration
-#739 is complete on `dev-ci`; publication now requires exact `dev-ci -> main`
-promotion, a green resulting main build, and the explicit #714 release gate.
-
-The failed old release run created no `v0.12.0` tag or GitHub Release.
+#739 is promoted to stable `main` and #714 published v0.12.0 through the
+central CAD release flow. Release run `45250563106` succeeded; the annotated
+`v0.12.0` tag resolves to the exact source above and the GitHub Release is
+published.
 
 ### Shared CI/release stack
 
@@ -73,7 +72,7 @@ The failed old release run created no `v0.12.0` tag or GitHub Release.
 
 ### dev-ci — central release flow
 
-Status: **ready for promotion to main**.
+Status: **complete on stable main**.
 
 1. **complete** — remove the Forge-local CAD build/Page release check (#763,
    PR #769);
@@ -81,15 +80,16 @@ Status: **ready for promotion to main**.
    release workflow;
 3. **complete upstream** — black-box v0.36.1 acceptance in
    `tool.cad.ci.test #256`;
-4. **complete on dev-ci** — #739 / PR #772 adopted the exact released central
-   release wrapper and removed Forge-local generic release handling;
-5. **now** — require exact `dev-ci` green and merge exact `dev-ci -> main`
-   through the released merge policy;
-6. require the resulting exact main build green;
-7. publish Forge v0.12.0 only through #714 and the central CAD release flow,
-   then verify the exact annotated tag and GitHub Release.
+4. **complete** — #739 / PR #772 adopted the exact released central release
+   wrapper;
+5. **complete** — PR #774 promoted exact `dev-ci -> main` through the shared
+   history-preserving merge policy at
+   `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+6. **complete** — exact main durable run `45250190637` succeeded;
+7. **complete** — #714 published and verified Forge v0.12.0 through the central
+   flow.
 
-Pages is web output and is not release evidence.
+Pages remains web output and is not release evidence.
 
 ### dev-cad — Forge API/compiler work
 
@@ -132,8 +132,8 @@ Each issue uses its own branch from current `dev-cad` and returns to
 
 | Issue | Owner/branch | Status | Next action |
 | --- | --- | --- | --- |
-| #739 Adopt central CAD release flow | dev-ci | **implemented on dev-ci** | PR #772 is merged at `ed57a09b10db616242483ff02c486a2b73ebacd7`; promote exact dev-ci to main through shared policy. |
-| #714 Release Forge 0.12.0 | main/release | **next release checkpoint** | Publish only after exact dev-ci promotion and the resulting main build are green. |
+| #739 Adopt central CAD release flow | dev-ci/main | **complete** | PR #772 plus permanent-lane PR #774 put the released wrapper on stable main. |
+| #714 Release Forge 0.12.0 | main/release | **complete** | v0.12.0 is published and verified at exact `68905bdbd4d999d73248858b4c3f9336ad47cf6e`. |
 | #746 Cone boolean feature compilation | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
 | #749 Isolate project-local modules between run_script roots | dev-cad | **implemented on dev-cad** | PR #770 is green and merged; keep open until the CAD batch reaches stable main/release. |
@@ -179,6 +179,6 @@ Forge must not own:
 
 ## Next checkpoint
 
-Continue #773 on `dev-cad`. In parallel, promote the completed #739 `dev-ci`
-head to `main`, require the exact resulting main build green, then use #714 for
-the explicit Forge v0.12.0 publication. Exploded-view #751 stays lower priority.
+Continue #773 on `dev-cad`; after its exact-head and durable lane evidence are
+green, continue with #776 as the next metal slice. Forge v0.12.0 and the central
+release-flow migration are complete. Exploded-view #751 stays lower priority.
