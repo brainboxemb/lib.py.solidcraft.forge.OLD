@@ -1,13 +1,15 @@
 {
   "action_executed": true,
   "action_type": "copy",
-  "bundle_sha256": "ae884c2af0340faad7d245ae4a7fdea4ea3d93c36c54794a0b34043075ed280e",
-  "duration_seconds": 0.313,
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "32ec2657ef36046346bc5c1a3e0cb42cd6710e353435ca9cffa4b669f5960b71",
+  "duration_seconds": 0.047,
   "engine": "scons",
-  "engine_schema": 3,
+  "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-22T11:49:53.896Z",
+  "finished_at": "2026-11-23T16:46:43.460Z",
   "item": "examples-parametric-move-pythonscad",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -15,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "3e1561de190a89e680139fd6128d90a7cdf1938e68ea0e0e229c70d24864a23d"
+      "sha256": "89009f86f9920bb1dc427d2f86ca8c9b278c9d69a0ffe505a560b92cadab3b7d"
     }
   },
-  "run_finished_at": "2026-11-22T11:50:06.708Z",
-  "run_started_at": "2026-11-22T11:41:49.657Z",
-  "schema": 4,
-  "started_at": "2026-11-22T11:49:53.583Z",
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:43.413Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "9245a4e8bcd1aecab238685b141a3746d3d0b835b71b457312b825c49a7da53c",
+  "target_spec_digest": "6fe47e7981922c78a74167d06fd0cee8e2a023b5e96e3a22e62f75dfabc4a5d8",
   "timeout_seconds": null
 }

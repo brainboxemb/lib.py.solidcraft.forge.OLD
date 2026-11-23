@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "826ca70d5edcab437bfc098b6cc490dce0481187231f0592df1f356f16be9343",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:45.203Z",
+  "item": "examples-sheet-fold-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "059dc986b280487cfad7a654918aed7d76fe63c7fd1a2f16341ca59dd588be81"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:45.187Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "be221862b4b9b510dee85e74368e9c58bdd09c41fdb6f15b87f86f20a3db0c96",
+  "timeout_seconds": null
+}

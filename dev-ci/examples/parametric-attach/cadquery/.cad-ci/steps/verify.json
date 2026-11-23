@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "15cc22107a065b89f852effe81eaa5e6a29ea87a15b79dc1b04cf65dd82c03fd",
+  "duration_seconds": 0.018,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:43.191Z",
+  "item": "examples-parametric-attach-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "12977656a73b50a1d5471ca8d414a57cb5f43987d3809ee7aa6f35191bd4a765"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:43.173Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "523e00e206bf8f1f68a09b439dc6af787d35297806d188acb6ac078fbe87fad4",
+  "timeout_seconds": null
+}

@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "4b5fc6c93f3a3f816c4cd676ad5c7b52248c07eea07fae148c145056e8aa40cb",
+  "duration_seconds": 0.018,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:45.738Z",
+  "item": "examples-slot-family-build123d",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "318ff9eb29b42cf66559f2ded6c6f88634d4385998ba945a8fdd9350b26bd3fd"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:45.720Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "0183de4763f329b1530106c16705e48f1033d0d7346420d533ce5124b6a42762",
+  "timeout_seconds": null
+}

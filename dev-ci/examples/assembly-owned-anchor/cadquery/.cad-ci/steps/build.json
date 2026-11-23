@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "42073a5c2e0ef40352d4e9554113e77d3cf51381e31da42f73ccd6ba7f484f6f",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:40.704Z",
+  "item": "examples-assembly-owned-anchor-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "c8bd28d25f7ccbf1fa97ac4c2bb64a87a5c362397c11e45b3a61709063678053"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:40.689Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "ae1a4c4e1e331fb0ef0693747219cd26ecddd65cced388048f3213ef25f92fe6",
+  "timeout_seconds": null
+}

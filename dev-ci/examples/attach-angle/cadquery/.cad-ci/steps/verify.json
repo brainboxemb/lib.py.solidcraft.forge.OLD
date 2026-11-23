@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "0e62f9af55bd8ed43a2769553e3cffc6a0049c96447555564d0fe680b6ba1b53",
+  "duration_seconds": 0.018,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:40.892Z",
+  "item": "examples-attach-angle-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "cbbba0e4609f00ae81ac6ed1ead51264d610ce81d5710ccb9ef7ece6755effc1"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:40.874Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "eb5ee8193d536e3bde0f80349bb6af470e7b9398780e1ba055acd32edf963574",
+  "timeout_seconds": null
+}

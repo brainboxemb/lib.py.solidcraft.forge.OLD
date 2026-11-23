@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "0e794016eb3b6578338e203cc31f87f80119555446f7d9a5a4c81f628e7caae9",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:40.873Z",
+  "item": "examples-attach-angle-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "7edbe8b12c36c92f67683b3937b69e0433df351f5e3b2a09f227505b14343981"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:40.857Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "5c4ade9c34e3b7c61b98ccd5bfcdd4392327561ad832b1bc4f7a092d96e53f39",
+  "timeout_seconds": null
+}

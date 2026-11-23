@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "3c4a12e0b4f5fbaee352a9ef9dfb136f70a700416ff0778620092739baf1afd6",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:45.031Z",
+  "item": "examples-selective-profile-extrude-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "fa6648042b6bea8fc16e15291b4c559da32914b65986d83eed79ac6529ea4ee6"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:45.015Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "c937b86c1a021a2907ba87723c0f1f2c0ca9962bf87899c918df07c66bb44fe9",
+  "timeout_seconds": null
+}

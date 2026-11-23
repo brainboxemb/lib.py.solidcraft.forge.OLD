@@ -1,13 +1,15 @@
 {
   "action_executed": true,
   "action_type": "copy",
-  "bundle_sha256": "a88b5c2e8ada1b40588b7d38b14bd09d5db898965c7e7ccea20359381edbdd6a",
-  "duration_seconds": 0.272,
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "7c34cf8153d831582315ad8846ad62d1adedf1c747db40ee03934570756ee748",
+  "duration_seconds": 0.047,
   "engine": "scons",
-  "engine_schema": 3,
+  "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-22T11:50:03.113Z",
+  "finished_at": "2026-11-23T16:46:45.997Z",
   "item": "examples-top-sketch-after-chamfer-pybosl2",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -15,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "69dba3b7162b51b9cf5ee7c4ab0e769563443a4331f48c00df9c3a4cb53b42e0"
+      "sha256": "0ac0ef9df13de4ac8da26beb925876ab0954fa9f97c1ec31409f0ef68954666d"
     }
   },
-  "run_finished_at": "2026-11-22T11:50:06.708Z",
-  "run_started_at": "2026-11-22T11:41:49.657Z",
-  "schema": 4,
-  "started_at": "2026-11-22T11:50:02.842Z",
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:45.950Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "fa75232bc4ff34af1da4b198ef14ef1c7953c99f97ecc688e3515082a7384e94",
+  "target_spec_digest": "3469797ddab2b2e3f9eb0d02fa624ec0bf846893d1445807f0ba3abc7f1a9e00",
   "timeout_seconds": null
 }

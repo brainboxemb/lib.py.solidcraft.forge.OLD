@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "311cd726b2b94b7bdbfde729f568d4a1e7f6768a0b6370425e7040ff5284f75e",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:44.725Z",
+  "item": "examples-round-top-sketch-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "78948a5132d7ec18c7b29bde393db06e2c7d763344295ad7f26624eead222306"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:44.708Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "a010b4b08d56116ea7be8c6a931b138e1484165b041ecc510c8597974949afc5",
+  "timeout_seconds": null
+}

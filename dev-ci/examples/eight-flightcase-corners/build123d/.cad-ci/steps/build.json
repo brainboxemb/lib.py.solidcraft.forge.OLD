@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "e786055fe5f1959905e4bcc2b60bac9e8ef6ad51fca5dfc1235f63a14d20fa87",
+  "duration_seconds": 0.016,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T16:46:42.088Z",
+  "item": "examples-eight-flightcase-corners-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "f4fd38fa3eb33a51336aeaad7dc48ed0c8a75fe8ba58920543dedb29bf7c3415"
+    }
+  },
+  "run_finished_at": "2026-11-23T16:47:31.534Z",
+  "run_started_at": "2026-11-23T16:45:14.412Z",
+  "schema": 6,
+  "started_at": "2026-11-23T16:46:42.072Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "c41961c0fbe18ce0743d5586cd23029c46182f84df715e8bcbf2dd43a5412ce4",
+  "timeout_seconds": null
+}
