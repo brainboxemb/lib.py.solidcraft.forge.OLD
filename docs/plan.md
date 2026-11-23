@@ -25,8 +25,8 @@ Current heads at the v0.13.0 release checkpoint:
 - `dev-cad`: `b83a53f60795ca8d08c452f132eab362974632e5`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-Published Forge package before this checkpoint: **v0.12.0** at exact
-`68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+Published Forge package before this patch checkpoint: **v0.13.0** at exact
+`fc44eb8c3ccbf5f945f69bf68d6076a0a4294f63`.
 
 The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
 release does not contain #746, #747, #749 or #750. The original `Cone`
@@ -63,39 +63,25 @@ release evidence. The stable release evidence is the main **ci-build-record**.
 
 ## Active work
 
-### Release — #781 Forge v0.13.0
+### Release — #789 Forge v0.13.1
 
 Status: **now**.
 
-Reason for v0.13.0:
+v0.13.0 is published and contains the intended post-v0.12 CAD batch. Its
+release notes, however, did not explicitly explain that v0.12.0 had been cut
+before #746/#747/#749/#750 reached stable main.
 
-- #746 Cone native Boolean feature compilation;
-- #747 Polygon2D in explicit/attached Sketches;
-- #749 model-local import isolation;
-- #750 rotated standalone Sketch cutters;
-- #773 native sheet hem;
-- #776 native sheet path flange.
+v0.13.1 is a documentation/release-metadata patch only:
 
-Completed release steps:
+1. package version becomes `0.13.1`;
+2. changelog gets an explicit release-boundary explanation;
+3. no modelling behavior changes from v0.13.0;
+4. after merge, require the exact main branch build green;
+5. publish with `/release v0.13.1 <exact-main-sha>`;
+6. verify annotated tag and GitHub Release against that exact SHA;
+7. update this plan to the published state.
 
-1. #782 synced exact `main -> dev-cad` through the reviewed
-   `/merge-resolved` path;
-2. exact `dev-cad` branch build `45256578230` passed;
-3. #784 synced exact `dev-cad -> main`;
-4. exact main branch build `45258575394` passed at
-   `733134e66283e57c65a608731c04945fbf177b60`.
-
-Current release steps:
-
-5. **now** — #781 prepares package version `0.13.0` and the dated changelog
-   section on a short-lived release branch;
-6. merge that preparation to `main` and require the exact resulting main
-   branch build green;
-7. publish only with `/release v0.13.0 <exact-main-sha>`;
-8. verify the annotated tag and GitHub Release both resolve to that exact SHA;
-9. update this plan to the published release state.
-
-Do not retag or move v0.12.0.
+Do not move or rewrite v0.12.0 or v0.13.0.
 
 ### CAD — #779 whole-sheet perforation
 
@@ -138,7 +124,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #781 Release Forge v0.13.0 | **now** | Finish release preparation, exact main build, publication and tag verification. |
+| #789 Release Forge v0.13.1 clarification patch | **now** | Merge metadata/docs patch, require exact main build, publish and verify v0.13.1. |
 | #785 Examples / Verification catalog split | **after release** | Restore four curated Examples and add Sheet metal Verification group. |
 | #786 API documentation completeness | **after release** | Add Sheet metal Reference/Guide/Cheatsheet/API coverage. |
 | #779 Native whole-sheet perforation | **after release** | Refresh from dev-cad, finish runtime evidence and publish as Verification case. |
@@ -159,6 +145,7 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-Merge the #781 v0.13.0 preparation to `main`, require the exact resulting main
-branch build green, publish through the central release flow, and verify the
-immutable tag/GitHub Release before resuming #779, #785 or #786.
+Finish #789 as Forge v0.13.1: merge the metadata/documentation patch to
+`main`, require the exact resulting main branch build green, publish through
+the central release flow, and verify the immutable tag/GitHub Release before
+resuming #779, #785 or #786.
