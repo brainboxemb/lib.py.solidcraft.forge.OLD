@@ -35,19 +35,18 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.11.0**.
+Latest actual Forge release: **v0.12.0**.
 
-- tag: `v0.11.0`;
+- annotated tag: `v0.12.0`;
 - exact source:
-  `9258d54079981604b6dd777a4c4face897c190fe`;
+  `68905bdbd4d999d73248858b4c3f9336ad47cf6e`;
+- published GitHub Release: `v0.12.0`;
 - qualified SolidCraft: `0.45.0`.
 
-The v0.12.0 source preparation is already present in the current integration
-history. Publication waits for #739 to reach stable `main` and for the exact
-resulting main build to be green.
-
-The earlier failed v0.12.0 release attempt created no v0.12.0 tag or GitHub
-Release.
+The central CAD release flow published and verified this release in run
+`45250563106`. The annotated tag resolves to the exact stable-main source
+above. The earlier failed v0.12.0 attempt did not create a competing tag or
+release.
 
 ## Consumer workflow
 
@@ -116,5 +115,6 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-The next planned release is **v0.12.0** under #714, after #739 reaches
-`main` and the exact main build is green.
+v0.12.0 is complete under #714. Keep future release preparation explicit and
+continue using the same central flow; choose the next version only when the
+next coherent stable-main batch is ready.
