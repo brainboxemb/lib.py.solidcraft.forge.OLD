@@ -201,7 +201,9 @@ For these coordinate-defined profiles an omitted anchor remains `None`, so
 Forge does not invent a profile centre. Text2D may still use
 `Sketch.add(..., offset=(u, v))` to set its native insertion-point
 displacement. Explicit `anchor=CENTER` is not supported for Polygon2D or
-Text2D yet. Polygon2D keeps its existing offset/lowering limits.
+Text2D yet. Polygon2D itself is supported inside normal standalone explicit
+Sketches and face-attached explicit Sketches; its authored vertex coordinates
+remain sketch-local in either case.
 
 Semantic profile centering was introduced by
 [change 0018](background/changes/0018-sketch-profile-centering.md). The profile-specific
@@ -340,6 +342,23 @@ body = body - cut
 feature with SolidCraft operations `join`, `cut` and `intersect`
 respectively. Forge does not create a temporary body/combine sequence, and the
 standalone Sketch remains authored on its own world/work plane.
+
+A standalone Sketch may also declare an explicit local frame with
+`origin=(x, y, z)` and `rotation=(rx, ry, rz)`. Extruding that Sketch and
+using it as a normal Boolean operand preserves the rotated native Sketch frame,
+so non-axis-aligned cutters do not need consumer-local transform hacks:
+
+```python
+with Sketch(
+    name="Tip wedge",
+    plane="XY",
+    origin=(-12, 0, 0),
+    rotation=(90, 0, 45),
+) as wedge:
+    Polygon2D([(-4, -4), (4, -4), (0, 4)])
+
+body = body - wedge.extrude(8)
+```
 
 See [change 0024](background/changes/0024-signed-sketch-extrude.md) and
 [change 0043](background/changes/0043-standalone-sketch-boolean.md).
