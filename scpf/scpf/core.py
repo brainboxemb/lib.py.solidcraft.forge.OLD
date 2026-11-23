@@ -958,7 +958,8 @@ def _cylinder_base_from_anchor(height, diameter, axis, point, anchor):
     """Get native cylinder base from its selected world-space anchor.
 
     The axial dimension is height; the two transverse dimensions are
-    diameter. CENTER therefore places the base half a height behind origin.
+    diameter. Keep the axial base direct so BOTTOM/LEFT/FRONT anchors do not
+    acquire a synthetic height dependency through +height/2 -height/2.
     """
     extents = {
         "X": (height, diameter, diameter),
@@ -966,9 +967,16 @@ def _cylinder_base_from_anchor(height, diameter, axis, point, anchor):
         "Z": (diameter, diameter, height),
     }[axis]
     center = _primitive_center_from_anchor(extents, point, anchor)
+    selector = _direction_selector(anchor)
     index = {"X": 0, "Y": 1, "Z": 2}[axis]
     base = list(center)
-    base[index] = _dim_add(base[index], -half(height))
+    axial_side = selector.vector[index]
+    if axial_side < 0:
+        base[index] = point[index]
+    elif axial_side > 0:
+        base[index] = _dim_add(point[index], -height)
+    else:
+        base[index] = _dim_add(point[index], -half(height))
     return tuple(base)
 
 
