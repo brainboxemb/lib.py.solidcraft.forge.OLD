@@ -380,6 +380,26 @@ Requirements:
   removed from `sys.modules`;
 - repeated execution of one model root is deterministic.
 
+## Rotated explicit Sketch frames
+
+A standalone or explicitly world-positioned Sketch may define a fixed local
+rotation before extrusion.
+
+Requirements:
+
+- `Sketch(..., rotation=(rx, ry, rz))` accepts exactly three finite numeric
+  degree values;
+- rotations are applied about local X, then Y, then Z;
+- `origin=(x, y, z)` is the world translation of the local Sketch origin;
+- the compiler lowers the frame to native `sketch.create` `origin`,
+  `x_dir` and `y_dir`; Forge does not add a model-specific transform
+  command;
+- a standalone rotated Sketch extrusion can be used as the normal operand of
+  CSG join/cut/intersect;
+- `offset` is not combined with an explicit rotated frame;
+- rotated Sketch sheet-metal and open-chain authoring remain unsupported until
+  separately qualified.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
