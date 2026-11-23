@@ -195,6 +195,93 @@ class GeometryPrimitives(unittest.TestCase):
         self.assertIn("interference", str(cone["top_diameter"]))
         self.assertEqual(cone["height"], 20)
 
+    def test_cone_boolean_feature_join_and_placed_join_use_native_cone(self):
+        from scpf import BOTTOM, Box, Cone, Edges, Parameter
+        from scpf.compiler import compile_model
+
+        diameter = Parameter("diameter", 20)
+        interference = Parameter("interference", 0.2)
+        body = Box(50, 40, 20).fillet(2, edges=Edges.VERTICAL)
+
+        direct = compile_model(
+            body + Cone(
+                d=diameter,
+                top_d=diameter + interference,
+                h=8,
+                anchor=BOTTOM,
+            ),
+            "DirectConeJoin",
+        )["commands"]
+        direct_cone = next(
+            row["params"] for row in direct
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(direct_cone["operation"], "join")
+        self.assertEqual(direct_cone["targets"], ["DirectConeJoin"])
+        self.assertEqual(direct_cone["base"], [0, 0, 0])
+        self.assertEqual(direct_cone["diameter"], "diameter")
+        self.assertIn("interference", str(direct_cone["top_diameter"]))
+
+        placed = compile_model(
+            body + Cone(
+                d=12,
+                top_d=10,
+                h=6,
+                anchor=BOTTOM,
+            ).at(4, 5, 6, anchor=BOTTOM),
+            "PlacedConeJoin",
+        )["commands"]
+        placed_cone = next(
+            row["params"] for row in placed
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(placed_cone["operation"], "join")
+        self.assertEqual(placed_cone["targets"], ["PlacedConeJoin"])
+        self.assertEqual(placed_cone["base"], [4, 5, 6])
+
+    def test_cone_boolean_feature_cut_preserves_axis_and_axial_anchor(self):
+        from scpf import LEFT, Axis, Box, Cone, Edges
+        from scpf.compiler import compile_model
+
+        body = Box(50, 40, 20).fillet(2, edges=Edges.VERTICAL)
+        commands = compile_model(
+            body - Cone(
+                d=12,
+                top_d=8,
+                h=10,
+                axis=Axis.X,
+                anchor=LEFT,
+            ),
+            "ConeCut",
+        )["commands"]
+        cone = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "cut")
+        self.assertEqual(cone["targets"], ["ConeCut"])
+        self.assertEqual(cone["axis"], "X")
+        self.assertEqual(cone["base"], [0, 0, 0])
+
+    def test_placed_cone_keeps_pure_primitive_csg_path(self):
+        from scpf import BOTTOM, Box, Cone
+        from scpf.compiler import compile_model
+
+        commands = compile_model(
+            Box(40, 40, 20)
+            + Cone(d=12, top_d=10, h=6, anchor=BOTTOM).at(
+                3, 4, 5, anchor=BOTTOM
+            ),
+            "PureConeJoin",
+        )["commands"]
+        cone = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "join")
+        self.assertEqual(cone["targets"], ["PureConeJoin"])
+        self.assertEqual(cone["base"], [3, 4, 5])
+
     def test_cone_supports_only_center_or_axial_end_anchors(self):
         from scpf import BOTTOM, LEFT, Axis, Cone
         from scpf.compiler import compile_model
