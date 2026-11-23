@@ -29,9 +29,9 @@ class MergePolicyWorkflowTests(unittest.TestCase):
         )
 
         self.assertIn("stable_branch: main", text)
-        self.assertIn("development_branches: '["dev-cad","dev-ci"]'", text)
+        self.assertIn('development_branches: \'["dev-cad","dev-ci"]\'', text)
         self.assertIn(
-            "permanent_branches: '["build","gh-pages"]'",
+            'permanent_branches: \'["build","gh-pages"]\'',
             text,
         )
         self.assertIn("integration_workflow: scpf.yml", text)
