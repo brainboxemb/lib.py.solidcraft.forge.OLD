@@ -20,15 +20,32 @@ import model_verification_batch as batch  # noqa: E402
 
 class ModelBatchSelectionTests(unittest.TestCase):
     def test_ci_item_opts_into_direct_dependent_context(self):
-        text = (
+        item = (
             ROOT / "ci" / "model-verification-batch" / "ci.yml"
         ).read_text(encoding="utf-8")
-        self.assertIn("selection_context: direct_dependents", text)
+        builder = (
+            ROOT
+            / "ci"
+            / "builders"
+            / "model-verification-batch"
+            / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("builder: model-verification-batch", item)
+        self.assertNotIn("selection_context:", item)
+        self.assertIn("selection_context: direct_dependents", builder)
 
-        reference = (
+        reference_item = (
             ROOT / "ci" / "reference-verification-batch" / "ci.yml"
         ).read_text(encoding="utf-8")
-        self.assertNotIn("selection_context:", reference)
+        reference_builder = (
+            ROOT
+            / "ci"
+            / "builders"
+            / "reference-verification-batch"
+            / "builder.yml"
+        ).read_text(encoding="utf-8")
+        self.assertNotIn("selection_context:", reference_item)
+        self.assertNotIn("selection_context:", reference_builder)
 
     def test_active_model_ids_preserve_cad_ci_order(self):
         with patch.dict(
