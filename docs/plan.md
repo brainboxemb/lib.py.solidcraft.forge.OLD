@@ -79,8 +79,8 @@ The released v0.35.0 workflow adds read-only targeted selection. Qualify this
 migration in explicit gates without toggling model `process` state:
 
 1. **passed** — one representative model: `simple-box` (run `45217991932`);
-2. **current** — five model source paths in one graph;
-3. ten model source paths in one graph;
+2. **passed** — five model source paths in one graph (run `45218279427`);
+3. **current** — ten model source paths in one graph;
 4. remove the temporary selector and run the full catalog.
 
 Only advance when the previous gate is green. The 5/10 gates use public
