@@ -319,6 +319,114 @@ class SheetMetalTests(unittest.TestCase):
                 "NotSheet",
             )
 
+    def test_sheet_hem_lowers_to_native_history(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+
+        sheet = blank.sheet_metal(
+            thickness=2,
+            bend_radius=2,
+            rule_name="Hem Rule",
+        )
+        commands = compile_model(
+            sheet.hem(edges=[(40, 0, 2)], length=12),
+            "HemmedSheet",
+        )["commands"]
+
+        self.assertEqual(
+            [row["command"] for row in commands],
+            [
+                "sheet.manage_rules",
+                "sketch.create",
+                "sketch.rectangle.two_point",
+                "sketch.finish",
+                "sheet.flange",
+                "sheet.hem",
+            ],
+        )
+        hem = commands[-1]["params"]
+        self.assertEqual(
+            hem,
+            {
+                "edges": [[40.0, 0.0, 2.0]],
+                "length": 12,
+                "body": "HemmedSheet",
+            },
+        )
+        self.assertEqual(commands[4]["params"]["rule"], "Hem Rule")
+
+    def test_sheet_hem_parameter_units_and_native_options(self):
+        hem_length = Parameter("hem_length", 12)
+        hem_gap = Parameter("hem_gap", 4)
+
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        commands = compile_model(
+            sheet.hem(
+                edges=[(40, -10, 2), (40, 10, 2)],
+                length=hem_length,
+                gap=hem_gap,
+                flip=True,
+            ),
+            "ParametricHem",
+        )["commands"]
+
+        units = {
+            row["params"]["name"]: row["params"]["unit"]
+            for row in commands
+            if row["command"] == "parameters.add"
+        }
+        self.assertEqual(units["hem_length"], "mm")
+        self.assertEqual(units["hem_gap"], "mm")
+
+        hem = commands[-1]["params"]
+        self.assertEqual(hem["length"], "hem_length")
+        self.assertEqual(hem["gap"], "hem_gap")
+        self.assertEqual(
+            hem["edges"],
+            [[40.0, -10.0, 2.0], [40.0, 10.0, 2.0]],
+        )
+        self.assertTrue(hem["flip"])
+
+    def test_sheet_hem_validates_public_contract(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        invalid_edges = (
+            [],
+            [(0, 0)],
+            [(0, 0, 0, 0)],
+            [(True, 0, 0)],
+            [(float("nan"), 0, 0)],
+            [(Parameter("edge_x", 40), 0, 2)],
+        )
+        for edges in invalid_edges:
+            with self.subTest(edges=edges), self.assertRaises(ValueError):
+                sheet.hem(edges=edges, length=10)
+
+        for length in (0, -1, float("nan")):
+            with self.subTest(length=length), self.assertRaisesRegex(
+                ValueError, "length"
+            ):
+                sheet.hem(edges=[(40, 0, 2)], length=length)
+
+        for gap in (0, -1, float("nan")):
+            with self.subTest(gap=gap), self.assertRaisesRegex(ValueError, "gap"):
+                sheet.hem(edges=[(40, 0, 2)], length=10, gap=gap)
+
+        with self.assertRaisesRegex(TypeError, "flip"):
+            sheet.hem(edges=[(40, 0, 2)], length=10, flip="yes")
+
+        ordinary = Box(80, 40, 2, anchor=Anchor.BOTTOM)
+        with self.assertRaisesRegex(ModelError, "existing sheet material"):
+            compile_model(
+                ordinary.hem(edges=[(40, 0, 2)], length=10),
+                "NotSheet",
+            )
+
     def test_contour_flange_uses_native_open_chain_and_replay_curve_bindings(self):
         with Sketch(name="Contour", plane="XZ") as sketch:
             chain = sketch.chain(start=(0, 0))
