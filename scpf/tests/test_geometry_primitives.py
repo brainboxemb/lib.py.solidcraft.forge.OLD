@@ -237,7 +237,7 @@ class GeometryPrimitives(unittest.TestCase):
         )
 
     def test_symbolic_box_and_cone_placement_anchor_arithmetic_stays_symbolic(self):
-        from scpf import BOTTOM, Box, Cone, Parameter
+        from scpf import BOTTOM, TOP, Box, Cone, Parameter
         from scpf.compiler import compile_model
 
         height = Parameter("height", 20)
@@ -245,7 +245,7 @@ class GeometryPrimitives(unittest.TestCase):
         body = Box(100, 80, 8, anchor=BOTTOM)
 
         box_commands = compile_model(
-            body + Box(10, 12, height).at(5, 6, z),
+            body + Box(10, 12, height).at(5, 6, z, anchor=TOP),
             "SymbolicBoxJoin",
         )["commands"]
         box = [
