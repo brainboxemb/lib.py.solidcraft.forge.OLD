@@ -89,6 +89,7 @@ def _is_feature_tree(shape):
         "sheet_contour_flange",
         "sheet_edge_flange",
         "sheet_hem",
+        "sheet_path_flange",
         "sheet_fold",
     ):
         return True
@@ -1284,6 +1285,11 @@ def _non_count_parameter_names(node, found=None):
             _non_count_parameter_names(original, found)
             _non_count_parameter_names((edges, length, gap, flip), found)
             return found
+        if node.kind == "sheet_path_flange":
+            original, edge, path, radius = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names((edge, path, radius), found)
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1556,6 +1562,26 @@ def _to_commands(shape, name):
         if flip:
             params["flip"] = True
         return steps + [_command("sheet.hem", **params)], base
+
+    if shape.kind == "sheet_path_flange":
+        original, edge, path, radius = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError(
+                "sheet path flange requires existing sheet material"
+            )
+        sketch, meta, curves = compile_open_chain_with_curves(path)
+        params = {
+            "edge": [command_value(value) for value in edge],
+            "sketch": meta["sketch_name"],
+            "curves": curves,
+            "body": name,
+        }
+        if radius is not None:
+            params["radius"] = command_value(radius)
+        return steps + sketch + [
+            _command("sheet.path_flange", **params)
+        ], base
 
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data
