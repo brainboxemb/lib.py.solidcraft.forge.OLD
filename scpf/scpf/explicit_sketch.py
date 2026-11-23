@@ -427,9 +427,13 @@ class Sketch:
             raise ValueError(
                 "open connected chain currently requires a standalone Sketch"
             )
-        if self.origin is not None or self.rotation is not None:
+        if self.origin is not None:
             raise ValueError(
-                "open connected chain does not yet support an explicit Sketch frame"
+                "open connected chain does not yet support explicit Sketch origin"
+            )
+        if self.rotation is not None:
+            raise ValueError(
+                "open connected chain does not yet support Sketch rotation"
             )
         builder = _ConnectedChainBuilder(self, start)
         self._chain_builders.append(builder)
