@@ -3,10 +3,10 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Forge owns the public CAD library/compiler/model semantics, Forge-specific
-verification expectations, presentation policy and repository-specific builder
-commands. Generic CAD-CI, reusable CAD verification, runtime packaging,
-durable build state, Pages publication and merge governance stay in their owner
+Forge owns the public CAD API/compiler/model behavior, Forge-specific
+verification expectations and repository-specific model/build adapters.
+Generic CAD-CI, shared release flow, reusable verification, runtime packaging,
+generated build branches, Pages and merge policy stay in their owner
 repositories.
 
 ## Current repository state
@@ -19,137 +19,135 @@ dev-cad
 dev-ci
 ```
 
-Current heads after the #721 history-preserving synchronization:
+Current heads:
 
-- `main`: `3f8811b6cc7174af64f0ce45aad890051e3ccc40`;
-- `dev-ci`: `90ac473473ab954103190ba426b350852b380fc0`;
-- `dev-cad`: `1a751317b8f1901118084ecc6e9f6faa9b1adf6b` before this
-  documentation-restoration PR.
+- `main`: `74e44e98bb561992547609b24b2e2664356423a1`;
+- `dev-ci`: `8d8bf2ad7e229500a75f8c1e3043cb8245de01d6`;
+- `dev-cad`: `4625e57b39b344cb64ed4063cb7ea7c933fa7b15`.
 
-#740 is complete and closed. Stable CAD-CI is accepted on `main`; the later
-`3f8811b...` main commit is the plan-only reconciliation after that accepted
-cut-over.
+The two development branches now have separate jobs:
 
-#721 completed the required real two-parent `main -> dev-cad`
-synchronization at `1a751317...`, with parents `eebff74...` and
-`3f8811b...`. Durable dev-cad run `45227292709` is green, and
-`build/dev-cad`, dev-cad Pages and Verification provenance all identify
-`1a751317...`.
+- `dev-ci`: finish the central release-flow adoption;
+- `dev-cad`: continue Forge CAD/API fixes.
 
-The active step is #722 phase B: restore only the preserved dev-cad CAD-library
-documentation on top of the synchronized v0.35/main baseline. After the
-restored lane is durable-green, #716 can resume as the exact
-`dev-cad -> main` promotion for the v0.12.0 candidate.
+Do not mix those two kinds of change in one branch.
 
 ### Forge package release
 
-Current real Forge package release: **v0.11.0** at
+Current published Forge package: **v0.11.0** at
 `9258d54079981604b6dd777a4c4face897c190fe`.
 
-Issue #714 remains the explicit v0.12.0 release gate. The dev-cad CAD/API batch
-must not be promoted/released until the CI cut-over is stable, dev-cad history
-is synchronized/restored and durable main/Pages evidence is green.
+The v0.12.0 source preparation is already on `main`. Publication is blocked
+only by the release-flow migration in #739.
 
-### Accepted generic owner stack
+The failed old release run created no `v0.12.0` tag or GitHub Release.
+
+### Shared CI/release stack
 
 - `lib.py.cad.ci v0.18.2` @
   `088644a05ff698957aef2ddc6cc5de037ddfa158`;
-- `tool.cad.ci v0.35.0` @
-  `9fcad92b7c5f10ae29a9cb085a4f25bb38ed00f9`;
+- `tool.cad.ci v0.36.0` @
+  `093eafb0eabf6b6617ec82dde17a76fdc718ae12` is released;
+- v0.36.0 central CAD release-flow external acceptance is running in
+  `tool.cad.ci.test #256`;
+- `tool.py.lib.ci v0.2.1` @
+  `58ead6897a4ac8cafef22a3c1f834491bf61568d` owns the generic
+  tag/GitHub Release transaction;
 - `lib.py.cad.verification v0.16.0` @
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
-- `docker.cad.solidcraft v0.3.4` immutable SolidCraft/reference runtimes;
-- v0.34.2/v0.18.2 CadQuery Workplane + Assembly acceptance and permanent-lane
-  durable provenance completed in `tool.cad.ci.test #248`;
-- v0.35.0 targeted `item` + multi-path workflow selection completed in
-  `tool.cad.ci.test #254`.
+- `docker.cad.solidcraft v0.3.4` remains the pinned runtime image.
 
 ## Permanent branch rule
 
 - `main`: stable integration only.
-- `dev-cad`: Forge API/compiler/model/Verification/site-content work.
-- `dev-ci`: CI/runtime/publication integration.
+- `dev-cad`: Forge API/compiler/model/verification/site-content work.
+- `dev-ci`: CI/release integration.
 - short-lived branches are squash-merged;
-- exact `dev-cad|dev-ci -> main`: history-preserving normal merge;
-- exact `main -> dev-cad|dev-ci`: history-preserving normal merge;
-- merge mechanics come only from the exact released shared policy;
-- generic CI/verification/runtime behavior is changed/released in the owner repo
-  before Forge adopts it.
+- exact `dev-cad|dev-ci -> main`: normal history-preserving merge;
+- exact `main -> dev-cad|dev-ci`: normal history-preserving merge;
+- generic owner behavior is changed, released and externally tested in its
+  owner repository before Forge consumes it.
 
-## Active workstreams
+## Active work
 
-### WS1 — reconcile dev-cad history and Forge v0.12.0
+### dev-ci — central release flow
 
-Status: **now**. The #740 stable cut-over is complete.
+Status: **blocked only on external acceptance**.
 
-Required order:
+1. **complete** — remove the Forge-local CAD build/Page release check (#763,
+   PR #769);
+2. **complete upstream** — `tool.cad.ci v0.36.0` now provides the central
+   CAD release workflow and checks the stable main `ci-build-record`;
+3. **now outside Forge** — finish black-box v0.36.0 acceptance in
+   `tool.cad.ci.test #256`;
+4. after #256 passes, #739 replaces Forge's local generic release workflow
+   with the exact released `tool.cad.ci v0.36.0` consumer template;
+5. require `dev-ci` green, then merge exact `dev-ci -> main`;
+6. require the resulting main build green;
+7. publish Forge v0.12.0 through the central CAD release flow and verify the
+   exact tag/GitHub Release.
 
-1. **complete** — #722 phase A mirrored the final stable shared documents;
-2. **complete** — #721 / #717 synchronized exact `main -> dev-cad` as a
-   two-parent merge and durable dev-cad evidence is green;
-3. **now** — #722 phase B restores the preserved dev-cad-only CAD
-   documentation without restoring retired CI/governance text;
-4. after restored dev-cad durable evidence is green, resume #716 exact
-   `dev-cad -> main` promotion;
-5. #714 prepares/publishes Forge v0.12.0 through the explicit release gate.
+Pages is web output and is not release evidence.
 
-### WS2 — subsequent infrastructure/documentation work
+### dev-cad — Forge API/compiler work
 
-- #739 released `tool.py.lib.ci` release-template adoption — **after the
-  current dev-cad/v0.12 checkpoint**. Do not move `main` again while #722/#721
-  are establishing the final merge base.
-- #713 scripts ownership audit — **later**, but #740 may delete scripts that
-  become unambiguously obsolete because owner functionality has replaced them.
-- #737 historical changelog normalization — **later / docs-only**.
-- #659 build/verification/results terminology — **later**.
-- #570 CADCraft diagram replacement — **later**.
-- #335 build123d Sheet Metal reference semantics — **later**.
+Status: **active in parallel**.
 
-### WS3 — CAD/API work after the release checkpoint
+Completed on `dev-cad`:
 
-Issues #746, #747, #748, #749, #750, #751 and #753 are real reusable Forge
-gaps but are **blocked on the current dev-cad history/v0.12 checkpoint**.
-#753 already has draft PR #754 as a focused native qualification fixture; keep
-it draft and do not merge it before the checkpoint. Do not accumulate another
-CAD/API release batch before v0.12.0 is either published or explicitly deferred.
+1. #746 Cone boolean join/cut support — PR #766, merge
+   `611762e4f2eb1be02ec758f4a86cb519f1419fbc`;
+2. #747 Polygon2D in explicit/attached Sketch — PR #768, merge
+   `4625e57b39b344cb64ed4063cb7ea7c933fa7b15`, including a real
+   SolidCraft runtime regression;
+3. #748 STL export — closed as not Forge-owned; the CAD consumer uses the
+   supported SolidCraft CLI directly from the accepted saved `.sc` model.
 
-Other longer-term API/research work remains later: #349, #347, #325, #81, #82,
-#9 and #8. #175 and #5 remain probably obsolete in their current broad forms.
+Current order:
+
+1. **now** — #749 isolate project-local Python modules between
+   `run_script()` model roots;
+2. #750 standalone Shape local rotation/transform;
+3. #751 native SolidCraft exploded views;
+4. #753 component-local native Cylinder joins across copied/rotated
+   occurrences.
+
+Each issue uses its own branch from current `dev-cad` and returns to
+`dev-cad` only after focused tests are green.
 
 ## Open issue assessment — 2026-11-23
 
-| Issue | Owner/lane | Status | Next action |
+| Issue | Owner/branch | Status | Next action |
 | --- | --- | --- | --- |
-| #739 Adopt tool.py.lib.ci release template | dev-ci | **blocked on v0.12 checkpoint** | Keep separate and avoid moving main again during #722/#721/#716 history reconciliation. |
-| #722 Normalize/restore shared docs around dev-cad sync | dev-cad | **now** | Phase A and #721 are complete; restore only preserved CAD-library docs on the synchronized baseline, then require restored dev-cad durable green and close #722. |
-| #717 Reconcile main/dev-cad history | dev-cad | **effectively complete but still open** | #721 is a verified two-parent sync and durable evidence is green; close after #722 restoration proves the final dev-cad lane and #716 re-evaluates cleanly. |
-| #714 Release Forge 0.12.0 | repository | **blocked on #717/#716** | Prepare/publish only after promoted main and durable evidence are green. |
-| #746 Cone join/cut feature compilation | dev-cad | **blocked on v0.12 checkpoint** | Reusable compiler gap; implement in the next CAD/API batch. |
-| #747 Polygon2D explicit/attached Sketch compilation | dev-cad | **blocked on v0.12 checkpoint** | Required by downstream CAD; no consumer workaround. |
-| #748 Qualified STL export path | dev-cad/runtime owner | **blocked on v0.12 checkpoint** | Determine native export owner, then qualify released path. |
-| #749 Isolate project-local modules between run_script roots | dev-cad | **blocked on v0.12 checkpoint** | Fix runner ownership, no consumer sys.modules workaround. |
-| #750 Standalone Shape local transform/rotation | dev-cad | **blocked on v0.12 checkpoint** | Add generic cutter transform support after release checkpoint. |
-| #751 Native SolidCraft exploded views | dev-cad | **blocked on v0.12 checkpoint** | Wrap/qualify native explode API after release checkpoint. |
-| #753 Qualify component-local native Cylinder joins across copied/rotated occurrences | dev-cad | **blocked on v0.12 checkpoint** | Draft PR #754 exists; retain it as the focused runtime/Forge qualification fixture and resume after the history/release checkpoint. |
-| #713 Audit/reduce Forge scripts | repository | **later** | Reassess after #740/#714; remove only genuine duplicates. |
-| #737 Historical changelog alignment | docs | **later** | Do not mix retrospective rewrite into CI/release cut-over. |
-| #659 Standardize build/verification/results terminology | cross-repo | **later** | Separate follow-up. |
-| #570 Remove CADCraft from Verification diagrams | dev-cad | **later** | Preserve presentation responsibility while replacing source format. |
-| #349 Remaining SOLID › CREATE coverage | dev-cad | **later** | Focused slices only when needed. |
+| #739 Adopt central CAD release flow | dev-ci | **blocked on tool.cad.ci.test #256** | After external v0.36.0 acceptance, copy the released CAD release template and remove Forge-local generic release code. |
+| #714 Release Forge 0.12.0 | main/release | **blocked on #739** | Publish only after #739 reaches main and the exact main build is green. |
+| #746 Cone boolean feature compilation | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
+| #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Keep open until the CAD batch reaches stable main/release. |
+| #749 Isolate project-local modules between run_script roots | dev-cad | **now** | Make local imports independent of earlier run_script calls in the same process. |
+| #750 Standalone Shape local transform/rotation | dev-cad | **next** | Add generic local cutter transform support after #749. |
+| #751 Native SolidCraft exploded views | dev-cad | **next** | Wrap and qualify native explode behavior after #750. |
+| #753 Component-local Cylinder joins across copied/rotated occurrences | dev-cad | **after #751** | Refresh the existing focused draft against current dev-cad and qualify it. |
+| #713 Audit/reduce Forge scripts | repository | **later** | Remove only genuine duplicates after the release-flow migration. |
+| #737 Historical changelog alignment | docs | **later / docs-only** | Keep separate from functional work. |
+| #659 Standardize build/verification/results terminology | cross-repo | **later** | Follow the shared plain-language work; do not mix into #749. |
+| #570 Remove CADCraft from verification diagrams | dev-cad | **later** | Replace source format while preserving presentation behavior. |
+| #349 Remaining SOLID CREATE coverage | dev-cad | **later** | Deliver focused features only when required. |
 | #347 Generalized pattern seeds | dev-cad | **later** | Generalize by native feature identity. |
-| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace solid approximation with real sheet-metal reference. |
+| #335 build123d Sheet Metal reference | dev-cad | **later** | Replace the current reference approximation. |
 | #325 AnchorFrame root cause | dev-cad | **later** | Resume when an active model requires it. |
-| #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Consolidate useful evidence into #325. |
+| #175 HUB75-like AnchorFrame diagnostic | dev-cad | **probably obsolete** | Move any unique evidence into #325. |
 | #82 Joints-folder visibility | dev-cad | **later** | Decide interaction/export policy later. |
 | #81 Rotated occurrence-local AnchorFrame references | dev-cad | **later** | Investigate with #325. |
-| #9 First-class Sketch/constraints/workplanes | dev-cad | **later** | Refresh epic and deliver focused slices. |
-| #8 Hollow primitives | dev-cad | **later** | Reconcile with native shell/pipe/boolean histories. |
-| #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate any remaining scope from #9. |
+| #9 First-class Sketch/constraints/workplanes | dev-cad | **later** | Keep as the broad epic; implement focused slices separately. |
+| #8 Hollow primitives | dev-cad | **later** | Reconcile with native shell/pipe/boolean support when needed. |
+| #5 Generic anchors/parametric constraints | dev-cad | **probably obsolete** | Separate any remaining useful scope from #9. |
 
 ## Boundary
 
 Forge may own:
 
+- compiler/API behavior;
+- `run_script()` model loading;
 - Forge-specific builder commands;
 - model-specific SolidCraft verification definitions;
 - visual/presentation policy;
@@ -157,19 +155,15 @@ Forge may own:
 
 Forge must not own:
 
-- generic PR diff/docs classification;
-- CAD-CI planning/SCons/cache behavior;
-- built-in build123d/CadQuery runtime batching;
-- reusable mesh geometry verification;
-- verification-package materialization/transport;
-- durable build-store semantics;
-- Pages placement/publication mechanics.
+- generic CAD-CI planning/SCons/cache behavior;
+- generic build-record validation;
+- generic release command/tag/GitHub Release handling;
+- Pages publication mechanics;
+- reusable CAD verification internals;
+- generic merge policy.
 
-## Next release checkpoint
+## Next checkpoint
 
-#740 is complete/closed. #721 synchronized `main -> dev-cad` at
-`1a751317b8f1901118084ecc6e9f6faa9b1adf6b` and durable evidence is green.
-Finish this #722 CAD-document restoration and require the restored dev-cad lane
-green. Then complete #716 -> #714. Do not start #739 or merge another CAD/API
-implementation batch before Forge v0.12.0 is published or explicitly deferred;
-keeping `main` fixed avoids another history synchronization cycle.
+Continue #749 on `dev-cad` while `tool.cad.ci.test #256` runs independently.
+When #256 passes, finish #739 on `dev-ci` and release Forge v0.12.0 through
+the central CAD release flow.
