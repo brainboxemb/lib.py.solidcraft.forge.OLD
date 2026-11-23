@@ -51,6 +51,43 @@ def _extrude_profile_params(profile_picks, exact_regions):
     return params
 
 
+def _polygon_profile_command(profile, *, plane, offset=(0, 0)):
+    """Lower one Polygon2D profile to one closed native sketch line."""
+
+    if profile.kind != "polygon":
+        raise ModelError("expected a Polygon2D profile")
+    points, profile_plane, ids = profile.data
+    if profile_plane != plane:
+        raise ModelError("Polygon2D plane must match Sketch plane")
+
+    ox, oy = offset
+    shifted = [
+        (
+            _combine_dimension(ox, point[0]),
+            _combine_dimension(oy, point[1]),
+        )
+        for point in points
+    ]
+    concrete = [tuple(pv(v) for v in point) for point in shifted]
+    if not all(isfinite(v) for point in concrete for v in point):
+        raise ModelError("non-finite polygon coordinate")
+    if len(set(concrete)) != len(concrete):
+        raise ModelError("duplicate polygon vertices")
+    if any(a == b for a, b in zip(concrete, concrete[1:] + concrete[:1])):
+        raise ModelError("zero-length polygon edge")
+
+    return _command(
+        "sketch.line",
+        points=[
+            [command_value(value) for value in point]
+            for point in shifted
+        ],
+        closed=True,
+        ids=list(ids) if ids is not None else
+        [chr(ord("a") + i) for i in range(len(points))],
+    )
+
+
 def compile_connected_profile(profile, *, offset=(0, 0)):
     """Lower one declarative mixed line/arc profile into native sketch commands."""
 
@@ -316,25 +353,16 @@ def compile_standalone_sketch(
                 "Polygon2D uses authored sketch coordinates; "
                 "semantic CENTER is not supported yet"
             )
-        points, profile_plane, ids = profile.data
-        if profile_plane != plane:
-            raise ModelError("Polygon2D plane must match Sketch plane")
+        points, _profile_plane, ids = profile.data
         if pv(ox) or pv(oy):
             raise ModelError("standalone Polygon2D offset is not supported yet")
-        concrete = [tuple(pv(v) for v in point) for point in points]
-        if not all(isfinite(v) for point in concrete for v in point):
-            raise ModelError("non-finite polygon coordinate")
-        if len(set(concrete)) != len(concrete):
-            raise ModelError("duplicate polygon vertices")
-        if any(a == b for a, b in zip(concrete, concrete[1:] + concrete[:1])):
-            raise ModelError("zero-length polygon edge")
-        sketch.append(_command(
-            "sketch.line",
-            points=[[command_value(v) for v in point] for point in points],
-            closed=True,
-            ids=list(ids) if ids is not None else
-            [chr(ord("a") + i) for i in range(len(points))],
-        ))
+        sketch.append(
+            _polygon_profile_command(
+                profile,
+                plane=plane,
+                offset=(ox, oy),
+            )
+        )
         meta = {
             "profile": "polygon",
             "sketch_plane": plane,
