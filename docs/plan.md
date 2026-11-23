@@ -19,11 +19,11 @@ dev-cad
 dev-ci
 ```
 
-Current permanent heads after #716 promotion:
+Current permanent heads after #764:
 
-- `main`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
+- `main`: `74e44e98bb561992547609b24b2e2664356423a1`;
 - `dev-cad`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
-- `dev-ci`: `90ac473473ab954103190ba426b350852b380fc0`.
+- `dev-ci`: `14996cf59c870c9737b6176fd003f4d016b7164b`.
 
 #716 promoted the reconciled post-v0.11 CAD batch through the released
 permanent-lane merge policy. Exact-head PR run `45228705759`, main durable run
@@ -86,8 +86,8 @@ Status: **now, in parallel with WS2**.
 
 Required order:
 
-1. run `sync-to-dev` from current `main` into `dev-ci`;
-2. #763 updates only the Forge-owned release validator and its documentation/tests;
+1. **complete** — sync `main -> dev-ci` through #764 at `14996cf59c87...`;
+2. **now** — #763 updates only the Forge-owned release validator and its documentation/tests;
 3. #739 replaces Forge's local command parsing/tag/GitHub Release code with the
    released `tool.py.lib.ci` release template and reusable workflow;
 4. require the exact `dev-ci` head to pass its normal CI checks;
