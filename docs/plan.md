@@ -19,9 +19,9 @@ dev-cad
 dev-ci
 ```
 
-Current permanent heads after #716 promotion:
+Current permanent heads at the v0.12.0 release gate:
 
-- `main`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
+- `main`: `72b50e49df74df4740ae9e46d2df59689dbd858d`;
 - `dev-cad`: `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
 - `dev-ci`: `90ac473473ab954103190ba426b350852b380fc0`.
 
@@ -31,9 +31,15 @@ permanent-lane merge policy. Exact-head PR run `45228705759`, main durable run
 `build/main`, Pages and Verification provenance all identify exact
 `5e63112...`.
 
-#722 and #717 are complete and closed. The active gate is now #714:
-prepare one explicit v0.12.0 release candidate, then require all release
-evidence on the exact preparation commit before publication.
+#722 and #717 are complete and closed. #762 prepared v0.12.0 on exact
+`main` commit `72b50e49...`; main run `45231597664` is green and the
+stored build/Page evidence names that source commit.
+
+The first publication attempt, run `45232338094`, stopped before creating a
+tag or GitHub Release because Forge's release validator still expected the
+pre-CAD-CI Pages field `build_manifest_source_commit`. Issue #763 is now the
+only v0.12.0 release blocker: align the Forge-owned validator with the released
+CAD-CI Pages contract, qualify the new exact main commit, then rerun the release.
 
 ### Forge package release
 
@@ -83,11 +89,14 @@ Required order:
    `5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5`;
 2. **complete** — exact promoted main/dev-cad durable integration and stable
    Pages/Verification provenance are green;
-3. **now** — #714 creates the explicit release-preparation commit: v0.12.0
-   changelog inventory, package version `0.12.0`, and exact candidate plan;
-4. require the resulting exact main SHA to have green `build/main`,
-   `forge-release`, `release-policy` and stable Pages evidence;
-5. publish only with `/release v0.12.0 <exact-main-sha>`, then independently
+3. **complete** — #762 created the explicit v0.12.0 release-preparation
+   commit and merged it to `main` at `72b50e49...`;
+4. **now** — #763 removes the stale Forge release-validator dependency on
+   `build_manifest_source_commit` and validates the released Pages
+   `source_commit`, `build_commit` and `build_scope` contract;
+5. after #763 merges, require the new exact main SHA to have green
+   `build/main`, exact `forge-release` evidence and stable Pages evidence;
+6. publish only with `/release v0.12.0 <exact-main-sha>`, then independently
    verify the annotated tag and GitHub Release.
 
 ### WS2 — subsequent infrastructure/documentation work
@@ -118,7 +127,8 @@ Other longer-term API/research work remains later: #349, #347, #325, #81, #82,
 | Issue | Owner/lane | Status | Next action |
 | --- | --- | --- | --- |
 | #739 Adopt tool.py.lib.ci release template | dev-ci | **blocked on v0.12 checkpoint** | Keep separate and avoid moving main again during #722/#721/#716 history reconciliation. |
-| #714 Release Forge 0.12.0 | repository | **now** | Promotion gate is green; prepare exact v0.12.0 candidate, qualify that exact main SHA, then publish through `/release`. |
+| #763 Align release validation with CAD-CI Pages provenance | repository | **now** | Fix the stale Pages-field check exposed by failed release run `45232338094`, then qualify the new exact main SHA. |
+| #714 Release Forge 0.12.0 | repository | **blocked on #763** | Release preparation is merged; rerun publication only after #763 merges and the new exact main build/Page evidence is green. |
 | #746 Cone join/cut feature compilation | dev-cad | **blocked on v0.12 checkpoint** | Reusable compiler gap; implement in the next CAD/API batch. |
 | #747 Polygon2D explicit/attached Sketch compilation | dev-cad | **blocked on v0.12 checkpoint** | Required by downstream CAD; no consumer workaround. |
 | #748 Qualified STL export path | dev-cad/runtime owner | **blocked on v0.12 checkpoint** | Determine native export owner, then qualify released path. |
@@ -162,11 +172,14 @@ Forge must not own:
 
 ## Next release checkpoint
 
-The post-v0.11 CAD/CI batch is on stable `main` at
-`5e63112a82f0d30f0006c0e7de3fed7f8f69ebf5` with exact durable/Page
-provenance green. #714 is now the only release checkpoint: merge the v0.12.0
-preparation, qualify that exact resulting main SHA, publish the immutable
-`v0.12.0` tag/GitHub Release, and reconcile the plan afterward.
+The v0.12.0 release-preparation commit is on stable `main` at
+`72b50e49df74df4740ae9e46d2df59689dbd858d` and its main build/Page output
+is green. Publication run `45232338094` exposed one stale Forge release check;
+no v0.12.0 tag or GitHub Release was created.
+
+Finish #763, qualify the new exact main SHA, then rerun #714 publication and
+verify the immutable `v0.12.0` tag/GitHub Release. Do not start the next CAD/API
+merge batch before that checkpoint is complete.
 
 Do not start #739 or merge another CAD/API implementation batch before the
 release is published or explicitly deferred.
