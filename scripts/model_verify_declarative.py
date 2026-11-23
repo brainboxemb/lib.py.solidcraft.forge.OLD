@@ -21,7 +21,12 @@ import runpy
 import subprocess
 import time
 
-from forge_example import (\n    compile_commands,\n    dependency_wheel,\n    verification_wheel,\n    write_commands,\n)
+from forge_example import (
+    compile_commands,
+    dependency_wheel,
+    verification_wheel,
+    write_commands,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
