@@ -1,0 +1,158 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "d5c5969417ffc359950eeb1420c5d5923f880d4582c92b160db195c61bc2494a",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "solid.box",
+      "resolved_params": {
+        "length": 60,
+        "width": 60,
+        "height": 30,
+        "center": [
+          0,
+          0,
+          0
+        ],
+        "body_name": "RotatedSketchCutter"
+      }
+    },
+    {
+      "index": 1,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": {
+          "origin": [
+            -12.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0.7071067811865476,
+            0.7071067811865475,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "name": "Left wedge"
+      }
+    },
+    {
+      "index": 2,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            -4,
+            -4
+          ],
+          [
+            4,
+            -4
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "closed": true,
+        "ids": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 4,
+      "command": "solid.extrude",
+      "resolved_params": {
+        "distance": 8,
+        "direction": "positive",
+        "operation": "cut",
+        "targets": [
+          "RotatedSketchCutter"
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": {
+          "origin": [
+            12.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0.7071067811865476,
+            -0.7071067811865475,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "name": "Right wedge"
+      }
+    },
+    {
+      "index": 6,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            -4,
+            -4
+          ],
+          [
+            4,
+            -4
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        "closed": true,
+        "ids": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 8,
+      "command": "solid.extrude",
+      "resolved_params": {
+        "distance": 8,
+        "direction": "positive",
+        "operation": "cut",
+        "targets": [
+          "RotatedSketchCutter"
+        ]
+      }
+    }
+  ],
+  "completed": 9
+}

@@ -32,6 +32,11 @@
     },
     {
       "error": null,
+      "model": "attached-through-all",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "bracket",
       "status": "pass"
     },
@@ -152,6 +157,11 @@
     },
     {
       "error": null,
+      "model": "rotated-sketch-cutter",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "round-top-sketch",
       "status": "pass"
     },
@@ -182,6 +192,16 @@
     },
     {
       "error": null,
+      "model": "sheet-hem",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "sheet-path-flange",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "simple-box",
       "status": "pass"
     },
@@ -207,6 +227,6 @@
     }
   ],
   "schema": 1,
-  "source_sha": "72b50e49df74df4740ae9e46d2df59689dbd858d",
+  "source_sha": "733134e66283e57c65a608731c04945fbf177b60",
   "status": "pass"
 }

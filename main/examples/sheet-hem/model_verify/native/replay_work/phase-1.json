@@ -1,0 +1,118 @@
+{
+  "commands": [
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "width",
+        "expression": "80",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "depth",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "hem_length",
+        "expression": "12",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "hem_gap",
+        "expression": "4",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "sheet.manage_rules",
+      "params": {
+        "name": "Hem Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "XY",
+        "name": "Blank"
+      }
+    },
+    {
+      "command": "sketch.rectangle.two_point",
+      "params": {
+        "p0": [
+          "-(width / 2)",
+          "-(depth / 2)"
+        ],
+        "p1": [
+          "width / 2",
+          "depth / 2"
+        ]
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sheet.flange",
+      "params": {
+        "type": "base",
+        "sketch": "Blank",
+        "rule": "Hem Rule",
+        "body_name": "SheetHem"
+      }
+    },
+    {
+      "command": "sheet.hem",
+      "params": {
+        "edges": [
+          [
+            40.0,
+            0.0,
+            2.0
+          ]
+        ],
+        "length": "hem_length",
+        "body": "SheetHem",
+        "gap": "hem_gap"
+      }
+    }
+  ]
+}
