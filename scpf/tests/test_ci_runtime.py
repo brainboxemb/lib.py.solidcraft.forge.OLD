@@ -134,8 +134,8 @@ class CiRuntimeContractTests(unittest.TestCase):
         self.assertIn("branches: [main, dev-cad, dev-ci]", text)
         self.assertIn("workflow_dispatch:", text)
         self.assertIn("# template-version: 5", text)
-        self.assertIn("item: simple-box", text)
-        self.assertIn("changed_paths:", text)
+        self.assertIn("item: ${{ inputs.item }}", text)
+        self.assertIn("changed_paths: ${{ inputs.changed_paths }}", text)
         self.assertIn(
             f"reusable-ci.yml@{TOOL_RELEASE}",
             text,

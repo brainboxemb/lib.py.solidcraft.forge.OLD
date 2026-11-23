@@ -52,10 +52,10 @@ is synchronized/restored and durable main/Pages evidence is green.
 - `lib.py.cad.verification v0.16.0` @
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4` immutable SolidCraft/reference runtimes;
-- external acceptance complete through `tool.cad.ci.test #248`: existing
-  CadQuery Workplane root 017 and new Assembly root 019 both pass on the
-  released v0.35.0/v0.18.2 stack, followed by green dev-ci, main and dev-cad
-  durable provenance.
+- v0.34.2/v0.18.2 CadQuery Workplane + Assembly acceptance and permanent-lane
+  durable provenance completed in `tool.cad.ci.test #248`;
+- v0.35.0 targeted `item` + multi-path workflow selection completed in
+  `tool.cad.ci.test #254`.
 
 ## Permanent branch rule
 
@@ -80,8 +80,8 @@ migration in explicit gates without toggling model `process` state:
 
 1. **passed** — one representative model: `simple-box` (run `45217991932`);
 2. **passed** — five model source paths in one graph (run `45218279427`);
-3. **current** — ten model source paths in one graph;
-4. remove the temporary selector and run the full catalog.
+3. **passed** — ten model source paths in one graph (run `45218516282`);
+4. **current** — selector removed; run the normal full catalog.
 
 Only advance when the previous gate is green. The 5/10 gates use public
 `changed_paths` input so shared direct-dependent batches are exercised in the

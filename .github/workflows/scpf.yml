@@ -4,8 +4,6 @@
 #
 # Copied from the released tool.cad.ci consumer template.
 # Forge changes only repository-owned policy values and jobs=2.
-# During #740 staged migration, the PR call carries one temporary targeted
-# selector. Remove it before the final full-catalog gate.
 
 name: Forge
 
@@ -48,9 +46,6 @@ jobs:
     if: github.event_name == 'pull_request'
     uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-ci.yml@v0.35.0
     with:
-      # #740 staged migration gate 10: ten representative model source paths.
-      # Remove this selector for the final full-catalog gate.
-      changed_paths: '["examples/simple-box/scpf/model.py","examples/components/scpf/model.py","examples/anchored-holes/scpf/model.py","examples/bracket/scpf/model.py","examples/parametric-placement-pair/scpf/model.py","examples/anchor-topology-mutation/scpf/model.py","examples/assembly-decorator/scpf/model.py","examples/attach-angle/scpf/model.py","examples/circular-feature-pattern/scpf/model.py","examples/sheet-fold/scpf/model.py"]'
       pull_request_policy: '{"stable_branch":"main","development_branches":["dev-cad","dev-ci"],"docs_only_prefixes":["docs/"]}'
       jobs: 2
 
