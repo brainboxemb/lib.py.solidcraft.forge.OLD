@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import traceback
 import time
 
@@ -255,7 +256,10 @@ def run_host_batch() -> int:
 def run_inside_runtime(manifest_path: Path) -> int:
     """Process every model, retaining failures until the complete list is done."""
 
-    from model_verify_declarative import run_inside_runtime as verify_one
+    root_text = str(ROOT)
+    if root_text not in sys.path:
+        sys.path.insert(0, root_text)
+    from verification.model_verification import run_inside_runtime as verify_one
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     rows = manifest.get("models")

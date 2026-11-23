@@ -10,7 +10,7 @@ from scpf.version import TESTED_SOLIDCRAFT_VERSION
 ROOT = Path(__file__).resolve().parents[2]
 CAD_CI = ROOT / "cad-ci.yml"
 WORKFLOW = ROOT / ".github" / "workflows" / "scpf.yml"
-MODEL_VERIFY = ROOT / "scripts" / "model_verify_declarative.py"
+MODEL_VERIFY = ROOT / "verification" / "model_verification.py"
 MODEL_BATCH = ROOT / "scripts" / "model_verification_batch.py"
 REFERENCE_BATCH = ROOT / "scripts" / "reference_verification_batch.py"
 TOOL_COMMIT = "b1474f6be66dc0236f2a5c2555af07a100447255"
@@ -62,24 +62,31 @@ class CiRuntimeContractTests(unittest.TestCase):
         self.assertIn('os.environ.get("REFERENCE_RUNTIME_IMAGE"', reference_text)
         self.assertNotIn('os.environ.get("FORGE_RUNTIME_IMAGE"', reference_text)
 
-    def test_model_launcher_exposes_cold_path_timing(self):
-        """Keep #484 timing decomposition visible without changing semantics."""
+    def test_model_batch_exposes_cold_path_timing(self):
+        """Keep timing decomposition on the single batch entrypoint + module."""
 
-        text = MODEL_VERIFY.read_text(encoding="utf-8")
+        batch_text = MODEL_BATCH.read_text(encoding="utf-8")
         for label in (
-            "compile_commands_s=",
+            "compile_all_s=",
             "image_pull_s=",
-            "container_start_s=",
+            "container_process_s=",
+            "total_s=",
+        ):
+            self.assertIn(label, batch_text)
+
+        model_text = MODEL_VERIFY.read_text(encoding="utf-8")
+        for label in (
             "python_bootstrap_s=",
             "cad_verification_import_s=",
             "definition_load_s=",
             "native_model_s=",
             "solidcraft_verification_s=",
+            "visual_verification_s=",
+            "presentation_preview_s=",
             "inside_runtime_total_s=",
-            "container_process_total_s=",
         ):
-            self.assertIn(label, text)
-        self.assertIn("time.perf_counter()", text)
+            self.assertIn(label, model_text)
+        self.assertIn("time.perf_counter()", model_text)
 
     def test_runtime_batches_start_one_container_per_batch(self):
         model_text = MODEL_BATCH.read_text(encoding="utf-8")

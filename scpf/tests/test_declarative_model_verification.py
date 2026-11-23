@@ -7,7 +7,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-LAUNCHER = ROOT / "scripts" / "model_verify_declarative.py"
+LAUNCHER = ROOT / "verification" / "model_verification.py"
 BATCH = ROOT / "scripts" / "model_verification_batch.py"
 
 BATCH_ONE_MODELS = (
@@ -92,7 +92,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
     """Keep Forge as producer/data owner rather than CAD checker owner."""
 
     def test_migrated_models_use_verify_data_only(self):
-        """Every migrated model uses verify.py and the shared launcher."""
+        """Every migrated model uses verify.py and the shared producer module."""
 
         for slug in MIGRATED_MODELS:
             with self.subTest(slug=slug):
@@ -213,7 +213,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         self.assertNotIn("materialize_case", text)
 
     def test_shared_launcher_only_produces_and_hands_off(self):
-        """Forge launcher may replay Forge output but not check SolidCraft data."""
+        """Forge producer module may replay Forge output but not own generic checks."""
 
         text = LAUNCHER.read_text(encoding="utf-8")
         self.assertIn("run_document", text)

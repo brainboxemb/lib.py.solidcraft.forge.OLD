@@ -83,7 +83,7 @@ class CiPackageDependencyContractTests(unittest.TestCase):
                 text = path.read_text(encoding="utf-8")
                 if "template: forge-model-declarative" in text:
                     self.assertEqual(needs(text), set())
-                elif "scripts/model_verify_declarative.py" in text:
+                elif "scripts/model_verification_batch.py" in text:
                     self.assertEqual(
                         needs(text),
                         {"forge-package", "model-verification-batch"},

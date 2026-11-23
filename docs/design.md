@@ -182,7 +182,7 @@ examples/<model>/scpf/model.py
         -> artifacts + verification.json
 ```
 
-`scripts/model_verify_declarative.py` may know how Forge produces the initial
+`verification/model_verification.py` may know how Forge produces the initial
 native SolidCraft model and how to locate a model-local verification file. It
 must not know the SolidCraft measurement schema, implement numeric/body/timeline
 comparisons, or duplicate mutation/evaluation verification logic.
@@ -193,7 +193,7 @@ field contract.
 
 All current historical model-verification cases use the declarative
 `verification/verify.py` contract. The shared batch producer invokes
-`scripts/model_verify_declarative.py` inside the released runtime for each
+`verification/model_verification.py` inside the released runtime for each
 model. The former procedural `verify_model.py` migration path is historical;
 new generic verification behavior must not be implemented in Forge.
 
@@ -1106,7 +1106,7 @@ Pages can remain a pure evidence consumer.
 
 ### Native SolidCraft preview
 
-`scripts/model_verify_declarative.py` always leaves:
+`verification/model_verification.py` always leaves:
 
 ```text
 model_verify/presentation/preview-iso.png
@@ -1115,7 +1115,7 @@ model_verify/presentation/preview.json
 
 after successful baseline model production/verification.
 
-`scripts/model_visual.py` owns the rendering helper because it already owns
+`verification/model_visual.py` owns the rendering helper because it already owns
 Forge's SolidCraft camera conversion and snapshot invocation.
 
 Rules:

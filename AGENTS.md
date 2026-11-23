@@ -47,7 +47,8 @@ The active CI structure is defined by:
 - `scripts/tool_verify.py`
 - `scripts/forge_example.py`
 - `scripts/model_verification_batch.py`
-- `scripts/model_verify_declarative.py`
+- `verification/model_verification.py`
+- `verification/model_visual.py`
 - `scripts/release/validate_release.py`
 - `scripts/release/publish_release.py`
 

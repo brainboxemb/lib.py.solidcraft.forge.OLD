@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
-"""Forge-owned SolidCraft visual rendering for model-local visual policy.
+"""Forge-owned SolidCraft visual adapter for model-local visual policy.
 
-Generic normalization, regression, projection and expected-shape drawing stay
-in released lib.py.cad.verification. This module owns only model policy loading,
-SolidCraft camera conversion and the SolidCraft snapshot invocation.
+This is an importable Forge module, not a process entry point. Generic
+normalization, regression, projection and expected-shape drawing stay in
+released `lib.py.cad.verification`; this module owns model policy loading,
+SolidCraft camera conversion and SolidCraft snapshot invocation.
 """
 
 from __future__ import annotations

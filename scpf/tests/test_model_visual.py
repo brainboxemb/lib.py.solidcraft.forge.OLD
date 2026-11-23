@@ -12,7 +12,7 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "scripts" / "model_visual.py"
+SCRIPT = ROOT / "verification" / "model_visual.py"
 POLICY = ROOT / "examples" / "simple-box" / "verification" / "visual.json"
 STAGED_MODELS = (
     "anchor-topology-mutation",
@@ -23,7 +23,7 @@ STAGED_MODELS = (
 
 
 def load_visual_module():
-    """Load scripts/model_visual.py without making scripts a package."""
+    """Load the Forge visual module directly for isolated adapter tests."""
 
     spec = importlib.util.spec_from_file_location("model_visual", SCRIPT)
     module = importlib.util.module_from_spec(spec)

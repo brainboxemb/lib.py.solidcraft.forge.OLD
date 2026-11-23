@@ -26,9 +26,12 @@ that every script is a stable public API.
 | Script | Responsibility | Current caller / consumer |
 | --- | --- | --- |
 | `model_verification_batch.py` | Run active declarative Forge model verification as one shared SolidCraft-runtime batch and write per-model results. Process-driving portions remain under #713 review and must move behind owner APIs when generic. | `model-verification-batch` CAD-CI item. |
-| `model_verify_declarative.py` | Produce/replay one Forge-native model and delegate generic checks/evidence to released `lib.py.cad.verification`. Keep only the Forge producer/adapter boundary; generic verification process logic remains an #713 migration target. | Used by the model verification batch. |
-| `model_visual.py` | Forge-specific visual policy loading, SolidCraft camera conversion and snapshot invocation. Generic image comparison remains in `lib.py.cad.verification`. | Used by declarative model verification. |
 | `qualification_summary.py` | Compose already-produced verification evidence into Forge's public qualification semantics; it does not execute CAD. | Forge test/site evidence paths; semantic composition comes from released verification library. |
+
+The model batch is the only model-verification process entry point. It imports
+`verification/model_verification.py`, which owns Forge native-model production,
+and `verification/model_visual.py`, which owns Forge-specific camera/snapshot
+adaptation. Those are ordinary modules, not scripts or secondary launchers.
 
 ## Independent reference verification
 
