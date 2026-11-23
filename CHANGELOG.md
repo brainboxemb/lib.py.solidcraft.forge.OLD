@@ -8,12 +8,38 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+## [0.13.2] - 2026-11-23
+
+### Hotfix context
+
+v0.13.2 is the consumer hotfix for the symbolic placed-primitive regression
+found while the product-CAD repository adopted v0.13.1.
+
+v0.13.1 remains a valid immutable release, but an existing parametrically
+placed `Cylinder` could fail during Forge command generation when its placement
+coordinate had already become a native expression while its height was still a
+Forge `Expression`. The detailed `hub75-panel` model exposed this as:
+
+```text
+TypeError: can only concatenate str (not "Expression") to str
+```
+
+v0.13.2 keeps symbolic placement/dimension values typed until Box, Cylinder or
+Cone anchor arithmetic is complete and converts them to native SolidCraft
+expressions only when the final primitive command is emitted.
+
+For Cylinder axial anchors, BOTTOM/LEFT/FRONT now also keep the native base
+directly on the placed coordinate instead of creating a synthetic
+`+height/2 -height/2` dependency.
+
+This patch adds no new public modelling API beyond v0.13.1. Downstream users
+adopting the v0.13.x capability batch should use **v0.13.2 or newer**.
+
 ### Fixed
 
-- Keep symbolic primitive placement coordinates typed until anchor arithmetic is
-  complete, fixing #796 where a parametrically placed Cylinder could mix a
-  native string expression with a Forge `Expression` during CSG lowering.
-
+- Preserve symbolic primitive placement through anchor arithmetic (#796),
+  including the HUB75-style symbolic Cylinder boolean join and the equivalent
+  Box/Cone lowering boundary.
 
 ## [0.13.1] - 2026-11-23
 
