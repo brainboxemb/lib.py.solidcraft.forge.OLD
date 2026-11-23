@@ -15,15 +15,15 @@
     },
     "ci/forge-release": {
       "engine": "scons",
-      "engine_schema": 3,
+      "engine_schema": 4,
       "final_bundle_sha256": "ff111949a1d54d98aa2270eb7cd9ee1ba50487699ee22ef94c2d235cf97ec367",
       "final_step": "tool_verify",
-      "final_target_spec_digest": "3b2d178bf335cd92b9048bf41409c306487e4f109c9c2fa506f13a71f2fe593d",
+      "final_target_spec_digest": "b03a8c7c13290652abec014b5873fa88a38b53d2d3d46c3ea3e48e8f35748dd1",
       "item_id": "forge-release",
       "outputs": [
         "tool_verify"
       ],
-      "source_commit": "de3c64b09dc3755034c29e85a812bb08eebed283"
+      "source_commit": "685afbc3c925f951c5d69cb883429a805b85eb2d"
     },
     "ci/forge-tests": {
       "engine": "scons",
@@ -33,7 +33,7 @@
       "final_target_spec_digest": "5ecf8c928263ff55d5d0862a7a6346bd74cc8689df9f5bf8bc9381dd2086d7eb",
       "item_id": "forge-tests",
       "outputs": [],
-      "source_commit": "c393f2b238e51cc045bbae100cebb2af9b2be173"
+      "source_commit": "685afbc3c925f951c5d69cb883429a805b85eb2d"
     },
     "ci/model-verification-batch": {
       "engine": "scons",
@@ -2314,5 +2314,5 @@
   "name": "dev-ci",
   "schema": 1,
   "scope": "named",
-  "source_commit": "c393f2b238e51cc045bbae100cebb2af9b2be173"
+  "source_commit": "685afbc3c925f951c5d69cb883429a805b85eb2d"
 }
