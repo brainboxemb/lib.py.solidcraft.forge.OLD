@@ -1,80 +1,87 @@
 # Repository-level CAD-CI items
 
-This directory contains **repository-level CI items for Forge**.
+This directory contains **Forge-owned repository CI items and builders**.
 
-These are not Forge CAD models and they are not a second generic CI framework.
-Generic discovery, planning, SCons execution, build-store handling and Pages
-publication belong to the released `lib.py.cad.ci` / `tool.cad.ci` stack.
+Generic discovery, SCons execution, built-in CAD builders, reusable mesh
+verification, durable build storage and Pages publication belong to the exact
+released `lib.py.cad.ci` / `tool.cad.ci` stack.
 
-The root [`cad-ci.yml`](../cad-ci.yml) discovers these items together with
-`scpf/ci.yml` and the model/reference items below `examples/`.
+The root [`cad-ci.yml`](../cad-ci.yml) discovers repository items together
+with `scpf/ci.yml` and the model/reference items below `examples/`.
+Executable Forge-specific behavior lives under `ci/builders/<name>/builder.yml`;
+normal item `ci.yml` files select a builder and remain declarative.
 
-This README documents the **current layout only**. It is not a decision that
-this directory structure is ideal or permanent. Structural changes require a
-separate issue/design decision.
+## Current item map
 
-## Current item status
-
-As of 2026-11-22 all nine repository-level items below are still present in
-durable `build/main` / `build/dev-ci` and have a current responsibility.
-None is classified as obsolete.
-
-- `model-verification-batch` remains current, but #661 tracks finer internal
-  selected-model granularity.
-- `verification-diagrams` remains current as a site/evidence responsibility;
-  #570 replaces its CADCraft implementation without removing the responsibility.
-- `solidcraft-reference` is intentionally a low-frequency compatibility guard,
-  not a dependency of normal model verification.
-
-Directory count is therefore not, by itself, evidence that an item can be
-removed. Structural simplification must preserve these responsibilities and
-their durable consumers.
-
-## Item map
-
-| Item | Purpose | Depends on | Primary implementation / consumer |
+| Item | Purpose | Depends on | Forge-owned implementation |
 | --- | --- | --- | --- |
-| `cad-verification-package` | Build the exact released `lib.py.cad.verification` wheel used by Forge verification. | none | `scripts/verification_package.py`; consumed by the model/reference verification batches. |
-| `forge-tests` | Run the Forge Python unit/integration test suite against the exact built Forge package. | `forge-package` | `scripts/tool_ci.py`; also covers merge-policy and qualification-summary tests. |
-| `forge-release` | Release-level verification of the exact built Forge package with a fixed representative example set. | `forge-package` | `scripts/tool_verify.py` and `scripts/forge_example.py`. |
-| `model-verification-batch` | Produce native SolidCraft verification evidence for the active Forge model catalog in one shared runtime batch. | `forge-package`, `cad-verification-package` | `scripts/model_verification_batch.py`, `scripts/model_verify_declarative.py`, `scripts/model_visual.py`. Individual model items copy their result from this batch. |
-| `reference-verification-batch` | Produce independent build123d/CadQuery/pyBOSL2/PythonSCAD reference evidence in one shared reference-runtime batch. | `cad-verification-package` | `scripts/reference_verification_batch.py`, reference helpers under `verification/`, and `scripts/build_diagrams.py`. Reference child items copy their result from this batch. |
-| `release-policy` | Validate Forge release-candidate and publication policy without starting CAD runtimes. | none | `scripts/release/validate_release.py`, `scripts/release/publish_release.py` and their tests; contract in `docs/release.md`. |
-| `site-source` | Validate Forge site source, example metadata and build-evidence expectations without starting CAD runtimes. | none | `site/test_build_evidence.py`, `site/test_example_metadata.py`, `site/test_site.py`. |
-| `solidcraft-reference` | Verify the checked SolidCraft command-registry snapshot against the pinned immutable runtime. | none | `scripts/verify_solidcraft_reference_runtime.py`; snapshot source under `docs/reference/solidcraft/`. |
-| `verification-diagrams` | Publish/copy verification diagrams already produced by the shared reference batch. | `reference-verification-batch` | Engine-owned dependency copy; diagram sources under `verification/diagrams/sources/`. |
+| `forge-tests` | Run the Forge Python unit/integration suite against the exact built Forge package. | `forge-package` | `ci/builders/forge-tests`, `scripts/tool_ci.py`. |
+| `forge-release` | Release-level verification of the exact built Forge package. | `forge-package` | `ci/builders/forge-release`, `scripts/tool_verify.py`. |
+| `model-verification-batch` | Produce native SolidCraft verification for active Forge model consumers in one shared runtime batch. | `forge-package` plus builder capability `verification_package: true` | `ci/builders/model-verification-batch`, model verification scripts. |
+| `reference-verification-batch` | Produce only the remaining Forge-owned PythonSCAD/pyBOSL2 reference evidence plus diagram working output. | builder capability `verification_package: true` | `ci/builders/reference-verification-batch`, `scripts/reference_verification_batch.py`, presentation helpers. |
+| `release-policy` | Validate Forge release-candidate/publication policy without CAD runtimes. | none | `ci/builders/release-policy`, `scripts/release/*`. |
+| `site-source` | Validate Forge site source, metadata and evidence adapters without CAD runtimes. | none | `ci/builders/site-source`, `site/test_*.py`. |
+| `solidcraft-reference` | Verify the checked SolidCraft command-registry snapshot against the pinned immutable runtime. | none | `ci/builders/solidcraft-reference`, `scripts/verify_solidcraft_reference_runtime.py`. |
+| `verification-diagrams` | Project diagrams already produced by the remaining Forge reference batch. | `reference-verification-batch` | `ci/builders/verification-diagrams`. |
 
-## How these items fit together
+The Forge package itself is the `forge-package` item in
+[`scpf/ci.yml`](../scpf/ci.yml).
 
-The Forge package itself is built by [`scpf/ci.yml`](../scpf/ci.yml) as
-`forge-package`.
+## Generic reference path
 
-The important dependency paths are:
+CadQuery and build123d are **not** repository-level Forge batch work anymore.
+
+Each `examples/<slug>/cadquery` or `build123d` item selects the released
+built-in builder and the first-class `mesh-geometry` verification adapter.
+The released library owns verification-package materialization and its internal
+graph nodes. Forge consumes only public contracts:
 
 ```text
-forge-package
-  ├─ forge-tests
-  ├─ forge-release
-  └─ model-verification-batch
-       └─ examples/<model> model verification result
-
-cad-verification-package
-  ├─ model-verification-batch
-  └─ reference-verification-batch
-       ├─ examples/<model>/<reference implementation>
-       └─ verification-diagrams
+root verification.package pin
+  -> built-in CadQuery/build123d verification
+  -> Forge repository builders declaring verification_package: true
+       -> CAD_CI_VERIFICATION_WHEEL
 ```
 
-The root `cad-ci.yml` owns repository-wide templates, runtime variables and
-item discovery. Item files in this directory contain only Forge-repository
-configuration and commands; they must not implement generic selection,
-scheduling, caching or publication behavior.
+Forge configuration and scripts must not name the synthesized internal package
+item.
 
-## Related documentation
+One compatible reference container is shared by active built-in items;
+build123d rows share one runtime-owned isolated interpreter process. Forge owns
+only each model's `model.py` and
+`verification/reference_geometry.json`.
 
-- [Repository plan](../docs/plan.md) — current unfinished work and ordering.
-- [Repository requirements](../docs/requirements.md) — Forge product/consumer requirements.
-- [Repository design](../docs/design.md) — Forge architecture and owner boundaries.
-- [Release contract](../docs/release.md) — Forge package release validation/publication.
-- [Examples](../examples/README.md) — model/reference item structure.
-- [Scripts](../scripts/README.md) — implementation helper inventory.
+PythonSCAD/pyBOSL2 remain in `reference-verification-batch` until a released
+generic owner contract exists for those engines.
+
+## Pages
+
+Pages is not a normal CI item. Root `cad-ci.yml` declares:
+
+```yaml
+publication:
+  pages:
+    builder: pages-site
+    output: site
+```
+
+`ci/builders/pages-site` renders Forge content from the complete durable scope
+and exact source/build provenance supplied by CAD-CI. The released tool/library
+own stable/named Pages placement and publication.
+
+## Ownership
+
+Forge builders may implement repository-specific package commands, SolidCraft
+verification, PythonSCAD/pyBOSL2 reference execution, diagrams and site
+rendering. They must not implement generic selection, scheduling, caching,
+verification-package transport, built-in build123d/CadQuery batching, durable
+state or Pages publication.
+
+Related documentation:
+
+- [Repository plan](../docs/plan.md)
+- [Repository requirements](../docs/requirements.md)
+- [Repository design](../docs/design.md)
+- [Release contract](../docs/release.md)
+- [Examples](../examples/README.md)
+- [Scripts](../scripts/README.md)

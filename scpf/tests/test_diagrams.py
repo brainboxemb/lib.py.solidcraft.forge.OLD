@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts" / "build_diagrams.py"
 SOURCES = ROOT / "verification" / "diagrams" / "sources"
 CI = ROOT / "ci" / "verification-diagrams" / "ci.yml"
+BUILDER = ROOT / "ci" / "builders" / "verification-diagrams" / "builder.yml"
 
 EXPECTED = {
     "corner-bracket-depth.cadcraft.json",
@@ -69,19 +70,22 @@ class DiagramEvidenceTests(unittest.TestCase):
         )
 
     def test_diagram_item_is_independent_and_durable(self):
-        text = CI.read_text(encoding="utf-8")
-        self.assertIn("id: verification-diagrams", text)
-        self.assertIn("process: true", text)
-        self.assertIn("kind: verification", text)
-        self.assertIn("needs:", text)
-        self.assertIn("- reference-verification-batch", text)
-        self.assertIn("scripts/build_diagrams.py", text)
-        self.assertIn("verification/diagrams/sources/**", text)
-        self.assertIn("copy:", text)
-        self.assertIn("dependency: reference-verification-batch", text)
-        self.assertIn("source: .", text)
-        self.assertNotIn("materialize-diagrams", text)
-        self.assertIn("- diagrams", text)
+        item = CI.read_text(encoding="utf-8")
+        builder = BUILDER.read_text(encoding="utf-8")
+        self.assertIn("id: verification-diagrams", item)
+        self.assertIn("process: true", item)
+        self.assertIn("kind: verification", item)
+        self.assertIn("needs:", item)
+        self.assertIn("- reference-verification-batch", item)
+        self.assertIn("scripts/build_diagrams.py", item)
+        self.assertIn("verification/diagrams/sources/**", item)
+        self.assertIn("builder: verification-diagrams", item)
+        self.assertNotIn("copy:", item)
+        self.assertIn("copy:", builder)
+        self.assertIn("dependency: reference-verification-batch", builder)
+        self.assertIn("source: .", builder)
+        self.assertNotIn("materialize-diagrams", builder)
+        self.assertIn("- diagrams", builder)
 
     def test_renderer_collects_all_diagram_results_before_failure(self):
         text = SCRIPT.read_text(encoding="utf-8")

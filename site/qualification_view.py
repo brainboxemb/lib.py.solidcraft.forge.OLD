@@ -215,36 +215,57 @@ def _reference_rows(
     example: ExampleBuildEvidence,
 ) -> tuple[dict[str, Any], ...]:
     """Expose each canonical independent reference child."""
+
     rows = []
     for reference in example.references:
         source = reference.verification.get("source")
+        if not isinstance(source, str):
+            source = f"{reference.item.path}/model.py"
+
+        if reference.preview_path is None:
+            preview_url = None
+            preview_metadata_url = None
+            verification_path = (
+                reference.stl_path.parent / "verification" / "verification.json"
+            )
+            geometry = next(
+                (
+                    row.get("evidence") or {}
+                    for row in reference.verification.get("checks", ())
+                    if isinstance(row, dict) and row.get("id") == "geometry"
+                ),
+                {},
+            )
+        else:
+            preview_url = _artifact_url(
+                stable,
+                reference.preview_path,
+                raw=True,
+            )
+            preview_metadata_url = _artifact_url(
+                stable,
+                reference.preview_path.parent / "preview.json",
+            )
+            verification_path = reference.stl_path.parent / "verification.json"
+            geometry = reference.verification.get("geometry") or {}
+
         rows.append(
             {
                 "implementation": reference.implementation,
                 "status": reference.verification.get("status"),
                 "accepted_source_commit": reference.item.source_commit,
-                "source_url": (
-                    _source_url(reference.item.source_commit, source)
-                    if isinstance(source, str)
-                    else None
+                "source_url": _source_url(
+                    reference.item.source_commit,
+                    source,
                 ),
-                "preview_url": _artifact_url(
-                    stable,
-                    reference.preview_path,
-                    raw=True,
-                ),
-                "preview_metadata_url": _artifact_url(
-                    stable,
-                    reference.preview_path.parent / "preview.json",
-                ),
+                "preview_url": preview_url,
+                "preview_metadata_url": preview_metadata_url,
                 "stl_url": _artifact_url(stable, reference.stl_path),
                 "verification_url": _artifact_url(
                     stable,
-                    reference.stl_path.parent / "verification.json",
+                    verification_path,
                 ),
-                "geometry_json": _json_text(
-                    reference.verification.get("geometry") or {}
-                ),
+                "geometry_json": _json_text(geometry),
             }
         )
     return tuple(rows)
