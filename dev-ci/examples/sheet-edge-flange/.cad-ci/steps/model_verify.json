@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "7cc80b8f4b9a661f3bf5c337d24891146f08e68164eb5abe9167ffe21f7232ee",
+  "duration_seconds": 0.234,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T18:07:54.526Z",
+  "item": "sheet-edge-flange",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "4056f444c8bc2956f39ef98bb0e680961c6f0004e35ab46100a53ede250bfea8"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "0449cc034f88a5a74c19dbb45c5a243b37991f369d4871dc9c04b1b454b068cf"
+    }
+  },
+  "run_finished_at": "2026-11-23T18:08:29.240Z",
+  "run_started_at": "2026-11-23T18:05:47.984Z",
+  "schema": 6,
+  "started_at": "2026-11-23T18:07:54.292Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "9676cb7a335475ae89ad7015dfee2dadf5ec5a5d8175df591facce0c753cad8f",
+  "timeout_seconds": null
+}

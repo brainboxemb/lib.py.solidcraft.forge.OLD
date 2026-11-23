@@ -47,7 +47,17 @@
     },
     {
       "error": null,
+      "model": "component-local-sketch-names",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "components",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "connected-profile-sheet",
       "status": "pass"
     },
     {
@@ -78,6 +88,11 @@
     {
       "error": null,
       "model": "hole-family",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "open-sketch-chain",
       "status": "pass"
     },
     {
@@ -152,6 +167,16 @@
     },
     {
       "error": null,
+      "model": "sheet-contour-flange",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "sheet-edge-flange",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "sheet-fold",
       "status": "pass"
     },
@@ -182,6 +207,6 @@
     }
   ],
   "schema": 1,
-  "source_sha": "860b21eced976dfa5cbdf5cf51919b82673d5d07",
+  "source_sha": "14996cf59c870c9737b6176fd003f4d016b7164b",
   "status": "pass"
 }

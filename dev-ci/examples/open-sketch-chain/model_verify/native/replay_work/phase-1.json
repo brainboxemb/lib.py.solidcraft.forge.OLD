@@ -1,0 +1,80 @@
+{
+  "commands": [
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "length",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "end_height",
+        "expression": "30",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "XY",
+        "name": "Contour Path"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            "length",
+            0
+          ]
+        ],
+        "ids": [
+          "l1"
+        ],
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.arc.tangent",
+      "params": {
+        "start": "l1.end",
+        "curve": "l1",
+        "end": [
+          50,
+          10
+        ]
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            50,
+            10
+          ],
+          [
+            50,
+            "end_height"
+          ]
+        ],
+        "ids": [
+          "l2"
+        ],
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    }
+  ]
+}

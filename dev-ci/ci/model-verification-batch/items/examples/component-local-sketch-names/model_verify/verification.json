@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "baseline/measurements.json",
+          "sha256": "1547cab1f28a2fc68b359826f358e75d9e046bdbc674627bc60205f920bf253d",
+          "size": 3000
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_envelopes": {
+          "actual_count": 2,
+          "expected_count": 2,
+          "kind": "body_envelopes",
+          "matched_pairs": [
+            {
+              "actual": {
+                "label": "LeftPlate",
+                "max": [
+                  -20.0,
+                  8.0,
+                  4.0
+                ],
+                "min": [
+                  -40.0,
+                  -8.0,
+                  0.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  -20.0,
+                  8.0,
+                  4.0
+                ],
+                "min": [
+                  -40.0,
+                  -8.0,
+                  0.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "RightPlate",
+                "max": [
+                  45.0,
+                  9.0,
+                  6.0
+                ],
+                "min": [
+                  15.0,
+                  -9.0,
+                  0.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  45.0,
+                  9.0,
+                  6.0
+                ],
+                "min": [
+                  15.0,
+                  -9.0,
+                  0.0
+                ]
+              },
+              "max_delta": 0.0
+            }
+          ],
+          "pass": true,
+          "tolerance": 0.001,
+          "unmatched_actual": [],
+          "unmatched_expected": []
+        }
+      },
+      "id": "baseline",
+      "reason": null,
+      "status": "pass"
+    }
+  ],
+  "input": "/output/items/examples/component-local-sketch-names/model_verify/native/model.sc",
+  "metadata": {},
+  "schema": "cad-verification",
+  "schema_version": 1,
+  "status": "pass",
+  "verification_id": "component-local-sketch-names"
+}

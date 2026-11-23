@@ -1,0 +1,137 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "a37cc86784d64b7dad2e4e83ba569d1b863008e7d114ebaadd1192052af5d3fd",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "width",
+        "expression": "80",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "depth",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 3,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 4,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "index": 5,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "flange_height",
+        "expression": "20",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 6,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "flange_angle",
+        "expression": "90",
+        "unit": "deg"
+      }
+    },
+    {
+      "index": 7,
+      "command": "sheet.manage_rules",
+      "resolved_params": {
+        "name": "Edge Flange Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "index": 8,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "Blank"
+      }
+    },
+    {
+      "index": 9,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          "-(width / 2)",
+          "-(depth / 2)"
+        ],
+        "p1": [
+          "width / 2",
+          "depth / 2"
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 11,
+      "command": "sheet.flange",
+      "resolved_params": {
+        "type": "base",
+        "sketch": "Blank",
+        "rule": "Edge Flange Rule",
+        "body_name": "SheetEdgeFlange"
+      }
+    },
+    {
+      "index": 12,
+      "command": "sheet.flange",
+      "resolved_params": {
+        "type": "edge",
+        "edges": [
+          [
+            40.0,
+            0.0,
+            2.0
+          ]
+        ],
+        "height": "flange_height",
+        "angle": "flange_angle",
+        "body": "SheetEdgeFlange"
+      }
+    }
+  ],
+  "completed": 13
+}

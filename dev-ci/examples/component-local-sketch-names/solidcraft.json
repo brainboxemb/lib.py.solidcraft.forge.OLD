@@ -1,0 +1,125 @@
+{
+  "format": "scpf-replay",
+  "version": 2,
+  "commands": [
+    {
+      "command": "component.create",
+      "params": {
+        "name": "LeftPlate",
+        "grounded": true
+      },
+      "bind": {
+        "$leftplate": "occurrence"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "XY",
+        "name": "d1_LeftPlate__Profile"
+      }
+    },
+    {
+      "command": "sketch.rectangle.two_point",
+      "params": {
+        "p0": [
+          -10.0,
+          -8.0
+        ],
+        "p1": [
+          10.0,
+          8.0
+        ]
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "distance": 4,
+        "direction": "positive",
+        "body_name": "LeftPlate"
+      }
+    },
+    {
+      "command": "component.activate",
+      "params": {
+        "component": "root"
+      }
+    },
+    {
+      "command": "component.create",
+      "params": {
+        "name": "RightPlate",
+        "grounded": false
+      },
+      "bind": {
+        "$rightplate": "occurrence"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "XY",
+        "name": "d2_RightPlate__Profile"
+      }
+    },
+    {
+      "command": "sketch.rectangle.two_point",
+      "params": {
+        "p0": [
+          -15.0,
+          -9.0
+        ],
+        "p1": [
+          15.0,
+          9.0
+        ]
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "distance": 6,
+        "direction": "positive",
+        "body_name": "RightPlate"
+      }
+    },
+    {
+      "command": "component.activate",
+      "params": {
+        "component": "root"
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": "$leftplate",
+        "translate": [
+          -30,
+          0,
+          0
+        ],
+        "move_grounded": true
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": "$rightplate",
+        "translate": [
+          30,
+          0,
+          0
+        ]
+      }
+    }
+  ]
+}

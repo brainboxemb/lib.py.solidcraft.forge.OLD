@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "beeba5e061ceffb5745e512afb087a9472361ebaa0c02e88f9fe970d17c1a57e",
+  "duration_seconds": 0.1,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-23T18:07:48.954Z",
+  "item": "sheet-contour-flange",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "678e6f603ea12f262bca7e569836089f8e0437ad7cd6d9da9442ada98f405b85"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "88de1c84d0e294d2f89f542cdd6e3ca0ba21161a16a7f827d3c77ba80de50438"
+    }
+  },
+  "run_finished_at": "2026-11-23T18:08:29.240Z",
+  "run_started_at": "2026-11-23T18:05:47.984Z",
+  "schema": 6,
+  "started_at": "2026-11-23T18:07:48.854Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "6bd813d379e8f4d30c257258d03cba063b33921b828dc5d28a2cf7ae73d65372",
+  "timeout_seconds": null
+}

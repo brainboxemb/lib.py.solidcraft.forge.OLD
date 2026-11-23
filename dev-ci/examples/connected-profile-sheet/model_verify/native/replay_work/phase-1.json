@@ -1,0 +1,144 @@
+{
+  "commands": [
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "half_span",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "radius",
+        "expression": "20",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "command": "parameters.add",
+      "params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "command": "sheet.manage_rules",
+      "params": {
+        "name": "Connected Profile Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "plane": "XY",
+        "name": "Connected blank"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            "-(half_span)",
+            "-(radius)"
+          ],
+          [
+            "half_span",
+            "-(radius)"
+          ]
+        ],
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.arc.center_point",
+      "params": {
+        "center": [
+          "half_span",
+          0
+        ],
+        "start": [
+          "half_span",
+          "-(radius)"
+        ],
+        "end": [
+          "half_span",
+          "radius"
+        ],
+        "clockwise": false,
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            "half_span",
+            "radius"
+          ],
+          [
+            "-(half_span)",
+            "radius"
+          ]
+        ],
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.arc.center_point",
+      "params": {
+        "center": [
+          "-(half_span)",
+          0
+        ],
+        "start": [
+          "-(half_span)",
+          "radius"
+        ],
+        "end": [
+          "-(half_span)",
+          "-(radius)"
+        ],
+        "clockwise": false,
+        "connect": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sheet.flange",
+      "params": {
+        "type": "base",
+        "sketch": "Connected blank",
+        "rule": "Connected Profile Rule",
+        "body_name": "ConnectedProfileSheet"
+      }
+    }
+  ]
+}
