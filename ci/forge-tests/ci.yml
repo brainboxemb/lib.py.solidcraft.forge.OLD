@@ -1,4 +1,6 @@
-# Run the Forge unit-test suite against the exact built package.
+# Forge repository CI item: run the Forge test suite against the exact built package.
+# Generic selection/scheduling/caching remain owned by the released CAD-CI stack.
+# Local documentation: README.md
 id: forge-tests
 kind: tool
 needs:
@@ -15,16 +17,4 @@ watch:
   - scripts/merge_policy.py
 strategy:
   reuse: true
-steps:
-  - id: tool_test
-    inputs:
-      - .github/workflows/scpf.yml
-      - .github/workflows/merge-policy.yml
-      - scpf/scpf/**
-      - scpf/tests/**
-      - scpf/pyproject.toml
-      - scripts/tool_ci.py
-      - scripts/forge_example.py
-      - scripts/qualification_summary.py
-      - scripts/merge_policy.py
-    run: [python, ../../scripts/tool_ci.py, tool_test]
+builder: forge-tests

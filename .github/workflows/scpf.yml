@@ -1,167 +1,71 @@
+# template: tool.cad.ci/cad-ci-lanes
+# template-version: 5
+# tool-release: v0.35.0
+#
+# Copied from the released tool.cad.ci consumer template.
+# Forge changes only repository-owned policy values and jobs=2.
+
 name: Forge
 
 on:
   pull_request:
+    branches: [main, dev-cad, dev-ci]
     types: [opened, synchronize, reopened]
   push:
     branches: [main, dev-cad, dev-ci]
   workflow_dispatch:
+    inputs:
+      item:
+        description: Optional exact CAD-CI item id for a read-only targeted qualification run.
+        required: false
+        type: string
+        default: ""
+      changed_paths:
+        description: Optional JSON list of repository-relative paths for multi-item targeted qualification.
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
-  cad_ci_pr:
+  probe:
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      (inputs.item != '' || inputs.changed_paths != '')
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-ci.yml@v0.35.0
+    with:
+      source_sha: ${{ github.sha }}
+      item: ${{ inputs.item }}
+      changed_paths: ${{ inputs.changed_paths }}
+      jobs: 2
+
+  pr:
     if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      packages: read
-      pull-requests: read
-    runs-on: ubuntu-latest
-    concurrency:
-      group: forge-pr-${{ github.repository }}-${{ github.event.pull_request.number }}
-      cancel-in-progress: true
-    steps:
-      - name: Classify pull request before CAD CI bootstrap
-        id: classify
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: |
-          if [ "$BASE_REF" = "main" ]; then
-            echo "run_cad=true" >> "$GITHUB_OUTPUT"
-            echo "classification=main-target" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-ci.yml@v0.35.0
+    with:
+      pull_request_policy: '{"stable_branch":"main","development_branches":["dev-cad","dev-ci"],"docs_only_prefixes":["docs/"]}'
+      jobs: 2
 
-          mapfile -t changed_paths < <(
-            gh api --paginate \
-              "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/files?per_page=100" \
-              --jq '.[].filename'
-          )
-
-          if [ "${#changed_paths[@]}" -eq 0 ]; then
-            echo "run_cad=true" >> "$GITHUB_OUTPUT"
-            echo "classification=empty-or-unknown" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          docs_only=true
-          for path in "${changed_paths[@]}"; do
-            case "$path" in
-              docs/*) ;;
-              *)
-                docs_only=false
-                break
-                ;;
-            esac
-          done
-
-          if [ "$docs_only" = "true" ]; then
-            echo "run_cad=false" >> "$GITHUB_OUTPUT"
-            echo "classification=docs-only" >> "$GITHUB_OUTPUT"
-          else
-            echo "run_cad=true" >> "$GITHUB_OUTPUT"
-            echo "classification=cad-ci-required" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Report docs-only validation
-        if: steps.classify.outputs.run_cad == 'false'
-        run: >-
-          echo "Docs-only pull request:
-          CAD-CI bootstrap and runtime work are not required."
-
-      - name: Run exact released CAD CI stack
-        if: steps.classify.outputs.run_cad == 'true'
-        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
-        with:
-          source_sha: ${{ github.event.pull_request.head.sha }}
-          base_sha: ${{ github.event.pull_request.base.sha }}
-          full_run: ${{ github.event.pull_request.base.ref == 'main' && (github.event.pull_request.head.ref == 'dev-cad' || github.event.pull_request.head.ref == 'dev-ci' || github.event.pull_request.head.ref == 'promote/dev-cad' || github.event.pull_request.head.ref == 'promote/dev-ci') }}
-          jobs: "2"
-          github_token: ${{ github.token }}
-
-  cad_ci_push:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+  durable:
+    if: >-
+      (github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' &&
+        inputs.item == '' &&
+        inputs.changed_paths == '')) &&
+      (github.ref_name == 'main' ||
+       github.ref_name == 'dev-cad' ||
+       github.ref_name == 'dev-ci')
     permissions:
       contents: write
       packages: read
-    runs-on: ubuntu-latest
-    concurrency:
-      group: forge-push-${{ github.repository }}-${{ github.ref_name }}
-      cancel-in-progress: true
-    steps:
-      - name: Validate durable source lane
-        env:
-          SOURCE_SCOPE: ${{ github.ref_name }}
-        run: |
-          case "$SOURCE_SCOPE" in
-            main|dev-cad|dev-ci) ;;
-            *)
-              echo "unsupported durable source branch: $SOURCE_SCOPE" >&2
-              exit 2
-              ;;
-          esac
-
-      - name: Run and publish durable CAD CI scope
-        id: cad_ci
-        uses: brainboxemb/tool.cad.ci@b62f9d0b169aa201a3c66c3166f364396b2d71bc
-        with:
-          source_sha: ${{ github.sha }}
-          durable_scope: ${{ github.ref_name }}
-          source_ref: ${{ github.ref_name }}
-          jobs: "2"
-          github_token: ${{ github.token }}
-
-      - name: Build Forge Pages for source scope
-        env:
-          SOURCE_SHA: ${{ github.sha }}
-          BUILD_COMMIT: ${{ steps.cad_ci.outputs.build_commit }}
-          SCOPE: ${{ steps.cad_ci.outputs.scope }}
-          PREPARED_SCOPE: ${{ steps.cad_ci.outputs.prepared_scope }}
-        run: |
-          python site/build.py \
-            --out generated-site \
-            --source-sha "$SOURCE_SHA" \
-            --build-evidence "$PREPARED_SCOPE" \
-            --build-scope "$SCOPE" \
-            --build-commit "$BUILD_COMMIT"
-          test -s generated-site/provenance.json
-          test -s generated-site/verification/manifest.json
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          value = json.loads(
-              Path("generated-site/provenance.json").read_text(
-                  encoding="utf-8"
-              )
-          )
-          assert value["source_commit"] == os.environ["SOURCE_SHA"]
-          assert value["build_commit"] == os.environ["BUILD_COMMIT"]
-          assert value["build_scope"] == os.environ["SCOPE"]
-          PY
-
-      - name: Publish Forge Pages for source scope
-        env:
-          SOURCE_REF: ${{ github.ref_name }}
-          SOURCE_SHA: ${{ github.sha }}
-          SCOPE: ${{ steps.cad_ci.outputs.scope }}
-        run: |
-          if [ "$SCOPE" = "main" ]; then
-            page_args=(
-              --preserve-subtree dev-cad
-              --preserve-subtree dev-ci
-            )
-          else
-            page_args=(--name "$SCOPE")
-          fi
-          python -m cad_ci_tool publish pages \
-            --repo . \
-            --site generated-site \
-            "${page_args[@]}" \
-            --message "pages: $SCOPE $SOURCE_SHA" \
-            --source-ref "$SOURCE_REF" \
-            --expected-source "$SOURCE_SHA"
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-durable.yml@v0.35.0
+    with:
+      source_sha: ${{ github.sha }}
+      source_ref: ${{ github.ref_name }}
+      scope: ${{ github.ref_name }}
+      build_branch: build
+      pages_branch: gh-pages
+      jobs: 2

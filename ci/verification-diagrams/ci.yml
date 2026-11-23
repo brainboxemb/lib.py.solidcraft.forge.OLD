@@ -1,4 +1,6 @@
-# Project CADCraft evidence produced by the shared reference runtime.
+# Forge repository CI item: expose verification diagrams produced by the shared reference batch.
+# This item copies existing batch output; it does not start a second renderer/runtime.
+# Local documentation: README.md
 id: verification-diagrams
 process: true
 kind: verification
@@ -10,10 +12,4 @@ watch:
   - scripts/reference_verification_batch.py
 strategy:
   reuse: true
-steps:
-  - id: build_diagrams
-    copy:
-      dependency: reference-verification-batch
-      source: .
-    outputs:
-      - diagrams
+builder: verification-diagrams

@@ -6,6 +6,34 @@ variables:
   REFERENCE_RUNTIME_IMAGE: "ghcr.io/brainboxemb/cad-reference:v0.3.4"
   SOLIDCRAFT_VERSION: "0.45.0"
 
+runtimes:
+  reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"
+
+verification:
+  package:
+    repository: brainboxemb/lib.py.cad.verification
+    version: "0.16.0"
+    commit: c7c145b7be0c602724e8cca874ef29990baaad1e
+
+builders:
+  forge-model: ci/builders/forge-model
+  forge-package: ci/builders/forge-package
+  forge-tests: ci/builders/forge-tests
+  forge-release: ci/builders/forge-release
+  release-policy: ci/builders/release-policy
+  site-source: ci/builders/site-source
+  solidcraft-reference: ci/builders/solidcraft-reference
+  model-verification-batch: ci/builders/model-verification-batch
+  reference-verification-batch: ci/builders/reference-verification-batch
+  forge-reference-projection: ci/builders/forge-reference-projection
+  verification-diagrams: ci/builders/verification-diagrams
+  pages-site: ci/builders/pages-site
+
+publication:
+  pages:
+    builder: pages-site
+    output: site
+
 templates:
   forge-model-declarative:
     kind: model
@@ -25,23 +53,7 @@ templates:
         - scripts/model_visual.py
     strategy:
       reuse: true
-    steps:
-      - id: contract_test
-        inputs:
-          item:
-            - scpf/**
-            - tests/**
-          repo:
-            - scripts/forge_example.py
-            - scripts/model_contract_test.py
-        run: [python, ../../scripts/model_contract_test.py]
-      - id: model_verify
-        copy:
-          dependency: model-verification-batch
-          source: items/{item_path}
-        outputs:
-          - solidcraft.json
-          - model_verify
+    builder: forge-model
 
   forge-reference:
     kind: verification
@@ -59,38 +71,33 @@ templates:
         - scripts/reference_verification_batch.py
     strategy:
       reuse: true
-    steps:
-      - id: verify_reference
-        copy:
-          dependency: reference-verification-batch
-          source: items/{item_path}
-        outputs:
-          - references
+    builder: forge-reference-projection
 
-  forge-reference-build123d:
+  forge-reference-cadquery:
     kind: verification
-    needs:
-      - reference-verification-batch
+    builder: cadquery
+    verification:
+      adapter: mesh-geometry
+      definition: ../verification/reference_geometry.json
     watch:
       item:
         - model.py
         - ../verification/reference_geometry.json
-      repo:
-        - verification/reference_validation.py
-        - verification/reference_preview.py
-        - verification/tests/test_reference_preview.py
-        - verification/build123d_export.py
-        - scripts/forge_example.py
-        - scripts/reference_verification_batch.py
     strategy:
       reuse: true
-    steps:
-      - id: verify_reference
-        copy:
-          dependency: reference-verification-batch
-          source: items/{item_path}
-        outputs:
-          - references
+
+  forge-reference-build123d:
+    kind: verification
+    builder: build123d
+    verification:
+      adapter: mesh-geometry
+      definition: ../verification/reference_geometry.json
+    watch:
+      item:
+        - model.py
+        - ../verification/reference_geometry.json
+    strategy:
+      reuse: true
 
 items:
   - scpf

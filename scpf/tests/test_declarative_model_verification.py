@@ -103,16 +103,22 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
                 ci = (
                     ROOT / "examples" / slug / "ci.yml"
                 ).read_text(encoding="utf-8")
-                if "template: forge-model-declarative" in ci:
-                    root_ci = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
-                    self.assertIn(
-                        "scripts/model_verification_batch.py",
-                        root_ci,
-                    )
-                    self.assertNotIn("scripts/model_verify.py", root_ci)
-                else:
-                    self.assertIn("scripts/model_verification_batch.py", ci)
-                    self.assertNotIn("scripts/model_verify.py", ci)
+                self.assertIn("template: forge-model-declarative", ci)
+                self.assertNotIn("steps:", ci)
+                root_ci = (ROOT / "cad-ci.yml").read_text(encoding="utf-8")
+                builder = (
+                    ROOT
+                    / "ci"
+                    / "builders"
+                    / "model-verification-batch"
+                    / "builder.yml"
+                ).read_text(encoding="utf-8")
+                self.assertIn("builder: forge-model", root_ci)
+                self.assertIn(
+                    "scripts/model_verification_batch.py",
+                    builder,
+                )
+                self.assertNotIn("scripts/model_verify.py", builder)
 
                 text = (verification / "verify.py").read_text(
                     encoding="utf-8"

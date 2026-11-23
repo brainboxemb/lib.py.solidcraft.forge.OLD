@@ -1,0 +1,10 @@
+schema: 1
+description: Project one child reference result from the current Forge reference batch.
+
+steps:
+  - id: verify_reference
+    copy:
+      dependency: reference-verification-batch
+      source: items/{item_path}
+    outputs:
+      - references

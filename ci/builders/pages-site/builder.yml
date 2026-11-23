@@ -1,0 +1,8 @@
+schema: 1
+description: Render Forge Pages from the complete durable build scope.
+
+steps:
+  - id: render
+    run: [python, ci/builders/pages-site/build.py]
+    outputs:
+      - site

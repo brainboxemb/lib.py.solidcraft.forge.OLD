@@ -6,97 +6,71 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "merge-policy.yml"
+RELEASE = "v0.35.0"
 
 
 class MergePolicyWorkflowTests(unittest.TestCase):
-    def test_merge_workflow_delegates_policy_and_requires_green_checks(self):
+    def test_forge_wrapper_is_thin_and_uses_released_shared_policy(self):
         text = WORKFLOW.read_text(encoding="utf-8")
 
+        self.assertIn("# template: tool.cad.ci/merge-policy", text)
+        self.assertIn("# template-version: 4", text)
+        self.assertIn(f"# tool-release: {RELEASE}", text)
         self.assertIn("issue_comment:", text)
         self.assertIn("github.event.comment.body == '/merge'", text)
-        self.assertIn("github.actor == github.repository_owner", text)
-
-        self.assertIn("pull-requests: write", text)
-        self.assertIn("issues: write", text)
-        self.assertIn("checks: read", text)
-        self.assertIn("statuses: read", text)
-        self.assertIn("actions: write", text)
-        self.assertIn("contents: write", text)
-
-        self.assertIn("scripts/merge_policy.py", text)
-        self.assertIn("check-runs?per_page=100", text)
-        self.assertNotIn("filter=latest", text)
-        self.assertIn("sort_by(.name, (.started_at // \"\"), .id)", text)
-        self.assertIn("group_by(.name)", text)
-        self.assertIn("map(last)", text)
-        self.assertIn('STATUS_COUNT="$(jq', text)
-        self.assertIn('merge_method="$METHOD"', text)
-        self.assertIn('sha="$HEAD_SHA"', text)
-
-        self.assertIn("DIRECT_PROMOTION", text)
-        self.assertIn("CLEANUP_HEAD", text)
-        self.assertIn("INTEGRATE_BASE", text)
-        self.assertIn("git/refs/heads/$HEAD_REF", text)
-        self.assertIn("temporary head deleted", text)
-        self.assertIn("long-lived lane recreated at merge commit", text)
-        self.assertIn("actions/workflows/scpf.yml/dispatches", text)
-        self.assertIn('-f ref="$BASE_REF"', text)
-        self.assertIn('-f ref="$HEAD_REF"', text)
-        self.assertIn("Integration dispatched: %s", text)
-        self.assertIn("COMMENT_BODY", text)
         self.assertIn(
-            "printf 'Merged by repository policy: `%s -> %s`",
+            "startsWith(github.event.comment.body, '/merge-resolved')",
+            text,
+        )
+        self.assertIn(
+            "uses: brainboxemb/tool.cad.ci/.github/workflows/"
+            f"reusable-merge-policy.yml@{RELEASE}",
             text,
         )
 
-    def test_cleanup_command_is_owner_only_and_requires_positive_evidence(self):
+        self.assertIn("stable_branch: main", text)
+        self.assertIn('development_branches: \'["dev-cad","dev-ci"]\'', text)
+        self.assertIn(
+            'permanent_branches: \'["build","gh-pages"]\'',
+            text,
+        )
+        self.assertIn("integration_workflow: scpf.yml", text)
+
+        for retired in (
+            "stable_ref:",
+            "lane_refs_json:",
+            "permanent_refs_json:",
+            "temporary_prefixes_json:",
+            "temporary_branch_prefixes:",
+            "github.actor == github.repository_owner",
+        ):
+            self.assertNotIn(retired, text)
+
+        for value in (
+            "pull-requests: write",
+            "issues: write",
+            "checks: read",
+            "statuses: read",
+            "actions: write",
+            "contents: write",
+        ):
+            self.assertIn(value, text)
+
+    def test_forge_wrapper_contains_no_local_merge_or_bulk_cleanup_logic(self):
         text = WORKFLOW.read_text(encoding="utf-8")
 
-        self.assertIn("github.event.comment.body == '/cleanup-branches'", text)
-        self.assertIn("github.actor == github.repository_owner", text)
-        self.assertIn("github.event.issue.number == 481", text)
-        self.assertIn("gh pr list", text)
-        self.assertIn("--state open", text)
-        self.assertIn("pulls?state=closed&per_page=100", text)
-        self.assertIn("[.head.ref, .head.sha] | @tsv", text)
-        self.assertIn("is_exact_merged_pr_head", text)
-        self.assertIn('candidate_sha="$2"', text)
-        self.assertIn(
-            '[ "$ref" = "$candidate" ] && [ "$sha" = "$candidate_sha" ]',
-            text,
-        )
-        self.assertIn("scripts/merge_policy.py", text)
-        self.assertIn("--base __cleanup__", text)
-        self.assertIn("compare/$encoded...$target", text)
-        self.assertIn('"ahead"', text)
-        self.assertIn('"identical"', text)
-        self.assertIn(
-            "Deleted integrated or exact merged-PR-head temporary branches",
-            text,
-        )
-        self.assertIn("source_branch @ $source_sha", text)
-        self.assertIn("Kept because an open PR still uses the branch", text)
-        self.assertIn("Kept because unique/unmerged commits remain", text)
-        self.assertIn("git/refs/heads/$source_branch", text)
-
-        # A closed issue is never deletion evidence.
-        self.assertNotIn("closed_issue_number", text)
-        self.assertNotIn("issue #$issue_number closed", text)
-        self.assertNotIn("Retired unique branches owned by closed issues", text)
-
-        # General cleanup never contains a backup-ref deletion escape hatch.
-        self.assertNotIn("OBSOLETE_HISTORY_BACKUPS", text)
-        self.assertNotIn("retired_history_backups", text)
-        self.assertNotIn("backup_mismatch", text)
-        self.assertNotIn("Retired exact clean-history backup refs", text)
-
-    def test_workflow_does_not_duplicate_branch_policy_literals(self):
-        text = WORKFLOW.read_text(encoding="utf-8")
-
-        self.assertNotIn('HEAD_REF" = "dev-cad"', text)
-        self.assertNotIn('HEAD_REF" = "dev-ci"', text)
-        self.assertNotIn('promote/dev-cad', text)
-        self.assertNotIn('promote/dev-ci', text)
+        for forbidden in (
+            "runs-on:",
+            "gh api",
+            "scripts/merge_policy.py",
+            "merge_method",
+            "check-runs?per_page=100",
+            "/cleanup-branches",
+            "pulls?state=closed",
+            "compare/$encoded",
+            "git/refs/heads/$source_branch",
+        ):
+            self.assertNotIn(forbidden, text)
 
 
 if __name__ == "__main__":

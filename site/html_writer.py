@@ -968,6 +968,27 @@ def qualification_reference_comparison(
             )
             if value
         )
+        preview_url = row.get("preview_url")
+        if preview_url:
+            safe_preview = escape(preview_url)
+            preview_block = (
+                '<figure class="qualification-reference-preview">'
+                f'<a href="{safe_preview}" class="qualification-image-link" '
+                'target="_blank" rel="noopener">'
+                f'<img src="{safe_preview}" alt="'
+                f'{escape(row["implementation"])} current reference preview" '
+                'loading="lazy"></a>'
+                '<figcaption>Current deterministic STL presentation preview · '
+                f'{artifact_links}</figcaption></figure>'
+            )
+        else:
+            preview_block = (
+                '<p class="qualification-reference-artifacts">'
+                'No separate presentation preview is generated for this '
+                'generic built-in reference. '
+                f'{artifact_links}</p>'
+            )
+
         fragments.append(
             render_template(
                 "qualification-reference-row.html",
@@ -983,8 +1004,7 @@ def qualification_reference_comparison(
                 source_link=source_link,
                 source_code=escape(source_code),
                 geometry_json=escape(row["geometry_json"]),
-                preview_url=escape(row["preview_url"]),
-                artifact_links=artifact_links,
+                preview_block=preview_block,
             )
         )
 

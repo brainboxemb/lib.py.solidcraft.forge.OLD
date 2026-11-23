@@ -1,4 +1,6 @@
-# Validate the explicit Forge release-publication policy without CAD runtimes.
+# Forge repository CI item: test explicit Forge release validation/publication policy without CAD runtimes.
+# The authoritative Forge release contract is docs/release.md.
+# Local documentation: README.md
 id: release-policy
 process: true
 kind: test
@@ -9,17 +11,4 @@ watch:
   - docs/release.md
 strategy:
   reuse: true
-steps:
-  - id: test_release_validator
-    inputs:
-      - .github/workflows/release.yml
-      - ci/forge-release/ci.yml
-      - scripts/release/**
-      - docs/release.md
-    run: [python, ../../scripts/release/test_validate_release.py]
-  - id: test_release_publisher
-    inputs:
-      - .github/workflows/release.yml
-      - scripts/release/**
-      - docs/release.md
-    run: [python, ../../scripts/release/test_publish_release.py]
+builder: release-policy

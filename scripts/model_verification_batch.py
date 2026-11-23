@@ -17,6 +17,7 @@ import yaml
 from forge_example import (
     compile_commands,
     dependency_wheel,
+    verification_wheel,
     write_commands,
 )
 
@@ -71,11 +72,55 @@ def processed_declarative_slugs() -> tuple[str, ...]:
     return tuple(slugs)
 
 
-def write_manifest(batch_root: Path, wheel: Path) -> Path:
-    """Compile every selected model and write one runtime manifest."""
+def active_declarative_slugs(
+    processed: tuple[str, ...] | None = None,
+) -> tuple[str, ...]:
+    """Return the released CAD-CI active direct model dependents."""
+
+    raw = os.environ.get("CAD_CI_ACTIVE_DEPENDENTS_JSON")
+    if raw is None:
+        raise RuntimeError(
+            "CAD_CI_ACTIVE_DEPENDENTS_JSON is required for the model batch"
+        )
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "CAD_CI_ACTIVE_DEPENDENTS_JSON must be valid JSON"
+        ) from exc
+    if (
+        not isinstance(value, list)
+        or any(not isinstance(item, str) or not item for item in value)
+        or len(set(value)) != len(value)
+    ):
+        raise RuntimeError(
+            "CAD_CI_ACTIVE_DEPENDENTS_JSON must be a unique string list"
+        )
+
+    processed_slugs = (
+        processed_declarative_slugs()
+        if processed is None
+        else tuple(processed)
+    )
+    allowed = set(processed_slugs)
+    unknown = [item for item in value if item not in allowed]
+    if unknown:
+        raise RuntimeError(
+            "unexpected model batch direct dependent(s): "
+            + ", ".join(unknown)
+        )
+    return tuple(value)
+
+
+def write_manifest(
+    batch_root: Path,
+    wheel: Path,
+    slugs: tuple[str, ...],
+) -> Path:
+    """Compile the selected model subset and write one runtime manifest."""
 
     rows = []
-    for slug in processed_declarative_slugs():
+    for slug in slugs:
         case_root = batch_root / "examples" / slug
         case_root.mkdir(parents=True, exist_ok=True)
         command_path = case_root / "solidcraft.json"
@@ -117,7 +162,7 @@ def write_manifest(batch_root: Path, wheel: Path) -> Path:
 
 
 def run_host_batch() -> int:
-    """Compile the case list, then verify it in one SolidCraft container."""
+    """Compile the selected cases, then verify them in one SolidCraft container."""
 
     output = output_root()
     batch_root = output / "items"
@@ -125,14 +170,20 @@ def run_host_batch() -> int:
         shutil.rmtree(batch_root)
     batch_root.mkdir(parents=True)
 
-    forge_wheel = dependency_wheel("forge-package", "scpf-*.whl")
-    verification_wheel = dependency_wheel(
-        "cad-verification-package",
-        "brainboxemb_cad_verification_lib-*.whl",
+    slugs = active_declarative_slugs()
+    print(
+        "FORGE BATCH selected models: "
+        + (", ".join(slugs) if slugs else "none"),
+        flush=True,
     )
+    if not slugs:
+        return 0
+
+    forge_wheel = dependency_wheel("forge-package", "scpf-*.whl")
+    verification_package = verification_wheel()
     batch_started = time.perf_counter()
     compile_started = time.perf_counter()
-    manifest = write_manifest(batch_root, forge_wheel)
+    manifest = write_manifest(batch_root, forge_wheel, slugs)
     print(
         "FORGE BATCH TIMING "
         f"compile_all_s={time.perf_counter() - compile_started:.3f}",
@@ -150,7 +201,7 @@ def run_host_batch() -> int:
 
     container_forge_wheel = f"/forge-package/{forge_wheel.name}"
     container_verification_wheel = (
-        f"/cad-verification/{verification_wheel.name}"
+        f"/cad-verification/{verification_package.name}"
     )
     container_started = time.perf_counter()
     completed = subprocess.run(
@@ -173,7 +224,7 @@ def run_host_batch() -> int:
             "-v",
             f"{forge_wheel.parent}:/forge-package:ro",
             "-v",
-            f"{verification_wheel.parent}:/cad-verification:ro",
+            f"{verification_package.parent}:/cad-verification:ro",
             "-w",
             "/workspace",
             image,
