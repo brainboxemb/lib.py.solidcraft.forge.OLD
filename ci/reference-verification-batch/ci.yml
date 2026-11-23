@@ -5,7 +5,7 @@ id: reference-verification-batch
 process: true
 kind: verification
 needs:
-  - cad-verification-package
+  - cad-ci-verification-package
 watch:
   - scripts/forge_example.py
   - scripts/reference_verification_batch.py
