@@ -21,9 +21,9 @@ dev-ci
 
 Current permanent heads at this checkpoint:
 
-- `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
-- `dev-cad`: `4ea3096f3f5b5d53eef48bfb25b62185908f96df`;
-- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+- `main`: `80bc83e72e34e0dce6e6df745d2ebf8f96111379`;
+- `dev-cad`: `e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3`;
+- `dev-ci`: `8c24f884b18eb17b25cce3b3c3237dee67de71eb`.
 
 Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
 `45358578565` succeeded and published the accepted dev-cad build/Page state.
@@ -118,16 +118,22 @@ Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
 
 ### #814 — Example basic validation selection
 
-Status: **parallel design / blocked on stable sync to dev-ci**.
+Status: **now / dev-ci**.
 
 The existing first/basic Forge validation stage is already
 `forge-release` / `scripts/tool_verify.py`. It currently duplicates the four
 teaching slugs in `PASSING_EXAMPLES`.
 
-After #785 reaches `main`, sync `main -> dev-ci` through normal permanent-ref
-policy. Then #814 replaces that duplicate list with selection from canonical
-`model.yml` entries whose purpose contains `example`. The separate
-`custom-anchor` expected-rejection policy fixture remains explicit.
+Stable #785 is now synchronized to `dev-ci` by PR #815 / merge
+`8c24f884b18eb17b25cce3b3c3237dee67de71eb`. #814 replaces the duplicate
+passing-slug list with canonical `model.yml` selection whose normalized purpose
+contains `example`. The separate `custom-anchor` expected-rejection policy
+fixture remains explicit.
+
+CAD-CI changed-path watches stay static and conservative: the release item watches
+all model metadata/source/test paths, while `tool_verify.py` performs the
+canonical purpose selection. This avoids a second slug registry without adding a
+Forge-local scheduler.
 
 ### #788 — CAD-CI concurrency measurement
 
@@ -142,7 +148,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | Issue | Status | Next action |
 | --- | --- | --- |
 | #817 Plan reconciliation after #785 | **now / docs-only** | Merge the current snapshot to dev-cad before stable promotion. |
-| #814 Example basic validation selection | **blocked on main -> dev-ci sync** | After #785 promotion, sync stable metadata to dev-ci and derive forge-release passing models from `purpose: example`. |
+| #814 Example basic validation selection | **now / dev-ci** | Derive forge-release passing models from canonical `purpose: example`; keep static watches generic rather than duplicating slugs. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
 | #785 Examples / Verification purpose split | **complete on dev-cad / promotion pending** | Promote accepted dev-cad to main; then close. |
 | #779 Native whole-sheet perforation | **now / CAD** | Rebuild PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
