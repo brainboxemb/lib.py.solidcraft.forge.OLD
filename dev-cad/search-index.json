@@ -981,6 +981,75 @@
       "keywords": "Assembly.group(self, name) The collection should appear as one named subassembly/browser unit in SolidCraft. Grouping changes native hierarchy, not placement or relationships. Use attach() for mechanical relationships between occurrences. frame = (left + right).group(\"Frame\") name Native subassembly/browser component name."
     },
     {
+      "title": "Assembly.with_exploded_view",
+      "kind": "API Reference",
+      "url": "reference/Assembly.with_exploded_view/",
+      "summary": "Add one native SolidCraft exploded presentation to this Assembly. Define exploded views after composing the final Assembly. Use either automatic scale mode or explicit occurrence translations.",
+      "aliases": [
+        "Assembly.with_exploded_view",
+        "with_exploded_view"
+      ],
+      "keywords": "Assembly.with_exploded_view(self, name, *, scale=None, moves=None)",
+      "symbol": "Assembly.with_exploded_view"
+    },
+    {
+      "title": "Assembly.with_exploded_view \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/assembly-basics/#exploded-views",
+      "summary": "Add one native SolidCraft exploded presentation to this Assembly. Define exploded views after composing the final Assembly. Use either automatic scale mode or explicit occurrence translations.",
+      "aliases": [
+        "Assembly.with_exploded_view",
+        "with_exploded_view"
+      ],
+      "keywords": "Assembly.with_exploded_view(self, name, *, scale=None, moves=None)"
+    },
+    {
+      "title": "Assembly.show_exploded",
+      "kind": "API Reference",
+      "url": "reference/Assembly.show_exploded/",
+      "summary": "Show one named exploded view after the assembly is built.",
+      "aliases": [
+        "Assembly.show_exploded",
+        "show_exploded"
+      ],
+      "keywords": "Assembly.show_exploded(self, name)",
+      "symbol": "Assembly.show_exploded"
+    },
+    {
+      "title": "Assembly.show_exploded \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/assembly-basics/#exploded-views",
+      "summary": "Show one named exploded view after the assembly is built.",
+      "aliases": [
+        "Assembly.show_exploded",
+        "show_exploded"
+      ],
+      "keywords": "Assembly.show_exploded(self, name)"
+    },
+    {
+      "title": "Assembly.show_assembled",
+      "kind": "API Reference",
+      "url": "reference/Assembly.show_assembled/",
+      "summary": "Explicitly show the normal assembled placement.",
+      "aliases": [
+        "Assembly.show_assembled",
+        "show_assembled"
+      ],
+      "keywords": "Assembly.show_assembled(self)",
+      "symbol": "Assembly.show_assembled"
+    },
+    {
+      "title": "Assembly.show_assembled \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/assembly-basics/#exploded-views",
+      "summary": "Explicitly show the normal assembled placement.",
+      "aliases": [
+        "Assembly.show_assembled",
+        "show_assembled"
+      ],
+      "keywords": "Assembly.show_assembled(self)"
+    },
+    {
       "title": "Assembly.with_anchor",
       "kind": "API Reference",
       "url": "reference/Assembly.with_anchor/",
@@ -2981,7 +3050,7 @@
       "aliases": [
         "assembly-basics"
       ],
-      "keywords": "Start with the mental model Forge separates geometry from physical parts and from relationships between parts . Most assembly code becomes much easier once those three levels are kept separate. You mean\u2026 Forge concept SolidCraft result Geometry inside one part Shape Native geometry/features in one definition One reusable physical part @component class Reusable component definition Where/how one occurrence stands placement=Placement(...) Occurrence placement One placed copy of that part Block() / copy() Component occurrence Several parts collected together a + b Assembly containing occurrences One part depends on another attach() Native SolidCraft assembly relationship/joint A named mounting reference Anchor , AnchorFrame , AnchorTopology Reference used by that relationship Browser/subassembly organisation group() Nested native component 1. A component means one physical part A component is not limited to one primitive. It is the definition of one physical manufactured item. Its build() may contain several primitives, sketches, holes, bosses, fillets and other features as long as they together describe that one part. from scpf import Box, Cylinder, component @component class MountingPlate: width = 80.0 depth = 50.0 thickness = 5.0 def build(self): plate = Box(self.width, self.depth, self.thickness) boss = Cylinder(d=16, h=12).at(0, 0, self.thickness) return plate + boss The plate and cylindrical boss are geometry/features inside one component . They do not need an assembly joint because they are not separate physical parts. Physical-part test: if the boss is machined, printed or moulded as part of the plate, keep it inside one component. If it is actually a separate brass insert pressed into the plate, make a second component and relate the two occurrences in an assembly. MountingPlate is the reusable definition. Calling MountingPlate() creates one occurrence; copy() creates another occurrence of the same definition without duplicating the feature history. 2. Put components in one assembly first = Block(placement=Placement(x=-30)) second = first.copy(placement=Placement(x=30)) assembly = first + second Here first + second means \u201cthese two component occurrences belong to one assembly\u201d. It does not Boolean-union their solids. Same operator, different level: Shape + Shape describes supported geometric union; occurrence + occurrence builds an assembly of physical parts. placement=Placement(...) declares the pose when an occurrence is created or copied. It does not create a mechanical relationship; use attach() when another occurrence owns the relationship. 3. Use @assembly when the composition itself is reusable You do not need @assembly merely because a script contains several components. Use it when the composition itself is a reusable model object that you want to import or instantiate as a subassembly. from scpf import Anchor, assembly @assembly class BlockPair: def build(self): left = Block() right = Block().attach( left, parent=Anchor.RIGHT, child=Anchor.LEFT, ) return left + right pair = BlockPair() The component definitions remain the physical parts. BlockPair describes how those occurrences are composed. This is different from group() : an assembly expresses the model composition; grouping controls the native nested hierarchy/browser unit. 4. Use attach() when the relationship is the intent If the real rule is \u201cthe left side of this part belongs on the right side of that part\u201d, encode that relationship instead of calculating a replacement XYZ coordinate yourself. from scpf import Anchor left = Block() right = Block().attach( left, parent=Anchor.RIGHT, child=Anchor.LEFT, ) assembly = left + right Forge records an associative attachment between the two occurrences and lowers that to the native SolidCraft relationship mechanism. The anchors say which references are related ; they are not just prettier names for a hard-coded XYZ point. This is the important rule: use an anchor when you need to describe a relationship or semantic mounting reference . Do not add anchors to every component pre-emptively. 5. Which kind of anchor? Situation Use Normal rectangular face/corner is enough Anchor.LEFT , Anchor.FRONT_TOP_RIGHT , etc. The reusable part owns a special mounting point and orientation Named AnchorFrame returned by the component's anchors() The reference must follow a particular native edge/corner topology AnchorTopology The reference exists only because of this larger assembly Assembly-owned with_anchor() , not an application-specific anchor added to the generic part Start with the simplest standard Anchor . Move to AnchorFrame or AnchorTopology only when a face/corner reference cannot express the actual mounting intent. 6. Let SolidCraft own the native relationship Forge describes the relationship; SolidCraft owns the resulting native geometry, occurrence hierarchy and joint data. Forge is not intended to grow a second general mating solver. That is also why a meaningful attach() is preferable to Forge inventing increasingly clever coordinate corrections. offset=(u, v) moves within the attachment plane, gap is normal distance between references, and angle is the relative turn around the attachment normal. These are relationship values, not a replacement global XYZ transform. There are two useful attachment modes. Normal attach() uses the chosen references to determine the relationship and placement. Use attach(..., as_built=True) when both occurrences are already in the intended pose and SolidCraft should record that existing pose as a fixed assembly relationship instead of repositioning them. 7. A group is organisation, not a relationship frame = (left + right).group(\"Frame\") group(\"Frame\") creates a real nested native component so the occurrences appear together in the SolidCraft browser hierarchy. Grouping does not mate, align or rotate the parts and does not replace attach() . Use a group when the collection itself is a useful named subassembly or browser unit. Do not create a group merely because two components touch. A practical decision sequence Will these features be manufactured as one physical item? Keep them in one component, even if the geometry is complex. Is something installed or manufactured separately? Give it its own component occurrence. Do you only need a deliberate occurrence pose? Supply placement=Placement(...) when creating or copying it. Should one separate part follow another semantically? Use attach() and the simplest suitable anchor. Is a standard face/corner insufficient? Define an AnchorFrame or topology-backed reference at the level that owns that meaning. Do several occurrences form a useful named subassembly/browser unit? Then use group() . After this page, the Components and assemblies chapter covers parameter sharing, offsets, custom frames, topology anchors and assembly-owned datums in detail."
+      "keywords": "Start with the mental model Forge separates geometry from physical parts and from relationships between parts . Most assembly code becomes much easier once those three levels are kept separate. You mean\u2026 Forge concept SolidCraft result Geometry inside one part Shape Native geometry/features in one definition One reusable physical part @component class Reusable component definition Where/how one occurrence stands placement=Placement(...) Occurrence placement One placed copy of that part Block() / copy() Component occurrence Several parts collected together a + b Assembly containing occurrences One part depends on another attach() Native SolidCraft assembly relationship/joint A named mounting reference Anchor , AnchorFrame , AnchorTopology Reference used by that relationship Browser/subassembly organisation group() Nested native component 1. A component means one physical part A component is not limited to one primitive. It is the definition of one physical manufactured item. Its build() may contain several primitives, sketches, holes, bosses, fillets and other features as long as they together describe that one part. from scpf import Box, Cylinder, component @component class MountingPlate: width = 80.0 depth = 50.0 thickness = 5.0 def build(self): plate = Box(self.width, self.depth, self.thickness) boss = Cylinder(d=16, h=12).at(0, 0, self.thickness) return plate + boss The plate and cylindrical boss are geometry/features inside one component . They do not need an assembly joint because they are not separate physical parts. Physical-part test: if the boss is machined, printed or moulded as part of the plate, keep it inside one component. If it is actually a separate brass insert pressed into the plate, make a second component and relate the two occurrences in an assembly. MountingPlate is the reusable definition. Calling MountingPlate() creates one occurrence; copy() creates another occurrence of the same definition without duplicating the feature history. 2. Put components in one assembly first = Block(placement=Placement(x=-30)) second = first.copy(placement=Placement(x=30)) assembly = first + second Here first + second means \u201cthese two component occurrences belong to one assembly\u201d. It does not Boolean-union their solids. Same operator, different level: Shape + Shape describes supported geometric union; occurrence + occurrence builds an assembly of physical parts. placement=Placement(...) declares the pose when an occurrence is created or copied. It does not create a mechanical relationship; use attach() when another occurrence owns the relationship. Exploded views are presentation, not placement Define an exploded view after composing the final assembly. Forge stores the view in SolidCraft without changing the occurrences' normal Placement or joints. assembly = first + second + third assembly = assembly.with_exploded_view(\"Service\", scale=1.25) assembly = assembly.with_exploded_view( \"Instructions\", moves=[ (second, (0, 25, 0)), (third, (0, 50, 10)), ], ) assembly = assembly.show_assembled() Automatic mode uses SolidCraft's native scale-based explosion. Explicit mode takes occurrence objects and fixed XYZ translations; Forge resolves those objects to native occurrence ids during replay. Use show_exploded(\"Service\") to display one stored view and show_assembled() to return to normal presentation. Do not model an explosion with ordinary occurrence moves. 3. Use @assembly when the composition itself is reusable You do not need @assembly merely because a script contains several components. Use it when the composition itself is a reusable model object that you want to import or instantiate as a subassembly. from scpf import Anchor, assembly @assembly class BlockPair: def build(self): left = Block() right = Block().attach( left, parent=Anchor.RIGHT, child=Anchor.LEFT, ) return left + right pair = BlockPair() The component definitions remain the physical parts. BlockPair describes how those occurrences are composed. This is different from group() : an assembly expresses the model composition; grouping controls the native nested hierarchy/browser unit. 4. Use attach() when the relationship is the intent If the real rule is \u201cthe left side of this part belongs on the right side of that part\u201d, encode that relationship instead of calculating a replacement XYZ coordinate yourself. from scpf import Anchor left = Block() right = Block().attach( left, parent=Anchor.RIGHT, child=Anchor.LEFT, ) assembly = left + right Forge records an associative attachment between the two occurrences and lowers that to the native SolidCraft relationship mechanism. The anchors say which references are related ; they are not just prettier names for a hard-coded XYZ point. This is the important rule: use an anchor when you need to describe a relationship or semantic mounting reference . Do not add anchors to every component pre-emptively. 5. Which kind of anchor? Situation Use Normal rectangular face/corner is enough Anchor.LEFT , Anchor.FRONT_TOP_RIGHT , etc. The reusable part owns a special mounting point and orientation Named AnchorFrame returned by the component's anchors() The reference must follow a particular native edge/corner topology AnchorTopology The reference exists only because of this larger assembly Assembly-owned with_anchor() , not an application-specific anchor added to the generic part Start with the simplest standard Anchor . Move to AnchorFrame or AnchorTopology only when a face/corner reference cannot express the actual mounting intent. 6. Let SolidCraft own the native relationship Forge describes the relationship; SolidCraft owns the resulting native geometry, occurrence hierarchy and joint data. Forge is not intended to grow a second general mating solver. That is also why a meaningful attach() is preferable to Forge inventing increasingly clever coordinate corrections. offset=(u, v) moves within the attachment plane, gap is normal distance between references, and angle is the relative turn around the attachment normal. These are relationship values, not a replacement global XYZ transform. There are two useful attachment modes. Normal attach() uses the chosen references to determine the relationship and placement. Use attach(..., as_built=True) when both occurrences are already in the intended pose and SolidCraft should record that existing pose as a fixed assembly relationship instead of repositioning them. 7. A group is organisation, not a relationship frame = (left + right).group(\"Frame\") group(\"Frame\") creates a real nested native component so the occurrences appear together in the SolidCraft browser hierarchy. Grouping does not mate, align or rotate the parts and does not replace attach() . Use a group when the collection itself is a useful named subassembly or browser unit. Do not create a group merely because two components touch. A practical decision sequence Will these features be manufactured as one physical item? Keep them in one component, even if the geometry is complex. Is something installed or manufactured separately? Give it its own component occurrence. Do you only need a deliberate occurrence pose? Supply placement=Placement(...) when creating or copying it. Should one separate part follow another semantically? Use attach() and the simplest suitable anchor. Is a standard face/corner insufficient? Define an AnchorFrame or topology-backed reference at the level that owns that meaning. Do several occurrences form a useful named subassembly/browser unit? Then use group() . After this page, the Components and assemblies chapter covers parameter sharing, offsets, custom frames, topology anchors and assembly-owned datums in detail."
     },
     {
       "title": "Start with the mental model",
@@ -3012,6 +3081,16 @@
         "collection"
       ],
       "keywords": "When to use a Shape, component, occurrence, anchor, relationship or group. first = Block(placement=Placement(x=-30)) second = first.copy(placement=Placement(x=30)) assembly = first + second Here first + second means \u201cthese two component occurrences belong to one assembly\u201d. It does not Boolean-union their solids. Same operator, different level: Shape + Shape describes supported geometric union; occurrence + occurrence builds an assembly of physical parts. placement=Placement(...) declares the pose when an occurrence is created or copied. It does not create a mechanical relationship; use attach() when another occurrence owns the relationship."
+    },
+    {
+      "title": "Exploded views are presentation, not placement",
+      "kind": "API Guide",
+      "url": "guide/assembly-basics/#exploded-views",
+      "summary": "From one component to an assembly",
+      "aliases": [
+        "exploded-views"
+      ],
+      "keywords": "When to use a Shape, component, occurrence, anchor, relationship or group. Define an exploded view after composing the final assembly. Forge stores the view in SolidCraft without changing the occurrences' normal Placement or joints. assembly = first + second + third assembly = assembly.with_exploded_view(\"Service\", scale=1.25) assembly = assembly.with_exploded_view( \"Instructions\", moves=[ (second, (0, 25, 0)), (third, (0, 50, 10)), ], ) assembly = assembly.show_assembled() Automatic mode uses SolidCraft's native scale-based explosion. Explicit mode takes occurrence objects and fixed XYZ translations; Forge resolves those objects to native occurrence ids during replay. Use show_exploded(\"Service\") to display one stored view and show_assembled() to return to normal presentation. Do not model an explosion with ordinary occurrence moves."
     },
     {
       "title": "3. Use @assembly when the composition itself is reusable",
@@ -3804,6 +3883,26 @@
       "keywords": "part.attach(base, parent=Anchor.FRONT_TOP_LEFT, child=mount, offset=(0, -wall + 12))"
     },
     {
+      "title": "assembly.with_exploded_view(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-reusable-components-assembly-with-exploded-view",
+      "summary": "Store a native automatic or explicit exploded presentation without changing normal occurrence placements.",
+      "aliases": [
+        "Reusable components"
+      ],
+      "keywords": "assembly.with_exploded_view('Service', scale=1.25).show_exploded('Service')"
+    },
+    {
+      "title": "assembly.show_assembled()",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-reusable-components-assembly-show-assembled",
+      "summary": "Return presentation to the normal assembled occurrence placements.",
+      "aliases": [
+        "Reusable components"
+      ],
+      "keywords": "assembly.show_assembled()"
+    },
+    {
       "title": "assembly.with_anchor(...) / anchor(...)",
       "kind": "Cheatsheet",
       "url": "cheatsheet/#cheat-reusable-components-assembly-with-anchor-anchor",
@@ -4091,6 +4190,17 @@
         "components"
       ],
       "keywords": "Reuse one neutral three-plate corner protector on all eight case corners. The assembly calculates each XYZ position and 3D orientation directly from case dimensions. FlightcaseCorner.copy(placement=Placement(x=..., y=..., z=..., rotation=(axis, angle))) One rounded CaseBlock plus eight occurrences of one neutral trihedral protector. Position and orientation belong to the assembly; there is no Attachment. Forge binds the occurrence ids returned by component.create/occurrence.copy to replay variables. Numeric unrotated copies use occurrence.copy translate directly; symbolic positions and rotations use a later occurrence.move addressed by the bound id. Each of the eight case corners is wrapped by three connected plates: one horizontal and two vertical. The protector outer envelope is a fixed 24x24x24 mm at every corner. Change case_width/depth/height from 120x80x60 to 160x120x90 mm; all protectors follow the calculated corner positions without rerunning Python, while every protector remains exactly 24x24x24 mm. This case qualifies eight corner placements around the case. Per-occurrence bounds and the visual decomposition describe this case's placement geometry; native relationships are checked separately. component.create/occurrence.copy return real occurrence ids; the replay executor binds those ids before later parametric occurrence.move commands. One neutral trihedral part is reused in eight assembly-owned poses."
+    },
+    {
+      "title": "Native exploded assembly views",
+      "kind": "Verification",
+      "url": "verification/exploded-views/",
+      "summary": "Three reusable Block occurrences keep their assembled placements while SolidCraft stores one automatic and one explicit exploded presentation.",
+      "aliases": [
+        "Persistent exploded presentations leave normal occurrence placements unchanged",
+        "components"
+      ],
+      "keywords": "Verify that Forge can store persistent native exploded presentations for a reusable component assembly without changing the occurrences' normal design placements. ```python assembly = first + second + third assembly = assembly.with_exploded_view(\"Automatic\", scale=1.25) assembly = assembly.with_exploded_view( \"Instructions\", moves=[ (second, (0, 25, 0)), (third, (0, 50, 10)), ], ) assembly = assembly.show_assembled() ``` Three occurrences of one reusable `ExplodeBlock` component are placed at X=0, 40 and 80 mm. The completed Assembly owns two presentation views: one automatic scale-based view and one explicit instruction view. Forge creates the reusable component and all three normal occurrence placements first. It then emits two native `explode.create` commands. Explicit moves reference the actual replay-bound occurrence ids derived from the Forge occurrence objects. Finally `explode.show(view=None)` selects assembled presentation. No exploded translation is lowered as `occurrence.move`. The saved SolidCraft design retains three normally placed component occurrences plus two persistent exploded views. Showing either view changes presentation only; the authored occurrence placements remain unchanged. Without rerunning Forge Python, reopen the saved design and show the stored `Automatic` view. Separately show the `Instructions` view and then return to assembled presentation with `explode.show(view=None)`. Both operations must succeed while model verification continues to see the original occurrence envelopes. The three assembled body envelopes prove that normal occurrence placement is retained, but bounds alone cannot prove persistence of named presentation views. Saved-design replay of `explode.show` is therefore required evidence. `explode.create` and `explode.show` own persistent exploded-view state independently of occurrence placement. Explicit exploded moves use Forge occurrence objects and are resolved to replay-bound native occurrence ids during assembly lowering."
     },
     {
       "title": "Four centred vertical L-profiles",

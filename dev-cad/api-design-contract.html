@@ -447,6 +447,33 @@ Slots can participate in the supported native sketch
 
 See [change 0027](background/changes/0027-native-sketch-slot-family.md).
 
+### Exploded assembly presentation
+
+Exploded views are persistent SolidCraft presentation state on a completed
+Assembly. They do not rewrite occurrence `Placement` or attachment
+relationships.
+
+```python
+assembly = first + second + third
+assembly = assembly.with_exploded_view(&quot;Service&quot;, scale=1.25)
+assembly = assembly.with_exploded_view(
+    &quot;Instructions&quot;,
+    moves=[
+        (second, (0, 25, 0)),
+        (third, (0, 50, 10)),
+    ],
+)
+assembly = assembly.show_assembled()
+```
+
+Automatic mode delegates the explosion to native `explode.create(scale=...)`.
+Explicit mode stores Forge occurrence identities and resolves them to native
+replay occurrence ids during assembly lowering. `show_exploded(name)` selects
+a stored presentation and `show_assembled()` emits
+`explode.show(view=None)`. Define views after composing the final Assembly;
+adding occurrences afterwards is rejected so automatic view scope cannot change
+silently.
+
 ### Occurrence `Placement`
 
 `Placement` is reserved occurrence metadata, separate from component model

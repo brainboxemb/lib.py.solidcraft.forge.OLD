@@ -349,6 +349,42 @@
     },
     {
       "kind": "callable",
+      "name": "Assembly.with_exploded_view",
+      "summary": "Add one native SolidCraft exploded presentation to this Assembly. Define exploded views after composing the final Assembly. Use either automatic scale mode or explicit occurrence translations.",
+      "guide": "guide/assembly-basics/#exploded-views",
+      "reference": "reference/Assembly.with_exploded_view/",
+      "use_when": "",
+      "limits": "",
+      "parameters": [],
+      "example": "",
+      "signature": "Assembly.with_exploded_view(self, name, *, scale=None, moves=None)"
+    },
+    {
+      "kind": "callable",
+      "name": "Assembly.show_exploded",
+      "summary": "Show one named exploded view after the assembly is built.",
+      "guide": "guide/assembly-basics/#exploded-views",
+      "reference": "reference/Assembly.show_exploded/",
+      "use_when": "",
+      "limits": "",
+      "parameters": [],
+      "example": "",
+      "signature": "Assembly.show_exploded(self, name)"
+    },
+    {
+      "kind": "callable",
+      "name": "Assembly.show_assembled",
+      "summary": "Explicitly show the normal assembled placement.",
+      "guide": "guide/assembly-basics/#exploded-views",
+      "reference": "reference/Assembly.show_assembled/",
+      "use_when": "",
+      "limits": "",
+      "parameters": [],
+      "example": "",
+      "signature": "Assembly.show_assembled(self)"
+    },
+    {
+      "kind": "callable",
       "name": "Assembly.with_anchor",
       "summary": "Expose one named attachment datum owned by this assembly.",
       "guide": "guide/components/#assembly-anchor",

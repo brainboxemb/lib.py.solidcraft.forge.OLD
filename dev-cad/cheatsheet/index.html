@@ -277,6 +277,18 @@ plate = sketch.extrude(8)</code></pre>
 <pre><code>part.attach(base, parent=Anchor.FRONT_TOP_LEFT, child=mount, offset=(0, -wall + 12))</code></pre>
 <p class="tip"><a href="../examples/components/">View working example →</a></p>
 </article>
+<article class="reference" id="cheat-reusable-components-assembly-with-exploded-view">
+<h3><code>assembly.with_exploded_view(...)</code></h3>
+<p>Store a native automatic or explicit exploded presentation without changing normal occurrence placements.</p>
+<pre><code>assembly.with_exploded_view(&#x27;Service&#x27;, scale=1.25).show_exploded(&#x27;Service&#x27;)</code></pre>
+<p class="tip"><a href="../verification/exploded-views/">View verification case →</a></p>
+</article>
+<article class="reference" id="cheat-reusable-components-assembly-show-assembled">
+<h3><code>assembly.show_assembled()</code></h3>
+<p>Return presentation to the normal assembled occurrence placements.</p>
+<pre><code>assembly.show_assembled()</code></pre>
+<p class="tip"><a href="../verification/exploded-views/">View verification case →</a></p>
+</article>
 <article class="reference" id="cheat-reusable-components-assembly-with-anchor-anchor">
 <h3><code>assembly.with_anchor(...) / anchor(...)</code></h3>
 <p>Expose a semantic attachment datum owned by an assembly without adding application-specific anchors to a generic component.</p>
