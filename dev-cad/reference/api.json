@@ -714,12 +714,12 @@
       "summary": "Pattern an existing native history feature in one or two directions.",
       "guide": "guide/features/#feature-patterns",
       "reference": "reference/Shape.rectangular_pattern/",
-      "use_when": "Repeat an already-created native sketch extrusion while keeping one editable SolidCraft rectangular-pattern history feature.",
+      "use_when": "Repeat an already-created native feature while keeping one editable SolidCraft rectangular-pattern history feature.",
       "limits": "The source feature must already be part of this Shape. Supplying a second direction requires both count2 and spacing2.",
       "parameters": [
         {
           "name": "feature",
-          "description": "Existing Sketch.extrude() feature already applied to this Shape, or a non-empty sequence of such features."
+          "description": "Existing applied feature Shape, or a non-empty sequence of applied feature Shapes. Forge resolves each source to its native history feature."
         },
         {
           "name": "count",
@@ -771,12 +771,12 @@
       "summary": "Pattern an existing native history feature around a fixed axis.",
       "guide": "guide/features/#feature-patterns",
       "reference": "reference/Shape.circular_pattern/",
-      "use_when": "Repeat an already-created native sketch extrusion around an axis while keeping one editable SolidCraft circular-pattern history feature, for example a bolt circle.",
+      "use_when": "Repeat an already-created native feature around an axis while keeping one editable SolidCraft circular-pattern history feature, for example a Hole-based bolt circle.",
       "limits": "The source feature must already be part of this Shape. Axis values cover principal or fixed XYZ axes. Native construction-axis, edge-axis and face-axis selectors are not exposed yet.",
       "parameters": [
         {
           "name": "feature",
-          "description": "Existing Sketch.extrude() feature already applied to this Shape, or a non-empty sequence of such features."
+          "description": "Existing applied feature Shape, or a non-empty sequence of applied feature Shapes. Forge resolves each source to its native history feature."
         },
         {
           "name": "count",
