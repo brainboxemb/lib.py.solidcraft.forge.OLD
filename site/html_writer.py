@@ -1011,14 +1011,22 @@ def qualification_reference_comparison(
             )
         )
 
-    description = (
-        "Each source is shown from the current Forge tree. Stable result "
-        "evidence is unavailable in this source-only build."
-        if not rows_by_implementation
-        else
-        "Each source is shown from the current Forge tree beside the accepted "
-        "durable result for that independent implementation."
-    )
+    if not reference_sources:
+        description = (
+            "No independent reference implementation is declared for this "
+            "native capability case; native SolidCraft verification remains "
+            "the authoritative evidence."
+        )
+    elif not rows_by_implementation:
+        description = (
+            "Each source is shown from the current Forge tree. Stable result "
+            "evidence is unavailable in this source-only build."
+        )
+    else:
+        description = (
+            "Each source is shown from the current Forge tree beside the "
+            "accepted durable result for that independent implementation."
+        )
     return render_template(
         "verification-references.html",
         description=escape(description),
