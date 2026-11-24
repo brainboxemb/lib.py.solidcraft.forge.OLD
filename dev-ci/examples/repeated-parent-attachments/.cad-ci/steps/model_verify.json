@@ -3,13 +3,13 @@
   "action_type": "copy",
   "active_dependent_config_digests": {},
   "active_dependents": [],
-  "bundle_sha256": "59a0efea0a65de5ec87250414ffbf2eac595e60840c3f342e411ad3013b4e41f",
-  "duration_seconds": 0.294,
+  "bundle_sha256": "5cbc09e52c5ec4f701b1ea715cfa73ce76401ece3a480dd8a6396913f85bd255",
+  "duration_seconds": 0.117,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-23T18:07:57.306Z",
+  "finished_at": "2026-11-24T09:16:20.952Z",
   "item": "repeated-parent-attachments",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -17,7 +17,7 @@
     "model_verify": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "c7a0a13531df2390fb86e89235da7ec3e8653bd0ef8e9694f15fd9589b5ef360"
+      "sha256": "bc3ace240ef2cc09bb1fdafbb8069d4dcda9f69439db145e8fd1923669bada66"
     },
     "solidcraft.json": {
       "kind": "file",
@@ -25,10 +25,10 @@
       "sha256": "937102b6ed1be6f2e132bfa85d4a3a42fe6d553b1f4fc044bc4b1a7b01d247ce"
     }
   },
-  "run_finished_at": "2026-11-23T18:08:29.240Z",
-  "run_started_at": "2026-11-23T18:05:47.984Z",
+  "run_finished_at": "2026-11-24T09:17:03.686Z",
+  "run_started_at": "2026-11-24T09:14:53.747Z",
   "schema": 6,
-  "started_at": "2026-11-23T18:07:57.012Z",
+  "started_at": "2026-11-24T09:16:20.835Z",
   "status": "pass",
   "step": "model_verify",
   "target_spec_digest": "d7a43af6d52fec813c87d99c6b7701862171d41ff22ce622d3d2aca38d47d781",

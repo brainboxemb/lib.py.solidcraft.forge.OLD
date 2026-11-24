@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "c11b819570da8aa11c88a39fd442fa15134825be36c1d5fecd8024dca2ea51a1",
+  "duration_seconds": 0.098,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T09:16:27.687Z",
+  "item": "sheet-hem",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "b4220b839089a818c55f8723a27fa2e244f01f6ee1bb19d39c14f16561be9233"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "2c4dc137a4775c9e0bcae1c1a06137d2a27582ef1112ed0c225a61366b756ac9"
+    }
+  },
+  "run_finished_at": "2026-11-24T09:17:03.686Z",
+  "run_started_at": "2026-11-24T09:14:53.747Z",
+  "schema": 6,
+  "started_at": "2026-11-24T09:16:27.589Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "55ac9e945c0c833dfd7062cb4908ac7caa4ecc2f078c3b7919f022219676e147",
+  "timeout_seconds": null
+}

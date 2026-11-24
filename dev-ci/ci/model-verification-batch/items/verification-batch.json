@@ -32,6 +32,11 @@
     },
     {
       "error": null,
+      "model": "attached-through-all",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "bracket",
       "status": "pass"
     },
@@ -53,6 +58,11 @@
     {
       "error": null,
       "model": "components",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "cone-boolean",
       "status": "pass"
     },
     {
@@ -152,6 +162,11 @@
     },
     {
       "error": null,
+      "model": "rotated-sketch-cutter",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "round-top-sketch",
       "status": "pass"
     },
@@ -182,6 +197,16 @@
     },
     {
       "error": null,
+      "model": "sheet-hem",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "sheet-path-flange",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "simple-box",
       "status": "pass"
     },
@@ -207,6 +232,6 @@
     }
   ],
   "schema": 1,
-  "source_sha": "14996cf59c870c9737b6176fd003f4d016b7164b",
+  "source_sha": "8c24f884b18eb17b25cce3b3c3237dee67de71eb",
   "status": "pass"
 }

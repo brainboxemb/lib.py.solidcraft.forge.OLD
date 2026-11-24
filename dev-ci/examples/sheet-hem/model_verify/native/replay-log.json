@@ -1,0 +1,136 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "70b7c32273ef530e4a54dd8c73c007ceaabe80bed96af2c000ae854087106a89",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "width",
+        "expression": "80",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "depth",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 3,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 4,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "index": 5,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "hem_length",
+        "expression": "12",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 6,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "hem_gap",
+        "expression": "4",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 7,
+      "command": "sheet.manage_rules",
+      "resolved_params": {
+        "name": "Hem Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "index": 8,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "Blank"
+      }
+    },
+    {
+      "index": 9,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          "-(width / 2)",
+          "-(depth / 2)"
+        ],
+        "p1": [
+          "width / 2",
+          "depth / 2"
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 11,
+      "command": "sheet.flange",
+      "resolved_params": {
+        "type": "base",
+        "sketch": "Blank",
+        "rule": "Hem Rule",
+        "body_name": "SheetHem"
+      }
+    },
+    {
+      "index": 12,
+      "command": "sheet.hem",
+      "resolved_params": {
+        "edges": [
+          [
+            40.0,
+            0.0,
+            2.0
+          ]
+        ],
+        "length": "hem_length",
+        "body": "SheetHem",
+        "gap": "hem_gap"
+      }
+    }
+  ],
+  "completed": 13
+}

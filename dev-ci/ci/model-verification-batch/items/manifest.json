@@ -38,6 +38,12 @@
     },
     {
       "compile_error": null,
+      "input": "/output/items/examples/attached-through-all/solidcraft.json",
+      "output": "/output/items/examples/attached-through-all/model_verify",
+      "slug": "attached-through-all"
+    },
+    {
+      "compile_error": null,
       "input": "/output/items/examples/bracket/solidcraft.json",
       "output": "/output/items/examples/bracket/model_verify",
       "slug": "bracket"
@@ -65,6 +71,12 @@
       "input": "/output/items/examples/components/solidcraft.json",
       "output": "/output/items/examples/components/model_verify",
       "slug": "components"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/examples/cone-boolean/solidcraft.json",
+      "output": "/output/items/examples/cone-boolean/model_verify",
+      "slug": "cone-boolean"
     },
     {
       "compile_error": null,
@@ -182,6 +194,12 @@
     },
     {
       "compile_error": null,
+      "input": "/output/items/examples/rotated-sketch-cutter/solidcraft.json",
+      "output": "/output/items/examples/rotated-sketch-cutter/model_verify",
+      "slug": "rotated-sketch-cutter"
+    },
+    {
+      "compile_error": null,
       "input": "/output/items/examples/round-top-sketch/solidcraft.json",
       "output": "/output/items/examples/round-top-sketch/model_verify",
       "slug": "round-top-sketch"
@@ -218,6 +236,18 @@
     },
     {
       "compile_error": null,
+      "input": "/output/items/examples/sheet-hem/solidcraft.json",
+      "output": "/output/items/examples/sheet-hem/model_verify",
+      "slug": "sheet-hem"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/examples/sheet-path-flange/solidcraft.json",
+      "output": "/output/items/examples/sheet-path-flange/model_verify",
+      "slug": "sheet-path-flange"
+    },
+    {
+      "compile_error": null,
       "input": "/output/items/examples/simple-box/solidcraft.json",
       "output": "/output/items/examples/simple-box/model_verify",
       "slug": "simple-box"
@@ -248,5 +278,5 @@
     }
   ],
   "schema": 1,
-  "source_sha": "14996cf59c870c9737b6176fd003f4d016b7164b"
+  "source_sha": "8c24f884b18eb17b25cce3b3c3237dee67de71eb"
 }
