@@ -85,8 +85,8 @@ main **ci-build-record**.
 Status: **now / downstream CAD regression**.
 
 Reproduce the downstream Mounting Rail M8 failure with the smallest Forge-owned
-native fixture: one contour flange and one valid face-attached through-cut
-12.5 mm from the rail end. Headless replay is known to succeed downstream while
+native fixture: one contour flange and one valid face-attached through-cut. The
+standalone downstream failure uses Y=37.5 mm; the assembly failure uses Y=12.5 mm. Headless replay is known to succeed downstream while
 live GUI replay of the same replay document fails with a false
 "recess reaching into a bend" error.
 
@@ -153,7 +153,7 @@ critical path.
 
 ## Next checkpoint
 
-1. isolate #845 with a minimal contour-flange + 12.5 mm recess fixture and preserve the exact replay document;
+1. isolate #845 with a minimal contour-flange + valid broad-face recess fixture and preserve the exact replay document;
 2. complete #843 native Revolve on `dev-cad` with unit + native verification;
 3. promote the accepted CAD lane to `main` and publish the next qualified Forge release needed by downstream CAD #30;
 4. resume #788 controlled jobs=2/4/6 measurement independently;
