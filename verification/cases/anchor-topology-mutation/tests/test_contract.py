@@ -5,13 +5,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class AnchorTopologyMutationCommandTests(unittest.TestCase):
     def test_fixed_topology_pick_is_inlined(self):
         document = run_script(
-            ROOT / "examples/anchor-topology-mutation/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )
         commands = document["commands"]
 
