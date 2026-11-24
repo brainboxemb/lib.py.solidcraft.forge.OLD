@@ -105,11 +105,11 @@ groups:
         example: anchored-holes
       - title: "shape.rectangular_pattern(...)"
         description: "Repeat an already-applied native feature in one or two linear directions."
-        snippet: "plate.rectangular_pattern(cut, count=4, spacing=20, direction=Axis.X)"
+        snippet: "plate.rectangular_pattern(hole, count=4, spacing=20, direction=Axis.X)"
         example:
       - title: "shape.circular_pattern(...)"
         description: "Repeat an already-applied native feature around a fixed axis."
-        snippet: "plate.circular_pattern(cut, count=6, axis=Axis.Z)"
+        snippet: "plate.circular_pattern(hole, count=6, axis=Axis.Z)"
         example:
       - title: "shape.at(target, anchor=..., child=...)"
         description: "Place a direct CSG shape anchor on another shape anchor; CENTER-to-CENTER is supported first."
