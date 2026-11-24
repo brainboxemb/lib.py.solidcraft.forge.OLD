@@ -21,8 +21,8 @@ dev-ci
 
 Current permanent heads at this checkpoint:
 
-- `main`: `80bc83e72e34e0dce6e6df745d2ebf8f96111379`;
-- `dev-cad`: `e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3`;
+- `main`: `cd46d6797df319b9d13605c11568990113772700`;
+- `dev-cad`: `51363f3481b9dda7634ad426c8266cf278c5a75b`;
 - `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
 Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
@@ -30,11 +30,13 @@ Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
 The earlier accidental #811 directory split is fully reverted and is not part
 of the active architecture.
 
-Latest published Forge package: **v0.13.2** at exact
-`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
+Latest published Forge package: **v0.14.0** at exact
+`cd46d6797df319b9d13605c11568990113772700`.
 
-The exact v0.13.2 main branch build `45269510406` and central release run
-`45269991837` succeeded. No Forge release is currently active.
+The exact v0.14.0 main branch build `45381336046` and central release run
+`45381885774` succeeded. Annotated tag object
+`71464de5f5290a29b2b235ecf065b8bab35ad2c0` resolves to that exact source.
+No Forge release is currently active.
 
 ## Permanent branch rule
 
@@ -59,58 +61,16 @@ The exact v0.13.2 main branch build `45269510406` and central release run
   `58ead6897a4ac8cafef22a3c1f834491bf61568d`;
 - `lib.py.cad.verification v0.16.0` @
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
-- `docker.cad.solidcraft v0.3.4`.
+- `docker.cad.solidcraft v0.3.5` / SolidCraft 0.48.1.
 
 Pages is web output and is not release evidence. Stable release evidence is the
 main **ci-build-record**.
 
 ## Active execution
 
-### #823 — adopt runtime v0.3.5 / SolidCraft 0.48.1
-
-Status: **now / primary blocker resolution**.
-
-Runtime owner `docker.cad.solidcraft` has released immutable **v0.3.5** at
-exact source `cb4295271173ac88deed92627c74456300c0393f`, qualified against
-SolidCraft **0.48.1**. Authoritative tag build `45366783017` is green for both
-runtime roles and published the GitHub Release.
-
-Pre-release external Forge qualification #821 is complete: temporary PR #822
-used runtime-main `:edge` only for evidence and final Forge run
-`45366059337` passed. The retained #753
-`component-cylinder-occurrence` model verification passed on that candidate.
-PR #822 was closed unmerged so no mutable edge pin entered a permanent lane.
-
-Adopt the immutable release now:
-
-- pin both runtime roles to v0.3.5;
-- set the tested SolidCraft contract to 0.48.1;
-- capture the canonical 0.48.1 command registry from immutable v0.3.5;
-- update immutable runtime-consumption/reference tests and provenance;
-- retain #753 as the product-blocking regression case;
-- require full PR and durable dev-cad acceptance before stable promotion.
-
-### #753 — component-local Cylinder joins across occurrences
-
-Status: **blocked only on #823 immutable runtime adoption**.
-
-CAD #388 is the highest-priority downstream blocker for the five-panel HUB75
-assembly: component bodies are placed correctly, but one loose set of native
-Cylinder join/tool geometry can remain visible at the component-definition
-origin.
-
-PR #754 is merged and the retained fixture is durable-green on dev-cad. Runtime
-owner qualification proved SolidCraft 0.48.1 renders the retained geometry as
-exactly two occurrence islands with no stale third tool object; external Forge
-candidate qualification #821 also passed.
-
-Do not add a product-CAD geometry workaround. Close #753 only after #823 pins
-immutable runtime v0.3.5 / SolidCraft 0.48.1 and the durable Forge dev-cad run
-passes the retained fixture.
-
 ### #779 — native whole-sheet perforation
 
-Status: **now / dev-cad in parallel**.
+Status: **next / dev-cad after release-record sync**.
 
 PR #780 has already been rebuilt on the purpose-aware catalog contract and was
 green before the #753 blocker fixture advanced dev-cad. Refresh it only after
@@ -139,9 +99,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | Issue | Status | Next action |
 | --- | --- | --- |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #823 Adopt runtime v0.3.5 / SolidCraft 0.48.1 | **now / blocker resolution** | Pin immutable v0.3.5, capture 0.48.1 reference evidence and require retained #753 verification. |
-| #753 Component-local Cylinder joins | **blocked on #823 adoption only** | Close after immutable v0.3.5 is durable-green in Forge; then unblock CAD #388. |
-| #779 Native whole-sheet perforation | **next / CAD** | Refresh PR #780 after #823 so it inherits the qualified v0.3.5 runtime baseline. |
+| #779 Native whole-sheet perforation | **next / CAD** | Refresh PR #780 after main -> dev-cad release-record sync; retain v0.3.5 / SolidCraft 0.48.1 baseline. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
@@ -160,11 +118,7 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. complete #823 on `dev-cad`: immutable runtime v0.3.5 / SolidCraft 0.48.1,
-   canonical 0.48.1 command reference, full PR validation and durable branch
-   acceptance;
-2. close #753 and update downstream CAD #388 only after that durable acceptance;
-3. promote the accepted runtime-adoption batch to `main` and make the Forge
-   release decision from the stable main build;
-4. refresh #779 / PR #780 on the accepted runtime baseline;
-5. keep #788 measurement work independent and #751 lower priority.
+1. merge #828 release-record documentation to `main`;
+2. synchronize exact `main -> dev-cad` through the normal permanent-lane policy;
+3. refresh and finish #779 / PR #780 on that post-v0.14.0 dev-cad baseline;
+4. keep #788 concurrency measurement independent and #751 lower priority.
