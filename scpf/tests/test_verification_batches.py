@@ -3,8 +3,6 @@
 from pathlib import Path
 import unittest
 
-from repository_fixtures import FIXTURE_ROOTS
-
 
 ROOT = Path(__file__).resolve().parents[2]
 CAD_CI = ROOT / "cad-ci.yml"
@@ -44,13 +42,17 @@ class VerificationBatchContractTests(unittest.TestCase):
         self.assertEqual(config.count("adapter: mesh-geometry"), 2)
 
     def test_normal_item_configs_have_no_execution_plumbing(self):
-        for root in FIXTURE_ROOTS:
-            for pattern in ("*/ci.yml", "*/*/ci.yml"):
-                for path in sorted(root.glob(pattern)):
-                    text = path.read_text(encoding="utf-8")
-                    self.assertNotIn("steps:", text, path.as_posix())
-                    self.assertNotIn("run:", text, path.as_posix())
-                    self.assertNotIn("copy:", text, path.as_posix())
+        for path in sorted((ROOT / "examples").glob("*/ci.yml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn("steps:", text, path.as_posix())
+            self.assertNotIn("run:", text, path.as_posix())
+            self.assertNotIn("copy:", text, path.as_posix())
+
+        for path in sorted((ROOT / "examples").glob("*/*/ci.yml")):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotIn("steps:", text, path.as_posix())
+            self.assertNotIn("run:", text, path.as_posix())
+            self.assertNotIn("copy:", text, path.as_posix())
 
     def test_batch_items_select_repository_builders(self):
         model = MODEL_BATCH_CI.read_text(encoding="utf-8")
@@ -66,11 +68,11 @@ class VerificationBatchContractTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         text = MODEL_BATCH.read_text(encoding="utf-8")
         self.assertIn("selection_context: direct_dependents", builder)
-        self.assertIn("def active_declarative_items(", text)
+        self.assertIn("def active_declarative_slugs(", text)
         self.assertIn('os.environ.get("CAD_CI_ACTIVE_DEPENDENTS_JSON")', text)
-        self.assertIn("for slug, source_path in items:", text)
+        self.assertIn("for slug in slugs:", text)
         self.assertIn(
-            'f"/output/items/{source_path}/model_verify"',
+            '"output": f"/output/items/examples/{slug}/model_verify"',
             text,
         )
         self.assertNotIn("materialize_case", text)
@@ -93,17 +95,6 @@ class VerificationBatchContractTests(unittest.TestCase):
         )
         self.assertNotIn("examples/*/build123d/**", builder)
         self.assertNotIn("examples/*/cadquery/**", builder)
-        self.assertIn("verification/cases/*/pythonscad/**", builder)
-        self.assertIn("verification/cases/*/pybosl2/**", builder)
-        self.assertIn("def processed_reference_items(", batch)
-        self.assertIn(
-            "for slug, source_path in items_by_slug.items():",
-            batch,
-        )
-        self.assertIn(
-            '/ source_path\n                / implementation',
-            batch,
-        )
         self.assertNotIn("export_build123d", validation)
         self.assertFalse(
             (ROOT / "verification" / "build123d_export.py").exists()

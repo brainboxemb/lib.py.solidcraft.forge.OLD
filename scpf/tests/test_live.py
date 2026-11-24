@@ -16,7 +16,6 @@ from scpf.live import LiveError, new_design, send_commands, send_document
 from scpf.replay import apply_bindings, replay_document
 from scpf.__main__ import read_command_file, main
 from scpf.runner import run_script
-from repository_fixtures import fixture_path
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -66,7 +65,7 @@ class LiveProtocolTests(unittest.TestCase):
         (self.directory / f"{server.port}.token").write_text("abcdeffedcba")
 
     def test_live_plate_is_single_strict_atomic_batch(self):
-        document = run_script(fixture_path("plate", "scpf", "model.py"))
+        document = run_script(ROOT / "examples/plate/scpf/model.py")
         commands = document["commands"]
         server = FakeSolidCraft({
             "id": 1, "ok": True,
@@ -501,7 +500,7 @@ class LiveProtocolTests(unittest.TestCase):
         self.assertEqual(server.request["params"]["param_check"], "strict")
 
     def test_cli_new_creates_empty_design_before_model_batch(self):
-        document = run_script(fixture_path("plate", "scpf", "model.py"))
+        document = run_script(ROOT / "examples/plate/scpf/model.py")
         commands = document["commands"]
         server = FakeSolidCraft([
             {
@@ -523,7 +522,7 @@ class LiveProtocolTests(unittest.TestCase):
         with patch.dict(os.environ, {"SOLIDCRAFT_CONTROL_DIR": str(self.directory)}):
             self.assertEqual(
                 main([
-                    str(fixture_path("plate", "scpf", "model.py")),
+                    str(ROOT / "examples/plate/scpf/model.py"),
                     "--connect",
                     "--new",
                 ]),
@@ -544,7 +543,7 @@ class LiveProtocolTests(unittest.TestCase):
         )
 
     def test_live_bracket_can_send_native_commands(self):
-        commands = run_script(fixture_path("bracket", "scpf", "model.py"))["commands"]
+        commands = run_script(ROOT / "examples/bracket/scpf/model.py")["commands"]
         server = FakeSolidCraft({
             "id": 1, "ok": True, "result": {"completed": len(commands), "results": [],
                                               "undone": 0},
@@ -555,7 +554,7 @@ class LiveProtocolTests(unittest.TestCase):
         self.assertEqual(server.request["params"]["commands"][0]["command"], "parameters.add")
 
     def test_replay_existing_json_unchanged_to_live_gui(self):
-        commands_file = fixture_path("bracket", "source", "bracket.json")
+        commands_file = ROOT / "examples/bracket/source/bracket.json"
         original = json.loads(commands_file.read_text(encoding="utf-8"))
         self.assertEqual(read_command_file(commands_file), original)
         server = FakeSolidCraft({
@@ -578,14 +577,14 @@ class LiveProtocolTests(unittest.TestCase):
 
     def test_replay_rejects_out_option(self):
         with self.assertRaises(SystemExit) as error:
-            main(["replay", str(fixture_path("bracket", "source", "bracket.json")),
+            main(["replay", str(ROOT / "examples/bracket/source/bracket.json"),
                   "--out", "copied.json"])
         self.assertEqual(error.exception.code, 2)
 
     def test_new_requires_connect(self):
         with self.assertRaises(SystemExit) as error:
             main([
-                str(fixture_path("plate", "scpf", "model.py")),
+                str(ROOT / "examples/plate/scpf/model.py"),
                 "--out",
                 str(self.directory / "plate.json"),
                 "--new",

@@ -4,7 +4,6 @@ import tempfile
 import unittest
 
 from scpf.runner import run_script
-from repository_fixtures import fixture_path
 from scpf.model_objects import Placement
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -847,7 +846,7 @@ class AssemblyAttachmentTests(unittest.TestCase):
 
     def test_corner_anchor_compiles_to_native_edge_and_corner_origins(self):
         commands = run_script(
-            fixture_path("corner-anchor", "scpf", "model.py")
+            ROOT / "examples/corner-anchor/scpf/model.py"
         )["commands"]
 
         joint = next(
@@ -1036,7 +1035,7 @@ class AssemblyAttachmentTests(unittest.TestCase):
 
     def test_parametric_attach_keeps_gap_as_native_joint_expression(self):
         commands = run_script(
-            fixture_path("parametric-attach", "scpf", "model.py")
+            ROOT / "examples/parametric-attach/scpf/model.py"
         )["commands"]
 
         gap = next(

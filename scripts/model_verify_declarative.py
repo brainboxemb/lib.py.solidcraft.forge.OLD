@@ -24,7 +24,6 @@ import time
 from forge_example import (
     compile_commands,
     dependency_wheel,
-    item_root,
     verification_wheel,
     write_commands,
 )
@@ -60,21 +59,10 @@ def runtime_image() -> str:
     return value
 
 
-def item_source_path(slug: str | None = None) -> str:
-    """Return the selected repository item path, with legacy Example fallback."""
-
-    value = os.environ.get("CAD_CI_ITEM_PATH", "").strip()
-    if value:
-        return value
-    if slug:
-        return f"examples/{slug}"
-    raise RuntimeError("CAD_CI_ITEM_PATH is required")
-
-
-def verify_path(source_path: str) -> Path:
+def verify_path(slug: str) -> Path:
     """Return one model-local declarative verification file."""
 
-    return item_root(source_path) / "verification" / "verify.py"
+    return ROOT / "examples" / slug / "verification" / "verify.py"
 
 
 def load_definition(path: Path):
@@ -150,7 +138,6 @@ def run_inside_runtime(
     slug: str,
     input_path: Path,
     output_dir: Path,
-    source_path: str | None = None,
 ) -> int:
     """Produce the native model and hand all verification to the library."""
 
@@ -174,8 +161,7 @@ def run_inside_runtime(
         flush=True,
     )
 
-    source_path = source_path or f"examples/{slug}"
-    path = verify_path(source_path)
+    path = verify_path(slug)
     if not path.is_file():
         raise RuntimeError(f"missing verification file: {path}")
 
@@ -288,19 +274,18 @@ def run_host() -> int:
     """Compile with the built Forge wheel and invoke the released runtime."""
 
     slug = item_slug()
-    source_path = item_source_path(slug)
     output = output_root()
     wheel = dependency_wheel()
     verification_package = verification_wheel()
     image = runtime_image()
 
-    if not verify_path(source_path).is_file():
+    if not verify_path(slug).is_file():
         raise RuntimeError(
-            f"missing declarative verification file for {source_path}"
+            f"missing declarative verification file for {slug}"
         )
 
     compile_started = time.perf_counter()
-    document = compile_commands(source_path, wheel)
+    document = compile_commands(slug, wheel)
     write_commands(document, output / "solidcraft.json")
     print(
         "FORGE TIMING "
@@ -363,8 +348,6 @@ exec python "$@"
             "--inside-runtime",
             "--slug",
             slug,
-            "--item-path",
-            source_path,
             "--input",
             "/output/solidcraft.json",
             "--output",
@@ -386,39 +369,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inside-runtime", action="store_true")
     parser.add_argument("--slug")
-    parser.add_argument("--item-path")
     parser.add_argument("--input", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
     if not args.inside_runtime:
-        if (
-            args.slug is not None
-            or args.item_path is not None
-            or args.input is not None
-            or args.output is not None
-        ):
-            parser.error(
-                "--slug/--item-path/--input/--output require --inside-runtime"
-            )
+        if args.slug is not None or args.input is not None or args.output is not None:
+            parser.error("--slug/--input/--output require --inside-runtime")
         return run_host()
 
-    if (
-        not args.slug
-        or not args.item_path
-        or args.input is None
-        or args.output is None
-    ):
-        parser.error(
-            "--inside-runtime requires --slug, --item-path, --input and --output"
-        )
+    if not args.slug or args.input is None or args.output is None:
+        parser.error("--inside-runtime requires --slug, --input and --output")
 
-    return run_inside_runtime(
-        args.slug,
-        args.input,
-        args.output,
-        args.item_path,
-    )
+    return run_inside_runtime(args.slug, args.input, args.output)
 
 
 if __name__ == "__main__":

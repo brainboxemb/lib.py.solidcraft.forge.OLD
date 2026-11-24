@@ -16,7 +16,6 @@ from scpf import (
 )
 from scpf.compiler import ModelError, compile_model
 from scpf.runner import run_script
-from repository_fixtures import fixture_path
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -88,7 +87,7 @@ class SketchAttachmentTests(unittest.TestCase):
 
     def test_focused_attached_through_all_example_still_compiles(self):
         document = run_script(
-            fixture_path("attached-through-all", "scpf", "model.py")
+            ROOT / "examples/attached-through-all/scpf/model.py"
         )
         polygon = next(
             row["params"]

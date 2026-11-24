@@ -1,51 +1,42 @@
 # Forge examples
 
-The `examples/` tree is the deliberately small public teaching catalog.
+The `examples/` tree contains several deliberately different repository roles.
 
-It is **not** the complete Forge Verification catalog.
-
-The current public examples are:
-
-- `simple-box`;
-- `anchored-holes`;
-- `components`;
-- `corner-anchor`.
-
-Each teaching root owns its normal model files plus a local `catalog.yml`:
+A current full model Verification case owns all of:
 
 ```text
 examples/<slug>/
-  catalog.yml
   ci.yml
   model.yml
   README.md
   scpf/model.py
   verification/verify.py
-  ...
+  build123d/{ci.yml,model.py}
+  cadquery/{ci.yml,model.py}
+  pybosl2/{ci.yml,model.py}
+  pythonscad/{ci.yml,model.py}
 ```
 
-`catalog.yml` explicitly declares whether that teaching item is public as an
-Example and whether it also participates in public Verification. A new
-Verification case must not become an Example merely because it has a
-`model.yml`.
+Those cases are discovered from their local files; there is no central
+executable model-case registry.
 
-Public capability verification lives under:
+Any other top-level directory below `examples/` must contain `role.yml`.
+That file makes the exception explicit and records why the directory still
+exists, who currently owns it, and the current keep/promote/retire decision.
 
-```text
-verification/cases/<slug>/
-```
+Supported exception roles are:
 
-Non-public regression/release fixtures live under:
+- `release-verification` — fixture owned by Forge package release verification;
+- `regression-fixture` — focused source fixture whose behavior is owned by a
+  current executing test outside the full model-verification catalog. This also
+  covers deliberately non-native Q1/Q2 fixtures such as `model_authoring`.
 
-```text
-verification/regressions/<slug>/
-```
+Temporary migration candidates and unowned legacy samples are not permanent
+roles. They must be promoted, explicitly superseded, or retired before the
+reconciliation issue closes.
 
-Those roots are independently discovered by CAD-CI and the Pages site.
+The historical lineage of the current 32-case catalog and every current
+exception is recorded in `docs/background/example-history.md`.
 
-Do not put a new public modelling capability under `examples/` unless it is
-intentionally one of the small teaching examples. Normal new capabilities belong
-under `verification/cases/`.
-
-Historical catalog lineage is recorded in
-`docs/background/example-history.md`.
+Do not create a new directory under `examples/` without either the complete
+Verification contract or an explicit local role.

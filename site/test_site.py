@@ -17,11 +17,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 sys.path.insert(0, str(ROOT / "scpf"))
 
-from example_metadata import (
-    discover_example_metadata,
-    discover_verification_metadata,
-    load_section_presentation,
-)
 from html_writer import (
     qualification_current_evidence,
     qualification_reference_comparison,
@@ -31,33 +26,6 @@ from qualification_view import _expected_body_rows, _raw_file_rows
 
 
 class SiteSourceTests(unittest.TestCase):
-    def test_examples_and_verification_are_independent_public_catalogs(self):
-        examples = discover_example_metadata()
-        verification = discover_verification_metadata()
-
-        self.assertEqual(
-            tuple(row.slug for row in examples),
-            ("anchored-holes", "components", "corner-anchor", "simple-box"),
-        )
-        self.assertEqual(len(examples), 4)
-        self.assertGreater(len(verification), len(examples))
-
-        verification_slugs = {row.slug for row in verification}
-        for slug in (
-            "sheet-fold",
-            "sheet-edge-flange",
-            "sheet-contour-flange",
-            "sheet-hem",
-            "sheet-path-flange",
-            "attached-through-all",
-            "rotated-sketch-cutter",
-        ):
-            self.assertIn(slug, verification_slugs)
-            self.assertNotIn(slug, {row.slug for row in examples})
-
-        sections = load_section_presentation()
-        self.assertEqual(sections["sheet-metal"][1], "7 · Sheet metal")
-
     def test_sheet_metal_api_is_first_class_in_reference_guide_and_cheatsheet(self):
         reference = (SITE / "api_reference.py").read_text(encoding="utf-8")
         guide_manifest = json.loads(
@@ -239,8 +207,7 @@ class SiteSourceTests(unittest.TestCase):
     def test_raw_file_inventory_enumerates_complete_durable_item(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            source_path = "verification/cases/sheet-fold"
-            item_root = root / source_path
+            item_root = root / "examples" / "sheet-fold"
             wanted = (
                 "solidcraft.json",
                 "model_verify/verification.json",
@@ -264,10 +231,7 @@ class SiteSourceTests(unittest.TestCase):
                     + path.relative_to(root).as_posix()
                 ),
             )
-            example = SimpleNamespace(
-                slug="sheet-fold",
-                source_path=source_path,
-            )
+            example = SimpleNamespace(slug="sheet-fold")
             rows = _raw_file_rows(stable, example)
             paths = {row["path"] for row in rows}
 
@@ -585,10 +549,10 @@ class SiteSourceTests(unittest.TestCase):
             manifest = json.loads(
                 (out / "manifest.json").read_text(encoding="utf-8")
             )
-            expected_examples = discover_example_metadata()
-            expected_verification = discover_verification_metadata()
-            self.assertEqual(len(manifest["examples"]), len(expected_examples))
-            self.assertEqual(len(manifest["examples"]), 4)
+            expected_count = len(
+                tuple((ROOT / "examples").glob("*/model.yml"))
+            )
+            self.assertEqual(len(manifest["examples"]), expected_count)
 
             verification = json.loads(
                 (out / "verification" / "manifest.json").read_text(
@@ -597,11 +561,7 @@ class SiteSourceTests(unittest.TestCase):
             )
             self.assertEqual(
                 len(verification["cases"]),
-                len(expected_verification),
-            )
-            self.assertGreater(
-                len(verification["cases"]),
-                len(manifest["examples"]),
+                expected_count,
             )
             self.assertEqual(
                 verification["evidence_source"],
@@ -766,7 +726,6 @@ class SiteSourceTests(unittest.TestCase):
                 "4 · Components and occurrences",
                 "5 · Anchors and local frames",
                 "6 · Associative relationships",
-                "7 · Sheet metal",
             ):
                 self.assertIn(heading, verification_index)
             self.assertLess(
@@ -826,7 +785,7 @@ class SiteSourceTests(unittest.TestCase):
             ]
             self.assertEqual(
                 len(example_entries),
-                len(expected_examples),
+                expected_count,
             )
 
 

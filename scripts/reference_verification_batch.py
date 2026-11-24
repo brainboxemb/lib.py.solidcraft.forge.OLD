@@ -18,11 +18,6 @@ from forge_example import verification_wheel
 
 ROOT = Path(__file__).resolve().parents[1]
 IMPLEMENTATIONS = ("pythonscad", "pybosl2")
-ITEM_ROOTS = (
-    ROOT / "examples",
-    ROOT / "verification" / "cases",
-    ROOT / "verification" / "regressions",
-)
 
 
 def output_root() -> Path:
@@ -55,48 +50,35 @@ def source_sha() -> str:
     ).strip()
 
 
-def processed_reference_items() -> dict[str, str]:
-    """Return reference-qualified model IDs mapped to repository source paths."""
-
-    items: dict[str, str] = {}
-    for root in ITEM_ROOTS:
-        if not root.is_dir():
-            continue
-        for ci_path in sorted(root.glob("*/ci.yml")):
-            config = yaml.safe_load(ci_path.read_text(encoding="utf-8")) or {}
-            if config.get("process", True) is False:
-                continue
-            model_root = ci_path.parent
-            if not (
-                model_root / "verification" / "reference_geometry.json"
-            ).is_file():
-                continue
-            missing = [
-                implementation
-                for implementation in IMPLEMENTATIONS
-                if not (model_root / implementation / "ci.yml").is_file()
-                or not (model_root / implementation / "model.py").is_file()
-            ]
-            if missing:
-                raise RuntimeError(
-                    f"{model_root.name}: incomplete reference set: "
-                    + ", ".join(missing)
-                )
-            slug = model_root.name
-            source_path = model_root.relative_to(ROOT).as_posix()
-            if slug in items:
-                raise RuntimeError(f"duplicate reference model id: {slug}")
-            items[slug] = source_path
-
-    if not items:
-        raise RuntimeError("no processed reference models found")
-    return items
-
-
 def processed_reference_slugs() -> tuple[str, ...]:
-    """Return reference-qualified model IDs in stable order."""
+    """Return process:true models with the remaining Forge-owned reference set."""
 
-    return tuple(processed_reference_items())
+    slugs: list[str] = []
+    for ci_path in sorted((ROOT / "examples").glob("*/ci.yml")):
+        config = yaml.safe_load(ci_path.read_text(encoding="utf-8")) or {}
+        if config.get("process", True) is False:
+            continue
+        model_root = ci_path.parent
+        if not (
+            model_root / "verification" / "reference_geometry.json"
+        ).is_file():
+            continue
+        missing = [
+            implementation
+            for implementation in IMPLEMENTATIONS
+            if not (model_root / implementation / "ci.yml").is_file()
+            or not (model_root / implementation / "model.py").is_file()
+        ]
+        if missing:
+            raise RuntimeError(
+                f"{model_root.name}: incomplete reference set: "
+                + ", ".join(missing)
+            )
+        slugs.append(model_root.name)
+
+    if not slugs:
+        raise RuntimeError("no processed reference models found")
+    return tuple(slugs)
 
 
 def run_inside_runtime(cases: str, commit: str) -> int:
@@ -155,8 +137,8 @@ def run_inside_runtime(cases: str, commit: str) -> int:
     )
 
 
-def build_item_projections(output: Path, items_by_slug: dict[str, str]) -> int:
-    """Build child reference output under each CAD-CI source item path."""
+def build_item_projections(output: Path, slugs: tuple[str, ...]) -> int:
+    """Build every child-owned reference output once from the aggregate report."""
 
     references = output / "references"
     report_path = references / "verification.json"
@@ -170,7 +152,7 @@ def build_item_projections(output: Path, items_by_slug: dict[str, str]) -> int:
     items.mkdir(parents=True)
 
     failed = False
-    for slug, source_path in items_by_slug.items():
+    for slug in slugs:
         model = next(
             (
                 row
@@ -204,7 +186,8 @@ def build_item_projections(output: Path, items_by_slug: dict[str, str]) -> int:
 
             destination = (
                 items
-                / source_path
+                / "examples"
+                / slug
                 / implementation
                 / "references"
             )
@@ -265,8 +248,7 @@ def run_batch() -> int:
 
     verification_package = verification_wheel()
     image = runtime_image()
-    reference_items = processed_reference_items()
-    slugs = tuple(reference_items)
+    slugs = processed_reference_slugs()
 
     batch_started = time.perf_counter()
     pull_started = time.perf_counter()
@@ -325,7 +307,7 @@ def run_batch() -> int:
         return completed.returncode
 
     projection_started = time.perf_counter()
-    projection_status = build_item_projections(output, reference_items)
+    projection_status = build_item_projections(output, slugs)
     print(
         "REFERENCE BATCH TIMING "
         f"projection_s={time.perf_counter() - projection_started:.3f}",

@@ -1,0 +1,9 @@
+schema: 1
+role: regression-fixture
+decision: keep
+owner: examples/sheet-edge-flange/verification/verify.py
+reason: >
+  Issue #682 requires focused native SolidCraft qualification for edge flange
+  authoring, rule inheritance, flat-pattern continuity and saved-design
+  height/angle mutation. This fixture deliberately stays outside the public
+  Verification catalog.

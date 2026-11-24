@@ -40,8 +40,7 @@ The active CI structure is defined by:
 - `ci/forge-release/ci.yml`
 - `ci/release-policy/ci.yml` — tests release validation/publication policy without CAD runtimes
 - `ci/builders/*/builder.yml` — Forge-owned executable repository builders
-- model-item `ci.yml` files under `examples/`,
-  `verification/cases/` and `verification/regressions/`
+- migrated `examples/<model>/ci.yml` files
 - `scripts/tool_ci.py`
 - `scripts/tool_verify.py`
 - `scripts/forge_example.py`
@@ -52,20 +51,11 @@ The active CI structure is defined by:
 
 The generic planner/executor is `tool.cad.ci`.
 
-Forge model items declare item-level `process` state in their own
-`ci.yml`. Repository roots have distinct public roles:
-
-```text
-examples/<slug>/                 curated teaching examples only
-verification/cases/<slug>/       public capability Verification
-verification/regressions/<slug>/ non-public regression/release fixtures
-```
-
-The four teaching examples declare their public roles explicitly through local
-`catalog.yml`. Public Verification membership is discovered independently from
-`verification/cases/` plus teaching examples that explicitly opt in. Forge
-does not interpret `process`; released `tool.cad.ci` / `lib.py.cad.ci`
-own selection and execution semantics.
+Forge model items declare item-level `process` state in
+`examples/<model>/ci.yml`. The reconciled catalog contains 36 active model-verification items: the final
+32 historical cases plus four restored historical native cases from #559.
+`model_authoring` remains an explicit Q1/Q2-only regression fixture. Forge does not interpret `process`; released `tool.cad.ci` /
+`lib.py.cad.ci` own its selection and execution semantics.
 
 ## Current verification steps
 
@@ -76,7 +66,7 @@ forge-package
   ├─ forge-tests
   ├─ forge-release
   └─ model-verification-batch
-       └─ <item-root> native SolidCraft verification
+       └─ examples/<model> native SolidCraft verification
 
 CAD-CI verification-package capability
   ├─ model-verification-batch builder (verification_package: true)
@@ -114,33 +104,24 @@ All current model items use the declarative verification path, have native
 contracts. Generic build123d/CadQuery export and mesh verification are not
 implemented in Forge.
 
-The historical catalog lineage is documented in
-`docs/background/example-history.md`. Public catalog membership is owned by
-the three current repository roots above, not by one shared `examples/`
-namespace.
+The catalog lineage and the additional non-catalog fixtures below `examples/`
+are documented in `docs/background/example-history.md`.
 
 ## Model ownership
 
-A declarative model item may live in any of the three role roots. Its
-internal contract is path-independent:
+A declaratively migrated model may contain:
 
 ```text
-<item-root>/
+examples/<model>/
   ci.yml
-  model.yml                  # public cases/examples only
-  README.md                  # public cases/examples only
+  model.yml
+  README.md
   scpf/
     model.py
-  tests/
-    test_contract.py
   verification/
     verify.py
     <model-specific command/data files>
 ```
-
-Slug is model identity; repository path is source location. Shared site/evidence
-code must use the discovered item path and must not reconstruct
-`examples/<slug>`.
 
 All current historical model-verification cases use
 `verification/verify.py`. Do not add new procedural per-model verification

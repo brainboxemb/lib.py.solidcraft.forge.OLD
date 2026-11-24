@@ -15,11 +15,10 @@ from scpf import (
 )
 from scpf.compiler import compile_model
 from scpf.runner import run_script
-from repository_fixtures import fixture_path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-MODEL = fixture_path("slot-family", "scpf", "model.py")
+MODEL = ROOT / "examples/slot-family/scpf/model.py"
 
 
 class NativeSlotFamilyTests(unittest.TestCase):
