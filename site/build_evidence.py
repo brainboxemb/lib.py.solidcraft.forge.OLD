@@ -317,7 +317,7 @@ def _example(
     manifest_items: dict[str, Any],
     slug: str,
 ) -> ExampleBuildEvidence:
-    """Load one accepted model item and all four independent references."""
+    """Load one accepted model item plus any independent references present."""
 
     source_path = f"examples/{slug}"
     item = _item(root, manifest_items, source_path)
@@ -426,6 +426,7 @@ def _example(
     references = tuple(
         _reference(root, manifest_items, slug, implementation)
         for implementation in IMPLEMENTATIONS
+        if f"examples/{slug}/{implementation}" in manifest_items
     )
 
     return ExampleBuildEvidence(
