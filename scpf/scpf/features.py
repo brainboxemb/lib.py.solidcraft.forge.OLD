@@ -1398,9 +1398,11 @@ def _sheet_dimensionless_parameter_names(node, found=None):
 
 
 _AUTO_HISTORY_FEATURE_NAMES = {
-    "solid.hole": "Hole",
+    "solid.box": "Box",
+    "solid.sphere": "Sphere",
     "solid.cylinder": "Cylinder",
     "solid.cone": "Cone",
+    "solid.hole": "Hole",
 }
 
 
