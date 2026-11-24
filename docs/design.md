@@ -944,7 +944,7 @@ The stable site source boundary is:
 
 ```text
 examples/<slug>/model.yml
-  generic section/priority/title/description/parameters/stages
+  generic purpose/section/priority/title/description/parameters/stages
             |
 examples/<slug>/README.md
   preserved human engineering explanation
@@ -964,8 +964,10 @@ external templates + static assets
 generated Pages
 ```
 
-The generator discovers the 32 example directories. There is no central
-`EXAMPLES` catalog duplicating their local metadata or documentation.
+The generator discovers canonical model metadata from the existing model
+directories. It derives the curated Examples and public Verification catalogs
+independently from normalized `model.yml.purpose`. There is no central
+`EXAMPLES` or Verification membership registry duplicating local metadata.
 
 The example metadata loader validates the agreed `model.yml` presentation schema. A separate documentation loader reads the local `README.md` and
 preserves its engineering statements without inference. Numeric truth is not
@@ -1313,13 +1315,14 @@ architecture.
 
 ### Verification catalog grouping
 
-The verification overview is not a flat alphabetical card list. The renderer
-uses the existing `ExampleMetadata.section` value loaded from each
-`examples/<slug>/model.yml` as the grouping key. Group membership therefore
-stays owned by each example and remains part of the agreed presentation metadata
-schema.
+The verification overview is not a flat alphabetical card list. A model is a
+Verification case only when its normalized canonical `purpose` contains
+`verification`. The renderer then uses that model's `section` value as the
+grouping key. A model whose purpose contains `example` is independently
+eligible for the curated Examples presentation; a model may intentionally carry
+both purposes without duplicating source.
 
-The renderer groups cards after discovery. Section order is determined by the
+The renderer groups Verification cards after purpose selection. Section order is determined by the
 section configuration's `priority`; example order inside a section is determined
 by each example's local `model.yml.priority`, with slug only as a deterministic
 tie-breaker. No central section-membership or example-order registry is introduced.
@@ -1336,6 +1339,7 @@ parameters    -> 3 · Parameters and dependencies
 components    -> 4 · Components and occurrences
 anchors       -> 5 · Anchors and local frames
 associativity -> 6 · Associative relationships
+sheet-metal   -> 7 · Sheet metal
 ```
 
 
@@ -2353,11 +2357,15 @@ CAD repositories do the same through their existing catalog loader. This gives
 both repositories one executable schema definition without coupling the Forge
 package to website tooling.
 
-The contract rejects unknown keys. There is deliberately no extension namespace
-inside `model.yml`: allowing arbitrary consumer fields would recreate the schema
-drift that #703 is intended to remove. A consumer-specific presentation setting
-must use a separately named presentation source; CI/source/verification/generated
-state remains in its existing owner layer.
+The contract rejects unknown keys. `purpose` is part of the canonical shared
+contract, not a consumer extension. It accepts `example`, `verification`, or
+both values and normalizes scalar/list YAML forms to one semantic set. Public
+catalog membership is derived only from that canonical field.
+
+There is deliberately no extension namespace inside `model.yml`: allowing
+arbitrary consumer fields would recreate the schema drift that #703 is intended
+to remove. CI execution state, verification expectations and generated state
+remain in their existing owner layers.
 
 ## Component-local Sketch feature namespacing
 
