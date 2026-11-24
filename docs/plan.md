@@ -85,21 +85,36 @@ after exact PR run `45389448588`; durable run `45390362018` also
 succeeded and #347 is closed. Downstream CAD #135 still needs a Forge release
 containing this state.
 
-### #753 — component-local Cylinder history across occurrences
+### #753 — restore component context across replay phases
 
-Status: **reopened / primary product-CAD blocker**.
+Status: **now / root cause isolated**.
 
-CAD #388 consumed released Forge v0.14.0 and runtime v0.3.5 / SolidCraft 0.48.1.
-Its exact durable run `45389479040` succeeded, but the source-matched five-panel
-render still shows multiple detached joined-Cylinder features. The accepted
-Box+one-Cylinder fixture and v0.3.5 two-island smoke are therefore insufficient.
+The expanded HUB75 owner fixture is durable on `dev-cad` and reproduces the
+product defect. Runtime issue #26 reduced it further:
 
-The expanded owner fixture merged as `89e04abd40930aef48d6519e69e2672f6bc4d88f`.
-Durable run `45391583228` and build
-`0acc9b15beb9e54b9f665917c6017c00123e627f` reproduce the detached Cylinder
-render defect while native verification still reports exactly five intended
-panel bodies. Runtime qualification #26 is reopened and now owns a hard
-transparent render-island regression. No CAD-local geometry workaround.
+- one Box + one joined Cylinder authored before the first save: clean;
+- the same Box + Cylinder authored only after reopen: one detached Cylinder
+  island per occurrence;
+- full HUB75 feature history is not required for the failure.
+
+Forge headless replay already restores transient active-Sketch state between
+binding phases, but does not restore active component state. A phase that
+continues a reusable component after save/reopen therefore runs with root as
+the SolidCraft session context even though feature targets still name the
+component body. The boolean body is correct while the visible feature/tool is
+owned by the wrong presentation/history context.
+
+Fix the transport generically:
+
+- track the active component across replay chunks;
+- prepend native `component.activate` when a new CLI phase continues inside a
+  non-root component;
+- restore component context before any `sketch.edit` transport command;
+- keep transport-only restore commands out of authored replay results/logs;
+- prove the existing HUB75 owner preview becomes clean without changing model
+  commands or product geometry;
+- retain the runtime timing regression until the Forge fix is externally
+  accepted by CAD #388.
 
 ### #751 — native exploded views
 
@@ -124,10 +139,10 @@ Verification coverage or reintroduce per-model runtime startup.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #753 Component-local Cylinder history across occurrences | **now / primary blocker** | Reproduce the actual HUB75 multi-feature failure on SolidCraft 0.48.1 and isolate the smallest failing sequence. |
+| #753 Component replay context across save/reopen | **now / fix** | Restore active component in headless replay phases and prove the HUB75 owner/product render becomes clean. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
 | #779 Native whole-sheet perforation | **complete / durable-green** | Accepted at `f87b93dd603b5dc808a3365638cdf39f6ec52d65`; issue closed. |
-| #751 Native exploded views | **parallel / implementation ready for validation** | Validate the refreshed branch on current dev-cad, then unblock CAD #367 after release. |
+| #751 Native exploded views | **complete / durable-green** | Include in the next Forge release before CAD #367 consumes it. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
 | #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
@@ -145,8 +160,10 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. keep #753/#26 as the primary runtime/product blocker until the hard render
-   regression is fixed;
-2. validate #751 native exploded views in parallel against current dev-cad;
-3. keep #788 concurrency measurement independent;
-4. release accepted CAD unblockers only after their owner regressions are green.
+1. fix #753 by restoring active component context across headless replay phases;
+2. require the expanded HUB75 owner preview to lose all detached Cylinder
+   islands on the same runtime v0.3.5 / SolidCraft 0.48.1;
+3. re-run CAD #388 product acceptance on the fixed Forge head before any
+   release claim;
+4. keep #788 performance work independent; #347 and #751 are complete and
+   wait only for a release after the primary regression is resolved.
