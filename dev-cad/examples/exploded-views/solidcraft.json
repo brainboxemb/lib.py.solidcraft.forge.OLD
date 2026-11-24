@@ -1,0 +1,101 @@
+{
+  "format": "scpf-replay",
+  "version": 2,
+  "commands": [
+    {
+      "command": "component.create",
+      "params": {
+        "name": "ExplodeBlock",
+        "grounded": true
+      },
+      "bind": {
+        "$explodeblock_occurrence_1": "occurrence"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "length": 30.0,
+        "width": 20.0,
+        "height": 10.0,
+        "corner": [
+          -15.0,
+          -10.0,
+          0
+        ],
+        "body_name": "ExplodeBlock"
+      }
+    },
+    {
+      "command": "component.activate",
+      "params": {
+        "component": "root"
+      }
+    },
+    {
+      "command": "occurrence.copy",
+      "params": {
+        "component": "ExplodeBlock",
+        "translate": [
+          40.0,
+          0.0,
+          0.0
+        ]
+      },
+      "bind": {
+        "$explodeblock_occurrence_2": "occurrence"
+      }
+    },
+    {
+      "command": "occurrence.copy",
+      "params": {
+        "component": "ExplodeBlock",
+        "translate": [
+          80.0,
+          0.0,
+          0.0
+        ]
+      },
+      "bind": {
+        "$explodeblock_occurrence_3": "occurrence"
+      }
+    },
+    {
+      "command": "explode.create",
+      "params": {
+        "name": "Automatic",
+        "scale": 1.25
+      }
+    },
+    {
+      "command": "explode.create",
+      "params": {
+        "name": "Instructions",
+        "moves": [
+          {
+            "occurrence": "$explodeblock_occurrence_2",
+            "translate": [
+              0.0,
+              25.0,
+              0.0
+            ]
+          },
+          {
+            "occurrence": "$explodeblock_occurrence_3",
+            "translate": [
+              0.0,
+              50.0,
+              10.0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "command": "explode.show",
+      "params": {
+        "view": null
+      }
+    }
+  ]
+}

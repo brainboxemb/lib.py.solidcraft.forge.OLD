@@ -20,6 +20,7 @@
     "corner-anchor": "4738e63eb8197b828b29c5e617b47ba66463a7d7c1919923a193b1c858e2ce25",
     "eight-corner-brackets": "e0eecf20f5e17c5e394be33da6a3d7f44267668cbf722ffcfa6c91e10fad9ea8",
     "eight-flightcase-corners": "4714e8c41b563e0f36ce946e8a0987665846d238fc555615f5f90db47de0e7c8",
+    "exploded-views": "65a001b50ec4841aded1f7662328936193983261e37cfd7c9dc93e7ef955cabc",
     "four-corner-l": "5deb7e4f670378490b1bc1a75939f582ed9725027f72df68795d65370e729274",
     "group-hierarchy": "b5a966528c7f2626763f95d535537e5c814421ba65bb5dfc297da07e72595986",
     "hole-family": "39d9aeb2bfb92aea7ad84448ac0a5e7b020ed1670f6ea70bf0a8be07b21ddc80",
@@ -70,6 +71,7 @@
     "corner-anchor",
     "eight-corner-brackets",
     "eight-flightcase-corners",
+    "exploded-views",
     "four-corner-l",
     "group-hierarchy",
     "hole-family",
@@ -101,13 +103,13 @@
     "top-sketch-after-chamfer",
     "xz-anchor"
   ],
-  "bundle_sha256": "b475523fff815f5b3da758d371352073ba40f7195127ee0e72f9251da4314cbf",
-  "duration_seconds": 41.001,
+  "bundle_sha256": "8f815be092298bfb7b3041e634aad409fbebeca4b712c4ade6565023de7b6d95",
+  "duration_seconds": 65.719,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-24T12:07:42.243Z",
+  "finished_at": "2026-11-24T12:31:05.996Z",
   "item": "model-verification-batch",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -115,15 +117,15 @@
     "items": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "88a4eaac4e2f9b80ce592b6a37208244ea640e0359b360481b5fc0d222bf9ef0"
+      "sha256": "b14cd1325e03f423ae16f35fca5592eb4ba8de1f3b2a66d108786138dc122b0f"
     }
   },
-  "run_finished_at": "2026-11-24T12:08:44.217Z",
-  "run_started_at": "2026-11-24T12:06:53.591Z",
+  "run_finished_at": "2026-11-24T12:32:34.317Z",
+  "run_started_at": "2026-11-24T12:29:47.239Z",
   "schema": 6,
-  "started_at": "2026-11-24T12:07:01.246Z",
+  "started_at": "2026-11-24T12:30:00.283Z",
   "status": "pass",
   "step": "verify_models",
-  "target_spec_digest": "b724fcddb40ea2e44dfe2cdb3136b4c455aaaa1faa8e2dd1e8913b1c5478022c",
+  "target_spec_digest": "d2758ab8b519b34a2a7982918622b146fd07bbb36a4583300a27487889ae03d1",
   "timeout_seconds": null
 }
