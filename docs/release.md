@@ -35,35 +35,51 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.14.0**.
+Latest actual Forge release: **v0.15.0**.
 
-- annotated tag: `v0.14.0`;
+- annotated tag: `v0.15.0`;
 - annotated tag object:
-  `71464de5f5290a29b2b235ecf065b8bab35ad2c0`;
+  `1aa6304b412269163cffe19045cdd4b13b1f7e74`;
 - exact source:
-  `cd46d6797df319b9d13605c11568990113772700`;
-- published GitHub Release: `v0.14.0`;
+  `efc88bfcaf452051d721347f2e5ca561decad654`;
+- published GitHub Release: `v0.15.0`;
 - qualified runtime: `docker.cad.solidcraft v0.3.5`;
 - qualified SolidCraft: `0.48.1`;
 - canonical SolidCraft registry: 866 commands under
   `docs/reference/solidcraft/0.48.1/`;
-- exact main branch build: `45381336046`;
-- central release run: `45381885774`.
+- exact main branch build: `45399136016`;
+- central release run: `45399592693`.
 
 The annotated tag resolves exactly to the release source above.
 
-v0.14.0 is the first Forge release carrying:
+v0.15.0 ships the accepted post-v0.14 CAD/API batch:
 
-- canonical `model.yml.purpose` classification for curated Examples and the
-  broader Verification catalog (#785);
-- immutable runtime v0.3.5 / SolidCraft 0.48.1 adoption with the retained
-  component-local joined-Cylinder occurrence regression (#753/#823);
-- first-class Sheet metal API Guide/Reference/Cheatsheet documentation (#786).
+- generalized native feature-pattern sources, including applied Hole/native
+  primitive seeds (#347);
+- native exploded Assembly presentation without mutating assembled placements
+  (#751);
+- native whole-sheet `Shape.perforate(...)` manufacturing fields (#779);
+- active-component restoration across headless save/reopen replay phases
+  (#753).
 
-This release supersedes v0.13.2 as the recommended consumer baseline for the
-current CAD repository. Product-CAD consumers that need the HUB75 five-panel
-component fix should use Forge v0.14.0 together with the qualified
-`cad-solidcraft:v0.3.5` runtime.
+The #753 fix has also passed final released-source product acceptance. CAD #388
+adopted exact v0.15.0 without geometry/runtime changes as
+`0d3081a1b76148854d82e2bf0e1593571fb7fb60`; durable run
+`45400699265` succeeded. The exact durable `hub75-screen` render blob
+`ae6ce9178ba354ac67899044814bfb1ff91661b2` was visually inspected and
+contains the five intended panel occurrences with no detached component-local
+Cylinder/tool geometry.
+
+### Previous v0.14.0 baseline
+
+v0.14.0 remains valid and immutable at exact source
+`cd46d6797df319b9d13605c11568990113772700`, qualified against immutable
+runtime v0.3.5 / SolidCraft 0.48.1. Its exact main build was
+`45381336046` and central release run was `45381885774`.
+
+v0.14.0 established the 0.48.1 runtime/catalog baseline, but later CAD #388
+proved it did not fix the real save/reopen replay-context presentation defect.
+That Forge fix first ships in v0.15.0.
 
 ### Previous v0.13.2 baseline
 
@@ -73,7 +89,7 @@ v0.13.2 remains valid and immutable at exact source
 `45269991837`.
 
 v0.13.2 was the consumer hotfix for #796 and remains part of the historical
-release chain; the v0.14.0 record above does not rewrite it.
+release chain.
 
 ## Consumer workflow
 
@@ -144,6 +160,7 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 No Forge release is currently active.
 
-Resume the post-v0.13.2 CAD/API/documentation work. Product-CAD PR #406 should
-consume the exact released v0.13.2 source before any later Forge release is
-considered.
+v0.15.0 is the recommended released Forge baseline for current CAD consumers
+that need #347 pattern sources, #751 exploded views, #779 sheet perforation or
+the #753 replay-context fix. Resume normal Forge backlog work; release mechanics
+remain unchanged.
