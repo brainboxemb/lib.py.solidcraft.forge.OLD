@@ -11,6 +11,11 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+from example_metadata import (
+    discover_example_metadata,
+    discover_verification_metadata,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES_ROOT = ROOT / "examples"
@@ -171,19 +176,41 @@ def load_example_documentation(example_root: Path) -> ExampleDocumentation:
     )
 
 
-def discover_example_documentation(
-    root: Path = EXAMPLES_ROOT,
+def _documentation_for_metadata(
+    metadata,
+    *,
+    label: str,
 ) -> tuple[ExampleDocumentation, ...]:
-    """Discover public example documentation from model.yml membership."""
-
-    rows = [
-        load_example_documentation(path.parent)
-        for path in sorted(Path(root).glob("*/model.yml"))
-    ]
+    rows = tuple(
+        load_example_documentation(EXAMPLES_ROOT / row.slug)
+        for row in metadata
+    )
     if not rows:
-        raise ValueError(f"no verified examples found below {root}")
+        raise ValueError(f"no {label} documentation discovered")
 
     slugs = [row.slug for row in rows]
     if len(slugs) != len(set(slugs)):
-        raise ValueError("duplicate documented example slugs discovered")
-    return tuple(rows)
+        raise ValueError(f"duplicate documented {label} slugs discovered")
+    return rows
+
+
+def discover_example_documentation(
+    root: Path = EXAMPLES_ROOT,
+) -> tuple[ExampleDocumentation, ...]:
+    """Discover documentation for models whose purpose includes example."""
+
+    return _documentation_for_metadata(
+        discover_example_metadata(root),
+        label="Example",
+    )
+
+
+def discover_verification_documentation(
+    root: Path = EXAMPLES_ROOT,
+) -> tuple[ExampleDocumentation, ...]:
+    """Discover documentation for models whose purpose includes verification."""
+
+    return _documentation_for_metadata(
+        discover_verification_metadata(root),
+        label="Verification",
+    )
