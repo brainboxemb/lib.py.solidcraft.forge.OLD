@@ -5,8 +5,8 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "36e49c687d26523a1c9c9ccf333dd2cab634b972ef5669209defc4f9a7e0f254",
-          "size": 2505
+          "sha256": "77e25937c9018162ece97ea311aa3811a1ff5e9ad5d9a64a1af95b408d10f345",
+          "size": 2103
         }
       ],
       "error": null,
@@ -33,7 +33,7 @@
                 "min": [
                   -50.0,
                   -50.0,
-                  -2.7698767739501816e-32
+                  0.0
                 ]
               },
               "expected": {
@@ -71,8 +71,8 @@
             },
             "selector": "sole",
             "volume": {
-              "actual": 58190.44263153228,
-              "delta": 0.0,
+              "actual": 58190.44263153226,
+              "delta": 1.4551915228366852e-11,
               "expected": 58190.44263153228,
               "kind": "scalar",
               "label": "sole body volume",
@@ -93,24 +93,12 @@
           "label": "SolidCraft parameters",
           "pass": true
         },
-        "sketches": [
-          {
-            "actual": {
-              "curves": 1,
-              "name": "BoltHole",
-              "profiles": 1,
-              "status": "solved"
-            },
-            "expected": {
-              "curves": 1,
-              "name": "BoltHole",
-              "profiles": 1,
-              "status": "solved"
-            },
-            "label": "BoltHole sketch",
-            "pass": true
-          }
-        ],
+        "sketch_count": {
+          "actual": 0,
+          "expected": 0,
+          "label": "SolidCraft sketch count",
+          "pass": true
+        },
         "timeline": {
           "actual": [
             {
@@ -118,12 +106,8 @@
               "type": "BoxFeature"
             },
             {
-              "name": "BoltHole",
-              "type": "Sketch"
-            },
-            {
-              "name": "BoltHole",
-              "type": "ExtrudeFeature"
+              "name": "Hole1",
+              "type": "HoleFeature"
             },
             {
               "name": "CircularPattern1",
@@ -136,12 +120,8 @@
               "type": "BoxFeature"
             },
             {
-              "name": "BoltHole",
-              "type": "Sketch"
-            },
-            {
-              "name": "BoltHole",
-              "type": "ExtrudeFeature"
+              "name": "Hole1",
+              "type": "HoleFeature"
             },
             {
               "name": "CircularPattern1",
@@ -161,14 +141,14 @@
         {
           "kind": "file",
           "path": "saved_designs/bolts_4/model.sc",
-          "sha256": "2d808205a62fa736b468091a3d756801d09cb81e08347da9be1d2a61707710fe",
-          "size": 13270
+          "sha256": "f49b553fa052d50b16043a87bf8462a184fee404e5067039bf406f78aac775e9",
+          "size": 13152
         },
         {
           "kind": "file",
           "path": "saved_designs/bolts_4/measurements.json",
-          "sha256": "39779a5eac50450add1c89fe8a443ce39ede71f19410b8764318e35bac616a75",
-          "size": 2499
+          "sha256": "477aebb23d33ba959970ee6f7120523abe45d2054919bfaea6370b25733b59db",
+          "size": 2117
         }
       ],
       "error": null,
@@ -222,12 +202,8 @@
               "type": "BoxFeature"
             },
             {
-              "name": "BoltHole",
-              "type": "Sketch"
-            },
-            {
-              "name": "BoltHole",
-              "type": "ExtrudeFeature"
+              "name": "Hole1",
+              "type": "HoleFeature"
             },
             {
               "name": "CircularPattern1",
@@ -240,12 +216,8 @@
               "type": "BoxFeature"
             },
             {
-              "name": "BoltHole",
-              "type": "Sketch"
-            },
-            {
-              "name": "BoltHole",
-              "type": "ExtrudeFeature"
+              "name": "Hole1",
+              "type": "HoleFeature"
             },
             {
               "name": "CircularPattern1",

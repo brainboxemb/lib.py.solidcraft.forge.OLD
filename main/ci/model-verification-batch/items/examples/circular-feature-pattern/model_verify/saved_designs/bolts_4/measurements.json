@@ -11,12 +11,12 @@
         "min": [
           -50.0,
           -50.0,
-          -2.7698767739501816e-32
+          0.0
         ]
       },
       "center_of_mass": [
-        -3.5182304959675423e-16,
-        2.8111316247112707e-16,
+        -3.7017905404922663e-17,
+        6.826102886125261e-16,
         3.0
       ],
       "closed": true,
@@ -63,23 +63,12 @@
       "value": 4.0
     }
   ],
-  "sketches": [
-    {
-      "curves": 1,
-      "dof": 1,
-      "id": 2,
-      "name": "BoltHole",
-      "profiles": 1,
-      "status": "solved",
-      "visible": false,
-      "wires_ok": true
-    }
-  ],
+  "sketches": [],
   "timeline": [
     {
       "error": null,
       "id": 1,
-      "ms": 3.400049,
+      "ms": 2.8552500000000003,
       "name": "Box1",
       "rolled_back": false,
       "suppressed": false,
@@ -89,27 +78,17 @@
     {
       "error": null,
       "id": 2,
-      "ms": 0.080029,
-      "name": "BoltHole",
+      "ms": 13.774016999999999,
+      "name": "Hole1",
       "rolled_back": false,
       "suppressed": false,
-      "type": "Sketch",
+      "type": "HoleFeature",
       "warning": null
     },
     {
       "error": null,
       "id": 3,
-      "ms": 14.678717,
-      "name": "BoltHole",
-      "rolled_back": false,
-      "suppressed": false,
-      "type": "ExtrudeFeature",
-      "warning": null
-    },
-    {
-      "error": null,
-      "id": 4,
-      "ms": 68.968721,
+      "ms": 58.302887999999996,
       "name": "CircularPattern1",
       "rolled_back": false,
       "suppressed": false,

@@ -1,0 +1,72 @@
+{
+  "commands": [
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 48,
+        "translate": [
+          -320.0,
+          0,
+          160.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "angle": "90 deg"
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 49,
+        "translate": [
+          -160.0,
+          0,
+          160.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          -1.0
+        ],
+        "angle": "180 deg"
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 50,
+        "translate": [
+          160.0,
+          0,
+          160.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          -1.0
+        ],
+        "angle": "180 deg"
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 51,
+        "translate": [
+          320.0,
+          0,
+          160.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "angle": "90 deg"
+      }
+    }
+  ]
+}

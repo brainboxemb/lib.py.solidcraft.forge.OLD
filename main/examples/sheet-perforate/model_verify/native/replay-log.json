@@ -1,0 +1,140 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "65d85d2ecd50e3eb8cf0ac87d5c2e216633855763723ceab9541878a9f05eebf",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "width",
+        "expression": "60",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "depth",
+        "expression": "40",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "thickness",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 3,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "bend_radius",
+        "expression": "2",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 4,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "k_factor",
+        "expression": "0.5",
+        "unit": ""
+      }
+    },
+    {
+      "index": 5,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "perforation_diameter",
+        "expression": "5",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 6,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "perforation_pitch",
+        "expression": "10",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 7,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "perforation_margin",
+        "expression": "5",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 8,
+      "command": "sheet.manage_rules",
+      "resolved_params": {
+        "name": "Perforation Rule",
+        "thickness": "thickness",
+        "k_factor": "k_factor",
+        "bend_radius": "bend_radius",
+        "active": true
+      }
+    },
+    {
+      "index": 9,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XY",
+        "name": "Blank"
+      }
+    },
+    {
+      "index": 10,
+      "command": "sketch.rectangle.two_point",
+      "resolved_params": {
+        "p0": [
+          "-(width / 2)",
+          "-(depth / 2)"
+        ],
+        "p1": [
+          "width / 2",
+          "depth / 2"
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 12,
+      "command": "sheet.flange",
+      "resolved_params": {
+        "type": "base",
+        "sketch": "Blank",
+        "rule": "Perforation Rule",
+        "body_name": "SheetPerforate"
+      }
+    },
+    {
+      "index": 13,
+      "command": "sheet.perforate",
+      "resolved_params": {
+        "diameter": "perforation_diameter",
+        "pitch": "perforation_pitch",
+        "body": "SheetPerforate",
+        "margin": "perforation_margin",
+        "pattern": "square"
+      }
+    }
+  ],
+  "completed": 14
+}

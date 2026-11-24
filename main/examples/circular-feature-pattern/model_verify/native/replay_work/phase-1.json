@@ -31,9 +31,34 @@
       }
     },
     {
-      "command": "model.faces",
+      "command": "solid.hole",
       "params": {
-        "body": "CircularFeaturePattern"
+        "position": [
+          "pcd / 2",
+          0,
+          6
+        ],
+        "targets": [
+          "CircularFeaturePattern"
+        ],
+        "diameter": 8,
+        "direction": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Hole1"
+        ],
+        "axis": "Z",
+        "count": "bolts",
+        "alignment": "right",
+        "reversed": false
       }
     }
   ]

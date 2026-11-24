@@ -5,78 +5,165 @@
         {
           "kind": "file",
           "path": "baseline/measurements.json",
-          "sha256": "cf16edfae4a0cce512bcd679ad638b4a0f926af7145bf1e606031b8c7962f3f3",
-          "size": 2441
+          "sha256": "83c5b056e1a5a2681bc88aa17e55fd5c380c421bab5681b3ba810a9bcc1f8342",
+          "size": 15257
         }
       ],
       "error": null,
       "evidence": {
         "body_envelopes": {
-          "actual_count": 2,
-          "expected_count": 2,
+          "actual_count": 5,
+          "expected_count": 5,
           "kind": "body_envelopes",
           "matched_pairs": [
             {
               "actual": {
-                "label": "BossedPanel",
+                "label": "Hub75HistoryPanel (Hub75HistoryPanel:2)",
                 "max": [
-                  -20.0,
-                  2.0000000000000004,
-                  5.0
+                  -240.15,
+                  9.788295703885007e-15,
+                  319.855
                 ],
                 "min": [
-                  -40.0,
-                  -5.500000000000001,
-                  -5.0
+                  -399.85,
+                  -17.50000000000001,
+                  0.14500000000001023
                 ]
               },
               "expected": {
                 "label": null,
                 "max": [
-                  -20.0,
-                  2.0,
-                  5.0
+                  -240.15,
+                  0.0,
+                  319.855
                 ],
                 "min": [
-                  -40.0,
-                  -5.5,
-                  -5.0
+                  -399.85,
+                  -17.5,
+                  0.145
                 ]
               },
-              "max_delta": 8.881784197001252e-16
+              "max_delta": 1.0658141036401503e-14
             },
             {
               "actual": {
-                "label": "BossedPanel (BossedPanel:2)",
+                "label": "Hub75HistoryPanel (Hub75HistoryPanel:3)",
                 "max": [
-                  40.0,
-                  2.0000000000000004,
-                  5.0
+                  -80.14999999999999,
+                  4.240959942933129e-14,
+                  319.85499999999996
                 ],
                 "min": [
-                  20.0,
-                  -5.500000000000001,
-                  -5.0
+                  -239.85000000000002,
+                  -17.500000000000014,
+                  0.14500000000003865
                 ]
               },
               "expected": {
                 "label": null,
                 "max": [
-                  40.0,
-                  2.0,
-                  5.0
+                  -80.15,
+                  0.0,
+                  319.855
                 ],
                 "min": [
-                  20.0,
-                  -5.5,
-                  -5.0
+                  -239.85,
+                  -17.5,
+                  0.145
                 ]
               },
-              "max_delta": 8.881784197001252e-16
+              "max_delta": 5.684341886080802e-14
+            },
+            {
+              "actual": {
+                "label": "Hub75HistoryPanel",
+                "max": [
+                  79.85,
+                  9.788295703885007e-15,
+                  319.855
+                ],
+                "min": [
+                  -79.85,
+                  -17.50000000000001,
+                  0.14500000000001023
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  79.85,
+                  0.0,
+                  319.855
+                ],
+                "min": [
+                  -79.85,
+                  -17.5,
+                  0.145
+                ]
+              },
+              "max_delta": 1.0658141036401503e-14
+            },
+            {
+              "actual": {
+                "label": "Hub75HistoryPanel (Hub75HistoryPanel:4)",
+                "max": [
+                  239.85000000000002,
+                  4.240959942933129e-14,
+                  319.85499999999996
+                ],
+                "min": [
+                  80.14999999999999,
+                  -17.500000000000014,
+                  0.14500000000003865
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  239.85,
+                  0.0,
+                  319.855
+                ],
+                "min": [
+                  80.15,
+                  -17.5,
+                  0.145
+                ]
+              },
+              "max_delta": 5.684341886080802e-14
+            },
+            {
+              "actual": {
+                "label": "Hub75HistoryPanel (Hub75HistoryPanel:5)",
+                "max": [
+                  399.85,
+                  9.788295703885007e-15,
+                  319.855
+                ],
+                "min": [
+                  240.15,
+                  -17.50000000000001,
+                  0.14500000000001023
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  399.85,
+                  0.0,
+                  319.855
+                ],
+                "min": [
+                  240.15,
+                  -17.5,
+                  0.145
+                ]
+              },
+              "max_delta": 1.0658141036401503e-14
             }
           ],
           "pass": true,
-          "tolerance": 0.001,
+          "tolerance": 0.01,
           "unmatched_actual": [],
           "unmatched_expected": []
         }

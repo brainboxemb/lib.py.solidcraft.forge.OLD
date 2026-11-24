@@ -1,120 +1,714 @@
 {
   "bodies": [
     {
-      "area_mm2": 683.9822971502571,
+      "area_mm2": 136361.97464462667,
       "bbox": {
         "max": [
-          -20.0,
-          2.0000000000000004,
-          5.0
+          79.85,
+          9.788295703885007e-15,
+          319.855
         ],
         "min": [
-          -40.0,
-          -5.500000000000001,
-          -5.0
+          -79.85,
+          -17.50000000000001,
+          0.14500000000001023
         ]
       },
       "center_of_mass": [
-        -29.687323082732195,
-        -0.19542307329237762,
-        -1.829504593067114e-16
+        -6.418657050337162e-15,
+        -5.950648882844185,
+        160.0
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 15,
+      "edges": 266,
       "face_types": {
-        "cylinder": 1,
-        "plane": 7
+        "cylinder": 56,
+        "plane": 66
       },
-      "faces": 8,
+      "faces": 122,
       "kernel": {
-        "edges": 15,
-        "faces": 8,
+        "edges": 293,
+        "faces": 131,
         "shells": 1,
-        "vertices": 10
+        "vertices": 194
       },
-      "mass_g": 1.0887371633238316,
+      "mass_g": 426.6941675445386,
       "material": "Default",
       "measured_by": "smlib",
-      "name": "BossedPanel",
+      "name": "Hub75HistoryPanel",
       "notes": [],
-      "vertices": 10,
-      "volume_mm3": 843.9822971502571
+      "vertices": 176,
+      "volume_mm3": 330770.67251514614
     },
     {
-      "area_mm2": 683.9822971502571,
+      "area_mm2": 136361.97464462667,
       "bbox": {
         "max": [
-          40.0,
-          2.0000000000000004,
-          5.0
+          -240.15,
+          9.788295703885007e-15,
+          319.855
         ],
         "min": [
-          20.0,
-          -5.500000000000001,
-          -5.0
+          -399.85,
+          -17.50000000000001,
+          0.14500000000001023
         ]
       },
       "center_of_mass": [
-        30.312676917267805,
-        -0.19542307329237762,
-        -1.7216763011810254e-16
+        -320.0,
+        -5.950648882844183,
+        160.00000000000006
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 15,
+      "edges": 266,
       "face_types": {
-        "cylinder": 1,
-        "plane": 7
+        "cylinder": 56,
+        "plane": 66
       },
-      "faces": 8,
+      "faces": 122,
       "kernel": {
-        "edges": 15,
-        "faces": 8,
+        "edges": 293,
+        "faces": 131,
         "shells": 1,
-        "vertices": 10
+        "vertices": 194
       },
-      "mass_g": 1.0887371633238316,
+      "mass_g": 426.69416754453863,
       "material": "Default",
       "measured_by": "smlib",
-      "name": "BossedPanel (BossedPanel:2)",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:2)",
       "notes": [],
-      "vertices": 10,
-      "volume_mm3": 843.9822971502571
+      "vertices": 176,
+      "volume_mm3": 330770.6725151462
+    },
+    {
+      "area_mm2": 136361.97464462664,
+      "bbox": {
+        "max": [
+          -80.14999999999999,
+          4.240959942933129e-14,
+          319.85499999999996
+        ],
+        "min": [
+          -239.85000000000002,
+          -17.500000000000014,
+          0.14500000000003865
+        ]
+      },
+      "center_of_mass": [
+        -159.99999999999997,
+        -5.950648882844177,
+        160.00000000000006
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 266,
+      "face_types": {
+        "cylinder": 56,
+        "plane": 66
+      },
+      "faces": 122,
+      "kernel": {
+        "edges": 293,
+        "faces": 131,
+        "shells": 1,
+        "vertices": 194
+      },
+      "mass_g": 426.69416754453823,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:3)",
+      "notes": [],
+      "vertices": 176,
+      "volume_mm3": 330770.6725151459
+    },
+    {
+      "area_mm2": 136361.97464462667,
+      "bbox": {
+        "max": [
+          239.85000000000002,
+          4.240959942933129e-14,
+          319.85499999999996
+        ],
+        "min": [
+          80.14999999999999,
+          -17.500000000000014,
+          0.14500000000003865
+        ]
+      },
+      "center_of_mass": [
+        160.0,
+        -5.950648882844176,
+        160.00000000000006
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 266,
+      "face_types": {
+        "cylinder": 56,
+        "plane": 66
+      },
+      "faces": 122,
+      "kernel": {
+        "edges": 293,
+        "faces": 131,
+        "shells": 1,
+        "vertices": 194
+      },
+      "mass_g": 426.6941675445381,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:4)",
+      "notes": [],
+      "vertices": 176,
+      "volume_mm3": 330770.6725151458
+    },
+    {
+      "area_mm2": 136361.97464462667,
+      "bbox": {
+        "max": [
+          399.85,
+          9.788295703885007e-15,
+          319.855
+        ],
+        "min": [
+          240.15,
+          -17.50000000000001,
+          0.14500000000001023
+        ]
+      },
+      "center_of_mass": [
+        320.0,
+        -5.950648882844185,
+        160.0
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 266,
+      "face_types": {
+        "cylinder": 56,
+        "plane": 66
+      },
+      "faces": 122,
+      "kernel": {
+        "edges": 293,
+        "faces": 131,
+        "shells": 1,
+        "vertices": 194
+      },
+      "mass_g": 426.6941675445387,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:5)",
+      "notes": [],
+      "vertices": 176,
+      "volume_mm3": 330770.67251514626
     }
   ],
-  "body_count": 2,
+  "body_count": 5,
   "params": [],
-  "sketches": [],
+  "sketches": [
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 3,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel footprint",
+      "profiles": 1,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
+    },
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 5,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear start",
+      "profiles": 1,
+      "status": "solved",
+      "visible": true,
+      "wires_ok": true
+    },
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 6,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear perimeter",
+      "profiles": 1,
+      "status": "solved",
+      "visible": true,
+      "wires_ok": true
+    },
+    {
+      "curves": 16,
+      "dof": 16,
+      "id": 8,
+      "name": "d1_Hub75HistoryPanel__Rear electronics bays",
+      "profiles": 4,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
+    }
+  ],
   "timeline": [
     {
       "error": null,
       "id": 3,
-      "ms": 3.3677490000000003,
-      "name": "Box1",
+      "ms": 0.126811,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel footprint",
       "rolled_back": false,
       "suppressed": false,
-      "type": "BoxFeature",
+      "type": "Sketch",
       "warning": null
     },
     {
       "error": null,
       "id": 4,
-      "ms": 9.204604,
+      "ms": 2.747617,
+      "name": "Extrude1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "ExtrudeFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 5,
+      "ms": 0.028713000000000002,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear start",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 6,
+      "ms": 0.050446,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear perimeter",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 7,
+      "ms": 4.386991,
+      "name": "Loft1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "LoftFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 8,
+      "ms": 0.120673,
+      "name": "d1_Hub75HistoryPanel__Rear electronics bays",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 9,
+      "ms": 15.243765,
+      "name": "Rear electronics bays",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "ExtrudeFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 10,
+      "ms": 16.569526,
+      "name": "Hole1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 11,
+      "ms": 11.976905,
       "name": "Cylinder1",
       "rolled_back": false,
       "suppressed": false,
       "type": "CylinderFeature",
       "warning": null
+    },
+    {
+      "error": null,
+      "id": 12,
+      "ms": 27.718291,
+      "name": "Hole2",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 13,
+      "ms": 11.335677,
+      "name": "Cylinder2",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 14,
+      "ms": 31.407939000000002,
+      "name": "Hole3",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 15,
+      "ms": 12.408596,
+      "name": "Cylinder3",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 16,
+      "ms": 36.229226000000004,
+      "name": "Hole4",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 17,
+      "ms": 13.988700999999999,
+      "name": "Cylinder4",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 18,
+      "ms": 40.946495,
+      "name": "Hole5",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 19,
+      "ms": 14.406360999999999,
+      "name": "Cylinder5",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 20,
+      "ms": 45.660559000000006,
+      "name": "Hole6",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 21,
+      "ms": 16.042952,
+      "name": "Cylinder6",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 22,
+      "ms": 36.798274,
+      "name": "Cylinder7",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 23,
+      "ms": 58.171619,
+      "name": "Hole7",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 24,
+      "ms": 56.004850000000005,
+      "name": "Hole8",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 25,
+      "ms": 40.457627,
+      "name": "Cylinder8",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 26,
+      "ms": 69.53552,
+      "name": "Hole9",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 27,
+      "ms": 63.879383999999995,
+      "name": "Hole10",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 28,
+      "ms": 43.674882,
+      "name": "Cylinder9",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 29,
+      "ms": 77.97457800000001,
+      "name": "Hole11",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 30,
+      "ms": 71.40626999999999,
+      "name": "Hole12",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 31,
+      "ms": 49.692392000000005,
+      "name": "Cylinder10",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 32,
+      "ms": 87.734004,
+      "name": "Hole13",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 33,
+      "ms": 77.763138,
+      "name": "Hole14",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 34,
+      "ms": 79.138124,
+      "name": "Cylinder11",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 35,
+      "ms": 93.60576900000001,
+      "name": "Hole15",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 36,
+      "ms": 86.012464,
+      "name": "Hole16",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 37,
+      "ms": 84.12024699999999,
+      "name": "Cylinder12",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 38,
+      "ms": 105.596625,
+      "name": "Hole17",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 39,
+      "ms": 93.139976,
+      "name": "Hole18",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 40,
+      "ms": 36.500494,
+      "name": "Cylinder13",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 41,
+      "ms": 37.174862000000005,
+      "name": "Cylinder14",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 42,
+      "ms": 85.55949,
+      "name": "Hole19",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 43,
+      "ms": 86.573691,
+      "name": "Hole20",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 44,
+      "ms": 85.810479,
+      "name": "Hole21",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 45,
+      "ms": 89.351957,
+      "name": "Hole22",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 46,
+      "ms": 87.921997,
+      "name": "Hole23",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 47,
+      "ms": 93.42739,
+      "name": "Hole24",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
     }
   ],
   "total": {
-    "area_mm2": 1367.9645943005141,
-    "edges": 30,
-    "faces": 16,
-    "mass_g": 2.1774743266476633,
+    "area_mm2": 681809.8732231334,
+    "edges": 1330,
+    "faces": 610,
+    "mass_g": 2133.470837722692,
     "open_bodies_skipped": 0,
-    "vertices": 20,
-    "volume_mm3": 1687.9645943005141
+    "vertices": 880,
+    "volume_mm3": 1653853.3625757303
   }
 }
