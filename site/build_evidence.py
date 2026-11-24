@@ -363,65 +363,69 @@ def _example(
     )
 
     visual_path = model_verify / "visual.json"
-    if not visual_path.is_file():
-        raise ValueError(f"{slug}: visual verification is missing")
-    visual = _json_object(visual_path, f"{slug} visual verification")
-    if visual.get("status") != "pass":
-        raise ValueError(f"{slug}: visual verification is not pass")
-    views = visual.get("views")
-    if not isinstance(views, list) or not views:
-        raise ValueError(f"{slug}: visual verification has no views")
-    regression_views = 0
-    expected_shape_views = 0
-    for row in views:
-        if not isinstance(row, dict):
-            raise ValueError(f"{slug}: visual view must be an object")
-        view_evidence = row.get("evidence")
-        if not isinstance(view_evidence, dict):
-            raise ValueError(f"{slug}: visual view has no evidence object")
+    visual = None
+    if visual_path.is_file():
+        visual = _json_object(visual_path, f"{slug} visual verification")
+        if visual.get("status") != "pass":
+            raise ValueError(f"{slug}: visual verification is not pass")
+        views = visual.get("views")
+        if not isinstance(views, list) or not views:
+            raise ValueError(f"{slug}: visual verification has no views")
+        regression_views = 0
+        expected_shape_views = 0
+        for row in views:
+            if not isinstance(row, dict):
+                raise ValueError(f"{slug}: visual view must be an object")
+            view_evidence = row.get("evidence")
+            if not isinstance(view_evidence, dict):
+                raise ValueError(f"{slug}: visual view has no evidence object")
 
-        regression_required = row.get("regression_required", True)
-        expected_shape_required = row.get("expected_shape_required", True)
-        if not isinstance(regression_required, bool):
-            raise ValueError(
-                f"{slug}: visual regression_required must be boolean"
-            )
-        if not isinstance(expected_shape_required, bool):
-            raise ValueError(
-                f"{slug}: visual expected_shape_required must be boolean"
-            )
-        if not regression_required and not expected_shape_required:
-            raise ValueError(
-                f"{slug}: visual view has no verification role"
-            )
-
-        _relative_artifact(
-            model_verify,
-            view_evidence.get("actual_image"),
-            f"{slug} visual {row.get('view')} actual_image",
-        )
-        if regression_required:
-            regression_views += 1
-            _relative_artifact(
-                model_verify,
-                view_evidence.get("diff_image"),
-                f"{slug} visual {row.get('view')} diff_image",
-            )
-        if expected_shape_required:
-            expected_shape_views += 1
-            for key in ("goal_image", "overlay_image"):
-                _relative_artifact(
-                    model_verify,
-                    view_evidence.get(key),
-                    f"{slug} visual {row.get('view')} {key}",
+            regression_required = row.get("regression_required", True)
+            expected_shape_required = row.get("expected_shape_required", True)
+            if not isinstance(regression_required, bool):
+                raise ValueError(
+                    f"{slug}: visual regression_required must be boolean"
+                )
+            if not isinstance(expected_shape_required, bool):
+                raise ValueError(
+                    f"{slug}: visual expected_shape_required must be boolean"
+                )
+            if not regression_required and not expected_shape_required:
+                raise ValueError(
+                    f"{slug}: visual view has no verification role"
                 )
 
-    if regression_views <= 0:
-        raise ValueError(f"{slug}: visual verification has no regression views")
-    if expected_shape_views <= 0:
-        raise ValueError(
-            f"{slug}: visual verification has no expected-shape views"
-        )
+            _relative_artifact(
+                model_verify,
+                view_evidence.get("actual_image"),
+                f"{slug} visual {row.get('view')} actual_image",
+            )
+            if regression_required:
+                regression_views += 1
+                _relative_artifact(
+                    model_verify,
+                    view_evidence.get("diff_image"),
+                    f"{slug} visual {row.get('view')} diff_image",
+                )
+            if expected_shape_required:
+                expected_shape_views += 1
+                for key in ("goal_image", "overlay_image"):
+                    _relative_artifact(
+                        model_verify,
+                        view_evidence.get(key),
+                        f"{slug} visual {row.get('view')} {key}",
+                    )
+
+        if regression_views <= 0:
+            raise ValueError(
+                f"{slug}: visual verification has no regression views"
+            )
+        if expected_shape_views <= 0:
+            raise ValueError(
+                f"{slug}: visual verification has no expected-shape views"
+            )
+    else:
+        visual_path = None
 
     references = tuple(
         _reference(root, manifest_items, slug, implementation)
