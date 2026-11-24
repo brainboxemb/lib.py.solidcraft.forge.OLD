@@ -279,6 +279,13 @@ METHOD_REFERENCES = (
         guide_anchor="path-flange",
     ),
     _method(
+        "Shape.perforate",
+        "Shape.perforate()",
+        Shape.perforate,
+        guide="sheet-metal",
+        guide_anchor="perforation",
+    ),
+    _method(
         "Shape.rectangular_pattern",
         "Shape.rectangular_pattern()",
         Shape.rectangular_pattern,
