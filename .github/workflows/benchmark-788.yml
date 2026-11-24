@@ -1,0 +1,18 @@
+name: Forge concurrency benchmark
+
+on:
+  push:
+    branches:
+      - "perf/788-jobs-*"
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  benchmark:
+    uses: brainboxemb/tool.cad.ci/.github/workflows/reusable-ci.yml@v0.35.0
+    with:
+      source_sha: ${{ github.sha }}
+      full_run: true
+      jobs: ${{ github.ref_name == 'perf/788-jobs-6' && 6 || (github.ref_name == 'perf/788-jobs-4' && 4 || 2) }}
