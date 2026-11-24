@@ -164,12 +164,12 @@ The final model-verification path has one Forge producer step followed by the
 released verification-library runner:
 
 ```text
-examples/<model>/scpf/model.py
+<item-root>/scpf/model.py
   -> scripts/model_verify_declarative.py
      -> exact built Forge wheel
      -> compile Forge model to command document
      -> replay command document to initial native model.sc
-     -> load examples/<model>/verification/verify.py
+     -> load <item-root>/verification/verify.py
      -> run_solidcraft_verification(model.sc, output, VERIFICATION)
         -> baseline evaluation/checks
         -> saved-design mutation/evaluation/checks
@@ -191,6 +191,30 @@ All current historical model-verification cases use the declarative
 `scripts/model_verify_declarative.py` inside the released runtime for each
 model. The former procedural `verify_model.py` migration path is historical;
 new generic verification behavior must not be implemented in Forge.
+
+## Public catalog roots
+
+Forge deliberately separates repository source location from public catalog
+identity:
+
+```text
+examples/<slug>/                 small teaching catalog
+verification/cases/<slug>/       public capability Verification
+verification/regressions/<slug>/ non-public regression/release fixtures
+```
+
+The four teaching examples own local `catalog.yml` role declarations. A
+teaching example may also participate in Verification only through that explicit
+opt-in. A normal new public modelling capability belongs under
+`verification/cases/`, not under `examples/`.
+
+Public Verification discovery is independent from Example discovery. The site
+and accepted build-evidence adapters carry both slug and source path. Slug is
+stable public identity; source path tells CAD-CI/evidence where the item lives.
+No shared adapter may derive a source path by assuming `examples/<slug>`.
+
+Regression-only fixtures under `verification/regressions/` are executable
+repository checks but are not public Example or Verification pages.
 
 ## Model item participation
 
@@ -1314,15 +1338,15 @@ architecture.
 ### Verification catalog grouping
 
 The verification overview is not a flat alphabetical card list. The renderer
-uses the existing `ExampleMetadata.section` value loaded from each
-`examples/<slug>/model.yml` as the grouping key. Group membership therefore
-stays owned by each example and remains part of the agreed presentation metadata
-schema.
+uses the `section` value from each discovered public Verification case's local
+`model.yml`. A case may live under `verification/cases/<slug>` or, for one
+of the four teaching examples that explicitly opts in, under
+`examples/<slug>`.
 
-The renderer groups cards after discovery. Section order is determined by the
-section configuration's `priority`; example order inside a section is determined
-by each example's local `model.yml.priority`, with slug only as a deterministic
-tie-breaker. No central section-membership or example-order registry is introduced.
+The renderer groups cards after independent Verification discovery. Section
+order comes from the section configuration's `priority`; case order inside a
+section comes from local `model.yml.priority`, with slug only as a
+deterministic tie-breaker. No central membership/order registry is introduced.
 
 The section slug-to-label/priority mapping is presentation metadata, not a model
 membership registry. It lives as declarative configuration in
@@ -1336,6 +1360,7 @@ parameters    -> 3 · Parameters and dependencies
 components    -> 4 · Components and occurrences
 anchors       -> 5 · Anchors and local frames
 associativity -> 6 · Associative relationships
+sheet-metal   -> 7 · Sheet metal
 ```
 
 
