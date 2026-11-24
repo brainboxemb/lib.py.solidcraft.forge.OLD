@@ -65,6 +65,16 @@ qualification in CAD #388 proved that it did **not** fix the real HUB75
 five-panel save/reopen replay-context defect. Do not cite v0.14.0 as the #753
 product fix; that Forge replay fix first ships in the v0.15.0 candidate below.
 
+### Previous v0.13.2 baseline
+
+v0.13.2 remains valid and immutable at exact source
+`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`, qualified against SolidCraft
+0.45.0. Its exact main build was `45269510406` and its central release run was
+`45269991837`.
+
+v0.13.2 was the consumer hotfix for #796 and remains part of the historical
+release chain; the v0.14.0 record above does not rewrite it.
+
 ## Next release candidate
 
 Candidate: **v0.15.0**.
@@ -92,16 +102,6 @@ post-release on the normal durable CAD adoption path.
 Publication must not occur until the exact v0.15.0 release-preparation commit is
 stable on `main`, its durable main build is green/source-matched, and the
 shared release flow accepts that exact SHA.
-
-### Previous v0.13.2 baseline
-
-v0.13.2 remains valid and immutable at exact source
-`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`, qualified against SolidCraft
-0.45.0. Its exact main build was `45269510406` and its central release run was
-`45269991837`.
-
-v0.13.2 was the consumer hotfix for #796 and remains part of the historical
-release chain; the v0.14.0 record above does not rewrite it.
 
 ## Consumer workflow
 
