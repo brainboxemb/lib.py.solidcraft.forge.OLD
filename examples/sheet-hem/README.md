@@ -1,36 +1,41 @@
-# Native sheet hem regression fixture
+# Native sheet hem
 
-This non-public regression fixture qualifies Forge issue #773 against the
-pinned SolidCraft 0.45 runtime.
+**Group:** `sheet-metal`
+**Saved-design required:** `true`
 
-## Intent
+> Documentation provenance: Forge #785 promotes the released #773 hem fixture to public Verification.
 
-Start with one 80 × 40 × 2 mm native sheet base and add one native hem on the
-right-hand sheet edge.
+## Goal
 
-The public Forge operation is:
+Prove that an existing sheet edge can fold back as one native hem while inheriting the active material rule.
 
-```python
-sheet.hem(
-    edges=[(40, 0, 2)],
-    length=hem_length,
-    gap=hem_gap,
-)
-```
+## Forge API
 
-The existing sheet rule owns thickness, K-factor and bend radius. The hem does
-not restate those material fields.
+`Sketch.sheet_metal(...)` creates the blank and `Shape.hem(edges=..., length=..., gap=...)` adds the native feature.
 
-## Saved-design qualification
+## Forge model
 
-Without rerunning Forge Python, the saved SolidCraft design changes:
+An 80 × 40 × 2 mm sheet receives a 12 mm hem with a 4 mm gap on its selected right edge.
 
-- `hem_length: 12 -> 16 mm`;
-- `hem_gap: 4 -> 5 mm`.
+## How Forge builds it in SolidCraft
 
-The rebuilt/reopened model must remain one connected closed sheet-metal body.
+Forge reuses the existing sheet rule and emits one native hem feature from a fixed edge pick. Length and gap remain feature dimensions.
 
-## Flat pattern
+## SolidCraft result
 
-Baseline inspection requires a recoverable flat pattern with native bend
-history using the same sheet rule, thickness and K-factor.
+One native sheet body contains the hem and keeps a recoverable developed flat pattern.
+
+## Saved-design test
+
+Mutate hem length from 12 to 16 mm and gap from 4 to 5 mm, then verify the rebuilt feature and flat pattern.
+
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #785 / #773 public capability promotion.
+**Bounds sufficient:** `false`
+
+Bounds alone do not prove native hem identity, inherited material rule or the developed result.
+
+## Reference notes
+
+- **Native SolidCraft history** — Native hem and sheet-rule evidence is authoritative; external shape-only references are optional.
