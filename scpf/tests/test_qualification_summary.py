@@ -102,21 +102,28 @@ class QualificationSummaryTests(unittest.TestCase):
         path.write_text(json.dumps(value), encoding="utf-8")
         return path
 
-    def make_case(self, root, slug="simple-box", saved=True):
-        case = root / "examples" / slug
+    def make_case(
+        self,
+        root,
+        slug="simple-box",
+        saved=True,
+        source_path=None,
+    ):
+        source_path = source_path or f"examples/{slug}"
+        case = root / source_path
         self.write_json(
             root,
-            f"examples/{slug}/.cad-ci/steps/contract_test.json",
+            f"{source_path}/.cad-ci/steps/contract_test.json",
             {"status": "pass"},
         )
         self.write_json(
             root,
-            f"examples/{slug}/.cad-ci/steps/model_verify.json",
+            f"{source_path}/.cad-ci/steps/model_verify.json",
             {"status": "pass"},
         )
         self.write_json(
             root,
-            f"examples/{slug}/solidcraft.json",
+            f"{source_path}/solidcraft.json",
             {"commands": [{"command": "solid.box"}]},
         )
         for name in ("model.sc", "model.step", "results.json"):
@@ -150,7 +157,7 @@ class QualificationSummaryTests(unittest.TestCase):
             )
         self.write_json(
             root,
-            f"examples/{slug}/model_verify/verification.json",
+            f"{source_path}/model_verify/verification.json",
             {
                 "schema": "cad-verification",
                 "schema_version": 1,
@@ -176,7 +183,7 @@ class QualificationSummaryTests(unittest.TestCase):
             )
         self.write_json(
             root,
-            f"examples/{slug}/model_verify/visual.json",
+            f"{source_path}/model_verify/visual.json",
             {
                 "status": "pass",
                 "semantic": {"status": "pass", "checks": []},
@@ -188,7 +195,7 @@ class QualificationSummaryTests(unittest.TestCase):
                 self.write_json(
                     root,
                     (
-                        f"examples/{slug}/{implementation}/verification/"
+                        f"{source_path}/{implementation}/verification/"
                         "verification.json"
                     ),
                     {
@@ -208,7 +215,7 @@ class QualificationSummaryTests(unittest.TestCase):
                 self.write_json(
                     root,
                     (
-                        f"examples/{slug}/{implementation}/references/"
+                        f"{source_path}/{implementation}/references/"
                         f"{slug}/{implementation}/verification.json"
                     ),
                     {"implementation": implementation, "status": "pass"},
@@ -230,6 +237,26 @@ class QualificationSummaryTests(unittest.TestCase):
             ("integration", "native_model", "geometry", "saved_design", "visual"),
         )
         self.assertNotIn("reference", result["checks"])
+        self.assertEqual(gate["status"], "pass")
+
+    def test_verification_case_source_path_is_independent_from_slug(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(
+            summary, "_semantic_api", fake_api
+        ):
+            root = Path(tmp)
+            source_path = "verification/cases/sheet-fold"
+            self.make_case(
+                root,
+                slug="sheet-fold",
+                source_path=source_path,
+            )
+            result, gate = summary.compose_case(
+                root,
+                "sheet-fold",
+                source_path,
+            )
+
+        self.assertEqual(result["status"], "pass")
         self.assertEqual(gate["status"], "pass")
 
     def test_no_saved_design_is_not_required(self):
