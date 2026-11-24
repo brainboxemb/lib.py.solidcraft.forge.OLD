@@ -1,5 +1,7 @@
 # Native exploded assembly views
 
+> Documentation provenance: Forge #751 publishes native SolidCraft exploded assembly presentation as public Verification. Machine verification lives in [`verification/verify.py`](verification/verify.py).
+
 ## Goal
 
 Qualify SolidCraft exploded views as persistent presentation state on a real
