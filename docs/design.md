@@ -2427,6 +2427,20 @@ The final pattern command receives the resolved feature names. No public
 history-name parameter, duplicated source geometry or model-specific Hole
 special case is introduced.
 
+## Native exploded-view lowering
+
+Assembly owns exploded-view intent because explicit moves refer to physical
+Forge occurrences. Each move stores the stable `ModelInstance.occurrence_id`,
+the same identity already preserved by grouping and attachment.
+
+Assembly lowering first creates/copies occurrences, applies normal placements
+and joints, then emits native `explode.create`. Explicit move targets reuse the
+existing replay-bound occurrence variables. `explode.show` is emitted only
+when the model explicitly selects an exploded or assembled presentation.
+
+Exploded translations never participate in Placement, anchor or joint
+calculation and are never lowered as ordinary `occurrence.move`.
+
 ## Component-local Sketch feature namespacing
 
 #679 extends the existing assembly definition namespace; it does not introduce a
