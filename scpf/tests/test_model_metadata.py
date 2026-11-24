@@ -4,12 +4,14 @@ import unittest
 
 from scpf.model_metadata import (
     MODEL_METADATA_FIELDS,
+    MODEL_PURPOSES,
     ModelMetadata,
     validate_model_metadata,
 )
 
 
 VALID = {
+    "purpose": "verification",
     "section": "basic",
     "priority": 10,
     "title": "Plate",
@@ -25,6 +27,7 @@ class ModelMetadataTests(unittest.TestCase):
         self.assertEqual(
             MODEL_METADATA_FIELDS,
             (
+                "purpose",
                 "section",
                 "priority",
                 "title",
@@ -34,12 +37,38 @@ class ModelMetadataTests(unittest.TestCase):
                 "stages",
             ),
         )
+        self.assertEqual(MODEL_PURPOSES, {"example", "verification"})
 
     def test_valid_mapping_returns_typed_metadata(self):
         row = validate_model_metadata(VALID, label="plate")
         self.assertIsInstance(row, ModelMetadata)
+        self.assertEqual(row.purpose, {"verification"})
         self.assertEqual(row.priority, 10)
         self.assertEqual(row.stages, ("Create profile", "Extrude"))
+
+    def test_purpose_accepts_scalar_or_both_as_list(self):
+        example = validate_model_metadata(
+            dict(VALID, purpose="example"),
+            label="example",
+        )
+        both = validate_model_metadata(
+            dict(VALID, purpose=["example", "verification"]),
+            label="both",
+        )
+        self.assertEqual(example.purpose, {"example"})
+        self.assertEqual(both.purpose, {"example", "verification"})
+
+    def test_purpose_rejects_empty_duplicate_or_unknown_values(self):
+        invalid = (
+            [],
+            ["example", "example"],
+            "both",
+            ["example", "other"],
+            True,
+        )
+        for value in invalid:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                validate_model_metadata(dict(VALID, purpose=value))
 
     def test_unknown_consumer_extension_is_rejected(self):
         data = dict(VALID, build={"process": True})
