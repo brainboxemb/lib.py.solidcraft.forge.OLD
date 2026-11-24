@@ -18,8 +18,8 @@ against the exact immutable SolidCraft runtime consumed by Forge.
   [`scripts/verify_solidcraft_reference_runtime.py`](../../scripts/verify_solidcraft_reference_runtime.py)
 - **Snapshot helper:**
   [`scripts/capture_solidcraft_reference.py`](../../scripts/capture_solidcraft_reference.py)
-- **Current checked runtime:** `cad-solidcraft:v0.3.4`, SolidCraft `0.45.0`
-- **Current snapshot:** `docs/reference/solidcraft/0.45.0/commands.json`
+- **Current checked runtime:** `cad-solidcraft:v0.3.5`, SolidCraft `0.48.1`
+- **Current snapshot:** `docs/reference/solidcraft/0.48.1/commands.json`
 
 The runtime image itself is owned and released by
 `docker.cad.solidcraft`; this item only verifies Forge's pinned consumer
