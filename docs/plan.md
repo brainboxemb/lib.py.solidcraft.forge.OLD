@@ -80,6 +80,20 @@ main **ci-build-record**.
 
 ## Active execution
 
+### #845 — live replay rejects valid contour-flange recess
+
+Status: **now / downstream CAD regression**.
+
+Reproduce the downstream Mounting Rail M8 failure with the smallest Forge-owned
+native fixture: one contour flange and one valid face-attached through-cut. The
+standalone downstream failure uses Y=37.5 mm; the assembly failure uses Y=12.5 mm. Headless replay is known to succeed downstream while
+live GUI replay of the same replay document fails with a false
+"recess reaching into a bend" error.
+
+First preserve the exact geometry and determine whether the divergence comes
+from live replay phase/checkpoint semantics or SolidCraft in-memory sheet-metal
+state. Do not move the physical cut as a workaround.
+
 ### #843 — expose native solid.revolve
 
 Status: **now / concrete CAD blocker**.
@@ -120,7 +134,8 @@ critical path.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #843 Native solid.revolve | **now / CAD blocker** | Implement, qualify and document reusable profile-driven Revolve for CAD #30. |
+| #845 Live contour-flange recess replay divergence | **now / CAD regression** | Add minimal native fixture; compare exact replay document headless vs live without changing the physical cut. |
+| #843 Native solid.revolve | **now / parallel CAD blocker** | Implement, qualify and document reusable profile-driven Revolve for CAD #30. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **next / performance** | Controlled jobs=2/4/6 A/B on identical source/full graph. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
@@ -138,7 +153,8 @@ critical path.
 
 ## Next checkpoint
 
-1. complete #843 native Revolve on `dev-cad` with unit + native verification;
-2. promote the accepted CAD lane to `main` and publish the next qualified Forge release needed by downstream CAD #30;
-3. resume #788 controlled jobs=2/4/6 measurement independently;
-4. make no scheduler or batch-sharding change before the measurement evidence.
+1. isolate #845 with a minimal contour-flange + valid broad-face recess fixture and preserve the exact replay document;
+2. complete #843 native Revolve on `dev-cad` with unit + native verification;
+3. promote the accepted CAD lane to `main` and publish the next qualified Forge release needed by downstream CAD #30;
+4. resume #788 controlled jobs=2/4/6 measurement independently;
+5. make no scheduler or batch-sharding change before the measurement evidence.
