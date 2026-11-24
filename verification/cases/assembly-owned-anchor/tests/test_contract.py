@@ -5,13 +5,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class AssemblyOwnedAnchorCommandTests(unittest.TestCase):
     def test_named_assembly_anchor_resolves_to_native_corner_relationship(self):
         document = run_script(
-            ROOT / "examples/assembly-owned-anchor/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )
         commands = document["commands"]
 
