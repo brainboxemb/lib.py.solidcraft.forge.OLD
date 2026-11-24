@@ -1,4 +1,4 @@
-"""Native SolidCraft circular feature-pattern qualification."""
+"""Native SolidCraft circular pattern over a direct Hole feature."""
 
 
 class CircularFeaturePattern:
@@ -8,17 +8,14 @@ class CircularFeaturePattern:
     def build(self):
         plate = Box(100, 100, 6, anchor=Anchor.BOTTOM)
 
-        with Sketch(name="BoltHole", on=plate, parent=Anchor.TOP) as bolt:
-            bolt.add(
-                Circle2D(d=8),
-                offset=(self.pcd / 2, 0),
-            )
-
-        source_cut = bolt.extrude(Depth.THROUGH_ALL)
-        plate = plate - source_cut
+        source_hole = Hole(
+            d=8,
+            direction=(0, 0, -1),
+        ).at(self.pcd / 2, 0, 6)
+        plate = plate + source_hole
 
         return plate.circular_pattern(
-            source_cut,
+            source_hole,
             count=self.bolts,
             axis=Axis.Z,
         )

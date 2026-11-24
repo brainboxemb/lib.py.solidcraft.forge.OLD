@@ -1179,7 +1179,12 @@ def _shape_contains(root, needle):
 
 
 def _feature_pattern_sources(root, feature, operation):
-    """Validate shared source-feature rules for native feature patterns."""
+    """Validate shared source-feature rules for native feature patterns.
+
+    Forge keeps the source Shape itself here. Lowering resolves that exact
+    already-applied Shape to its native SolidCraft history-feature identity;
+    callers never pass native feature-name strings.
+    """
     if isinstance(feature, Shape):
         sources = (feature,)
     elif isinstance(feature, (tuple, list)) and feature:
@@ -1189,11 +1194,6 @@ def _feature_pattern_sources(root, feature, operation):
     else:
         raise TypeError(f"{operation} requires a source feature Shape")
 
-    if any(source.kind != "explicit_sketch_extrusion" for source in sources):
-        raise ValueError(
-            f"{operation} currently supports features produced by "
-            "Sketch.extrude()"
-        )
     if any(not _shape_contains(root, source) for source in sources):
         raise ValueError(
             f"{operation} source feature must already be applied to this Shape"
@@ -1927,7 +1927,7 @@ class Shape:
         """Pattern an existing native history feature in one or two directions.
 
         Parameters:
-            feature: Existing Sketch.extrude() feature already applied to this Shape, or a non-empty sequence of such features.
+            feature: Existing applied feature Shape, or a non-empty sequence of applied feature Shapes. Forge resolves each source to its native history feature.
             count: Number of instances in the first direction. Use a positive integer or direct Parameter.
             spacing: Instance spacing in the first direction, in mm.
             direction: First pattern direction as Axis.X/Y/Z or a non-zero XYZ vector. Defaults to Axis.X.
@@ -1940,8 +1940,8 @@ class Shape:
             reversed2: Reverse the second native pattern direction. Defaults to False.
 
         Use when:
-            Repeat an already-created native sketch extrusion while keeping one
-            editable SolidCraft rectangular-pattern history feature.
+            Repeat an already-created native feature while keeping one editable
+            SolidCraft rectangular-pattern history feature.
 
         Limits:
             The source feature must already be part of this Shape. Supplying a
@@ -2002,7 +2002,7 @@ class Shape:
         """Pattern an existing native history feature around a fixed axis.
 
         Parameters:
-            feature: Existing Sketch.extrude() feature already applied to this Shape, or a non-empty sequence of such features.
+            feature: Existing applied feature Shape, or a non-empty sequence of applied feature Shapes. Forge resolves each source to its native history feature.
             count: Total number of instances including the original. Use a positive integer or direct Parameter.
             axis: Rotation axis as Axis.X/Y/Z or a non-zero fixed XYZ direction. Defaults to Axis.Z.
             angle: Optional total pattern angle in degrees, as a fixed number or direct Parameter. Omit it for SolidCraft's native 360-degree default.
@@ -2011,9 +2011,9 @@ class Shape:
             reversed: Reverse the native pattern direction. Defaults to False.
 
         Use when:
-            Repeat an already-created native sketch extrusion around an axis
-            while keeping one editable SolidCraft circular-pattern history
-            feature, for example a bolt circle.
+            Repeat an already-created native feature around an axis while
+            keeping one editable SolidCraft circular-pattern history feature,
+            for example a Hole-based bolt circle.
 
         Limits:
             The source feature must already be part of this Shape. Axis values

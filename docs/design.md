@@ -2406,6 +2406,27 @@ arbitrary consumer fields would recreate the schema drift that #703 is intended
 to remove. CI execution state, verification expectations and generated state
 remain in their existing owner layers.
 
+## Native pattern source identity
+
+Shape patterns keep the Python source object in the pattern node. At lowering,
+Forge finds the exact Boolean-history prefix whose right-hand feature is that
+source and compiles only that prefix to determine the native history identity.
+
+Two identity forms are supported:
+
+1. an emitted feature command with an explicit `name` (for example an
+   explicit `Sketch.extrude()`) keeps that authored name;
+2. an unnamed native primitive/Hole feature uses SolidCraft's deterministic
+   type-local history name. Forge derives its ordinal by counting that command
+   type in the exact prefix, yielding names such as `Hole1`,
+   `Cylinder2`, or `Cone1`.
+
+The full original history is still compiled only once for the actual model.
+Prefix compilation is identity analysis, not another emitted geometry path.
+The final pattern command receives the resolved feature names. No public
+history-name parameter, duplicated source geometry or model-specific Hole
+special case is introduced.
+
 ## Component-local Sketch feature namespacing
 
 #679 extends the existing assembly definition namespace; it does not introduce a
