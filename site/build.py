@@ -20,8 +20,15 @@ sys.path.insert(0, str(ROOT / "scpf"))
 from scpf.runner import run_script
 from scpf.version import TESTED_SOLIDCRAFT_VERSION
 from guides import GUIDES
-from example_metadata import discover_example_metadata, section_presentation
-from example_documentation import discover_example_documentation
+from example_metadata import (
+    discover_example_metadata,
+    discover_verification_metadata,
+    section_presentation,
+)
+from example_documentation import (
+    discover_example_documentation,
+    discover_verification_documentation,
+)
 from cheatsheet_content import load_cheatsheet
 from build_evidence import IMPLEMENTATIONS, load_stable_build_evidence
 from qualification_view import qualification_case_view
@@ -211,18 +218,14 @@ def _cheatsheet_search_entries():
     return entries
 
 
-def _example_search_entries():
-    """Return search rows from example-owned metadata and preserved docs."""
+def _catalog_search_entries(rows, documentation, *, kind, prefix):
+    """Return search rows for one explicit public catalog."""
 
-    documentation = {
-        row.slug: row
-        for row in discover_example_documentation()
-    }
     return [
         _search_entry(
             row.title,
-            "Example",
-            f"examples/{row.slug}/",
+            kind,
+            f"{prefix}/{row.slug}/",
             row.description,
             aliases=(row.tagline, row.section),
             keywords=(
@@ -240,8 +243,40 @@ def _example_search_entries():
                 ),
             ),
         )
-        for row in discover_example_metadata()
+        for row in rows
     ]
+
+
+def _example_search_entries():
+    """Return search rows from the curated teaching-example catalog."""
+
+    rows = discover_example_metadata()
+    documentation = {
+        row.slug: row
+        for row in discover_example_documentation()
+    }
+    return _catalog_search_entries(
+        rows,
+        documentation,
+        kind="Example",
+        prefix="examples",
+    )
+
+
+def _verification_search_entries():
+    """Return search rows from the independent Verification catalog."""
+
+    rows = discover_verification_metadata()
+    documentation = {
+        row.slug: row
+        for row in discover_verification_documentation()
+    }
+    return _catalog_search_entries(
+        rows,
+        documentation,
+        kind="Verification",
+        prefix="verification",
+    )
 
 
 def build_search_index():
@@ -251,6 +286,7 @@ def build_search_index():
         + _guide_search_entries()
         + _cheatsheet_search_entries()
         + _example_search_entries()
+        + _verification_search_entries()
     )
     seen = set()
     unique = []
@@ -262,7 +298,7 @@ def build_search_index():
         unique.append(entry)
     return {
         "schema": 1,
-        "generated_from": "public API docstrings, API Guide, Cheatsheet, example model.yml metadata and local README engineering documentation",
+        "generated_from": "public API docstrings, API Guide, Cheatsheet, independent Example/Verification catalogs and local README engineering documentation",
         "entries": unique,
     }
 
@@ -276,7 +312,7 @@ def scpf_version():
     return data["project"]["version"]
 
 
-def _stable_qualification_summary(stable, slugs):
+def _stable_qualification_summary(stable, cases):
     """Compose current site status using the verification wheel in one complete scope."""
 
     wheel = str(stable.verification_wheel_path)
@@ -297,7 +333,7 @@ def _stable_qualification_summary(stable, slugs):
         spec.loader.exec_module(module)
         result, gate = module.compose_cases(
             stable.root,
-            tuple(slugs),
+            tuple(cases),
         )
     finally:
         for value in added:
@@ -350,30 +386,52 @@ def build(
         "examples": {},
     }
     example_rows = discover_example_metadata()
-    documentation_by_slug = {
+    verification_rows = discover_verification_metadata()
+    example_documentation_by_slug = {
         row.slug: row
         for row in discover_example_documentation()
     }
-    if set(documentation_by_slug) != {row.slug for row in example_rows}:
+    verification_documentation_by_slug = {
+        row.slug: row
+        for row in discover_verification_documentation()
+    }
+    if set(example_documentation_by_slug) != {
+        row.slug for row in example_rows
+    }:
         raise ValueError(
-            "example metadata/documentation catalogs do not match"
+            "Example metadata/documentation catalogs do not match"
+        )
+    if set(verification_documentation_by_slug) != {
+        row.slug for row in verification_rows
+    }:
+        raise ValueError(
+            "Verification metadata/documentation catalogs do not match"
+        )
+    verification_slugs = {row.slug for row in verification_rows}
+    if not {row.slug for row in example_rows}.issubset(verification_slugs):
+        raise ValueError(
+            "public Examples must opt into Verification explicitly"
         )
 
     stable = None
     stable_by_slug = {}
     summary_by_slug = {}
     stable_view_by_slug = {}
+    verification_cases = tuple(
+        (row.slug, row.source_path)
+        for row in verification_rows
+    )
     if build_evidence is not None:
         stable = load_stable_build_evidence(
             Path(build_evidence),
             build_commit,
-            (row.slug for row in example_rows),
+            verification_cases,
             scope=build_scope,
         )
         stable_by_slug = {row.slug: row for row in stable.examples}
         summary_by_slug = _stable_qualification_summary(
             stable,
-            (row.slug for row in example_rows),
+            verification_cases,
         )
         stable_view_by_slug = {
             row.slug: qualification_case_view(
@@ -382,7 +440,7 @@ def build(
                 summary_by_slug[row.slug],
                 site_source_commit=sha,
             )
-            for row in example_rows
+            for row in verification_rows
         }
         (out / "provenance.json").write_text(
             json.dumps(
@@ -406,8 +464,8 @@ def build(
         _section_priority, section_label, _section_description = (
             section_presentation(info.section)
         )
-        documentation = documentation_by_slug[slug]
-        source_path = ROOT / "examples" / slug / "scpf" / "model.py"
+        documentation = example_documentation_by_slug[slug]
+        source_path = info.source_root / "scpf" / "model.py"
         commands = run_script(source_path)
         assert commands.get("commands"), f"{slug}: empty command list"
 
@@ -457,7 +515,7 @@ def build(
             documentation.reference_notes
         )
         source_url = (
-            f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/scpf/model.py"
+            f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/scpf/model.py"
         )
 
         body = render_template(
@@ -516,24 +574,6 @@ def build(
                 preview_url=escape(card_preview),
             )
         )
-        if stable is not None:
-            verification_card = qualification_card(
-                info,
-                stable_view_by_slug[slug],
-                f"{slug}/",
-                section_label=section_label,
-            )
-        else:
-            verification_card = render_template(
-                "example-card.html",
-                **{**card_values, "section": escape(section_label)},
-                example_url=f"../examples/{escape(slug)}/",
-                preview_url=escape(qualification_preview),
-            )
-        verification_cards_by_section.setdefault(info.section, []).append(
-            (info.priority, info.slug, verification_card)
-        )
-
     # Expanded, navigable documentation remains separate from tiny smoke-test
     # examples and from the quick cheatsheet. Relevant API facts are repeated
     # inline from the generated reference data so ordinary guide use does not
@@ -634,35 +674,35 @@ def build(
         encoding="utf-8",
     )
 
-    # Verification pages are derived from the same local example metadata.
-    # #497 attaches accepted complete-scope status and measurements.
+    # Verification pages are derived from the independent capability catalog.
+    # Accepted complete-scope status and measurements are attached separately.
     verification_root = out / "verification"
     verification_root.mkdir(exist_ok=True)
     verification_manifest = {}
 
-    for info in example_rows:
+    for info in verification_rows:
         slug = info.slug
         _section_priority, section_label, _section_description = (
             section_presentation(info.section)
         )
-        documentation = documentation_by_slug[slug]
+        documentation = verification_documentation_by_slug[slug]
         case_dir = verification_root / slug
         case_dir.mkdir(exist_ok=True)
         reference_notes_html = reference_notes(
             documentation.reference_notes
         )
         verification_url = (
-            f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/verification/verify.py"
+            f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/verification/verify.py"
         )
         reference_sources = {
             implementation: (
-                ROOT / "examples" / slug / implementation / "model.py"
+                info.source_root / implementation / "model.py"
             ).read_text(encoding="utf-8")
             for implementation in IMPLEMENTATIONS
         }
         reference_source_urls = {
             implementation: (
-                f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/"
+                f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/"
                 f"{implementation}/model.py"
             )
             for implementation in IMPLEMENTATIONS
@@ -724,11 +764,11 @@ def build(
             verification_url=escape(verification_url),
             forge_source=escape(
                 (
-                    ROOT / "examples" / slug / "scpf" / "model.py"
+                    info.source_root / "scpf" / "model.py"
                 ).read_text(encoding="utf-8")
             ),
             forge_source_url=escape(
-                f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/scpf/model.py"
+                f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/scpf/model.py"
             ),
             current_evidence=current_evidence,
             reference_comparison=reference_comparison,
@@ -745,9 +785,9 @@ def build(
         )
         verification_manifest[slug] = {
             "title": info.title,
-            "documentation_source": f"examples/{slug}/README.md",
+            "documentation_source": f"{info.source_path}/README.md",
             "verification_source": (
-                f"examples/{slug}/verification/verify.py"
+                f"{info.source_path}/verification/verify.py"
             ),
             "evidence_source": (
                 f"build/{stable.scope}" if stable is not None else "build/main"
@@ -766,6 +806,31 @@ def build(
                 }
             )
 
+        card_values = {
+            "slug": escape(slug),
+            "title": escape(info.title),
+            "section": escape(section_label),
+            "description": escape(info.description),
+            "command_summary": "",
+        }
+        if stable is not None:
+            verification_card = qualification_card(
+                info,
+                stable_view_by_slug[slug],
+                f"{slug}/",
+                section_label=section_label,
+            )
+        else:
+            verification_card = render_template(
+                "example-card.html",
+                **card_values,
+                example_url=f"{escape(slug)}/",
+                preview_url="../static/example-placeholder.svg",
+            )
+        verification_cards_by_section.setdefault(info.section, []).append(
+            (info.priority, info.slug, verification_card)
+        )
+
     if stable is not None:
         evidence_note = render_template(
             "qualification-evidence-note.html",
@@ -781,7 +846,7 @@ def build(
     results_root = verification_root / "results"
     results_root.mkdir(exist_ok=True)
     results_body = results_content(
-        example_rows,
+        verification_rows,
         stable_view_by_slug,
         source_sha=sha,
         build_commit=(stable.build_commit if stable is not None else None),
@@ -802,7 +867,7 @@ def build(
     coverage_root = verification_root / "coverage"
     coverage_root.mkdir(exist_ok=True)
     coverage_body = coverage_content(
-        (row.slug for row in example_rows),
+        (row.slug for row in verification_rows),
         evidence_note,
     )
     (coverage_root / "index.html").write_text(
@@ -902,7 +967,7 @@ def build(
     )
     verification_index = render_template(
         "qualification-index.html",
-        example_count=len(example_rows),
+        example_count=len(verification_rows),
         groups=verification_groups,
         evidence_note=evidence_note,
     )
@@ -947,7 +1012,7 @@ def build(
         encoding="utf-8",
     )
     for slug in (
-        *(row.slug for row in example_rows),
+        *(row.slug for row in verification_rows),
         "results",
         "coverage",
         "joint-anatomy",
