@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "12f22cb4e037515363dd3260365e75ad10184b169088b527c55b88052897b1c1",
+  "duration_seconds": 0.014,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T09:04:29.834Z",
+  "item": "component-cylinder-occurrence",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "c19dfd97b8f19a6ebb7b1667f0a6930b9189f22bdbf29cc5d2de6e5c0adcfe23"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "bc81eb99abeaf8b21d382bd6cbd4cb06801bd23ff02e80a9a26638656196066d"
+    }
+  },
+  "run_finished_at": "2026-11-24T09:04:29.925Z",
+  "run_started_at": "2026-11-24T09:04:10.738Z",
+  "schema": 6,
+  "started_at": "2026-11-24T09:04:29.820Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "b6170a1a96b3fb6c2cb31a4242a03de4868a250e67d108bdad48d912f7021b7e",
+  "timeout_seconds": null
+}

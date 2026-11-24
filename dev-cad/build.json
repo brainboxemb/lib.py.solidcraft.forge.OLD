@@ -89,10 +89,10 @@
       "engine_schema": 6,
       "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
       "final_step": "test_site_source",
-      "final_target_spec_digest": "68ab8b4429b964ea258e78611f3f40738ce7d392c49ad6ea2f122cbebab81f8e",
+      "final_target_spec_digest": "65089d04a9059ad2dfcf4b1776031ab273f9e51412c0984a13a245df3c5eaf88",
       "item_id": "site-source",
       "outputs": [],
-      "source_commit": "4ea3096f3f5b5d53eef48bfb25b62185908f96df"
+      "source_commit": "e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3"
     },
     "ci/solidcraft-reference": {
       "engine": "scons",
@@ -695,6 +695,19 @@
         "references"
       ],
       "source_commit": "704f344e93496e02c28d587faa57885f9be68eaf"
+    },
+    "examples/component-cylinder-occurrence": {
+      "engine": "scons",
+      "engine_schema": 6,
+      "final_bundle_sha256": "12f22cb4e037515363dd3260365e75ad10184b169088b527c55b88052897b1c1",
+      "final_step": "model_verify",
+      "final_target_spec_digest": "b6170a1a96b3fb6c2cb31a4242a03de4868a250e67d108bdad48d912f7021b7e",
+      "item_id": "component-cylinder-occurrence",
+      "outputs": [
+        "model_verify",
+        "solidcraft.json"
+      ],
+      "source_commit": "e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3"
     },
     "examples/component-local-sketch-names": {
       "engine": "scons",
@@ -2530,5 +2543,5 @@
   "name": "dev-cad",
   "schema": 1,
   "scope": "named",
-  "source_commit": "80bc83e72e34e0dce6e6df745d2ebf8f96111379"
+  "source_commit": "e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3"
 }
