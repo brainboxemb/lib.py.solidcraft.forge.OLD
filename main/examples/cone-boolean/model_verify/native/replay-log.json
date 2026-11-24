@@ -1,0 +1,73 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "ca7dbac3f1ee1001a0f766cc54e7ad4b3ece3ce6d82737cd6e49ac516e8cdf36",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "solid.box",
+      "resolved_params": {
+        "length": 50,
+        "width": 40,
+        "height": 20,
+        "corner": [
+          -25.0,
+          -20.0,
+          0
+        ],
+        "body_name": "ConeBoolean"
+      }
+    },
+    {
+      "index": 1,
+      "command": "solid.fillet",
+      "resolved_params": {
+        "edges": [
+          [
+            -25.0,
+            -20.0,
+            10.0
+          ],
+          [
+            25.0,
+            -20.0,
+            10.0
+          ],
+          [
+            25.0,
+            20.0,
+            10.0
+          ],
+          [
+            -25.0,
+            20.0,
+            10.0
+          ]
+        ],
+        "radius": 2,
+        "body": "ConeBoolean"
+      }
+    },
+    {
+      "index": 2,
+      "command": "solid.cone",
+      "resolved_params": {
+        "height": 8,
+        "diameter": 18,
+        "top_diameter": 10,
+        "base": [
+          0,
+          0,
+          18
+        ],
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "ConeBoolean"
+        ]
+      }
+    }
+  ],
+  "completed": 3
+}
