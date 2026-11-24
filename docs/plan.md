@@ -98,9 +98,28 @@ native integration/model/geometry verification remains mandatory.
 Next action: promote accepted `dev-cad` through `main`. Close #785 after the
 stable promotion is accepted.
 
+### #753 — component-local Cylinder joins across occurrences
+
+Status: **now / blocking product CAD**.
+
+CAD #388 is the highest-priority downstream blocker for the five-panel HUB75
+assembly: component bodies are placed correctly, but one loose set of native
+Cylinder join/tool geometry can remain visible at the component-definition
+origin.
+
+Draft PR #754 owns the smallest reusable reproducer: one Box body, one native
+Cylinder join, one copied occurrence and rotated placements. Refresh it from the
+current dev-cad line and run the native SolidCraft path now that the earlier
+dev-cad CI blocker is gone.
+
+Do not add a product-CAD geometry workaround. First determine whether released
+SolidCraft reproduces the stale tool/frame behavior. If runtime-owned, retain
+the exact runtime blocker and qualification here; change Forge lowering only if
+the runtime fix is insufficient.
+
 ### #779 — native whole-sheet perforation
 
-Status: **now / dev-cad**.
+Status: **now / dev-cad in parallel**.
 
 PR #780 is based on the pre-#785 catalog contract and is 24 commits behind the
 accepted dev-cad line. Rebuild that existing issue branch from current
@@ -145,8 +164,8 @@ Verification coverage or reintroduce per-model runtime startup.
 | #814 Example basic validation selection | **blocked on main -> dev-ci sync** | After #785 promotion, sync stable metadata to dev-ci and derive forge-release passing models from `purpose: example`. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
 | #785 Examples / Verification purpose split | **complete on dev-cad / promotion pending** | Promote accepted dev-cad to main; then close. |
-| #779 Native whole-sheet perforation | **now / CAD** | Rebuild PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
-| #753 Component-local Cylinder joins | **later** | Refresh focused qualification after the active metal slice. |
+| #753 Component-local Cylinder joins | **now / blocker** | Refresh PR #754 on current dev-cad and run the native copied/rotated component reproducer; CAD #388 stays blocked until ownership/fix is qualified. |
+| #779 Native whole-sheet perforation | **now / CAD in parallel** | Finish PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
