@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release-verify the built Forge package with the fixed example set."""
+"""Release-verify the built Forge package with purpose-selected Examples."""
 
 from __future__ import annotations
 
@@ -14,17 +14,10 @@ from forge_example import (
     run_contract_tests,
     write_commands,
 )
+from model_selection import example_slugs
 
 
 ROOT = Path(__file__).resolve().parents[1]
-
-# These are Forge release checks, not the historical model-verification catalog.
-PASSING_EXAMPLES = (
-    "simple-box",
-    "anchored-holes",
-    "components",
-    "corner-anchor",
-)
 
 EXPECTED_REJECTIONS = {
     "custom-anchor": (
@@ -95,8 +88,9 @@ def main() -> int:
     output = output_root()
     package = dependency_wheel("forge-package")
     destination = output / "tool_verify"
+    passing_examples = example_slugs(package, ROOT)
 
-    for slug in PASSING_EXAMPLES:
+    for slug in passing_examples:
         verify_passing_example(slug, package, destination)
 
     for slug, message in EXPECTED_REJECTIONS.items():
@@ -104,7 +98,7 @@ def main() -> int:
 
     print(
         "Forge release verification passed: "
-        + ", ".join(PASSING_EXAMPLES + tuple(EXPECTED_REJECTIONS))
+        + ", ".join(passing_examples + tuple(EXPECTED_REJECTIONS))
     )
     return 0
 
