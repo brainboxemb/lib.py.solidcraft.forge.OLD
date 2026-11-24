@@ -4,12 +4,12 @@ from pathlib import Path
 import unittest
 from scpf.runner import run_script
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommandContractTests(unittest.TestCase):
     def test_bracket_command_contract(self):
-        rows = run_script(ROOT / "examples/bracket/scpf/model.py")["commands"]
+        rows = run_script(CASE_ROOT / "scpf/model.py")["commands"]
         sketch = next(row["params"] for row in rows if row["command"] == "sketch.create")
         polygon = next(row["params"] for row in rows if row["command"] == "sketch.line")
         extrude = next(row["params"] for row in rows if row["command"] == "solid.extrude")
