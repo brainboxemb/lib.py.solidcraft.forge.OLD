@@ -1,38 +1,63 @@
 # Contour flange recess replay
 
 **Group:** `sheet-metal`
-**Issue:** Forge #845
+**Saved-design required:** `false`
+
+> Documentation provenance: Forge #845 live/headless contour-flange recess investigation.
 
 ## Goal
 
-Reproduce the smallest known downstream divergence between headless SolidCraft
-replay and live GUI replay without carrying the Mounting Rail M8 product model,
-assembly or repeat pattern.
+Reproduce the smallest known downstream divergence around a valid recess on a
+native contour flange without carrying the Mounting Rail M8 assembly or repeat
+pattern.
 
-## Geometry
+## Forge API
 
-The fixture uses the same physical section as the downstream rail:
+`Sketch.chain(...)`, `Shape.contour_flange(...)`, face-attached
+`Sketch(..., on=..., parent=Anchor.TOP)`, `Circle2D(...)` and
+`Sketch.extrude(Depth.THROUGH_ALL)`.
 
-- 250 mm length;
-- 27 × 18 × 1.25 mm C-profile;
-- 15 mm opening;
-- R1.25 bend rule, K=0.40;
-- one Ø12.5 mm through-cut centred across the broad 27 mm back face;
-- cut centre Y=37.5 mm.
+## Forge model
 
-The cut is geometrically clear of both profile bends. The downstream standalone
-rail fails live at this exact first-cut position. The 1000 mm assembly variant
-also fails with the first cut at Y=12.5 mm.
+The fixture uses a 250 mm long 27 × 18 × 1.25 mm C-profile with a 15 mm
+opening, R1.25 bend rule and K=0.40. One Ø12.5 mm circular cut is centred
+across the broad 27 mm back face at Y=37.5 mm.
 
-## Replay contract
+This is the exact first-cut position from the downstream standalone rail that
+fails through live replay. The 1000 mm assembly variant also fails with its
+first cut at Y=12.5 mm.
 
-Forge emits the contour flange, binds the broad +Z face with `model.faces`,
-attaches the circular Sketch to that exact face and then emits the through-all
-cut.
+## How Forge builds it in SolidCraft
 
-Headless replay currently persists an intermediate `.sc` file between replay
-phases. Live replay uses the same replay document but keeps the design in the
-same GUI session across the binding boundary. #845 exists to determine whether
-that state difference is material.
+Forge authors one open XZ contour, creates one native contour-flange sheet
+body, resolves the broad +Z planar face through `model.faces`, attaches the
+circular Sketch to that exact face and emits one through-all cut.
 
-Do not move the cut as a workaround; the physical geometry is the regression.
+The replay document therefore contains the same face-binding boundary that is
+present in the downstream failure.
+
+## SolidCraft result
+
+A successful replay produces one closed native sheet-metal body with the
+circular recess on the broad planar face and keeps both source Sketches in
+native history.
+
+## Saved-design test
+
+No parameter mutation is required for this regression. The baseline native
+replay itself is the qualification: SolidCraft must accept the valid recess and
+save the resulting native sheet body.
+
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #845 minimal downstream reproduction.
+
+**Bounds sufficient:** `false`
+
+Bounds alone cannot prove that the circular cut was accepted as a valid recess
+on the intended sheet face or that the face-binding/replay boundary behaved
+correctly. Native saved-design history is required.
+
+## Reference notes
+
+- **Downstream Mounting Rail M8** — The fixture preserves the physical C-profile and first broad-face recess geometry that exposed Forge #845; no product pattern or assembly behavior is needed to reproduce the native operation.
