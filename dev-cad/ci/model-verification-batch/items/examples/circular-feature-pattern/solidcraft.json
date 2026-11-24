@@ -1,6 +1,4 @@
 {
-  "format": "scpf-replay",
-  "version": 2,
   "commands": [
     {
       "command": "parameters.add",
@@ -33,80 +31,29 @@
       }
     },
     {
-      "command": "model.faces",
+      "command": "solid.hole",
       "params": {
-        "body": "CircularFeaturePattern"
-      },
-      "bind": {
-        "$face_point_1": {
-          "field": "faces",
-          "where": {
-            "plane_normal": [
-              0,
-              0,
-              1
-            ]
-          },
-          "max": "area",
-          "select": "point"
-        },
-        "$face_index_1": {
-          "field": "faces",
-          "where": {
-            "plane_normal": [
-              0,
-              0,
-              1
-            ]
-          },
-          "max": "area",
-          "select": "index"
-        }
-      }
-    },
-    {
-      "command": "sketch.create",
-      "params": {
-        "plane": {
-          "face": "$face_point_1",
-          "body": "CircularFeaturePattern",
-          "index": "$face_index_1"
-        },
-        "project_edges": false,
-        "name": "BoltHole"
-      }
-    },
-    {
-      "command": "sketch.circle.center",
-      "params": {
-        "center": [
-          "(pcd / 2)",
-          0.0
+        "position": [
+          "pcd / 2",
+          0,
+          6
         ],
-        "diameter": 8
-      }
-    },
-    {
-      "command": "sketch.finish",
-      "params": {}
-    },
-    {
-      "command": "solid.extrude",
-      "params": {
-        "operation": "cut",
         "targets": [
           "CircularFeaturePattern"
         ],
-        "name": "BoltHole",
-        "through_all": true,
-        "direction": "negative"
+        "diameter": 8,
+        "direction": [
+          0.0,
+          0.0,
+          -1.0
+        ]
       }
     },
     {
       "command": "solid.pattern.circular",
       "params": {
         "features": [
-          "BoltHole"
+          "Hole1"
         ],
         "axis": "Z",
         "count": "bolts",

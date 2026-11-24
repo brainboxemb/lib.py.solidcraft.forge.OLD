@@ -1,15 +1,8 @@
 {
   "format": "scpf-replay-log",
   "version": 1,
-  "replay_sha256": "6e0f707c91a82fe0cac18882859202c5f45daee9154f2fc36db8441e3d664f79",
-  "variables": {
-    "$face_point_1": [
-      -20.710678118654755,
-      -20.710678118654755,
-      6.0
-    ],
-    "$face_index_1": 0
-  },
+  "replay_sha256": "8e189f51dc1604d3dfc55f501fc59767f4f2f4987dc56d8f85a2bc58ad601f8f",
+  "variables": {},
   "commands": [
     {
       "index": 0,
@@ -46,71 +39,30 @@
     },
     {
       "index": 3,
-      "command": "model.faces",
+      "command": "solid.hole",
       "resolved_params": {
-        "body": "CircularFeaturePattern"
-      },
-      "bindings": {
-        "$face_point_1": [
-          -20.710678118654755,
-          -20.710678118654755,
-          6.0
+        "position": [
+          "pcd / 2",
+          0,
+          6
         ],
-        "$face_index_1": 0
+        "targets": [
+          "CircularFeaturePattern"
+        ],
+        "diameter": 8,
+        "direction": [
+          0.0,
+          0.0,
+          -1.0
+        ]
       }
     },
     {
       "index": 4,
-      "command": "sketch.create",
-      "resolved_params": {
-        "plane": {
-          "face": [
-            -20.710678118654755,
-            -20.710678118654755,
-            6.0
-          ],
-          "body": "CircularFeaturePattern",
-          "index": 0
-        },
-        "project_edges": false,
-        "name": "BoltHole"
-      }
-    },
-    {
-      "index": 5,
-      "command": "sketch.circle.center",
-      "resolved_params": {
-        "center": [
-          "(pcd / 2)",
-          0.0
-        ],
-        "diameter": 8
-      }
-    },
-    {
-      "index": 6,
-      "command": "sketch.finish",
-      "resolved_params": {}
-    },
-    {
-      "index": 7,
-      "command": "solid.extrude",
-      "resolved_params": {
-        "operation": "cut",
-        "targets": [
-          "CircularFeaturePattern"
-        ],
-        "name": "BoltHole",
-        "through_all": true,
-        "direction": "negative"
-      }
-    },
-    {
-      "index": 8,
       "command": "solid.pattern.circular",
       "resolved_params": {
         "features": [
-          "BoltHole"
+          "Hole1"
         ],
         "axis": "Z",
         "count": "bolts",
@@ -119,5 +71,5 @@
       }
     }
   ],
-  "completed": 9
+  "completed": 5
 }

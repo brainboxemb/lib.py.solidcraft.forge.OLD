@@ -20,178 +20,24 @@
       "CircularFeaturePattern"
     ],
     "feature": 1,
-    "ms": 2.8976789999999997,
+    "ms": 2.698946,
     "name": "Box1",
     "removed_bodies": [],
     "warning": null
   },
   {
-    "body": "CircularFeaturePattern",
-    "faces": [
-      {
-        "area": 10000.0,
-        "centroid": [
-          0.0,
-          0.0,
-          6.0
-        ],
-        "exact": true,
-        "index": 0,
-        "name": "F1:+z",
-        "plane_normal": [
-          0.0,
-          0.0,
-          1.0
-        ],
-        "point": [
-          -20.710678118654755,
-          -20.710678118654755,
-          6.0
-        ]
-      },
-      {
-        "area": 600.0,
-        "centroid": [
-          0.0,
-          50.0,
-          3.0
-        ],
-        "exact": true,
-        "index": 1,
-        "name": "F1:+y",
-        "plane_normal": [
-          0.0,
-          1.0,
-          0.0
-        ],
-        "point": [
-          47.08991914547278,
-          50.0,
-          2.9100808545272256
-        ]
-      },
-      {
-        "area": 600.0,
-        "centroid": [
-          -50.0,
-          0.0,
-          3.0
-        ],
-        "exact": true,
-        "index": 2,
-        "name": "F1:-x",
-        "plane_normal": [
-          -1.0,
-          0.0,
-          0.0
-        ],
-        "point": [
-          -50.0,
-          47.08991914547278,
-          2.9100808545272256
-        ]
-      },
-      {
-        "area": 600.0,
-        "centroid": [
-          0.0,
-          -50.0,
-          3.0
-        ],
-        "exact": true,
-        "index": 3,
-        "name": "F1:-y",
-        "plane_normal": [
-          0.0,
-          -1.0,
-          0.0
-        ],
-        "point": [
-          -47.08991914547278,
-          -50.0,
-          2.9100808545272256
-        ]
-      },
-      {
-        "area": 600.0,
-        "centroid": [
-          50.0,
-          0.0,
-          3.0
-        ],
-        "exact": true,
-        "index": 4,
-        "name": "F1:+x",
-        "plane_normal": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "point": [
-          50.0,
-          -47.08991914547278,
-          2.9100808545272256
-        ]
-      },
-      {
-        "area": 10000.0,
-        "centroid": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "exact": true,
-        "index": 5,
-        "name": "F1:-z",
-        "plane_normal": [
-          -0.0,
-          0.0,
-          -1.0
-        ],
-        "point": [
-          -20.710678118654755,
-          20.710678118654755,
-          0.0
-        ]
-      }
-    ]
-  },
-  {
-    "attachment": "exact_face",
-    "created": {
-      "constraints": [],
-      "curves": [],
-      "dimensions": [],
-      "points": []
-    },
-    "name": "BoltHole",
-    "projected": null,
-    "sketch": 2,
-    "sketching_view": 1
-  },
-  {
-    "constraints": [],
-    "created": {
-      "constraints": [],
-      "curves": [
-        "c1"
-      ],
-      "dimensions": [],
-      "points": [
-        "p1"
-      ]
-    },
-    "curves": [
-      "c1"
+    "bodies": [
+      "CircularFeaturePattern"
     ],
-    "sketch": {
-      "dof": 1,
-      "solved": true
-    }
-  },
-  {
-    "profiles": 1,
-    "sketch": 2
+    "changed_bodies": [
+      "CircularFeaturePattern"
+    ],
+    "created_bodies": [],
+    "feature": 2,
+    "ms": 14.163124,
+    "name": "Hole1",
+    "removed_bodies": [],
+    "warning": null
   },
   {
     "bodies": [
@@ -202,21 +48,7 @@
     ],
     "created_bodies": [],
     "feature": 3,
-    "ms": 11.488883,
-    "name": "BoltHole",
-    "removed_bodies": [],
-    "warning": null
-  },
-  {
-    "bodies": [
-      "CircularFeaturePattern"
-    ],
-    "changed_bodies": [
-      "CircularFeaturePattern"
-    ],
-    "created_bodies": [],
-    "feature": 4,
-    "ms": 77.811357,
+    "ms": 95.578429,
     "name": "CircularPattern1",
     "removed_bodies": [],
     "warning": null
