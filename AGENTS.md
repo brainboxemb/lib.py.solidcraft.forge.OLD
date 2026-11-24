@@ -132,6 +132,7 @@ Presentation metadata in `model.yml` uses the canonical reusable contract in
 `scpf.model_metadata` and the exact template in `docs/templates/model.yml`:
 
 ```text
+purpose
 section
 priority
 title
@@ -144,7 +145,7 @@ stages
 Consumers must reuse `validate_model_metadata()` rather than copying this field
 list or validator. `model.yml` has no consumer-specific extension fields.
 
-`model.yml` is the generic model/page metadata source. `priority` is presentation-only ordering within the declared section; lower values render first. The example
+`model.yml` is the generic model/page metadata source. `purpose` classifies a model as `example`, `verification`, or both through a YAML list. It is the only public Example/Verification membership interface. `priority` is presentation-only ordering within the declared section; lower values render first. The example
 `README.md` owns human engineering explanation such as the goal, Forge API
 and model, SolidCraft lowering/result, saved-design explanation, geometry
 sufficiency rationale and reference notes. Do not infer or summarize those
@@ -154,11 +155,11 @@ Exact verification values remain in `verification/verify.py`; actual current
 results come from durable `build/main`. Do not add a central Python example
 page catalog.
 
-A top-level directory below `examples/` that is not a complete model
-Verification case must own a local `role.yml` explaining its current fixture
-role, owner and keep/promote/retire decision. `ci/site-source` enforces this
-without running CAD. Do not replace these distributed role declarations with a
-central hand-authored membership list.
+Repository-local `role.yml` files may remain as historical fixture notes, but
+they are not a public catalog interface and their presence or absence must not
+decide Example/Verification membership. Do not add `catalog.yml`, a central
+hand-authored membership registry or directory-name semantics; use canonical
+`model.yml.purpose`.
 
 Native-model expectations and mutation definitions live as model-specific data
 in the model verification definition.
