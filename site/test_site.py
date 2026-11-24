@@ -46,6 +46,7 @@ class SiteSourceTests(unittest.TestCase):
             "Shape.contour_flange",
             "Shape.hem",
             "Shape.path_flange",
+            "Shape.perforate",
         )
         for name in expected_methods:
             with self.subTest(name=name):
@@ -66,6 +67,7 @@ class SiteSourceTests(unittest.TestCase):
             "contour-flange",
             "hem",
             "path-flange",
+            "perforation",
             "flat-pattern",
         ):
             self.assertIn(f'id="{anchor}"', guide)
