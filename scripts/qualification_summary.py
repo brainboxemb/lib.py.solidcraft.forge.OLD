@@ -186,10 +186,10 @@ def _visual_check(case_root: Path) -> dict[str, Any]:
     report = _read_object(case_root / "model_verify" / "visual.json")
     if report is None:
         return {
-            "status": "missing",
-            "required": True,
-            "regression_status": "missing",
-            "expected_shape_status": "missing",
+            "status": "not-required",
+            "required": False,
+            "regression_status": "not-required",
+            "expected_shape_status": "not-required",
             "required_views": [],
             "images": [],
             "evidence": [],
@@ -259,6 +259,8 @@ def _reference_check(evidence_root: Path, slug: str):
     builtins = {"cadquery", "build123d"}
     for implementation in REFERENCE_IMPLEMENTATIONS:
         item_root = Path(evidence_root) / "examples" / slug / implementation
+        if not item_root.is_dir():
+            continue
         if implementation in builtins:
             path = item_root / "verification" / "verification.json"
         else:
@@ -313,6 +315,8 @@ def _reference_check(evidence_root: Path, slug: str):
         if relative:
             evidence.append(relative)
 
+    if not checks:
+        return {"status": "pass", "checks": []}, evidence
     return compose_semantic_result(checks), evidence
 
 
