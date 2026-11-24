@@ -18,7 +18,7 @@ from example_documentation import discover_example_documentation
 
 class ExampleMetadataTests(unittest.TestCase):
     def test_current_verification_catalog_is_self_describing(self):
-        rows = discover_example_metadata()
+        rows = discover_example_metadata(purpose="verification")
         self.assertGreater(len(rows), 0)
 
         for row in rows:
@@ -28,6 +28,16 @@ class ExampleMetadataTests(unittest.TestCase):
                 self.assertTrue((root / "verification" / "verify.py").is_file())
                 self.assertGreaterEqual(len(row.stages), 1)
                 self.assertTrue((root / "README.md").is_file())
+
+    def test_curated_example_purpose_is_small_and_explicit(self):
+        rows = discover_example_metadata(purpose="example")
+        self.assertEqual(
+            {row.slug for row in rows},
+            {"simple-box", "anchored-holes", "components", "corner-anchor"},
+        )
+        for row in rows:
+            self.assertIn("example", row.purpose)
+            self.assertIn("verification", row.purpose)
 
 
     def test_preserved_example_documentation_is_complete_and_provenanced(self):
@@ -86,7 +96,7 @@ class ExampleMetadataTests(unittest.TestCase):
                 self.assertEqual(set(data), expected)
 
     def test_section_and_example_priorities_are_complete_and_deterministic(self):
-        rows = discover_example_metadata()
+        rows = discover_example_metadata(purpose="verification")
         sections = load_section_presentation()
 
         self.assertEqual(
@@ -108,7 +118,7 @@ class ExampleMetadataTests(unittest.TestCase):
                 priorities = [row.priority for row in section_rows]
                 self.assertEqual(len(priorities), len(set(priorities)))
 
-    def test_every_example_directory_has_one_explicit_current_role(self):
+    def test_every_example_directory_has_model_metadata_or_repository_role(self):
         import yaml
 
         exception_roles = {
@@ -128,41 +138,37 @@ class ExampleMetadataTests(unittest.TestCase):
             if not root.is_dir():
                 continue
 
-            full_verification = all(
-                path.is_file()
-                for path in (
-                    root / "ci.yml",
-                    root / "model.yml",
-                    root / "README.md",
-                    root / "scpf" / "model.py",
-                    root / "verification" / "verify.py",
-                )
-            )
+            model_path = root / "model.yml"
             role_path = root / "role.yml"
 
             with self.subTest(slug=root.name):
-                if full_verification:
-                    self.assertFalse(
-                        role_path.exists(),
-                        "full Verification cases do not need a second role file",
-                    )
+                if model_path.is_file():
+                    for required in (
+                        root / "ci.yml",
+                        root / "README.md",
+                        root / "scpf" / "model.py",
+                        root / "verification" / "verify.py",
+                    ):
+                        self.assertTrue(required.is_file(), required)
+
                     for implementation in (
                         "build123d",
                         "cadquery",
                         "pybosl2",
                         "pythonscad",
                     ):
-                        self.assertTrue(
-                            (root / implementation / "ci.yml").is_file()
-                        )
-                        self.assertTrue(
-                            (root / implementation / "model.py").is_file()
+                        ci_path = root / implementation / "ci.yml"
+                        source_path = root / implementation / "model.py"
+                        self.assertEqual(
+                            ci_path.is_file(),
+                            source_path.is_file(),
+                            f"{implementation}: reference ci/source must appear together",
                         )
                     continue
 
                 self.assertTrue(
                     role_path.is_file(),
-                    "non-Verification example directory needs role.yml",
+                    "non-model fixture needs repository role metadata",
                 )
                 data = yaml.safe_load(role_path.read_text(encoding="utf-8"))
                 self.assertIsInstance(data, dict)

@@ -19,11 +19,15 @@ dev-cad
 dev-ci
 ```
 
-Current heads after v0.13.2 publication:
+Current permanent heads at this checkpoint:
 
-- `main`: `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
-- `dev-cad`: `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
+- `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
+- `dev-cad`: `704f344e93496e02c28d587faa57885f9be68eaf`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+
+The accidental #811 catalog-directory split has been fully reverted by #812 /
+PR #813. `dev-cad` now preserves that recovery in history while its tree is
+back on the pre-#811 content baseline.
 
 Latest published Forge package: **v0.13.2** at exact
 `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
@@ -117,18 +121,33 @@ PR #780 was intentionally kept outside the v0.13.x release batch. Refresh its
 branch from current `dev-cad`, finish the native perforation evidence, and make
 the feature a Sheet metal Verification item before completion.
 
-### Documentation / Verification — #785 and #786
+### Model purpose / public catalogs — #785
 
-Status: **#786 complete in this change; #785 remains active**.
+Status: **now on dev-cad**.
 
-- #785 restores the small curated public Examples catalog and introduces an
-  independent Verification catalog with a first-class **Sheet metal** group.
-- #786 adds a dedicated Sheet metal API Guide, registers the complete current
-  sheet API in generated Reference navigation, moves quick syntax into a
-  dedicated Cheatsheet group and documents cross-object sheet semantics in
-  `docs/api.md`.
-- future public modelling API is not documentation-complete without normal
-  user-facing API documentation and Verification coverage.
+#785 extends the canonical shared `model.yml` metadata with `purpose`.
+Accepted semantics are:
+
+- `purpose: example`;
+- `purpose: verification`;
+- or both purposes in one list.
+
+The source corpus stays in its existing model directories. No semantic
+`examples/` versus `verification/cases/` split and no `catalog.yml` is
+used. The four curated teaching models carry `example`; broader public
+capability cases carry `verification`; a model may carry both deliberately.
+
+The public Examples and Verification presentations select independently from
+the normalized purposes. Sheet metal becomes a first-class Verification group.
+#786 is already complete and remains the API-documentation baseline.
+
+### CI — #814 Example basic validation set
+
+Status: **parallel design on dev-ci; implementation waits for accepted #785 metadata**.
+
+#814 makes Forge's first/basic model-validation stage select models whose
+canonical purpose contains `example`. It must not introduce a second
+hardcoded slug list or duplicate generic CAD-CI selection behavior.
 
 ### Shared CAD-CI terminology
 
@@ -156,7 +175,8 @@ Exploded-view #751 remains deliberately lower priority.
 | #800 Forge v0.13.2 hotfix release | **complete** | Published and verified at exact `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
 | #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
-| #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
+| #785 Canonical model purpose / Examples + Verification | **now / dev-cad** | Add canonical `model.yml.purpose`, select both public catalogs from it, retain existing model paths and add Sheet metal Verification grouping. |
+| #814 Example basic validation selection | **parallel / dev-ci** | Design against `purpose: example`; implement after the accepted #785 metadata contract is available on dev-ci. |
 | #786 API documentation completeness | **complete** | Sheet metal is first-class in Reference, Guide, Cheatsheet and cross-object API documentation. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
 | #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
@@ -176,8 +196,11 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-1. let product-CAD PR #406 adopt the exact released v0.13.2 commit and re-enable
-   the existing `hub75-panel` without a model workaround;
-2. resume #779, #785 and #786 from the post-v0.13.2 refs in parallel;
-3. keep #788 as a separate measured performance lane and #751 exploded views at
+1. finish #785 on `dev-cad`: canonical `purpose` metadata, independent
+   Example/Verification selection and Sheet metal Verification grouping;
+2. continue #814 design on `dev-ci`, then consume the accepted #785 contract
+   through the normal permanent-branch synchronization path before implementation;
+3. refresh #779 only after the accepted #785 catalog contract is available so
+   perforation joins Verification through `purpose: verification`;
+4. keep #788 as a separate measured performance lane and #751 exploded views at
    lower priority.

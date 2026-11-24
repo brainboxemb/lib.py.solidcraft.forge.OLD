@@ -211,8 +211,8 @@ def _cheatsheet_search_entries():
     return entries
 
 
-def _example_search_entries():
-    """Return search rows from example-owned metadata and preserved docs."""
+def _model_search_entries(purpose, kind, url_root):
+    """Return search rows for one canonical public model purpose."""
 
     documentation = {
         row.slug: row
@@ -221,8 +221,8 @@ def _example_search_entries():
     return [
         _search_entry(
             row.title,
-            "Example",
-            f"examples/{row.slug}/",
+            kind,
+            f"{url_root}/{row.slug}/",
             row.description,
             aliases=(row.tagline, row.section),
             keywords=(
@@ -240,9 +240,20 @@ def _example_search_entries():
                 ),
             ),
         )
-        for row in discover_example_metadata()
+        for row in discover_example_metadata(purpose=purpose)
     ]
 
+
+def _example_search_entries():
+    return _model_search_entries("example", "Example", "examples")
+
+
+def _verification_search_entries():
+    return _model_search_entries(
+        "verification",
+        "Verification",
+        "verification",
+    )
 
 def build_search_index():
     """Build the client-side documentation search index from site sources."""
@@ -251,6 +262,7 @@ def build_search_index():
         + _guide_search_entries()
         + _cheatsheet_search_entries()
         + _example_search_entries()
+        + _verification_search_entries()
     )
     seen = set()
     unique = []
@@ -262,7 +274,7 @@ def build_search_index():
         unique.append(entry)
     return {
         "schema": 1,
-        "generated_from": "public API docstrings, API Guide, Cheatsheet, example model.yml metadata and local README engineering documentation",
+        "generated_from": "public API docstrings, API Guide, Cheatsheet, purpose-classified model.yml metadata and local README engineering documentation",
         "entries": unique,
     }
 
@@ -349,14 +361,16 @@ def build(
         "library_commit": sha,
         "examples": {},
     }
-    example_rows = discover_example_metadata()
+    model_rows = discover_example_metadata()
+    example_rows = discover_example_metadata(purpose="example")
+    verification_rows = discover_example_metadata(purpose="verification")
     documentation_by_slug = {
         row.slug: row
         for row in discover_example_documentation()
     }
-    if set(documentation_by_slug) != {row.slug for row in example_rows}:
+    if set(documentation_by_slug) != {row.slug for row in model_rows}:
         raise ValueError(
-            "example metadata/documentation catalogs do not match"
+            "model metadata/documentation catalogs do not match"
         )
 
     stable = None
@@ -367,13 +381,13 @@ def build(
         stable = load_stable_build_evidence(
             Path(build_evidence),
             build_commit,
-            (row.slug for row in example_rows),
+            (row.slug for row in verification_rows),
             scope=build_scope,
         )
         stable_by_slug = {row.slug: row for row in stable.examples}
         summary_by_slug = _stable_qualification_summary(
             stable,
-            (row.slug for row in example_rows),
+            (row.slug for row in verification_rows),
         )
         stable_view_by_slug = {
             row.slug: qualification_case_view(
@@ -382,7 +396,7 @@ def build(
                 summary_by_slug[row.slug],
                 site_source_commit=sha,
             )
-            for row in example_rows
+            for row in verification_rows
         }
         (out / "provenance.json").write_text(
             json.dumps(
@@ -403,9 +417,6 @@ def build(
 
     for info in example_rows:
         slug = info.slug
-        _section_priority, section_label, _section_description = (
-            section_presentation(info.section)
-        )
         documentation = documentation_by_slug[slug]
         source_path = ROOT / "examples" / slug / "scpf" / "model.py"
         commands = run_script(source_path)
@@ -421,11 +432,10 @@ def build(
         )
         count = len(commands["commands"])
 
-        if stable is not None:
-            stable_view = stable_view_by_slug[slug]
+        stable_view = stable_view_by_slug.get(slug)
+        if stable_view is not None:
             page_preview = stable_view["preview_url"]
             card_preview = stable_view["preview_url"]
-            qualification_preview = stable_view["preview_url"]
             preview_kind = "durable-presentation-preview"
             preview_caption = (
                 "Current deterministic presentation preview from durable "
@@ -434,7 +444,6 @@ def build(
         else:
             page_preview = "../../static/example-placeholder.svg"
             card_preview = "static/example-placeholder.svg"
-            qualification_preview = "../static/example-placeholder.svg"
             preview_kind = "source-only-placeholder"
             preview_caption = (
                 "Source-only preview. Native images are supplied by accepted "
@@ -515,23 +524,6 @@ def build(
                 example_url=f"examples/{escape(slug)}/",
                 preview_url=escape(card_preview),
             )
-        )
-        if stable is not None:
-            verification_card = qualification_card(
-                info,
-                stable_view_by_slug[slug],
-                f"{slug}/",
-                section_label=section_label,
-            )
-        else:
-            verification_card = render_template(
-                "example-card.html",
-                **{**card_values, "section": escape(section_label)},
-                example_url=f"../examples/{escape(slug)}/",
-                preview_url=escape(qualification_preview),
-            )
-        verification_cards_by_section.setdefault(info.section, []).append(
-            (info.priority, info.slug, verification_card)
         )
 
     # Expanded, navigable documentation remains separate from tiny smoke-test
@@ -640,7 +632,7 @@ def build(
     verification_root.mkdir(exist_ok=True)
     verification_manifest = {}
 
-    for info in example_rows:
+    for info in verification_rows:
         slug = info.slug
         _section_priority, section_label, _section_description = (
             section_presentation(info.section)
@@ -654,19 +646,21 @@ def build(
         verification_url = (
             f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/verification/verify.py"
         )
-        reference_sources = {
-            implementation: (
+        reference_sources = {}
+        reference_source_urls = {}
+        for implementation in IMPLEMENTATIONS:
+            reference_source = (
                 ROOT / "examples" / slug / implementation / "model.py"
-            ).read_text(encoding="utf-8")
-            for implementation in IMPLEMENTATIONS
-        }
-        reference_source_urls = {
-            implementation: (
+            )
+            if not reference_source.is_file():
+                continue
+            reference_sources[implementation] = reference_source.read_text(
+                encoding="utf-8"
+            )
+            reference_source_urls[implementation] = (
                 f"{LIBRARY_URL}/blob/{sha}/examples/{slug}/"
                 f"{implementation}/model.py"
             )
-            for implementation in IMPLEMENTATIONS
-        }
         if stable is not None:
             stable_view = stable_view_by_slug[slug]
             setup_svg = qualification_setup_svg(stable_view, info.title)
@@ -743,6 +737,31 @@ def build(
             ),
             encoding="utf-8",
         )
+        verification_card_values = {
+            "slug": escape(slug),
+            "title": escape(info.title),
+            "section": escape(section_label),
+            "description": escape(info.description),
+            "command_summary": "",
+        }
+        if stable is not None:
+            verification_card = qualification_card(
+                info,
+                stable_view_by_slug[slug],
+                f"{slug}/",
+                section_label=section_label,
+            )
+        else:
+            verification_card = render_template(
+                "example-card.html",
+                **verification_card_values,
+                example_url=f"{escape(slug)}/",
+                preview_url="../static/example-placeholder.svg",
+            )
+        verification_cards_by_section.setdefault(info.section, []).append(
+            (info.priority, info.slug, verification_card)
+        )
+
         verification_manifest[slug] = {
             "title": info.title,
             "documentation_source": f"examples/{slug}/README.md",
@@ -781,7 +800,7 @@ def build(
     results_root = verification_root / "results"
     results_root.mkdir(exist_ok=True)
     results_body = results_content(
-        example_rows,
+        verification_rows,
         stable_view_by_slug,
         source_sha=sha,
         build_commit=(stable.build_commit if stable is not None else None),
@@ -802,7 +821,7 @@ def build(
     coverage_root = verification_root / "coverage"
     coverage_root.mkdir(exist_ok=True)
     coverage_body = coverage_content(
-        (row.slug for row in example_rows),
+        (row.slug for row in verification_rows),
         evidence_note,
     )
     (coverage_root / "index.html").write_text(
@@ -902,7 +921,7 @@ def build(
     )
     verification_index = render_template(
         "qualification-index.html",
-        example_count=len(example_rows),
+        example_count=len(verification_rows),
         groups=verification_groups,
         evidence_note=evidence_note,
     )
@@ -947,7 +966,7 @@ def build(
         encoding="utf-8",
     )
     for slug in (
-        *(row.slug for row in example_rows),
+        *(row.slug for row in verification_rows),
         "results",
         "coverage",
         "joint-anatomy",
@@ -967,10 +986,15 @@ def build(
 
     sections = []
     example_slugs = {row.slug for row in example_rows}
+    verification_slugs = {row.slug for row in verification_rows}
     for heading, items in load_cheatsheet():
         boxes = []
         for title, description, snippet, linked in items:
-            link = cheatsheet_link(linked, example_slugs)
+            link = cheatsheet_link(
+                linked,
+                example_slugs,
+                verification_slugs,
+            )
             boxes.append(
                 render_template(
                     "cheatsheet-item.html",

@@ -7,7 +7,10 @@ from dataclasses import dataclass
 from typing import Any
 
 
+MODEL_PURPOSES = ("example", "verification")
+
 MODEL_METADATA_FIELDS = (
+    "purpose",
     "section",
     "priority",
     "title",
@@ -22,6 +25,7 @@ MODEL_METADATA_FIELDS = (
 class ModelMetadata:
     """Validated canonical model.yml values, independent of the YAML loader."""
 
+    purpose: tuple[str, ...]
     section: str
     priority: int
     title: str
@@ -35,6 +39,26 @@ def _text(value: Any, label: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{label} must be a non-empty string")
     return value.strip()
+
+
+def _purpose(value: Any, label: str) -> tuple[str, ...]:
+    values = [value] if isinstance(value, str) else value
+    if not isinstance(values, list) or not values:
+        raise ValueError(
+            f"{label} must be 'example', 'verification', or a non-empty list"
+        )
+    normalized = tuple(
+        _text(item, f"{label}[{index}]")
+        for index, item in enumerate(values)
+    )
+    unknown = sorted(set(normalized) - set(MODEL_PURPOSES))
+    if unknown:
+        raise ValueError(
+            f"{label} contains unsupported values: " + ", ".join(unknown)
+        )
+    if len(normalized) != len(set(normalized)):
+        raise ValueError(f"{label} must not contain duplicate values")
+    return tuple(item for item in MODEL_PURPOSES if item in normalized)
 
 
 def _positive_int(value: Any, label: str) -> int:
@@ -79,6 +103,7 @@ def validate_model_metadata(
         )
 
     return ModelMetadata(
+        purpose=_purpose(data["purpose"], f"{label}.purpose"),
         section=_text(data["section"], f"{label}.section"),
         priority=_positive_int(data["priority"], f"{label}.priority"),
         title=_text(data["title"], f"{label}.title"),
