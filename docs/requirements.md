@@ -1094,6 +1094,10 @@ The current public concept is **verification**, not qualification.
 - the Examples index must include only models whose normalized `purpose`
   contains `example`;
 - one model may carry both purposes and appear in both without duplicated source;
+- native integration/model/geometry evidence remains mandatory for public
+  Verification; independent reference implementations and visual
+  regression/expected-shape evidence are required only when that model declares
+  those evidence layers;
 - grouping order must be deterministic, and no second central catalog of group
   membership may be introduced;
 - each example declares a local integer `priority` in its `model.yml`; examples
