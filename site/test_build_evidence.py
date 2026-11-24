@@ -408,7 +408,7 @@ class StableBuildEvidenceTests(unittest.TestCase):
                     scope="dev_cad",
                 )
 
-    def test_missing_visual_verification_is_rejected(self):
+    def test_missing_visual_verification_is_allowed(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             self.make_complete_tree(root)
@@ -420,15 +420,13 @@ class StableBuildEvidenceTests(unittest.TestCase):
                 / "visual.json"
             ).unlink()
 
-            with self.assertRaisesRegex(
-                ValueError,
-                "visual verification is missing",
-            ):
-                load_stable_build_evidence(
-                    root,
-                    "c" * 40,
-                    ("simple-box",),
-                )
+            evidence = load_stable_build_evidence(
+                root,
+                "c" * 40,
+                ("simple-box",),
+            )
+            self.assertIsNone(evidence.examples[0].visual)
+            self.assertIsNone(evidence.examples[0].visual_path)
 
     def test_split_visual_view_roles_are_accepted(self):
         with tempfile.TemporaryDirectory() as tmp:
