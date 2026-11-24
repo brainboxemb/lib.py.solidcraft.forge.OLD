@@ -1,0 +1,90 @@
+{
+  "format": "scpf-replay-log",
+  "version": 1,
+  "replay_sha256": "3b3ba9489e59dad2f7edefa2621eec9592c1fbc92192ea654cb2f2d99dac16a3",
+  "variables": {},
+  "commands": [
+    {
+      "index": 0,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "radius",
+        "expression": "4",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 1,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "length",
+        "expression": "10",
+        "unit": "mm"
+      }
+    },
+    {
+      "index": 2,
+      "command": "parameters.add",
+      "resolved_params": {
+        "name": "sweep",
+        "expression": "360",
+        "unit": "deg"
+      }
+    },
+    {
+      "index": 3,
+      "command": "sketch.create",
+      "resolved_params": {
+        "plane": "XZ",
+        "name": "RadialProfile"
+      }
+    },
+    {
+      "index": 4,
+      "command": "sketch.line",
+      "resolved_params": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            "radius"
+          ],
+          [
+            "length",
+            "radius"
+          ],
+          [
+            "length",
+            0
+          ]
+        ],
+        "closed": true,
+        "ids": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "command": "sketch.finish",
+      "resolved_params": {}
+    },
+    {
+      "index": 6,
+      "command": "solid.revolve",
+      "resolved_params": {
+        "sketch": "RadialProfile",
+        "axis": "X",
+        "angle": "sweep",
+        "body_name": "NativeRevolve"
+      }
+    }
+  ],
+  "completed": 7
+}

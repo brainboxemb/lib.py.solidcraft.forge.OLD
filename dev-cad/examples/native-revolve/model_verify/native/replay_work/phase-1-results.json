@@ -1,0 +1,84 @@
+[
+  {
+    "display_value": 4.0,
+    "name": "radius",
+    "unit": "mm",
+    "value": 4.0
+  },
+  {
+    "display_value": 10.0,
+    "name": "length",
+    "unit": "mm",
+    "value": 10.0
+  },
+  {
+    "display_value": 360.0,
+    "name": "sweep",
+    "unit": "deg",
+    "value": 360.0
+  },
+  {
+    "attachment": "fixed",
+    "created": {
+      "constraints": [],
+      "curves": [],
+      "dimensions": [],
+      "points": []
+    },
+    "name": "RadialProfile",
+    "projected": null,
+    "sketch": 1,
+    "sketching_view": 1
+  },
+  {
+    "constraints": [
+      "k1"
+    ],
+    "created": {
+      "constraints": [
+        "k1"
+      ],
+      "curves": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "dimensions": [],
+      "points": [
+        "p1",
+        "p2",
+        "p3",
+        "a.start"
+      ]
+    },
+    "curves": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "sketch": {
+      "dof": 0,
+      "solved": true
+    }
+  },
+  {
+    "profiles": 1,
+    "sketch": 1
+  },
+  {
+    "bodies": [
+      "NativeRevolve"
+    ],
+    "changed_bodies": [],
+    "created_bodies": [
+      "NativeRevolve"
+    ],
+    "feature": 2,
+    "ms": 4.59412,
+    "name": "Revolve1",
+    "removed_bodies": [],
+    "warning": null
+  }
+]

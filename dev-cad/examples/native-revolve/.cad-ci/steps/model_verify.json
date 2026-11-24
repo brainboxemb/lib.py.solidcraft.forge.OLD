@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "0bdfb0707a0aaa51670b63a6a1d7abe4dfe8bc8c8aee7b55bfdbf35137ab2a38",
+  "duration_seconds": 0.214,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T17:06:56.697Z",
+  "item": "native-revolve",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "cc817ccc00b0df2cb31bd0ade4e17593f8ede1ec0dcc5051070aabccd91bed7d"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "bf2af48c5c118a8042dc987b51de3a272fabdb6b06f6e555d67d65229bd1f4c8"
+    }
+  },
+  "run_finished_at": "2026-11-24T17:07:08.796Z",
+  "run_started_at": "2026-11-24T17:04:52.843Z",
+  "schema": 6,
+  "started_at": "2026-11-24T17:06:56.483Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "713bc6f67cad6f485f0259253546fc61e185e7b7abc0c600d6731964236aa6ed",
+  "timeout_seconds": null
+}

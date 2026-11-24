@@ -3,13 +3,13 @@
   "action_type": "copy",
   "active_dependent_config_digests": {},
   "active_dependents": [],
-  "bundle_sha256": "4843bb42f2cc6d32e55c14afa945a14dc071676d890feac5659c08a575e7555f",
-  "duration_seconds": 0.267,
+  "bundle_sha256": "44838f867545dc6faef1df6919e447df980d0fca1360e9905a61dbc97379cf4c",
+  "duration_seconds": 0.798,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-24T13:22:20.213Z",
+  "finished_at": "2026-11-24T17:06:43.033Z",
   "item": "rotated-sketch-cutter",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -17,7 +17,7 @@
     "model_verify": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "bdac30d07fc3aaf25e2f8dd7206058c3980bdf3a340908b9c7d083cc75037baf"
+      "sha256": "de5e4ed10def49636e3c8227c50185491241d7d2b64c16be1f81c1e30dba6092"
     },
     "solidcraft.json": {
       "kind": "file",
@@ -25,10 +25,10 @@
       "sha256": "b4f3ade9f740457d9cdbdeedda6ebe3f10c17e9cd3f3ade745a415ca283a84a6"
     }
   },
-  "run_finished_at": "2026-11-24T13:22:54.103Z",
-  "run_started_at": "2026-11-24T13:20:43.766Z",
+  "run_finished_at": "2026-11-24T17:07:08.796Z",
+  "run_started_at": "2026-11-24T17:04:52.843Z",
   "schema": 6,
-  "started_at": "2026-11-24T13:22:19.946Z",
+  "started_at": "2026-11-24T17:06:42.235Z",
   "status": "pass",
   "step": "model_verify",
   "target_spec_digest": "9bb8eac78ee35dd06768de1c79a5c2c1fd1eec7c521edf71043147a00107eaad",
