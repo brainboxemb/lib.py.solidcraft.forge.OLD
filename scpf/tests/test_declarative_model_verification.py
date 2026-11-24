@@ -148,7 +148,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         for slug in BATCH_TWO_MODELS:
             with self.subTest(slug=slug):
                 text = (
-                    ROOT / "examples" / slug / "verification" / "verify.py"
+                    fixture_root(slug) / "verification" / "verify.py"
                 ).read_text(encoding="utf-8")
                 has_saved_design = "SolidCraftSavedDesign(" in text
                 self.assertEqual(
