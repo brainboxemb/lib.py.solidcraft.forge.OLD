@@ -988,9 +988,12 @@ not directory naming.
 
 ### Presentation metadata selection boundary
 
-`model.yml` is presentation/documentation metadata. Changing only
-`examples/<slug>/model.yml` must not select or invalidate model compilation,
-SolidCraft verification or independent CAD reference verification.
+`model.yml` is canonical descriptive/classification metadata. Changing only
+`examples/<slug>/model.yml` must not select or invalidate full model
+compilation, SolidCraft Verification or independent CAD reference Verification.
+The `example` purpose may additionally select the existing small Forge
+basic/release-validation stage; #814 owns that dev-ci interpretation. This does
+not turn `purpose` into generic CAD-CI process state.
 
 The lightweight site-source item owns `model.yml` and `README.md` validation
 and generated documentation checks. CAD verification inputs are the model source,
