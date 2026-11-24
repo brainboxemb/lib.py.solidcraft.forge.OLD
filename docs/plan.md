@@ -19,11 +19,15 @@ dev-cad
 dev-ci
 ```
 
-Current heads after v0.13.2 publication:
+Current heads at the #785 restart checkpoint:
 
-- `main`: `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
-- `dev-cad`: `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
-- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+- `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
+- `dev-cad`: `704f344e93496e02c28d587faa57885f9be68eaf`;
+- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e` (main -> dev-ci sync PR #815 in progress).
+
+PR #811's directory/catalog split was accidentally merged and then exactly
+reverted by #812/#813. The restored dev-cad tree is byte-for-byte equivalent
+to the pre-#811 tree; #785 now restarts from the corrected architecture.
 
 Latest published Forge package: **v0.13.2** at exact
 `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
@@ -111,24 +115,42 @@ v0.13.1 and v0.13.2 are complete and immutable. No Forge release is currently ac
 
 ### CAD — #779 whole-sheet perforation
 
-Status: **resume now**.
+Status: **next after #785**.
 
-PR #780 was intentionally kept outside the v0.13.x release batch. Refresh its
-branch from current `dev-cad`, finish the native perforation evidence, and make
-the feature a Sheet metal Verification item before completion.
+PR #780 was intentionally kept outside the v0.13.x release batch. Refresh it
+from the accepted #785 dev-cad head, keep its source under the existing
+`examples/sheet-perforate` layout, finish native perforation evidence and set
+its canonical model metadata purpose to include `verification`.
 
 ### Documentation / Verification — #785 and #786
 
-Status: **#786 complete in this change; #785 remains active**.
+Status: **#785 now on dev-cad; #786 complete**.
 
-- #785 restores the small curated public Examples catalog and introduces an
-  independent Verification catalog with a first-class **Sheet metal** group.
-- #786 adds a dedicated Sheet metal API Guide, registers the complete current
-  sheet API in generated Reference navigation, moves quick syntax into a
-  dedicated Cheatsheet group and documents cross-object sheet semantics in
-  `docs/api.md`.
-- future public modelling API is not documentation-complete without normal
-  user-facing API documentation and Verification coverage.
+#785 uses the canonical shared `model.yml` contract rather than source
+directory semantics:
+
+- add `purpose` with accepted values `example`, `verification`, or a YAML
+  list containing both;
+- keep all model source paths in their existing `examples/<slug>` locations;
+- select the curated Examples catalog from purpose containing `example`;
+- select the broader Verification catalog from purpose containing
+  `verification`;
+- keep the four curated examples as `[example, verification]`;
+- promote the recent sheet-metal, attached Polygon2D and rotated Sketch
+  capabilities to Verification in-place;
+- make external reference implementations optional evidence when the source
+  implementation is absent;
+- add the first-class **Sheet metal** Verification group;
+- do not use `role.yml`, `catalog.yml` or directory placement as the public
+  catalog contract.
+
+#786 is complete: Sheet metal is already first-class in Guide, Reference,
+Cheatsheet and `docs/api.md`.
+
+#814 is the separate dev-ci consumer of `purpose: example`: it will derive
+Forge's small first/basic model validation set from the same canonical metadata
+instead of maintaining a second hardcoded slug list. Its implementation waits
+for the accepted #785 metadata contract to reach dev-ci.
 
 ### Shared CAD-CI terminology
 
@@ -155,9 +177,11 @@ Exploded-view #751 remains deliberately lower priority.
 | #796 Symbolic placed-Cylinder anchor arithmetic | **complete / v0.13.2** | Released and verified; downstream CAD should consume v0.13.2 without a model workaround. |
 | #800 Forge v0.13.2 hotfix release | **complete** | Published and verified at exact `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`. |
 | #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
-| #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
-| #785 Examples / Verification catalog split | **now / docs+verification** | Restore four curated Examples and add a Sheet metal Verification group. |
+| #779 Native whole-sheet perforation | **next after #785** | Refresh from accepted #785 dev-cad, keep existing source path, add verification purpose and finish runtime evidence. |
+| #785 Purpose-based Examples / Verification catalogs | **now / dev-cad** | Add canonical model.yml purpose, restore four curated Examples, promote recent Verification cases in place and add Sheet metal grouping. |
 | #786 API documentation completeness | **complete** | Sheet metal is first-class in Reference, Guide, Cheatsheet and cross-object API documentation. |
+| #812 Revert accidental #811 catalog split | **complete / recovery** | PR #813 restored the exact pre-#811 tree without history rewrite. |
+| #814 Purpose-driven basic Forge validation set | **blocked on #785 contract / dev-ci** | After #785 reaches dev-ci, derive the small first/basic validation set from purpose containing example. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
 | #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
@@ -176,8 +200,12 @@ Exploded-view #751 remains deliberately lower priority.
 
 ## Next checkpoint
 
-1. let product-CAD PR #406 adopt the exact released v0.13.2 commit and re-enable
-   the existing `hub75-panel` without a model workaround;
-2. resume #779, #785 and #786 from the post-v0.13.2 refs in parallel;
-3. keep #788 as a separate measured performance lane and #751 exploded views at
+1. finish #785 on the restored dev-cad tree and require its exact branch build
+   green;
+2. complete main -> dev-ci sync PR #815 independently;
+3. after #785 is accepted and synchronized to dev-ci, implement #814 so the
+   first/basic Forge model set comes from `model.yml.purpose`;
+4. refresh #779 from the accepted #785 dev-cad head and add perforation as
+   another in-place Sheet metal Verification model;
+5. keep #788 as a separate measured performance lane and #751 exploded views at
    lower priority.
