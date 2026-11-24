@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "bdeb0274aab86d9a1e23fd7df72f0ed44dc713f975282684e7bbe4e335d0afef",
+  "duration_seconds": 0.02,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:47.077Z",
+  "item": "examples-rectangular-pattern-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "b52a6bcb1ca80e544fc3d56c337daad85554f837b4815285577a3328ebe6c3ef"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:47.057Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "8b9b3ca2c5b60c67c82315e84d9c0e85dbf914f6d87c0f85d8b3d92a0e597c07",
+  "timeout_seconds": null
+}

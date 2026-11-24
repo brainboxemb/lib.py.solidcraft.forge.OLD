@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "f8e0ed6a3f31c8c79f8fd117fef8dc6ab16bef364c44e1f647257afdc05ada4d",
+  "duration_seconds": 0.06,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:47.887Z",
+  "item": "examples-round-top-sketch-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "a561e754dc1d922ebb9398fb2211648476a5d03b98ebf283e967b31c2f097065"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:47.827Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "488f16324847b58a8586021dd5711559ac4f35aedc910da7950b9ee1063b7ae6",
+  "timeout_seconds": null
+}

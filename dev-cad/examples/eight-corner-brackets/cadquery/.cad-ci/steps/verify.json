@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "8ee89320b8d820fad62ce87033092e0205c5738ab38ba79d46f056685b1660ce",
+  "duration_seconds": 0.022,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:44.151Z",
+  "item": "examples-eight-corner-brackets-cadquery",
+  "outcome": "BUILT",
+  "output_state": "REPAIRED",
+  "outputs": {
+    "verification": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "49c659429317300ba30131c425a9d0f77f9ade30576dc87346468098575df25e"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:44.128Z",
+  "status": "pass",
+  "step": "verify",
+  "target_spec_digest": "731fe666e309fb8e500e2640f4c9cb0df4d1f83676937a4bb810074007e3d427",
+  "timeout_seconds": null
+}

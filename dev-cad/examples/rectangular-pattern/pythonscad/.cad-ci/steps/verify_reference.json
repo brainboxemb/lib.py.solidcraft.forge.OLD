@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "e873de5457551af2ca8b78d3efae7db3e6c4639d29563323c736c59c7cb86392",
+  "duration_seconds": 0.072,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:47.240Z",
+  "item": "examples-rectangular-pattern-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "f9bbd5f012cb3e299965b0e9a848c910a2b694ab9446081de8a7b9ca801fee7b"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:47.168Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "f7c4d173913dad7049fa2eecaf7a8451a2d93d68759dfd5d92e2a68208edda4c",
+  "timeout_seconds": null
+}

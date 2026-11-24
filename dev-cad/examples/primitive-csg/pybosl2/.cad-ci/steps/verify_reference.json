@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "4d54efd41894e615ee4f99b4542acfcd8240949c55bf50c4c7a161799ecbaaa8",
+  "duration_seconds": 0.079,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:46.944Z",
+  "item": "examples-primitive-csg-pybosl2",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "0f6b8451d18f979fb66ed1110477e4cac0a27712946888c4bd1e016286e8d3d3"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:46.865Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "009e2682dcfe5bda3fa461e9e164f15df3f32eeeae086bc61884aa7f8c53c0fc",
+  "timeout_seconds": null
+}

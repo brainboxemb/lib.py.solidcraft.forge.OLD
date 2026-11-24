@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "f751948593b3649dde0cdb3367242207e90287ba930f1fd59b0712503ddd669e",
+  "duration_seconds": 0.062,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:49.006Z",
+  "item": "examples-sketch-pattern-mirror-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "8e8d7aa496232b27e39d496c41a30366eff34077489fe2fe1c38febc94b4b21a"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:48.945Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "d8719311855d3177853906b0623a06aba4ec138c4d841e22cbed09a03d9e8a6c",
+  "timeout_seconds": null
+}

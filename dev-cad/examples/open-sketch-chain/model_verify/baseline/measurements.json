@@ -1,0 +1,57 @@
+{
+  "bodies": [],
+  "body_count": 0,
+  "params": [
+    {
+      "comment": "",
+      "error": null,
+      "expression": "40",
+      "model": false,
+      "name": "length",
+      "unit": "mm",
+      "value": 40.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "30",
+      "model": false,
+      "name": "end_height",
+      "unit": "mm",
+      "value": 30.0
+    }
+  ],
+  "sketches": [
+    {
+      "curves": 3,
+      "dof": 2,
+      "id": 1,
+      "name": "Contour Path",
+      "profiles": 0,
+      "status": "solved",
+      "visible": true,
+      "wires_ok": true
+    }
+  ],
+  "timeline": [
+    {
+      "error": null,
+      "id": 1,
+      "ms": 0.296964,
+      "name": "Contour Path",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    }
+  ],
+  "total": {
+    "area_mm2": -0.0,
+    "edges": 0,
+    "faces": 0,
+    "mass_g": -0.0,
+    "open_bodies_skipped": 0,
+    "vertices": 0,
+    "volume_mm3": -0.0
+  }
+}

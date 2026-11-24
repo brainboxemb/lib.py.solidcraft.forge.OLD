@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "548b100f8bc87d45cd429f1d70a19cc27467cd7dbe704871de0dce051c74f78c",
+  "duration_seconds": 0.019,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:44.127Z",
+  "item": "examples-eight-corner-brackets-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "a6a1741ed5448eede477e8f6d51d4e5108c0c2dc3e4887378871b63bee2fa4ce"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:44.107Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "54da52a873d1ba9a17a0d9bf87fd568e3cf065112400f519c78eed2ffc9398de",
+  "timeout_seconds": null
+}

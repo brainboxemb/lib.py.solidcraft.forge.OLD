@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "e46e38af26bdb25e4830e4339d271c6b92b4dbf14877c4c21441cfb5252b0e07",
+  "duration_seconds": 0.02,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:46.598Z",
+  "item": "examples-parent-derived-child-size-cadquery",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "ac4daa1f5d121c49144a6d8f7a474f6a99d79fad812e8e8c963f787e3652dc1f"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:46.578Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "95b70f3e83d544bf31fd9b44b6074db7767d2ae610be9c9a9d9f19693b674fa9",
+  "timeout_seconds": null
+}

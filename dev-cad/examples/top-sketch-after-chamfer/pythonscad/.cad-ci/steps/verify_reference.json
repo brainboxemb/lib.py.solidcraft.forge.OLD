@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "6f36a4d3eb4cbed05351075a3945a096001478ea84eeb369ffeb27ea097246ce",
+  "duration_seconds": 0.062,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:49.453Z",
+  "item": "examples-top-sketch-after-chamfer-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "bbce62108eb1597898791f2356ca677f9972463d9f4e79a417cc24cf071b37e1"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:49.391Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "c6797336db2a50452378a8d3fc4cbcd91c80a45934b21e7e62648a830851ceea",
+  "timeout_seconds": null
+}

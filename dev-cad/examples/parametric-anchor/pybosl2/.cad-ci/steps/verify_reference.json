@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "8cdf708d21e8c885ff447b5f85450c676246581decc332f50173f0e355c05155",
+  "duration_seconds": 0.062,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:45.560Z",
+  "item": "examples-parametric-anchor-pybosl2",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "371910befad568aae3020793bcfb3a5145409077f2af9cbf27153d651e160e09"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:45.498Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "9b89627ead575ac1e1f3cf691b39f505e726675d39f9d78ce58893d9a1c38292",
+  "timeout_seconds": null
+}

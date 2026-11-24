@@ -6,6 +6,36 @@
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-anchor-topology-mutation-build123d",
+      "item_path": "examples/anchor-topology-mutation/build123d",
+      "output": "/output/items/examples/anchor-topology-mutation/build123d/model.stl",
+      "source": "/repo/examples/anchor-topology-mutation/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/anchor-topology-mutation/verification/reference_geometry.json",
+        "output": "/output/items/examples/anchor-topology-mutation/build123d/verification",
+        "verification_id": "examples-anchor-topology-mutation-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-anchor-topology-mutation-cadquery",
+      "item_path": "examples/anchor-topology-mutation/cadquery",
+      "output": "/output/items/examples/anchor-topology-mutation/cadquery/model.stl",
+      "source": "/repo/examples/anchor-topology-mutation/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/anchor-topology-mutation/verification/reference_geometry.json",
+        "output": "/output/items/examples/anchor-topology-mutation/cadquery/verification",
+        "verification_id": "examples-anchor-topology-mutation-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
       "item_id": "examples-anchored-holes-build123d",
       "item_path": "examples/anchored-holes/build123d",
       "output": "/output/items/examples/anchored-holes/build123d/model.stl",
@@ -30,6 +60,216 @@
         "definition": "/repo/examples/anchored-holes/verification/reference_geometry.json",
         "output": "/output/items/examples/anchored-holes/cadquery/verification",
         "verification_id": "examples-anchored-holes-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-as-built-attach-build123d",
+      "item_path": "examples/as-built-attach/build123d",
+      "output": "/output/items/examples/as-built-attach/build123d/model.stl",
+      "source": "/repo/examples/as-built-attach/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/as-built-attach/verification/reference_geometry.json",
+        "output": "/output/items/examples/as-built-attach/build123d/verification",
+        "verification_id": "examples-as-built-attach-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-as-built-attach-cadquery",
+      "item_path": "examples/as-built-attach/cadquery",
+      "output": "/output/items/examples/as-built-attach/cadquery/model.stl",
+      "source": "/repo/examples/as-built-attach/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/as-built-attach/verification/reference_geometry.json",
+        "output": "/output/items/examples/as-built-attach/cadquery/verification",
+        "verification_id": "examples-as-built-attach-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-assembly-decorator-build123d",
+      "item_path": "examples/assembly-decorator/build123d",
+      "output": "/output/items/examples/assembly-decorator/build123d/model.stl",
+      "source": "/repo/examples/assembly-decorator/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/assembly-decorator/verification/reference_geometry.json",
+        "output": "/output/items/examples/assembly-decorator/build123d/verification",
+        "verification_id": "examples-assembly-decorator-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-assembly-decorator-cadquery",
+      "item_path": "examples/assembly-decorator/cadquery",
+      "output": "/output/items/examples/assembly-decorator/cadquery/model.stl",
+      "source": "/repo/examples/assembly-decorator/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/assembly-decorator/verification/reference_geometry.json",
+        "output": "/output/items/examples/assembly-decorator/cadquery/verification",
+        "verification_id": "examples-assembly-decorator-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-assembly-owned-anchor-build123d",
+      "item_path": "examples/assembly-owned-anchor/build123d",
+      "output": "/output/items/examples/assembly-owned-anchor/build123d/model.stl",
+      "source": "/repo/examples/assembly-owned-anchor/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/assembly-owned-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/assembly-owned-anchor/build123d/verification",
+        "verification_id": "examples-assembly-owned-anchor-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-assembly-owned-anchor-cadquery",
+      "item_path": "examples/assembly-owned-anchor/cadquery",
+      "output": "/output/items/examples/assembly-owned-anchor/cadquery/model.stl",
+      "source": "/repo/examples/assembly-owned-anchor/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/assembly-owned-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/assembly-owned-anchor/cadquery/verification",
+        "verification_id": "examples-assembly-owned-anchor-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-attach-angle-build123d",
+      "item_path": "examples/attach-angle/build123d",
+      "output": "/output/items/examples/attach-angle/build123d/model.stl",
+      "source": "/repo/examples/attach-angle/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/attach-angle/verification/reference_geometry.json",
+        "output": "/output/items/examples/attach-angle/build123d/verification",
+        "verification_id": "examples-attach-angle-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-attach-angle-cadquery",
+      "item_path": "examples/attach-angle/cadquery",
+      "output": "/output/items/examples/attach-angle/cadquery/model.stl",
+      "source": "/repo/examples/attach-angle/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/attach-angle/verification/reference_geometry.json",
+        "output": "/output/items/examples/attach-angle/cadquery/verification",
+        "verification_id": "examples-attach-angle-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-bracket-build123d",
+      "item_path": "examples/bracket/build123d",
+      "output": "/output/items/examples/bracket/build123d/model.stl",
+      "source": "/repo/examples/bracket/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/bracket/verification/reference_geometry.json",
+        "output": "/output/items/examples/bracket/build123d/verification",
+        "verification_id": "examples-bracket-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-bracket-cadquery",
+      "item_path": "examples/bracket/cadquery",
+      "output": "/output/items/examples/bracket/cadquery/model.stl",
+      "source": "/repo/examples/bracket/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/bracket/verification/reference_geometry.json",
+        "output": "/output/items/examples/bracket/cadquery/verification",
+        "verification_id": "examples-bracket-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-circle-negative-extrude-build123d",
+      "item_path": "examples/circle-negative-extrude/build123d",
+      "output": "/output/items/examples/circle-negative-extrude/build123d/model.stl",
+      "source": "/repo/examples/circle-negative-extrude/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/circle-negative-extrude/verification/reference_geometry.json",
+        "output": "/output/items/examples/circle-negative-extrude/build123d/verification",
+        "verification_id": "examples-circle-negative-extrude-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-circle-negative-extrude-cadquery",
+      "item_path": "examples/circle-negative-extrude/cadquery",
+      "output": "/output/items/examples/circle-negative-extrude/cadquery/model.stl",
+      "source": "/repo/examples/circle-negative-extrude/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/circle-negative-extrude/verification/reference_geometry.json",
+        "output": "/output/items/examples/circle-negative-extrude/cadquery/verification",
+        "verification_id": "examples-circle-negative-extrude-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-circular-feature-pattern-build123d",
+      "item_path": "examples/circular-feature-pattern/build123d",
+      "output": "/output/items/examples/circular-feature-pattern/build123d/model.stl",
+      "source": "/repo/examples/circular-feature-pattern/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/circular-feature-pattern/verification/reference_geometry.json",
+        "output": "/output/items/examples/circular-feature-pattern/build123d/verification",
+        "verification_id": "examples-circular-feature-pattern-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-circular-feature-pattern-cadquery",
+      "item_path": "examples/circular-feature-pattern/cadquery",
+      "output": "/output/items/examples/circular-feature-pattern/cadquery/model.stl",
+      "source": "/repo/examples/circular-feature-pattern/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/circular-feature-pattern/verification/reference_geometry.json",
+        "output": "/output/items/examples/circular-feature-pattern/cadquery/verification",
+        "verification_id": "examples-circular-feature-pattern-cadquery"
       }
     },
     {
@@ -96,6 +336,606 @@
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-eight-corner-brackets-build123d",
+      "item_path": "examples/eight-corner-brackets/build123d",
+      "output": "/output/items/examples/eight-corner-brackets/build123d/model.stl",
+      "source": "/repo/examples/eight-corner-brackets/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/eight-corner-brackets/verification/reference_geometry.json",
+        "output": "/output/items/examples/eight-corner-brackets/build123d/verification",
+        "verification_id": "examples-eight-corner-brackets-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-eight-corner-brackets-cadquery",
+      "item_path": "examples/eight-corner-brackets/cadquery",
+      "output": "/output/items/examples/eight-corner-brackets/cadquery/model.stl",
+      "source": "/repo/examples/eight-corner-brackets/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/eight-corner-brackets/verification/reference_geometry.json",
+        "output": "/output/items/examples/eight-corner-brackets/cadquery/verification",
+        "verification_id": "examples-eight-corner-brackets-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-eight-flightcase-corners-build123d",
+      "item_path": "examples/eight-flightcase-corners/build123d",
+      "output": "/output/items/examples/eight-flightcase-corners/build123d/model.stl",
+      "source": "/repo/examples/eight-flightcase-corners/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/eight-flightcase-corners/verification/reference_geometry.json",
+        "output": "/output/items/examples/eight-flightcase-corners/build123d/verification",
+        "verification_id": "examples-eight-flightcase-corners-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-eight-flightcase-corners-cadquery",
+      "item_path": "examples/eight-flightcase-corners/cadquery",
+      "output": "/output/items/examples/eight-flightcase-corners/cadquery/model.stl",
+      "source": "/repo/examples/eight-flightcase-corners/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/eight-flightcase-corners/verification/reference_geometry.json",
+        "output": "/output/items/examples/eight-flightcase-corners/cadquery/verification",
+        "verification_id": "examples-eight-flightcase-corners-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-four-corner-l-build123d",
+      "item_path": "examples/four-corner-l/build123d",
+      "output": "/output/items/examples/four-corner-l/build123d/model.stl",
+      "source": "/repo/examples/four-corner-l/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/four-corner-l/verification/reference_geometry.json",
+        "output": "/output/items/examples/four-corner-l/build123d/verification",
+        "verification_id": "examples-four-corner-l-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-four-corner-l-cadquery",
+      "item_path": "examples/four-corner-l/cadquery",
+      "output": "/output/items/examples/four-corner-l/cadquery/model.stl",
+      "source": "/repo/examples/four-corner-l/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/four-corner-l/verification/reference_geometry.json",
+        "output": "/output/items/examples/four-corner-l/cadquery/verification",
+        "verification_id": "examples-four-corner-l-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-group-hierarchy-build123d",
+      "item_path": "examples/group-hierarchy/build123d",
+      "output": "/output/items/examples/group-hierarchy/build123d/model.stl",
+      "source": "/repo/examples/group-hierarchy/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/group-hierarchy/verification/reference_geometry.json",
+        "output": "/output/items/examples/group-hierarchy/build123d/verification",
+        "verification_id": "examples-group-hierarchy-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-group-hierarchy-cadquery",
+      "item_path": "examples/group-hierarchy/cadquery",
+      "output": "/output/items/examples/group-hierarchy/cadquery/model.stl",
+      "source": "/repo/examples/group-hierarchy/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/group-hierarchy/verification/reference_geometry.json",
+        "output": "/output/items/examples/group-hierarchy/cadquery/verification",
+        "verification_id": "examples-group-hierarchy-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-hole-family-build123d",
+      "item_path": "examples/hole-family/build123d",
+      "output": "/output/items/examples/hole-family/build123d/model.stl",
+      "source": "/repo/examples/hole-family/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/hole-family/verification/reference_geometry.json",
+        "output": "/output/items/examples/hole-family/build123d/verification",
+        "verification_id": "examples-hole-family-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-hole-family-cadquery",
+      "item_path": "examples/hole-family/cadquery",
+      "output": "/output/items/examples/hole-family/cadquery/model.stl",
+      "source": "/repo/examples/hole-family/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/hole-family/verification/reference_geometry.json",
+        "output": "/output/items/examples/hole-family/cadquery/verification",
+        "verification_id": "examples-hole-family-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parameter-scope-build123d",
+      "item_path": "examples/parameter-scope/build123d",
+      "output": "/output/items/examples/parameter-scope/build123d/model.stl",
+      "source": "/repo/examples/parameter-scope/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parameter-scope/verification/reference_geometry.json",
+        "output": "/output/items/examples/parameter-scope/build123d/verification",
+        "verification_id": "examples-parameter-scope-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parameter-scope-cadquery",
+      "item_path": "examples/parameter-scope/cadquery",
+      "output": "/output/items/examples/parameter-scope/cadquery/model.stl",
+      "source": "/repo/examples/parameter-scope/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parameter-scope/verification/reference_geometry.json",
+        "output": "/output/items/examples/parameter-scope/cadquery/verification",
+        "verification_id": "examples-parameter-scope-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parametric-anchor-build123d",
+      "item_path": "examples/parametric-anchor/build123d",
+      "output": "/output/items/examples/parametric-anchor/build123d/model.stl",
+      "source": "/repo/examples/parametric-anchor/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-anchor/build123d/verification",
+        "verification_id": "examples-parametric-anchor-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parametric-anchor-cadquery",
+      "item_path": "examples/parametric-anchor/cadquery",
+      "output": "/output/items/examples/parametric-anchor/cadquery/model.stl",
+      "source": "/repo/examples/parametric-anchor/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-anchor/cadquery/verification",
+        "verification_id": "examples-parametric-anchor-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parametric-attach-build123d",
+      "item_path": "examples/parametric-attach/build123d",
+      "output": "/output/items/examples/parametric-attach/build123d/model.stl",
+      "source": "/repo/examples/parametric-attach/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-attach/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-attach/build123d/verification",
+        "verification_id": "examples-parametric-attach-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parametric-attach-cadquery",
+      "item_path": "examples/parametric-attach/cadquery",
+      "output": "/output/items/examples/parametric-attach/cadquery/model.stl",
+      "source": "/repo/examples/parametric-attach/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-attach/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-attach/cadquery/verification",
+        "verification_id": "examples-parametric-attach-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parametric-move-build123d",
+      "item_path": "examples/parametric-move/build123d",
+      "output": "/output/items/examples/parametric-move/build123d/model.stl",
+      "source": "/repo/examples/parametric-move/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-move/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-move/build123d/verification",
+        "verification_id": "examples-parametric-move-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parametric-move-cadquery",
+      "item_path": "examples/parametric-move/cadquery",
+      "output": "/output/items/examples/parametric-move/cadquery/model.stl",
+      "source": "/repo/examples/parametric-move/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-move/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-move/cadquery/verification",
+        "verification_id": "examples-parametric-move-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parametric-offset-build123d",
+      "item_path": "examples/parametric-offset/build123d",
+      "output": "/output/items/examples/parametric-offset/build123d/model.stl",
+      "source": "/repo/examples/parametric-offset/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-offset/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-offset/build123d/verification",
+        "verification_id": "examples-parametric-offset-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parametric-offset-cadquery",
+      "item_path": "examples/parametric-offset/cadquery",
+      "output": "/output/items/examples/parametric-offset/cadquery/model.stl",
+      "source": "/repo/examples/parametric-offset/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-offset/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-offset/cadquery/verification",
+        "verification_id": "examples-parametric-offset-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parametric-placement-pair-build123d",
+      "item_path": "examples/parametric-placement-pair/build123d",
+      "output": "/output/items/examples/parametric-placement-pair/build123d/model.stl",
+      "source": "/repo/examples/parametric-placement-pair/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-placement-pair/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-placement-pair/build123d/verification",
+        "verification_id": "examples-parametric-placement-pair-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parametric-placement-pair-cadquery",
+      "item_path": "examples/parametric-placement-pair/cadquery",
+      "output": "/output/items/examples/parametric-placement-pair/cadquery/model.stl",
+      "source": "/repo/examples/parametric-placement-pair/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parametric-placement-pair/verification/reference_geometry.json",
+        "output": "/output/items/examples/parametric-placement-pair/cadquery/verification",
+        "verification_id": "examples-parametric-placement-pair-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-parent-derived-child-size-build123d",
+      "item_path": "examples/parent-derived-child-size/build123d",
+      "output": "/output/items/examples/parent-derived-child-size/build123d/model.stl",
+      "source": "/repo/examples/parent-derived-child-size/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parent-derived-child-size/verification/reference_geometry.json",
+        "output": "/output/items/examples/parent-derived-child-size/build123d/verification",
+        "verification_id": "examples-parent-derived-child-size-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-parent-derived-child-size-cadquery",
+      "item_path": "examples/parent-derived-child-size/cadquery",
+      "output": "/output/items/examples/parent-derived-child-size/cadquery/model.stl",
+      "source": "/repo/examples/parent-derived-child-size/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/parent-derived-child-size/verification/reference_geometry.json",
+        "output": "/output/items/examples/parent-derived-child-size/cadquery/verification",
+        "verification_id": "examples-parent-derived-child-size-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-primitive-csg-build123d",
+      "item_path": "examples/primitive-csg/build123d",
+      "output": "/output/items/examples/primitive-csg/build123d/model.stl",
+      "source": "/repo/examples/primitive-csg/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/primitive-csg/verification/reference_geometry.json",
+        "output": "/output/items/examples/primitive-csg/build123d/verification",
+        "verification_id": "examples-primitive-csg-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-primitive-csg-cadquery",
+      "item_path": "examples/primitive-csg/cadquery",
+      "output": "/output/items/examples/primitive-csg/cadquery/model.stl",
+      "source": "/repo/examples/primitive-csg/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/primitive-csg/verification/reference_geometry.json",
+        "output": "/output/items/examples/primitive-csg/cadquery/verification",
+        "verification_id": "examples-primitive-csg-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-rectangular-pattern-build123d",
+      "item_path": "examples/rectangular-pattern/build123d",
+      "output": "/output/items/examples/rectangular-pattern/build123d/model.stl",
+      "source": "/repo/examples/rectangular-pattern/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rectangular-pattern/verification/reference_geometry.json",
+        "output": "/output/items/examples/rectangular-pattern/build123d/verification",
+        "verification_id": "examples-rectangular-pattern-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-rectangular-pattern-cadquery",
+      "item_path": "examples/rectangular-pattern/cadquery",
+      "output": "/output/items/examples/rectangular-pattern/cadquery/model.stl",
+      "source": "/repo/examples/rectangular-pattern/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rectangular-pattern/verification/reference_geometry.json",
+        "output": "/output/items/examples/rectangular-pattern/cadquery/verification",
+        "verification_id": "examples-rectangular-pattern-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-repeated-parent-attachments-build123d",
+      "item_path": "examples/repeated-parent-attachments/build123d",
+      "output": "/output/items/examples/repeated-parent-attachments/build123d/model.stl",
+      "source": "/repo/examples/repeated-parent-attachments/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/repeated-parent-attachments/verification/reference_geometry.json",
+        "output": "/output/items/examples/repeated-parent-attachments/build123d/verification",
+        "verification_id": "examples-repeated-parent-attachments-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-repeated-parent-attachments-cadquery",
+      "item_path": "examples/repeated-parent-attachments/cadquery",
+      "output": "/output/items/examples/repeated-parent-attachments/cadquery/model.stl",
+      "source": "/repo/examples/repeated-parent-attachments/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/repeated-parent-attachments/verification/reference_geometry.json",
+        "output": "/output/items/examples/repeated-parent-attachments/cadquery/verification",
+        "verification_id": "examples-repeated-parent-attachments-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-rotated-copy-placement-build123d",
+      "item_path": "examples/rotated-copy-placement/build123d",
+      "output": "/output/items/examples/rotated-copy-placement/build123d/model.stl",
+      "source": "/repo/examples/rotated-copy-placement/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rotated-copy-placement/verification/reference_geometry.json",
+        "output": "/output/items/examples/rotated-copy-placement/build123d/verification",
+        "verification_id": "examples-rotated-copy-placement-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-rotated-copy-placement-cadquery",
+      "item_path": "examples/rotated-copy-placement/cadquery",
+      "output": "/output/items/examples/rotated-copy-placement/cadquery/model.stl",
+      "source": "/repo/examples/rotated-copy-placement/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rotated-copy-placement/verification/reference_geometry.json",
+        "output": "/output/items/examples/rotated-copy-placement/cadquery/verification",
+        "verification_id": "examples-rotated-copy-placement-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-round-top-sketch-build123d",
+      "item_path": "examples/round-top-sketch/build123d",
+      "output": "/output/items/examples/round-top-sketch/build123d/model.stl",
+      "source": "/repo/examples/round-top-sketch/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/round-top-sketch/verification/reference_geometry.json",
+        "output": "/output/items/examples/round-top-sketch/build123d/verification",
+        "verification_id": "examples-round-top-sketch-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-round-top-sketch-cadquery",
+      "item_path": "examples/round-top-sketch/cadquery",
+      "output": "/output/items/examples/round-top-sketch/cadquery/model.stl",
+      "source": "/repo/examples/round-top-sketch/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/round-top-sketch/verification/reference_geometry.json",
+        "output": "/output/items/examples/round-top-sketch/cadquery/verification",
+        "verification_id": "examples-round-top-sketch-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-rounded-rectangle-sketch-build123d",
+      "item_path": "examples/rounded-rectangle-sketch/build123d",
+      "output": "/output/items/examples/rounded-rectangle-sketch/build123d/model.stl",
+      "source": "/repo/examples/rounded-rectangle-sketch/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rounded-rectangle-sketch/verification/reference_geometry.json",
+        "output": "/output/items/examples/rounded-rectangle-sketch/build123d/verification",
+        "verification_id": "examples-rounded-rectangle-sketch-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-rounded-rectangle-sketch-cadquery",
+      "item_path": "examples/rounded-rectangle-sketch/cadquery",
+      "output": "/output/items/examples/rounded-rectangle-sketch/cadquery/model.stl",
+      "source": "/repo/examples/rounded-rectangle-sketch/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/rounded-rectangle-sketch/verification/reference_geometry.json",
+        "output": "/output/items/examples/rounded-rectangle-sketch/cadquery/verification",
+        "verification_id": "examples-rounded-rectangle-sketch-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-selective-profile-extrude-build123d",
+      "item_path": "examples/selective-profile-extrude/build123d",
+      "output": "/output/items/examples/selective-profile-extrude/build123d/model.stl",
+      "source": "/repo/examples/selective-profile-extrude/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/selective-profile-extrude/verification/reference_geometry.json",
+        "output": "/output/items/examples/selective-profile-extrude/build123d/verification",
+        "verification_id": "examples-selective-profile-extrude-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-selective-profile-extrude-cadquery",
+      "item_path": "examples/selective-profile-extrude/cadquery",
+      "output": "/output/items/examples/selective-profile-extrude/cadquery/model.stl",
+      "source": "/repo/examples/selective-profile-extrude/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/selective-profile-extrude/verification/reference_geometry.json",
+        "output": "/output/items/examples/selective-profile-extrude/cadquery/verification",
+        "verification_id": "examples-selective-profile-extrude-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
+      "item_id": "examples-sheet-fold-build123d",
+      "item_path": "examples/sheet-fold/build123d",
+      "output": "/output/items/examples/sheet-fold/build123d/model.stl",
+      "source": "/repo/examples/sheet-fold/build123d/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/sheet-fold/verification/reference_geometry.json",
+        "output": "/output/items/examples/sheet-fold/build123d/verification",
+        "verification_id": "examples-sheet-fold-build123d"
+      }
+    },
+    {
+      "builder": "cadquery",
+      "builder_contract": 1,
+      "engine_python": null,
+      "item_id": "examples-sheet-fold-cadquery",
+      "item_path": "examples/sheet-fold/cadquery",
+      "output": "/output/items/examples/sheet-fold/cadquery/model.stl",
+      "source": "/repo/examples/sheet-fold/cadquery/model.py",
+      "verification": {
+        "adapter": "mesh-geometry",
+        "definition": "/repo/examples/sheet-fold/verification/reference_geometry.json",
+        "output": "/output/items/examples/sheet-fold/cadquery/verification",
+        "verification_id": "examples-sheet-fold-cadquery"
+      }
+    },
+    {
+      "builder": "build123d",
+      "builder_contract": 1,
+      "engine_python": "/opt/build123d/bin/python",
       "item_id": "examples-simple-box-build123d",
       "item_path": "examples/simple-box/build123d",
       "output": "/output/items/examples/simple-box/build123d/model.stl",
@@ -126,960 +966,120 @@
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-anchor-topology-mutation-build123d",
-      "item_path": "verification/cases/anchor-topology-mutation/build123d",
-      "output": "/output/items/verification/cases/anchor-topology-mutation/build123d/model.stl",
-      "source": "/repo/verification/cases/anchor-topology-mutation/build123d/model.py",
+      "item_id": "examples-sketch-pattern-mirror-build123d",
+      "item_path": "examples/sketch-pattern-mirror/build123d",
+      "output": "/output/items/examples/sketch-pattern-mirror/build123d/model.stl",
+      "source": "/repo/examples/sketch-pattern-mirror/build123d/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/anchor-topology-mutation/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/anchor-topology-mutation/build123d/verification",
-        "verification_id": "verification-cases-anchor-topology-mutation-build123d"
+        "definition": "/repo/examples/sketch-pattern-mirror/verification/reference_geometry.json",
+        "output": "/output/items/examples/sketch-pattern-mirror/build123d/verification",
+        "verification_id": "examples-sketch-pattern-mirror-build123d"
       }
     },
     {
       "builder": "cadquery",
       "builder_contract": 1,
       "engine_python": null,
-      "item_id": "verification-cases-anchor-topology-mutation-cadquery",
-      "item_path": "verification/cases/anchor-topology-mutation/cadquery",
-      "output": "/output/items/verification/cases/anchor-topology-mutation/cadquery/model.stl",
-      "source": "/repo/verification/cases/anchor-topology-mutation/cadquery/model.py",
+      "item_id": "examples-sketch-pattern-mirror-cadquery",
+      "item_path": "examples/sketch-pattern-mirror/cadquery",
+      "output": "/output/items/examples/sketch-pattern-mirror/cadquery/model.stl",
+      "source": "/repo/examples/sketch-pattern-mirror/cadquery/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/anchor-topology-mutation/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/anchor-topology-mutation/cadquery/verification",
-        "verification_id": "verification-cases-anchor-topology-mutation-cadquery"
+        "definition": "/repo/examples/sketch-pattern-mirror/verification/reference_geometry.json",
+        "output": "/output/items/examples/sketch-pattern-mirror/cadquery/verification",
+        "verification_id": "examples-sketch-pattern-mirror-cadquery"
       }
     },
     {
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-as-built-attach-build123d",
-      "item_path": "verification/cases/as-built-attach/build123d",
-      "output": "/output/items/verification/cases/as-built-attach/build123d/model.stl",
-      "source": "/repo/verification/cases/as-built-attach/build123d/model.py",
+      "item_id": "examples-slot-family-build123d",
+      "item_path": "examples/slot-family/build123d",
+      "output": "/output/items/examples/slot-family/build123d/model.stl",
+      "source": "/repo/examples/slot-family/build123d/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/as-built-attach/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/as-built-attach/build123d/verification",
-        "verification_id": "verification-cases-as-built-attach-build123d"
+        "definition": "/repo/examples/slot-family/verification/reference_geometry.json",
+        "output": "/output/items/examples/slot-family/build123d/verification",
+        "verification_id": "examples-slot-family-build123d"
       }
     },
     {
       "builder": "cadquery",
       "builder_contract": 1,
       "engine_python": null,
-      "item_id": "verification-cases-as-built-attach-cadquery",
-      "item_path": "verification/cases/as-built-attach/cadquery",
-      "output": "/output/items/verification/cases/as-built-attach/cadquery/model.stl",
-      "source": "/repo/verification/cases/as-built-attach/cadquery/model.py",
+      "item_id": "examples-slot-family-cadquery",
+      "item_path": "examples/slot-family/cadquery",
+      "output": "/output/items/examples/slot-family/cadquery/model.stl",
+      "source": "/repo/examples/slot-family/cadquery/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/as-built-attach/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/as-built-attach/cadquery/verification",
-        "verification_id": "verification-cases-as-built-attach-cadquery"
+        "definition": "/repo/examples/slot-family/verification/reference_geometry.json",
+        "output": "/output/items/examples/slot-family/cadquery/verification",
+        "verification_id": "examples-slot-family-cadquery"
       }
     },
     {
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-assembly-decorator-build123d",
-      "item_path": "verification/cases/assembly-decorator/build123d",
-      "output": "/output/items/verification/cases/assembly-decorator/build123d/model.stl",
-      "source": "/repo/verification/cases/assembly-decorator/build123d/model.py",
+      "item_id": "examples-top-sketch-after-chamfer-build123d",
+      "item_path": "examples/top-sketch-after-chamfer/build123d",
+      "output": "/output/items/examples/top-sketch-after-chamfer/build123d/model.stl",
+      "source": "/repo/examples/top-sketch-after-chamfer/build123d/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/assembly-decorator/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/assembly-decorator/build123d/verification",
-        "verification_id": "verification-cases-assembly-decorator-build123d"
+        "definition": "/repo/examples/top-sketch-after-chamfer/verification/reference_geometry.json",
+        "output": "/output/items/examples/top-sketch-after-chamfer/build123d/verification",
+        "verification_id": "examples-top-sketch-after-chamfer-build123d"
       }
     },
     {
       "builder": "cadquery",
       "builder_contract": 1,
       "engine_python": null,
-      "item_id": "verification-cases-assembly-decorator-cadquery",
-      "item_path": "verification/cases/assembly-decorator/cadquery",
-      "output": "/output/items/verification/cases/assembly-decorator/cadquery/model.stl",
-      "source": "/repo/verification/cases/assembly-decorator/cadquery/model.py",
+      "item_id": "examples-top-sketch-after-chamfer-cadquery",
+      "item_path": "examples/top-sketch-after-chamfer/cadquery",
+      "output": "/output/items/examples/top-sketch-after-chamfer/cadquery/model.stl",
+      "source": "/repo/examples/top-sketch-after-chamfer/cadquery/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/assembly-decorator/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/assembly-decorator/cadquery/verification",
-        "verification_id": "verification-cases-assembly-decorator-cadquery"
+        "definition": "/repo/examples/top-sketch-after-chamfer/verification/reference_geometry.json",
+        "output": "/output/items/examples/top-sketch-after-chamfer/cadquery/verification",
+        "verification_id": "examples-top-sketch-after-chamfer-cadquery"
       }
     },
     {
       "builder": "build123d",
       "builder_contract": 1,
       "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-assembly-owned-anchor-build123d",
-      "item_path": "verification/cases/assembly-owned-anchor/build123d",
-      "output": "/output/items/verification/cases/assembly-owned-anchor/build123d/model.stl",
-      "source": "/repo/verification/cases/assembly-owned-anchor/build123d/model.py",
+      "item_id": "examples-xz-anchor-build123d",
+      "item_path": "examples/xz-anchor/build123d",
+      "output": "/output/items/examples/xz-anchor/build123d/model.stl",
+      "source": "/repo/examples/xz-anchor/build123d/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/assembly-owned-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/assembly-owned-anchor/build123d/verification",
-        "verification_id": "verification-cases-assembly-owned-anchor-build123d"
+        "definition": "/repo/examples/xz-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/xz-anchor/build123d/verification",
+        "verification_id": "examples-xz-anchor-build123d"
       }
     },
     {
       "builder": "cadquery",
       "builder_contract": 1,
       "engine_python": null,
-      "item_id": "verification-cases-assembly-owned-anchor-cadquery",
-      "item_path": "verification/cases/assembly-owned-anchor/cadquery",
-      "output": "/output/items/verification/cases/assembly-owned-anchor/cadquery/model.stl",
-      "source": "/repo/verification/cases/assembly-owned-anchor/cadquery/model.py",
+      "item_id": "examples-xz-anchor-cadquery",
+      "item_path": "examples/xz-anchor/cadquery",
+      "output": "/output/items/examples/xz-anchor/cadquery/model.stl",
+      "source": "/repo/examples/xz-anchor/cadquery/model.py",
       "verification": {
         "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/assembly-owned-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/assembly-owned-anchor/cadquery/verification",
-        "verification_id": "verification-cases-assembly-owned-anchor-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-attach-angle-build123d",
-      "item_path": "verification/cases/attach-angle/build123d",
-      "output": "/output/items/verification/cases/attach-angle/build123d/model.stl",
-      "source": "/repo/verification/cases/attach-angle/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/attach-angle/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/attach-angle/build123d/verification",
-        "verification_id": "verification-cases-attach-angle-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-attach-angle-cadquery",
-      "item_path": "verification/cases/attach-angle/cadquery",
-      "output": "/output/items/verification/cases/attach-angle/cadquery/model.stl",
-      "source": "/repo/verification/cases/attach-angle/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/attach-angle/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/attach-angle/cadquery/verification",
-        "verification_id": "verification-cases-attach-angle-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-bracket-build123d",
-      "item_path": "verification/cases/bracket/build123d",
-      "output": "/output/items/verification/cases/bracket/build123d/model.stl",
-      "source": "/repo/verification/cases/bracket/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/bracket/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/bracket/build123d/verification",
-        "verification_id": "verification-cases-bracket-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-bracket-cadquery",
-      "item_path": "verification/cases/bracket/cadquery",
-      "output": "/output/items/verification/cases/bracket/cadquery/model.stl",
-      "source": "/repo/verification/cases/bracket/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/bracket/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/bracket/cadquery/verification",
-        "verification_id": "verification-cases-bracket-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-circle-negative-extrude-build123d",
-      "item_path": "verification/cases/circle-negative-extrude/build123d",
-      "output": "/output/items/verification/cases/circle-negative-extrude/build123d/model.stl",
-      "source": "/repo/verification/cases/circle-negative-extrude/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/circle-negative-extrude/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/circle-negative-extrude/build123d/verification",
-        "verification_id": "verification-cases-circle-negative-extrude-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-circle-negative-extrude-cadquery",
-      "item_path": "verification/cases/circle-negative-extrude/cadquery",
-      "output": "/output/items/verification/cases/circle-negative-extrude/cadquery/model.stl",
-      "source": "/repo/verification/cases/circle-negative-extrude/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/circle-negative-extrude/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/circle-negative-extrude/cadquery/verification",
-        "verification_id": "verification-cases-circle-negative-extrude-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-circular-feature-pattern-build123d",
-      "item_path": "verification/cases/circular-feature-pattern/build123d",
-      "output": "/output/items/verification/cases/circular-feature-pattern/build123d/model.stl",
-      "source": "/repo/verification/cases/circular-feature-pattern/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/circular-feature-pattern/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/circular-feature-pattern/build123d/verification",
-        "verification_id": "verification-cases-circular-feature-pattern-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-circular-feature-pattern-cadquery",
-      "item_path": "verification/cases/circular-feature-pattern/cadquery",
-      "output": "/output/items/verification/cases/circular-feature-pattern/cadquery/model.stl",
-      "source": "/repo/verification/cases/circular-feature-pattern/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/circular-feature-pattern/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/circular-feature-pattern/cadquery/verification",
-        "verification_id": "verification-cases-circular-feature-pattern-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-eight-corner-brackets-build123d",
-      "item_path": "verification/cases/eight-corner-brackets/build123d",
-      "output": "/output/items/verification/cases/eight-corner-brackets/build123d/model.stl",
-      "source": "/repo/verification/cases/eight-corner-brackets/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/eight-corner-brackets/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/eight-corner-brackets/build123d/verification",
-        "verification_id": "verification-cases-eight-corner-brackets-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-eight-corner-brackets-cadquery",
-      "item_path": "verification/cases/eight-corner-brackets/cadquery",
-      "output": "/output/items/verification/cases/eight-corner-brackets/cadquery/model.stl",
-      "source": "/repo/verification/cases/eight-corner-brackets/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/eight-corner-brackets/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/eight-corner-brackets/cadquery/verification",
-        "verification_id": "verification-cases-eight-corner-brackets-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-eight-flightcase-corners-build123d",
-      "item_path": "verification/cases/eight-flightcase-corners/build123d",
-      "output": "/output/items/verification/cases/eight-flightcase-corners/build123d/model.stl",
-      "source": "/repo/verification/cases/eight-flightcase-corners/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/eight-flightcase-corners/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/eight-flightcase-corners/build123d/verification",
-        "verification_id": "verification-cases-eight-flightcase-corners-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-eight-flightcase-corners-cadquery",
-      "item_path": "verification/cases/eight-flightcase-corners/cadquery",
-      "output": "/output/items/verification/cases/eight-flightcase-corners/cadquery/model.stl",
-      "source": "/repo/verification/cases/eight-flightcase-corners/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/eight-flightcase-corners/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/eight-flightcase-corners/cadquery/verification",
-        "verification_id": "verification-cases-eight-flightcase-corners-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-four-corner-l-build123d",
-      "item_path": "verification/cases/four-corner-l/build123d",
-      "output": "/output/items/verification/cases/four-corner-l/build123d/model.stl",
-      "source": "/repo/verification/cases/four-corner-l/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/four-corner-l/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/four-corner-l/build123d/verification",
-        "verification_id": "verification-cases-four-corner-l-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-four-corner-l-cadquery",
-      "item_path": "verification/cases/four-corner-l/cadquery",
-      "output": "/output/items/verification/cases/four-corner-l/cadquery/model.stl",
-      "source": "/repo/verification/cases/four-corner-l/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/four-corner-l/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/four-corner-l/cadquery/verification",
-        "verification_id": "verification-cases-four-corner-l-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-group-hierarchy-build123d",
-      "item_path": "verification/cases/group-hierarchy/build123d",
-      "output": "/output/items/verification/cases/group-hierarchy/build123d/model.stl",
-      "source": "/repo/verification/cases/group-hierarchy/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/group-hierarchy/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/group-hierarchy/build123d/verification",
-        "verification_id": "verification-cases-group-hierarchy-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-group-hierarchy-cadquery",
-      "item_path": "verification/cases/group-hierarchy/cadquery",
-      "output": "/output/items/verification/cases/group-hierarchy/cadquery/model.stl",
-      "source": "/repo/verification/cases/group-hierarchy/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/group-hierarchy/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/group-hierarchy/cadquery/verification",
-        "verification_id": "verification-cases-group-hierarchy-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-hole-family-build123d",
-      "item_path": "verification/cases/hole-family/build123d",
-      "output": "/output/items/verification/cases/hole-family/build123d/model.stl",
-      "source": "/repo/verification/cases/hole-family/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/hole-family/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/hole-family/build123d/verification",
-        "verification_id": "verification-cases-hole-family-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-hole-family-cadquery",
-      "item_path": "verification/cases/hole-family/cadquery",
-      "output": "/output/items/verification/cases/hole-family/cadquery/model.stl",
-      "source": "/repo/verification/cases/hole-family/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/hole-family/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/hole-family/cadquery/verification",
-        "verification_id": "verification-cases-hole-family-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parameter-scope-build123d",
-      "item_path": "verification/cases/parameter-scope/build123d",
-      "output": "/output/items/verification/cases/parameter-scope/build123d/model.stl",
-      "source": "/repo/verification/cases/parameter-scope/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parameter-scope/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parameter-scope/build123d/verification",
-        "verification_id": "verification-cases-parameter-scope-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parameter-scope-cadquery",
-      "item_path": "verification/cases/parameter-scope/cadquery",
-      "output": "/output/items/verification/cases/parameter-scope/cadquery/model.stl",
-      "source": "/repo/verification/cases/parameter-scope/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parameter-scope/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parameter-scope/cadquery/verification",
-        "verification_id": "verification-cases-parameter-scope-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parametric-anchor-build123d",
-      "item_path": "verification/cases/parametric-anchor/build123d",
-      "output": "/output/items/verification/cases/parametric-anchor/build123d/model.stl",
-      "source": "/repo/verification/cases/parametric-anchor/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-anchor/build123d/verification",
-        "verification_id": "verification-cases-parametric-anchor-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parametric-anchor-cadquery",
-      "item_path": "verification/cases/parametric-anchor/cadquery",
-      "output": "/output/items/verification/cases/parametric-anchor/cadquery/model.stl",
-      "source": "/repo/verification/cases/parametric-anchor/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-anchor/cadquery/verification",
-        "verification_id": "verification-cases-parametric-anchor-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parametric-attach-build123d",
-      "item_path": "verification/cases/parametric-attach/build123d",
-      "output": "/output/items/verification/cases/parametric-attach/build123d/model.stl",
-      "source": "/repo/verification/cases/parametric-attach/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-attach/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-attach/build123d/verification",
-        "verification_id": "verification-cases-parametric-attach-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parametric-attach-cadquery",
-      "item_path": "verification/cases/parametric-attach/cadquery",
-      "output": "/output/items/verification/cases/parametric-attach/cadquery/model.stl",
-      "source": "/repo/verification/cases/parametric-attach/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-attach/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-attach/cadquery/verification",
-        "verification_id": "verification-cases-parametric-attach-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parametric-move-build123d",
-      "item_path": "verification/cases/parametric-move/build123d",
-      "output": "/output/items/verification/cases/parametric-move/build123d/model.stl",
-      "source": "/repo/verification/cases/parametric-move/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-move/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-move/build123d/verification",
-        "verification_id": "verification-cases-parametric-move-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parametric-move-cadquery",
-      "item_path": "verification/cases/parametric-move/cadquery",
-      "output": "/output/items/verification/cases/parametric-move/cadquery/model.stl",
-      "source": "/repo/verification/cases/parametric-move/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-move/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-move/cadquery/verification",
-        "verification_id": "verification-cases-parametric-move-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parametric-offset-build123d",
-      "item_path": "verification/cases/parametric-offset/build123d",
-      "output": "/output/items/verification/cases/parametric-offset/build123d/model.stl",
-      "source": "/repo/verification/cases/parametric-offset/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-offset/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-offset/build123d/verification",
-        "verification_id": "verification-cases-parametric-offset-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parametric-offset-cadquery",
-      "item_path": "verification/cases/parametric-offset/cadquery",
-      "output": "/output/items/verification/cases/parametric-offset/cadquery/model.stl",
-      "source": "/repo/verification/cases/parametric-offset/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-offset/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-offset/cadquery/verification",
-        "verification_id": "verification-cases-parametric-offset-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parametric-placement-pair-build123d",
-      "item_path": "verification/cases/parametric-placement-pair/build123d",
-      "output": "/output/items/verification/cases/parametric-placement-pair/build123d/model.stl",
-      "source": "/repo/verification/cases/parametric-placement-pair/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-placement-pair/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-placement-pair/build123d/verification",
-        "verification_id": "verification-cases-parametric-placement-pair-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parametric-placement-pair-cadquery",
-      "item_path": "verification/cases/parametric-placement-pair/cadquery",
-      "output": "/output/items/verification/cases/parametric-placement-pair/cadquery/model.stl",
-      "source": "/repo/verification/cases/parametric-placement-pair/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parametric-placement-pair/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parametric-placement-pair/cadquery/verification",
-        "verification_id": "verification-cases-parametric-placement-pair-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-parent-derived-child-size-build123d",
-      "item_path": "verification/cases/parent-derived-child-size/build123d",
-      "output": "/output/items/verification/cases/parent-derived-child-size/build123d/model.stl",
-      "source": "/repo/verification/cases/parent-derived-child-size/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parent-derived-child-size/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parent-derived-child-size/build123d/verification",
-        "verification_id": "verification-cases-parent-derived-child-size-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-parent-derived-child-size-cadquery",
-      "item_path": "verification/cases/parent-derived-child-size/cadquery",
-      "output": "/output/items/verification/cases/parent-derived-child-size/cadquery/model.stl",
-      "source": "/repo/verification/cases/parent-derived-child-size/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/parent-derived-child-size/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/parent-derived-child-size/cadquery/verification",
-        "verification_id": "verification-cases-parent-derived-child-size-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-primitive-csg-build123d",
-      "item_path": "verification/cases/primitive-csg/build123d",
-      "output": "/output/items/verification/cases/primitive-csg/build123d/model.stl",
-      "source": "/repo/verification/cases/primitive-csg/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/primitive-csg/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/primitive-csg/build123d/verification",
-        "verification_id": "verification-cases-primitive-csg-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-primitive-csg-cadquery",
-      "item_path": "verification/cases/primitive-csg/cadquery",
-      "output": "/output/items/verification/cases/primitive-csg/cadquery/model.stl",
-      "source": "/repo/verification/cases/primitive-csg/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/primitive-csg/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/primitive-csg/cadquery/verification",
-        "verification_id": "verification-cases-primitive-csg-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-rectangular-pattern-build123d",
-      "item_path": "verification/cases/rectangular-pattern/build123d",
-      "output": "/output/items/verification/cases/rectangular-pattern/build123d/model.stl",
-      "source": "/repo/verification/cases/rectangular-pattern/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rectangular-pattern/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rectangular-pattern/build123d/verification",
-        "verification_id": "verification-cases-rectangular-pattern-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-rectangular-pattern-cadquery",
-      "item_path": "verification/cases/rectangular-pattern/cadquery",
-      "output": "/output/items/verification/cases/rectangular-pattern/cadquery/model.stl",
-      "source": "/repo/verification/cases/rectangular-pattern/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rectangular-pattern/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rectangular-pattern/cadquery/verification",
-        "verification_id": "verification-cases-rectangular-pattern-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-repeated-parent-attachments-build123d",
-      "item_path": "verification/cases/repeated-parent-attachments/build123d",
-      "output": "/output/items/verification/cases/repeated-parent-attachments/build123d/model.stl",
-      "source": "/repo/verification/cases/repeated-parent-attachments/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/repeated-parent-attachments/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/repeated-parent-attachments/build123d/verification",
-        "verification_id": "verification-cases-repeated-parent-attachments-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-repeated-parent-attachments-cadquery",
-      "item_path": "verification/cases/repeated-parent-attachments/cadquery",
-      "output": "/output/items/verification/cases/repeated-parent-attachments/cadquery/model.stl",
-      "source": "/repo/verification/cases/repeated-parent-attachments/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/repeated-parent-attachments/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/repeated-parent-attachments/cadquery/verification",
-        "verification_id": "verification-cases-repeated-parent-attachments-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-rotated-copy-placement-build123d",
-      "item_path": "verification/cases/rotated-copy-placement/build123d",
-      "output": "/output/items/verification/cases/rotated-copy-placement/build123d/model.stl",
-      "source": "/repo/verification/cases/rotated-copy-placement/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rotated-copy-placement/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rotated-copy-placement/build123d/verification",
-        "verification_id": "verification-cases-rotated-copy-placement-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-rotated-copy-placement-cadquery",
-      "item_path": "verification/cases/rotated-copy-placement/cadquery",
-      "output": "/output/items/verification/cases/rotated-copy-placement/cadquery/model.stl",
-      "source": "/repo/verification/cases/rotated-copy-placement/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rotated-copy-placement/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rotated-copy-placement/cadquery/verification",
-        "verification_id": "verification-cases-rotated-copy-placement-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-round-top-sketch-build123d",
-      "item_path": "verification/cases/round-top-sketch/build123d",
-      "output": "/output/items/verification/cases/round-top-sketch/build123d/model.stl",
-      "source": "/repo/verification/cases/round-top-sketch/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/round-top-sketch/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/round-top-sketch/build123d/verification",
-        "verification_id": "verification-cases-round-top-sketch-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-round-top-sketch-cadquery",
-      "item_path": "verification/cases/round-top-sketch/cadquery",
-      "output": "/output/items/verification/cases/round-top-sketch/cadquery/model.stl",
-      "source": "/repo/verification/cases/round-top-sketch/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/round-top-sketch/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/round-top-sketch/cadquery/verification",
-        "verification_id": "verification-cases-round-top-sketch-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-rounded-rectangle-sketch-build123d",
-      "item_path": "verification/cases/rounded-rectangle-sketch/build123d",
-      "output": "/output/items/verification/cases/rounded-rectangle-sketch/build123d/model.stl",
-      "source": "/repo/verification/cases/rounded-rectangle-sketch/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rounded-rectangle-sketch/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rounded-rectangle-sketch/build123d/verification",
-        "verification_id": "verification-cases-rounded-rectangle-sketch-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-rounded-rectangle-sketch-cadquery",
-      "item_path": "verification/cases/rounded-rectangle-sketch/cadquery",
-      "output": "/output/items/verification/cases/rounded-rectangle-sketch/cadquery/model.stl",
-      "source": "/repo/verification/cases/rounded-rectangle-sketch/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/rounded-rectangle-sketch/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/rounded-rectangle-sketch/cadquery/verification",
-        "verification_id": "verification-cases-rounded-rectangle-sketch-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-selective-profile-extrude-build123d",
-      "item_path": "verification/cases/selective-profile-extrude/build123d",
-      "output": "/output/items/verification/cases/selective-profile-extrude/build123d/model.stl",
-      "source": "/repo/verification/cases/selective-profile-extrude/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/selective-profile-extrude/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/selective-profile-extrude/build123d/verification",
-        "verification_id": "verification-cases-selective-profile-extrude-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-selective-profile-extrude-cadquery",
-      "item_path": "verification/cases/selective-profile-extrude/cadquery",
-      "output": "/output/items/verification/cases/selective-profile-extrude/cadquery/model.stl",
-      "source": "/repo/verification/cases/selective-profile-extrude/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/selective-profile-extrude/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/selective-profile-extrude/cadquery/verification",
-        "verification_id": "verification-cases-selective-profile-extrude-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-sheet-fold-build123d",
-      "item_path": "verification/cases/sheet-fold/build123d",
-      "output": "/output/items/verification/cases/sheet-fold/build123d/model.stl",
-      "source": "/repo/verification/cases/sheet-fold/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/sheet-fold/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/sheet-fold/build123d/verification",
-        "verification_id": "verification-cases-sheet-fold-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-sheet-fold-cadquery",
-      "item_path": "verification/cases/sheet-fold/cadquery",
-      "output": "/output/items/verification/cases/sheet-fold/cadquery/model.stl",
-      "source": "/repo/verification/cases/sheet-fold/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/sheet-fold/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/sheet-fold/cadquery/verification",
-        "verification_id": "verification-cases-sheet-fold-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-sketch-pattern-mirror-build123d",
-      "item_path": "verification/cases/sketch-pattern-mirror/build123d",
-      "output": "/output/items/verification/cases/sketch-pattern-mirror/build123d/model.stl",
-      "source": "/repo/verification/cases/sketch-pattern-mirror/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/sketch-pattern-mirror/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/sketch-pattern-mirror/build123d/verification",
-        "verification_id": "verification-cases-sketch-pattern-mirror-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-sketch-pattern-mirror-cadquery",
-      "item_path": "verification/cases/sketch-pattern-mirror/cadquery",
-      "output": "/output/items/verification/cases/sketch-pattern-mirror/cadquery/model.stl",
-      "source": "/repo/verification/cases/sketch-pattern-mirror/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/sketch-pattern-mirror/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/sketch-pattern-mirror/cadquery/verification",
-        "verification_id": "verification-cases-sketch-pattern-mirror-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-slot-family-build123d",
-      "item_path": "verification/cases/slot-family/build123d",
-      "output": "/output/items/verification/cases/slot-family/build123d/model.stl",
-      "source": "/repo/verification/cases/slot-family/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/slot-family/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/slot-family/build123d/verification",
-        "verification_id": "verification-cases-slot-family-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-slot-family-cadquery",
-      "item_path": "verification/cases/slot-family/cadquery",
-      "output": "/output/items/verification/cases/slot-family/cadquery/model.stl",
-      "source": "/repo/verification/cases/slot-family/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/slot-family/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/slot-family/cadquery/verification",
-        "verification_id": "verification-cases-slot-family-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-top-sketch-after-chamfer-build123d",
-      "item_path": "verification/cases/top-sketch-after-chamfer/build123d",
-      "output": "/output/items/verification/cases/top-sketch-after-chamfer/build123d/model.stl",
-      "source": "/repo/verification/cases/top-sketch-after-chamfer/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/top-sketch-after-chamfer/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/top-sketch-after-chamfer/build123d/verification",
-        "verification_id": "verification-cases-top-sketch-after-chamfer-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-top-sketch-after-chamfer-cadquery",
-      "item_path": "verification/cases/top-sketch-after-chamfer/cadquery",
-      "output": "/output/items/verification/cases/top-sketch-after-chamfer/cadquery/model.stl",
-      "source": "/repo/verification/cases/top-sketch-after-chamfer/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/top-sketch-after-chamfer/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/top-sketch-after-chamfer/cadquery/verification",
-        "verification_id": "verification-cases-top-sketch-after-chamfer-cadquery"
-      }
-    },
-    {
-      "builder": "build123d",
-      "builder_contract": 1,
-      "engine_python": "/opt/build123d/bin/python",
-      "item_id": "verification-cases-xz-anchor-build123d",
-      "item_path": "verification/cases/xz-anchor/build123d",
-      "output": "/output/items/verification/cases/xz-anchor/build123d/model.stl",
-      "source": "/repo/verification/cases/xz-anchor/build123d/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/xz-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/xz-anchor/build123d/verification",
-        "verification_id": "verification-cases-xz-anchor-build123d"
-      }
-    },
-    {
-      "builder": "cadquery",
-      "builder_contract": 1,
-      "engine_python": null,
-      "item_id": "verification-cases-xz-anchor-cadquery",
-      "item_path": "verification/cases/xz-anchor/cadquery",
-      "output": "/output/items/verification/cases/xz-anchor/cadquery/model.stl",
-      "source": "/repo/verification/cases/xz-anchor/cadquery/model.py",
-      "verification": {
-        "adapter": "mesh-geometry",
-        "definition": "/repo/verification/cases/xz-anchor/verification/reference_geometry.json",
-        "output": "/output/items/verification/cases/xz-anchor/cadquery/verification",
-        "verification_id": "verification-cases-xz-anchor-cadquery"
+        "definition": "/repo/examples/xz-anchor/verification/reference_geometry.json",
+        "output": "/output/items/examples/xz-anchor/cadquery/verification",
+        "verification_id": "examples-xz-anchor-cadquery"
       }
     }
   ],

@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "aa763e43a77f825dab237e85f531ee6a38420554c7d91310f787e1d4d5d3bbe2",
+  "duration_seconds": 0.061,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:43.628Z",
+  "item": "examples-circular-feature-pattern-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "a2069b2186855e45b5a62344871d2c1d0bd9ed5bda63f29e4c44f70875d13acf"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:43.568Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "8f238bca7bb7426b5f74b36dab600fdbf8da648a65a1794372ba477d93a31fd7",
+  "timeout_seconds": null
+}

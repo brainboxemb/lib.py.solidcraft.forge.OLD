@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "e24fd0926008b7ba77b35308e956efbd4be1911dc8762579d2b0842f7b10907c",
+  "duration_seconds": 0.06,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:48.346Z",
+  "item": "examples-selective-profile-extrude-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "62c2dd98493e5e2f96342807dad773bb816f761e4528801158b4db44f44d4d6d"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:48.286Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "282231c28e7f79f220060fe8f9fc333e0783644f96833bfe2e5deacdafc80167",
+  "timeout_seconds": null
+}

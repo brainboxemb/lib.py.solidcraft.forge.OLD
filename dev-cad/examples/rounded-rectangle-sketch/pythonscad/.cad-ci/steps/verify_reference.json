@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "5df4baa257cf1681409e69ca14246f9bea930810cacb588f866755c56a64ecd8",
+  "duration_seconds": 0.079,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:13:48.130Z",
+  "item": "examples-rounded-rectangle-sketch-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "a79c03913592b3af5d8356fec529dce93a3c41c9c7b436b6ae79be775c434eb5"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:15:23.433Z",
+  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:13:48.052Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "efa4c8bcde4b9c8feacb2d9c8cd03cbabdf082443cd8b061c5a0e9b59bdcf0f3",
+  "timeout_seconds": null
+}

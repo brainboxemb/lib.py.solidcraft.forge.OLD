@@ -2,27 +2,12 @@
   "models": [
     {
       "error": null,
-      "model": "anchored-holes",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "components",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "corner-anchor",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "simple-box",
-      "status": "pass"
-    },
-    {
-      "error": null,
       "model": "anchor-topology-mutation",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "anchored-holes",
       "status": "pass"
     },
     {
@@ -67,6 +52,26 @@
     },
     {
       "error": null,
+      "model": "component-local-sketch-names",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "components",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "connected-profile-sheet",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "corner-anchor",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "eight-corner-brackets",
       "status": "pass"
     },
@@ -88,6 +93,11 @@
     {
       "error": null,
       "model": "hole-family",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "open-sketch-chain",
       "status": "pass"
     },
     {
@@ -192,6 +202,11 @@
     },
     {
       "error": null,
+      "model": "simple-box",
+      "status": "pass"
+    },
+    {
+      "error": null,
       "model": "sketch-pattern-mirror",
       "status": "pass"
     },
@@ -209,24 +224,9 @@
       "error": null,
       "model": "xz-anchor",
       "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "component-local-sketch-names",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "connected-profile-sheet",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "open-sketch-chain",
-      "status": "pass"
     }
   ],
   "schema": 1,
-  "source_sha": "d53672f475c871e202e4a3fae37713a7aad07307",
+  "source_sha": "704f344e93496e02c28d587faa57885f9be68eaf",
   "status": "pass"
 }
