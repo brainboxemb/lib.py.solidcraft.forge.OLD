@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Native sheet edge flange · SCPF Python library</title>
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="../../">SCPF <span>Python library</span></a>
+    <div class="site-search" data-search-index="../../search-index.json">
+      <label class="sr-only" for="site-search-input">Search SCPF documentation</label>
+      <input id="site-search-input" class="site-search-input" type="search"
+             autocomplete="off" spellcheck="false" placeholder="Search API…"
+             aria-label="Search SCPF documentation" aria-expanded="false"
+             aria-controls="site-search-results">
+      <span class="site-search-shortcut" aria-hidden="true">/</span>
+      <div id="site-search-results" class="site-search-results" role="listbox" hidden></div>
+    </div>
+    <nav aria-label="Main">
+      <a href="../../">Examples</a>
+      <a href="../../guide/">API Guide</a>
+      <a href="../../reference/">API Reference</a>
+      <a href="../../verification/">Verification</a>
+      <a href="../../cheatsheet/">Cheatsheet</a>
+      <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge">Source</a>
+    </nav>
+  </div>
+</header>
+<div class="development-banner" role="status">
+  <div class="wrap">
+    <strong>Development version.</strong>
+    Forge is under active development and testing. APIs, behaviour, coverage
+    and verification results may be incomplete or change without notice;
+    published PASS results are not a support guarantee or production-readiness claim.
+  </div>
+</div>
+<main class="wrap">
+  <div class="crumb"><a href="../">← Verification</a> / Native sheet edge flange</div>
+
+  <section class="hero small">
+    <p class="eyebrow">Forge model example · 7 · Sheet metal</p>
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design PASS · Visual N/R</span></div>
+    <h1>Native sheet edge flange</h1>
+  </section>
+
+  <section class="panel qualification-example-overview">
+    <h2>What this example makes</h2>
+    <p>One native sheet body has one inherited-rule edge flange and a recoverable flat pattern.</p>
+    
+    <figure class="qualification-case-preview"><a href="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/presentation/preview-iso.png" class="qualification-image-link" target="_blank" rel="noopener" title="Open full-size native preview"><img src="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/presentation/preview-iso.png" alt="Native sheet edge flange native SolidCraft preview" loading="lazy"></a><figcaption>Native SolidCraft preview from the accepted durable build output.</figcaption></figure>
+  </section>
+
+  <section class="panel">
+    <h2>Forge code</h2>
+    <p>This is the complete Forge source used for this example.</p>
+    <pre><code>&quot;&quot;&quot;Native regression fixture for SolidCraft edge-flange history.&quot;&quot;&quot;
+
+
+class SheetEdgeFlange:
+    width = 80.0
+    depth = 40.0
+    thickness = 2.0
+    bend_radius = 2.0
+    k_factor = 0.5
+    flange_height = 20.0
+    flange_angle = 90.0
+
+    def build(self):
+        with Sketch(name=&quot;Blank&quot;, plane=&quot;XY&quot;) as blank:
+            Rectangle2D(self.width, self.depth)
+
+        sheet = blank.sheet_metal(
+            thickness=self.thickness,
+            bend_radius=self.bend_radius,
+            k_factor=self.k_factor,
+            rule_name=&quot;Edge Flange Rule&quot;,
+        )
+        return sheet.flange(
+            edges=[(40, 0, 2)],
+            height=self.flange_height,
+            angle=self.flange_angle,
+        )
+
+
+SheetEdgeFlange()
+</code></pre>
+    <h3>API used</h3>
+    <p><code>`Sketch.sheet_metal(...)` creates the blank; `Shape.flange(edges=..., height=..., angle=...)` adds the existing-edge feature.</code></p>
+    <p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/8c24f884b18eb17b25cce3b3c3237dee67de71eb/examples/sheet-edge-flange/scpf/model.py">Open the editable Forge source in GitHub →</a></p>
+  </section>
+
+  <section class="panel">
+  <h2>Reference code</h2>
+  <p>
+    The same model is written independently with the reference libraries below.
+    This makes it easier to compare modelling style and the resulting shape.
+  </p>
+  <p class="meta">No independent reference implementation is declared for this native capability case; native SolidCraft verification remains the authoritative evidence.</p>
+  <div class="qualification-reference-list"></div>
+</section>
+
+
+  <section class="panel">
+    <h2>How Forge builds it in SolidCraft</h2>
+    <p>Forge creates one sheet rule and flat sheet body, resolves the fixed edge pick and emits one native edge-flange feature. Height and angle remain feature dimensions.</p>
+  </section>
+
+  <section class="panel qualification-current">
+  <h2>SolidCraft result</h2>
+  <p>
+    Built and measured from the accepted durable SolidCraft evidence.
+    Open the measurement details to inspect body sizes and editable parameters.
+  </p>
+  <details class="qualification-detail-block"><summary><strong>Original model</strong> · 1 bodies</summary><h4>Editable parameters</h4><div class="qualification-table-scroll"><table class="api-table"><thead><tr><th>Parameter</th><th>Value</th><th>Unit</th><th>Expression</th></tr></thead><tbody><tr><td>width</td><td>80.0</td><td>mm</td><td>80</td></tr><tr><td>depth</td><td>40.0</td><td>mm</td><td>40</td></tr><tr><td>thickness</td><td>2.0</td><td>mm</td><td>2</td></tr><tr><td>bend_radius</td><td>2.0</td><td>mm</td><td>2</td></tr><tr><td>k_factor</td><td>0.5</td><td></td><td>0.5</td></tr><tr><td>flange_height</td><td>20.0</td><td>mm</td><td>20</td></tr><tr><td>flange_angle</td><td>1.5707963267948966</td><td>deg</td><td>90</td></tr></tbody></table></div><h4>Body size</h4><div class="qualification-table-scroll"><table class="api-table"><thead><tr><th>Body</th><th>Minimum</th><th>Maximum</th><th>Volume mm³</th><th>Faces</th><th>Edges</th><th>Closed</th></tr></thead><tbody><tr><td>SheetEdgeFlange</td><td>[-40.0, -20.0, -2.220446049250313e-15]</td><td>[40.0, 20.000000000000004, 19.999999999615312]</td><td>7736.991118400001</td><td>10</td><td>24</td><td>True</td></tr></tbody></table></div></details>
+  <h3>Saved-design results</h3><details class="qualification-detail-block"><summary>resize_edge_flange</summary><p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/saved_designs/resize_edge_flange/measurements.json" target="_blank" rel="noopener">Open durable measurements</a></p><pre><code>{
+  &quot;bodies&quot;: [
+    {
+      &quot;area_mm2&quot;: 8794.223492692,
+      &quot;bbox&quot;: {
+        &quot;max&quot;: [
+          46.47047612752276,
+          20.000000000000004,
+          24.665783747281495
+        ],
+        &quot;min&quot;: [
+          -40.0,
+          -20.000000000000004,
+          -3.108626042805341e-15
+        ]
+      },
+      &quot;center_of_mass&quot;: [
+        9.432859265767332,
+        1.0588377810423748e-15,
+        3.7611395668014946
+      ],
+      &quot;closed&quot;: true,
+      &quot;density_g_cm3&quot;: 1.29,
+      &quot;edges&quot;: 24,
+      &quot;face_types&quot;: {
+        &quot;cylinder&quot;: 2,
+        &quot;plane&quot;: 8
+      },
+      &quot;faces&quot;: 10,
+      &quot;kernel&quot;: {
+        &quot;edges&quot;: 28,
+        &quot;faces&quot;: 14,
+        &quot;shells&quot;: 1,
+        &quot;vertices&quot;: 16
+      },
+      &quot;mass_g&quot;: 10.607760291021599,
+      &quot;material&quot;: &quot;Default&quot;,
+      &quot;measured_by&quot;: &quot;smlib&quot;,
+      &quot;name&quot;: &quot;SheetEdgeFlange&quot;,
+      &quot;notes&quot;: [],
+      &quot;sheet_metal&quot;: true,
+      &quot;vertices&quot;: 16,
+      &quot;volume_mm3&quot;: 8223.069993039999
+    }
+  ],
+  &quot;body_count&quot;: 1,
+  &quot;params&quot;: [
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;80&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;width&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 80.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;40&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;depth&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 40.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;2&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;thickness&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 2.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;2&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;bend_radius&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 2.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;0.5&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;k_factor&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;value&quot;: 0.5
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;25 mm&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;flange_height&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 25.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;75 deg&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;flange_angle&quot;,
+      &quot;unit&quot;: &quot;deg&quot;,
+      &quot;value&quot;: 1.3089969389957472
+    }
+  ],
+  &quot;sketches&quot;: [
+    {
+      &quot;curves&quot;: 4,
+      &quot;dof&quot;: 0,
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Blank&quot;,
+      &quot;profiles&quot;: 1,
+      &quot;status&quot;: &quot;solved&quot;,
+      &quot;visible&quot;: false,
+      &quot;wires_ok&quot;: true
+    }
+  ],
+  &quot;timeline&quot;: [
+    {
+      &quot;error&quot;: null,
+      &quot;id&quot;: 1,
+      &quot;ms&quot;: 0.237989,
+      &quot;name&quot;: &quot;Blank&quot;,
+      &quot;rolled_back&quot;: false,
+      &quot;suppressed&quot;: false,
+      &quot;type&quot;: &quot;Sketch&quot;,
+      &quot;warning&quot;: null
+    },
+    {
+      &quot;error&quot;: null,
+      &quot;id&quot;: 2,
+      &quot;ms&quot;: 1.368295,
+      &quot;name&quot;: &quot;BaseFlange1&quot;,
+      &quot;rolled_back&quot;: false,
+      &quot;suppressed&quot;: false,
+      &quot;type&quot;: &quot;BaseFlangeFeature&quot;,
+      &quot;warning&quot;: null
+    },
+    {
+      &quot;error&quot;: null,
+      &quot;id&quot;: 3,
+      &quot;ms&quot;: 6.78995,
+      &quot;name&quot;: &quot;EdgeFlange1&quot;,
+      &quot;rolled_back&quot;: false,
+      &quot;suppressed&quot;: false,
+      &quot;type&quot;: &quot;EdgeFlangeFeature&quot;,
+      &quot;warning&quot;: null
+    }
+  ],
+  &quot;total&quot;: {
+    &quot;area_mm2&quot;: 8794.223492692,
+    &quot;edges&quot;: 24,
+    &quot;faces&quot;: 10,
+    &quot;mass_g&quot;: 10.607760291021599,
+    &quot;open_bodies_skipped&quot;: 0,
+    &quot;vertices&quot;: 16,
+    &quot;volume_mm3&quot;: 8223.069993039999
+  }
+}</code></pre></details>
+</section>
+<section class="notice">
+  <strong>Current visual verification: not required.</strong>
+  This model has no current <code>verification/visual.json</code> policy. The durable isometric image above is a current presentation preview, not a visual PASS claim.
+</section>
+
+
+<details class="panel qualification-technical-details">
+  <summary><strong>Technical test details</strong></summary>
+  <div class="qualification-technical-details-body">
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design PASS · Visual N/R</span></div>
+
+    <section class="qualification-technical-section">
+      <h3>Verification checks</h3>
+      <p class="meta">
+        Automated contract and geometry checks. Open an individual check for
+        its exact machine evidence.
+      </p>
+      <details class="qualification-detail-block">
+  <summary><code>baseline</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;body_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft body count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;named_bodies&quot;: [
+    {
+      &quot;closed&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body closed&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;selector&quot;: &quot;sole&quot;,
+      &quot;sheet_metal&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body sheet_metal&quot;,
+        &quot;pass&quot;: true
+      }
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;actual&quot;: {
+      &quot;bend_radius&quot;: 2.0,
+      &quot;depth&quot;: 40.0,
+      &quot;flange_angle&quot;: 1.5707963267948966,
+      &quot;flange_height&quot;: 20.0,
+      &quot;k_factor&quot;: 0.5,
+      &quot;thickness&quot;: 2.0,
+      &quot;width&quot;: 80.0
+    },
+    &quot;expected&quot;: {
+      &quot;bend_radius&quot;: 2.0,
+      &quot;depth&quot;: 40.0,
+      &quot;flange_angle&quot;: 1.5707963267948966,
+      &quot;flange_height&quot;: 20.0,
+      &quot;k_factor&quot;: 0.5,
+      &quot;thickness&quot;: 2.0,
+      &quot;width&quot;: 80.0
+    },
+    &quot;label&quot;: &quot;SolidCraft parameters&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketch_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft sketch count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketches&quot;: [
+    {
+      &quot;actual&quot;: {
+        &quot;curves&quot;: 4,
+        &quot;name&quot;: &quot;Blank&quot;,
+        &quot;profiles&quot;: 1,
+        &quot;status&quot;: &quot;solved&quot;
+      },
+      &quot;expected&quot;: {
+        &quot;curves&quot;: 4,
+        &quot;name&quot;: &quot;Blank&quot;,
+        &quot;profiles&quot;: 1,
+        &quot;status&quot;: &quot;solved&quot;
+      },
+      &quot;label&quot;: &quot;Blank sketch&quot;,
+      &quot;pass&quot;: true
+    }
+  ]
+}</code></pre>
+</details>
+<details class="qualification-detail-block">
+  <summary><code>saved_design_resize_edge_flange</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;body_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft body count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;named_bodies&quot;: [
+    {
+      &quot;closed&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body closed&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;selector&quot;: &quot;sole&quot;,
+      &quot;sheet_metal&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body sheet_metal&quot;,
+        &quot;pass&quot;: true
+      }
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;actual&quot;: {
+      &quot;flange_angle&quot;: 1.3089969389957472,
+      &quot;flange_height&quot;: 25.0
+    },
+    &quot;expected&quot;: {
+      &quot;flange_angle&quot;: 1.3089969389957472,
+      &quot;flange_height&quot;: 25.0
+    },
+    &quot;label&quot;: &quot;SolidCraft parameters&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketch_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft sketch count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketches&quot;: [
+    {
+      &quot;actual&quot;: {
+        &quot;curves&quot;: 4,
+        &quot;name&quot;: &quot;Blank&quot;,
+        &quot;profiles&quot;: 1,
+        &quot;status&quot;: &quot;solved&quot;
+      },
+      &quot;expected&quot;: {
+        &quot;curves&quot;: 4,
+        &quot;name&quot;: &quot;Blank&quot;,
+        &quot;profiles&quot;: 1,
+        &quot;status&quot;: &quot;solved&quot;
+      },
+      &quot;label&quot;: &quot;Blank sketch&quot;,
+      &quot;pass&quot;: true
+    }
+  ]
+}</code></pre>
+</details>
+<details class="qualification-detail-block">
+  <summary><code>inspection_flat_pattern</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;checks&quot;: [
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 1,
+        &quot;expected&quot;: 1,
+        &quot;label&quot;: &quot;SolidCraft inspection check result_count&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;id&quot;: &quot;result_count&quot;,
+      &quot;path&quot;: []
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 1,
+        &quot;expected&quot;: 1,
+        &quot;label&quot;: &quot;SolidCraft inspection check bend_count&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;id&quot;: &quot;bend_count&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;bends&quot;
+      ]
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 90.0,
+        &quot;delta&quot;: 0.0,
+        &quot;expected&quot;: 90.0,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;SolidCraft inspection check bend_angle&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.001
+      },
+      &quot;id&quot;: &quot;bend_angle&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;bends&quot;,
+        0,
+        &quot;angle_deg&quot;
+      ]
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 2.0,
+        &quot;delta&quot;: 0.0,
+        &quot;expected&quot;: 2.0,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;SolidCraft inspection check bend_radius&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.001
+      },
+      &quot;id&quot;: &quot;bend_radius&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;bends&quot;,
+        0,
+        &quot;radius&quot;
+      ]
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: &quot;Edge Flange Rule&quot;,
+        &quot;expected&quot;: &quot;Edge Flange Rule&quot;,
+        &quot;label&quot;: &quot;SolidCraft inspection check sheet_rule&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;id&quot;: &quot;sheet_rule&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;rule&quot;
+      ]
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 2.0,
+        &quot;delta&quot;: 0.0,
+        &quot;expected&quot;: 2.0,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;SolidCraft inspection check sheet_thickness&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.001
+      },
+      &quot;id&quot;: &quot;sheet_thickness&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;thickness&quot;
+      ]
+    },
+    {
+      &quot;comparison&quot;: {
+        &quot;actual&quot;: 0.5,
+        &quot;delta&quot;: 0.0,
+        &quot;expected&quot;: 0.5,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;SolidCraft inspection check sheet_k_factor&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.001
+      },
+      &quot;id&quot;: &quot;sheet_k_factor&quot;,
+      &quot;path&quot;: [
+        0,
+        &quot;k_factor&quot;
+      ]
+    }
+  ]
+}</code></pre>
+</details>
+
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Geometry evidence</h3>
+      <p><strong>Are outer bounds sufficient?</strong> no</p>
+      <p>The formed bounds do not prove inherited rule ownership or native flange/flat-pattern history; inspection of sheet and bend records is required.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Saved-design test</h3>
+      <p>Mutate flange height from 20 to 25 mm and bend angle from 90 to 75 degrees, then verify rebuilt native feature and flat-pattern evidence.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Raw test files</h3>
+      <p class="meta">
+        Exact accepted source files and durable build evidence used by this
+        Verification case.
+      </p>
+      <div class="qualification-file-groups"><section class="qualification-file-group"><h4>Accepted source files</h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/8c24f884b18eb17b25cce3b3c3237dee67de71eb/examples/sheet-edge-flange/scpf/model.py" target="_blank" rel="noopener">Forge model source</a> <code class="qualification-file-path">examples/sheet-edge-flange/scpf/model.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/8c24f884b18eb17b25cce3b3c3237dee67de71eb/examples/sheet-edge-flange/tests/test_contract.py" target="_blank" rel="noopener">Integration contract test</a> <code class="qualification-file-path">examples/sheet-edge-flange/tests/test_contract.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/8c24f884b18eb17b25cce3b3c3237dee67de71eb/examples/sheet-edge-flange/verification/verify.py" target="_blank" rel="noopener">Verification contract</a> <code class="qualification-file-path">examples/sheet-edge-flange/verification/verify.py</code></li></ul></section><section class="qualification-file-group"><h4>SolidCraft model and verification evidence <span class="meta">(14 files)</span></h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/baseline/measurements.json" target="_blank" rel="noopener">Baseline measurements</a> <code class="qualification-file-path">model_verify/baseline/measurements.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/inspections/flat_pattern/results.json" target="_blank" rel="noopener">results.json</a> <code class="qualification-file-path">model_verify/inspections/flat_pattern/results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/model.sc" target="_blank" rel="noopener">Native SolidCraft design</a> <code class="qualification-file-path">model_verify/native/model.sc</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/model.step" target="_blank" rel="noopener">Native STEP export</a> <code class="qualification-file-path">model_verify/native/model.step</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/replay-log.json" target="_blank" rel="noopener">Native replay log</a> <code class="qualification-file-path">model_verify/native/replay-log.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/replay_work/phase-1-results.json" target="_blank" rel="noopener">phase-1-results.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1-results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/replay_work/phase-1.json" target="_blank" rel="noopener">phase-1.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/native/results.json" target="_blank" rel="noopener">Native execution results</a> <code class="qualification-file-path">model_verify/native/results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/presentation/preview-iso.png" target="_blank" rel="noopener">Presentation preview image</a> <code class="qualification-file-path">model_verify/presentation/preview-iso.png</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/presentation/preview.json" target="_blank" rel="noopener">Presentation preview metadata</a> <code class="qualification-file-path">model_verify/presentation/preview.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/saved_designs/resize_edge_flange/measurements.json" target="_blank" rel="noopener">measurements.json</a> <code class="qualification-file-path">model_verify/saved_designs/resize_edge_flange/measurements.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/saved_designs/resize_edge_flange/model.sc" target="_blank" rel="noopener">model.sc</a> <code class="qualification-file-path">model_verify/saved_designs/resize_edge_flange/model.sc</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/model_verify/verification.json" target="_blank" rel="noopener">Verification result</a> <code class="qualification-file-path">model_verify/verification.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/922e4ac53a7d81359481b7dfeabd2ac21ba63071/dev-ci/examples/sheet-edge-flange/solidcraft.json" target="_blank" rel="noopener">Generated SolidCraft command JSON</a> <code class="qualification-file-path">solidcraft.json</code></li></ul></section></div>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Reference documentation</h3>
+      <ul><li><strong>Native SolidCraft history</strong> — The verification target is native sheet-rule and flange history, so independent solid-only references are optional rather than fabricated.</li></ul>
+    </section>
+
+    <p class="source-stamp">
+      Site source <code>8c24f884b18eb17b25cce3b3c3237dee67de71eb</code> · accepted model evidence source
+      <code>8c24f884b18eb17b25cce3b3c3237dee67de71eb</code> · durable build <code>922e4ac53a7d81359481b7dfeabd2ac21ba63071</code>
+    </p>
+  </div>
+</details>
+
+
+  <section class="panel">
+    <h2>Sources of truth</h2>
+    <p>
+      General model/page metadata is stored in <code>model.yml</code>.
+      Preserved engineering explanation is stored in <code>README.md</code>.
+      Exact expected values and tolerances are defined by
+      <code>verification/verify.py</code>.
+    </p>
+    <p>
+      <a href="../../examples/sheet-edge-flange/">Open the example →</a>
+      · <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/8c24f884b18eb17b25cce3b3c3237dee67de71eb/examples/sheet-edge-flange/verification/verify.py">Open verification/verify.py →</a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>SCPF</strong> generates commands; native SolidCraft creates the geometry.
+    <a href="https://brainboxemb.github.io/2026-011-02.cad.solidcraft/">Full SolidCraft CAD projects →</a>
+  </div>
+</footer>
+<script src="../../static/copy.js"></script>
+<script src="../../static/search.js"></script>
+</body>
+</html>

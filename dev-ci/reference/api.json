@@ -547,7 +547,7 @@
       "kind": "callable",
       "name": "Shape.fold",
       "summary": "Fold existing sheet material along one straight line.",
-      "guide": "guide/features/#features",
+      "guide": "guide/sheet-metal/#fold",
       "reference": "reference/Shape.fold/",
       "use_when": "Bend material that already exists in a sheet blank. Dimensions and bend allowance come from the sheet's shared rule.",
       "limits": "This first qualified form supports one straight fold line. The line endpoints and fixed point are fixed finite coordinates.",
@@ -575,6 +575,109 @@
       ],
       "example": "sheet.fold(\nline=((20, -20), (20, 20)),\nangle=90,\nfixed=(-20, 0, 0),\n)",
       "signature": "Shape.fold(self, *, line, angle=90, fixed=None, position='centerline', flip=False)"
+    },
+    {
+      "kind": "callable",
+      "name": "Shape.flange",
+      "summary": "Add a native edge flange to existing sheet material.",
+      "guide": "guide/sheet-metal/#edge-flange",
+      "reference": "reference/Shape.flange/",
+      "use_when": "Grow new sheet material from one or more existing sheet edges while inheriting thickness, K-factor and bend radius from the sheet rule.",
+      "limits": "This first slice accepts explicit fixed XYZ edge pick points only. Per-edge segment dictionaries, corner relief overrides, chained bends and radius overrides are intentionally not exposed.",
+      "parameters": [
+        {
+          "name": "edges",
+          "description": "Non-empty sequence of fixed XYZ pick points on sheet edges."
+        },
+        {
+          "name": "height",
+          "description": "Positive flange height in mm."
+        },
+        {
+          "name": "angle",
+          "description": "Bend angle in degrees. Defaults to 90."
+        },
+        {
+          "name": "height_from",
+          "description": "Optional native height datum: \"outer\", \"inner\" or \"tangent\"."
+        },
+        {
+          "name": "position",
+          "description": "Optional native bend position: \"inside\", \"outside\", \"middle\", \"material_outside\" or \"tangent\"."
+        },
+        {
+          "name": "flip",
+          "description": "Reverse the flange side when True. Defaults to False."
+        }
+      ],
+      "example": "",
+      "signature": "Shape.flange(self, *, edges, height, angle=90, height_from=None, position=None, flip=False)"
+    },
+    {
+      "kind": "callable",
+      "name": "Shape.contour_flange",
+      "summary": "Create a native contour-flange sheet from an open Sketch chain. The receiver must be the Shape returned by Sketch.chain(...).finish(). Material dimensions define the sheet rule used by the new body; the contour feature itself receives only that rule name.",
+      "guide": "guide/sheet-metal/#contour-flange",
+      "reference": "reference/Shape.contour_flange/",
+      "use_when": "",
+      "limits": "",
+      "parameters": [],
+      "example": "",
+      "signature": "Shape.contour_flange(self, *, distance, thickness, bend_radius, k_factor=0.5, rule_name='Forge Sheet', flip=False, reverse=False)"
+    },
+    {
+      "kind": "callable",
+      "name": "Shape.hem",
+      "summary": "Add a native hem to existing sheet material.",
+      "guide": "guide/sheet-metal/#hem",
+      "reference": "reference/Shape.hem/",
+      "use_when": "Fold one or more existing sheet edges back on the sheet while preserving native sheet-metal history and the inherited rule.",
+      "limits": "This first slice accepts explicit fixed XYZ edge pick points only. Generic edge selectors and compound hem profiles are intentionally outside this contract.",
+      "parameters": [
+        {
+          "name": "edges",
+          "description": "Non-empty sequence of fixed XYZ pick points on sheet edges."
+        },
+        {
+          "name": "length",
+          "description": "Positive hem length in mm, measured to the outer face."
+        },
+        {
+          "name": "gap",
+          "description": "Optional positive clearance in mm between the returned leg and the face it folds over. When omitted, SolidCraft uses the sheet rule."
+        },
+        {
+          "name": "flip",
+          "description": "Reverse the hem side when True. Defaults to False."
+        }
+      ],
+      "example": "",
+      "signature": "Shape.hem(self, *, edges, length, gap=None, flip=False)"
+    },
+    {
+      "kind": "callable",
+      "name": "Shape.path_flange",
+      "summary": "Add a native path flange to existing sheet material.",
+      "guide": "guide/sheet-metal/#path-flange",
+      "reference": "reference/Shape.path_flange/",
+      "use_when": "Create a multi-leg native flange from an existing sheet edge using one reusable open Sketch path.",
+      "limits": "The initial SolidCraft 0.45 contract accepts line-only open chains. Tangent arcs and generic edge selectors are intentionally rejected until the native path-flange runtime proves those contracts.",
+      "parameters": [
+        {
+          "name": "edge",
+          "description": "Fixed XYZ pick point on the existing sheet edge."
+        },
+        {
+          "name": "path",
+          "description": "Finished open connected Sketch chain describing the flange path across that edge."
+        },
+        {
+          "name": "radius",
+          "description": "Optional positive bend radius in mm. When omitted, SolidCraft inherits the active sheet rule."
+        }
+      ],
+      "example": "",
+      "signature": "Shape.path_flange(self, *, edge, path, radius=None)"
     },
     {
       "kind": "callable",
@@ -706,10 +809,14 @@
         {
           "name": "offset",
           "description": "Optional signed offset from a standalone origin plane, in mm."
+        },
+        {
+          "name": "rotation",
+          "description": "Optional fixed (x, y, z) rotation in degrees for an explicit world-frame Sketch. Rotations are applied X, then Y, then Z."
         }
       ],
       "example": "with Sketch(name=\"Base\", plane=\"XY\") as sketch:\nRectangle2D(80, 50)",
-      "signature": "Sketch(*, name='Profile', on=None, parent=<Anchor.TOP: 'top'>, plane=None, origin=None, offset=None)"
+      "signature": "Sketch(*, name='Profile', on=None, parent=<Anchor.TOP: 'top'>, plane=None, origin=None, offset=None, rotation=None)"
     },
     {
       "kind": "callable",
@@ -818,7 +925,7 @@
       "kind": "callable",
       "name": "Sketch.sheet_metal",
       "summary": "Create a native sheet-metal body from this closed flat Sketch.",
-      "guide": "guide/geometry/#profiles",
+      "guide": "guide/sheet-metal/#base-sheet",
       "reference": "reference/Sketch.sheet_metal/",
       "use_when": "Start a fabricated sheet part from its flat blank before applying holes, folds, hems or other sheet-metal features.",
       "limits": "The first qualified form requires one standalone XY Sketch with one closed profile. Leave the Sketch scope before creating the sheet.",
