@@ -681,6 +681,35 @@
     },
     {
       "kind": "callable",
+      "name": "Shape.perforate",
+      "summary": "Add a native whole-sheet perforation field.",
+      "guide": "guide/sheet-metal/#perforation",
+      "reference": "reference/Shape.perforate/",
+      "use_when": "Describe manufacturing perforations that belong to sheet flat-pattern, DXF and measured-volume semantics without cutting repeated B-rep holes.",
+      "limits": "This first slice covers the whole sheet only. Sketch/profile-bounded local perforation regions are intentionally outside the contract.",
+      "parameters": [
+        {
+          "name": "diameter",
+          "description": "Positive perforation diameter in mm."
+        },
+        {
+          "name": "pitch",
+          "description": "Positive centre-to-centre perforation pitch in mm."
+        },
+        {
+          "name": "margin",
+          "description": "Optional positive clear margin in mm. When omitted, SolidCraft uses the perforation diameter."
+        },
+        {
+          "name": "pattern",
+          "description": "Native perforation layout: \"staggered\" or \"square\". Defaults to \"staggered\"."
+        }
+      ],
+      "example": "",
+      "signature": "Shape.perforate(self, *, diameter, pitch, margin=None, pattern='staggered')"
+    },
+    {
+      "kind": "callable",
       "name": "Shape.rectangular_pattern",
       "summary": "Pattern an existing native history feature in one or two directions.",
       "guide": "guide/features/#feature-patterns",

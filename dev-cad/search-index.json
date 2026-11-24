@@ -1362,6 +1362,37 @@
       "keywords": "Shape.path_flange(self, *, edge, path, radius=None) Create a multi-leg native flange from an existing sheet edge using one reusable open Sketch path. The initial SolidCraft 0.45 contract accepts line-only open chains. Tangent arcs and generic edge selectors are intentionally rejected until the native path-flange runtime proves those contracts. edge Fixed XYZ pick point on the existing sheet edge. path Finished open connected Sketch chain describing the flange path across that edge. radius Optional positive bend radius in mm. When omitted, SolidCraft inherits the active sheet rule."
     },
     {
+      "title": "Shape.perforate",
+      "kind": "API Reference",
+      "url": "reference/Shape.perforate/",
+      "summary": "Add a native whole-sheet perforation field.",
+      "aliases": [
+        "Shape.perforate",
+        "diameter",
+        "margin",
+        "pattern",
+        "perforate",
+        "pitch"
+      ],
+      "keywords": "Shape.perforate(self, *, diameter, pitch, margin=None, pattern='staggered') Describe manufacturing perforations that belong to sheet flat-pattern, DXF and measured-volume semantics without cutting repeated B-rep holes. This first slice covers the whole sheet only. Sketch/profile-bounded local perforation regions are intentionally outside the contract. diameter Positive perforation diameter in mm. pitch Positive centre-to-centre perforation pitch in mm. margin Optional positive clear margin in mm. When omitted, SolidCraft uses the perforation diameter. pattern Native perforation layout: \"staggered\" or \"square\". Defaults to \"staggered\".",
+      "symbol": "Shape.perforate"
+    },
+    {
+      "title": "Shape.perforate \u00b7 API Guide",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#perforation",
+      "summary": "Add a native whole-sheet perforation field.",
+      "aliases": [
+        "Shape.perforate",
+        "diameter",
+        "margin",
+        "pattern",
+        "perforate",
+        "pitch"
+      ],
+      "keywords": "Shape.perforate(self, *, diameter, pitch, margin=None, pattern='staggered') Describe manufacturing perforations that belong to sheet flat-pattern, DXF and measured-volume semantics without cutting repeated B-rep holes. This first slice covers the whole sheet only. Sketch/profile-bounded local perforation regions are intentionally outside the contract. diameter Positive perforation diameter in mm. pitch Positive centre-to-centre perforation pitch in mm. margin Optional positive clear margin in mm. When omitted, SolidCraft uses the perforation diameter. pattern Native perforation layout: \"staggered\" or \"square\". Defaults to \"staggered\"."
+    },
+    {
       "title": "Shape.rectangular_pattern",
       "kind": "API Reference",
       "url": "reference/Shape.rectangular_pattern/",
@@ -3180,7 +3211,7 @@
       "aliases": [
         "sheet-metal"
       ],
-      "keywords": "Sheet metal is native editable history Forge sheet-metal operations lower to SolidCraft sheet rules and native sheet features. Use them when the saved design must keep material thickness, bend allowance and a recoverable flat pattern. Do not replace these operations with fused solid envelopes when native history matters. One sheet rule owns the material A sheet body has one active rule. That rule owns thickness , k_factor and the default bend_radius . Operations on an existing sheet inherit those values instead of restating them. Feature-specific dimensions such as flange height, hem length or a path-flange radius override remain on the feature. Create a flat sheet body with Sketch(name=\"Blank\", plane=\"XY\") as sketch: Rectangle2D(80, 40) sheet = sketch.sheet_metal( thickness=2, bend_radius=2, k_factor=0.5, rule_name=\"Panel sheet\", ) Sketch.sheet_metal() creates a new sheet body from one closed Sketch. It is a body-creation operation, not a feature applied to an existing sheet. Fold existing material sheet = sheet.fold( line=((20, -20, 0), (20, 20, 0)), angle=90, fixed=(-30, 0, 0), ) Shape.fold() bends material that already belongs to the sheet. The initial contract uses one straight fixed-coordinate fold line. Thickness, K-factor and bend radius come from the active rule. Grow an edge flange sheet = sheet.flange( edges=[(40, 0, 2)], height=20, angle=90, ) Shape.flange() adds material to explicit existing sheet edges. Height and angle may remain parameterized. Edge selection is currently a non-empty set of fixed XYZ pick points; generic topology selectors are not yet part of this API. Create a sheet from an open contour with Sketch(name=\"Contour\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((35, 0)) chain.tangent_arc_to((40, 5)) chain.line_to((40, 30)) contour = chain.finish() sheet = contour.contour_flange( distance=50, thickness=2.5, bend_radius=2.5, k_factor=0.44, ) Shape.contour_flange() is the other body-creation operation. Its receiver is a finished connected open Sketch chain. Forge preserves chain order and replay-bound native curve identity; callers do not pass SolidCraft curve ids. Hem an existing edge sheet = sheet.hem( edges=[(40, 0, 2)], length=12, gap=4, ) Shape.hem() folds an existing edge back onto the sheet while inheriting the active material rule. The first contract uses fixed XYZ edge picks. Length and optional gap are feature dimensions and may be parameterized. Follow a reusable path with Sketch(name=\"Path\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((0, 14)) path = chain.finish() sheet = sheet.path_flange( edge=(40, 0, 2), path=path, radius=3, ) Shape.path_flange() adds a native flange to an existing edge using a finished open Sketch path. The qualified SolidCraft 0.45 contract is line-only. Omitting radius inherits the active rule; supplying it overrides only this feature's bend radius. Editable dimensions versus topology picks Keep design dimensions symbolic when the method accepts Parameter / Expression values. Current edge picks and straight fold-line coordinates are intentionally fixed finite coordinates. Forge rejects unsupported associative selectors instead of pretending a numeric pick is a stable topology reference. Verification and flat patterns Native sheet-metal verification is stronger than matching a formed bounding box. Verification cases inspect sheet-rule values, native bend/history records, saved-design parameter edits and the recoverable flat pattern. See the Verification catalog , especially the Sheet metal group."
+      "keywords": "Sheet metal is native editable history Forge sheet-metal operations lower to SolidCraft sheet rules and native sheet features. Use them when the saved design must keep material thickness, bend allowance and a recoverable flat pattern. Do not replace these operations with fused solid envelopes when native history matters. One sheet rule owns the material A sheet body has one active rule. That rule owns thickness , k_factor and the default bend_radius . Operations on an existing sheet inherit those values instead of restating them. Feature-specific dimensions such as flange height, hem length or a path-flange radius override remain on the feature. Create a flat sheet body with Sketch(name=\"Blank\", plane=\"XY\") as sketch: Rectangle2D(80, 40) sheet = sketch.sheet_metal( thickness=2, bend_radius=2, k_factor=0.5, rule_name=\"Panel sheet\", ) Sketch.sheet_metal() creates a new sheet body from one closed Sketch. It is a body-creation operation, not a feature applied to an existing sheet. Fold existing material sheet = sheet.fold( line=((20, -20, 0), (20, 20, 0)), angle=90, fixed=(-30, 0, 0), ) Shape.fold() bends material that already belongs to the sheet. The initial contract uses one straight fixed-coordinate fold line. Thickness, K-factor and bend radius come from the active rule. Grow an edge flange sheet = sheet.flange( edges=[(40, 0, 2)], height=20, angle=90, ) Shape.flange() adds material to explicit existing sheet edges. Height and angle may remain parameterized. Edge selection is currently a non-empty set of fixed XYZ pick points; generic topology selectors are not yet part of this API. Create a sheet from an open contour with Sketch(name=\"Contour\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((35, 0)) chain.tangent_arc_to((40, 5)) chain.line_to((40, 30)) contour = chain.finish() sheet = contour.contour_flange( distance=50, thickness=2.5, bend_radius=2.5, k_factor=0.44, ) Shape.contour_flange() is the other body-creation operation. Its receiver is a finished connected open Sketch chain. Forge preserves chain order and replay-bound native curve identity; callers do not pass SolidCraft curve ids. Hem an existing edge sheet = sheet.hem( edges=[(40, 0, 2)], length=12, gap=4, ) Shape.hem() folds an existing edge back onto the sheet while inheriting the active material rule. The first contract uses fixed XYZ edge picks. Length and optional gap are feature dimensions and may be parameterized. Follow a reusable path with Sketch(name=\"Path\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((0, 14)) path = chain.finish() sheet = sheet.path_flange( edge=(40, 0, 2), path=path, radius=3, ) Shape.path_flange() adds a native flange to an existing edge using a finished open Sketch path. The qualified SolidCraft 0.45 contract is line-only. Omitting radius inherits the active rule; supplying it overrides only this feature's bend radius. Apply a whole-sheet perforation field sheet = sheet.perforate( diameter=5, pitch=10, margin=5, pattern=\"square\", ) Shape.perforate() adds native manufacturing perforation semantics to existing sheet material. Diameter and pitch are positive millimetre dimensions. margin is optional; omitting it leaves SolidCraft's native diameter-sized margin default in control. pattern is staggered by default or may be square . The first Forge contract applies to the whole sheet. It deliberately does not expose SolidCraft's Sketch/profile-bounded region fields. Perforations remain flat-pattern/DXF/measurement semantics rather than repeated B-rep holes. Editable dimensions versus topology picks Keep design dimensions symbolic when the method accepts Parameter / Expression values. Current edge picks and straight fold-line coordinates are intentionally fixed finite coordinates. Forge rejects unsupported associative selectors instead of pretending a numeric pick is a stable topology reference. Verification and flat patterns Native sheet-metal verification is stronger than matching a formed bounding box. Verification cases inspect sheet-rule values, native bend/history records, saved-design parameter edits and the recoverable flat pattern. See the Verification catalog , especially the Sheet metal group."
     },
     {
       "title": "Sheet metal is native editable history",
@@ -3261,6 +3292,16 @@
         "path-flange"
       ],
       "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. with Sketch(name=\"Path\", plane=\"XZ\") as sketch: chain = sketch.chain(start=(0, 0)) chain.line_to((0, 14)) path = chain.finish() sheet = sheet.path_flange( edge=(40, 0, 2), path=path, radius=3, ) Shape.path_flange() adds a native flange to an existing edge using a finished open Sketch path. The qualified SolidCraft 0.45 contract is line-only. Omitting radius inherits the active rule; supplying it overrides only this feature's bend radius."
+    },
+    {
+      "title": "Apply a whole-sheet perforation field",
+      "kind": "API Guide",
+      "url": "guide/sheet-metal/#perforation",
+      "summary": "Sheet metal",
+      "aliases": [
+        "perforation"
+      ],
+      "keywords": "Native sheet rules, folds, flanges, hems, paths and recoverable flat patterns. sheet = sheet.perforate( diameter=5, pitch=10, margin=5, pattern=\"square\", ) Shape.perforate() adds native manufacturing perforation semantics to existing sheet material. Diameter and pitch are positive millimetre dimensions. margin is optional; omitting it leaves SolidCraft's native diameter-sized margin default in control. pattern is staggered by default or may be square . The first Forge contract applies to the whole sheet. It deliberately does not expose SolidCraft's Sketch/profile-bounded region fields. Perforations remain flat-pattern/DXF/measurement semantics rather than repeated B-rep holes."
     },
     {
       "title": "Editable dimensions versus topology picks",
@@ -3571,6 +3612,16 @@
         "Sheet metal"
       ],
       "keywords": "sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)"
+    },
+    {
+      "title": "Shape.perforate(...)",
+      "kind": "Cheatsheet",
+      "url": "cheatsheet/#cheat-sheet-metal-shape-perforate",
+      "summary": "Apply a native whole-sheet manufacturing perforation field without repeated solid hole cuts.",
+      "aliases": [
+        "Sheet metal"
+      ],
+      "keywords": "sheet = sheet.perforate(diameter=5, pitch=10, margin=5, pattern='square')"
     },
     {
       "title": "sketch.extrude(distance)",
@@ -4293,6 +4344,17 @@
         "sheet-metal"
       ],
       "keywords": "Prove that an existing sheet edge can follow a reusable line-only open Sketch path as one native path-flange feature. `Sketch.chain(...)`, `line_to()`, `finish()` and `Shape.path_flange(edge=..., path=..., radius=...)`. An 80 \u00d7 40 \u00d7 2 mm sheet uses a 14 mm open path and a 3 mm feature-radius override on the right edge. Forge authors the reusable open path, resolves the fixed sheet edge and emits one native path-flange feature. Thickness and K-factor remain owned by the active rule. One native sheet body contains one path flange with a recoverable flat pattern and one bend record. Mutate path height from 14 to 18 mm and feature radius from 3 to 4 mm, then verify the rebuilt native history and flat pattern. The formed envelope cannot prove path reuse, feature-radius ownership or native flat-pattern history. Path-flange verification targets native sheet history; external references are optional when they cannot represent the same feature contract."
+    },
+    {
+      "title": "Native whole-sheet perforation",
+      "kind": "Verification",
+      "url": "verification/sheet-perforate/",
+      "summary": "A 60 \u00d7 40 \u00d7 2 mm native sheet carries a parameterized whole-sheet perforation field without repeated B-rep hole cuts.",
+      "aliases": [
+        "Manufacturing perforations stay native sheet and flat-pattern history",
+        "sheet-metal"
+      ],
+      "keywords": "Prove that Forge can author manufacturing perforations as native SolidCraft sheet history instead of approximating them with repeated B-rep holes. `Shape.perforate(diameter=..., pitch=..., margin=..., pattern=...)` applies a whole-sheet field to existing sheet material. A 60 \u00d7 40 \u00d7 2 mm native sheet uses an explicit sheet rule. The baseline adds \u00d85 mm perforations on a 10 mm square pitch with a 5 mm margin. Forge first emits the normal native sheet rule/base history, then emits one `sheet.perforate` command against the current sheet body. Diameter, pitch and optional margin remain parameterized. The initial API does not expose a Sketch/profile-bounded region. One connected closed native sheet body retains the perforation field as manufacturing/flat-pattern semantics. Forge does not create a repeated collection of solid Hole or Boolean-cut features. Without rerunning Forge Python, mutate perforation diameter from 5 to 6 mm, pitch from 10 to 12 mm and margin from 5 to 6 mm. Rebuild/reopen must preserve one connected sheet body and coherent native perforation/flat-pattern evidence. The folded B-rep envelope intentionally does not prove the perforation field: SolidCraft owns its manufacturing, DXF, flat-pattern and measured-volume semantics. Native history plus flat-pattern inspection is therefore required. This capability is specifically a native manufacturing-field contract. External solid kernels are optional evidence and must not be substituted with repeated physical holes that change the semantics."
     },
     {
       "title": "Parameterized Box",
