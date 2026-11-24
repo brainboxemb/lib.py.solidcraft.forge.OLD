@@ -8,6 +8,12 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Changed
+
+- Generalized native feature-pattern sources so rectangular/circular patterns
+  accept already-applied Hole and native primitive Shapes as well as named
+  Sketch extrusions, while keeping SolidCraft history names internal (#347).
+
 ### Added
 
 - Added native whole-sheet `Shape.perforate(...)` fields with parameterized
