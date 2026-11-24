@@ -986,10 +986,15 @@ def build(
 
     sections = []
     example_slugs = {row.slug for row in example_rows}
+    verification_slugs = {row.slug for row in verification_rows}
     for heading, items in load_cheatsheet():
         boxes = []
         for title, description, snippet, linked in items:
-            link = cheatsheet_link(linked, example_slugs)
+            link = cheatsheet_link(
+                linked,
+                example_slugs,
+                verification_slugs,
+            )
             boxes.append(
                 render_template(
                     "cheatsheet-item.html",
