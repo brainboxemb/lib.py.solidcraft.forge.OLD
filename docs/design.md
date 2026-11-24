@@ -2165,6 +2165,39 @@ existing edge-flange/hem selection policy. Path coordinates and optional
 delegates bend radius to the active sheet rule; providing it overrides only the
 path-flange feature.
 
+## Native whole-sheet perforation lowering
+
+`Shape.perforate()` is an existing-sheet history feature:
+
+```text
+existing sheet history
+  -> Shape(kind="sheet_perforate", diameter, pitch, margin, pattern)
+  -> recurse existing history; require base metadata sheet=True
+  -> sheet.perforate(
+       diameter=<expression>,
+       pitch=<expression>,
+       margin?=<expression>,
+       pattern?="square",
+       body=<current body name>
+     )
+```
+
+No new geometry compiler is involved. The feature deliberately preserves the
+native distinction between manufacturing perforations and B-rep holes:
+SolidCraft owns the flat-pattern/DXF/measurement effect while Forge does not
+populate the folded B-rep with repeated circular cuts.
+
+### Default and scope boundary
+
+`margin=None` is omitted so SolidCraft applies its documented default equal to
+the perforation diameter. `pattern="staggered"` is likewise omitted because it
+is the native default; `square` is written explicitly.
+
+The first slice does not accept `sketch` or `profiles`. A future bounded
+perforation-region API must reuse qualified Sketch/profile identity rather than
+adding caller-authored native ids. Generic pattern placement/alignment controls
+are not invented beyond the SolidCraft 0.45 command contract.
+
 ## Open connected Sketch-chain design
 
 #683 deliberately does not reuse `connected_profile`. A closed selectable
