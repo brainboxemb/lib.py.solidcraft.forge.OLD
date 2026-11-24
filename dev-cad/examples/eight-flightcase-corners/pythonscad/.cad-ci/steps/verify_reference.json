@@ -3,13 +3,13 @@
   "action_type": "copy",
   "active_dependent_config_digests": {},
   "active_dependents": [],
-  "bundle_sha256": "be2f3c5a9558e57bb16a712723cf50a13335e7e7b2aa0ce8780d022391eb8802",
-  "duration_seconds": 0.061,
+  "bundle_sha256": "3d98901ba86439e71b4d28fe8934a19f4c708c86237e693c22143635ce104440",
+  "duration_seconds": 0.143,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-24T08:13:44.527Z",
+  "finished_at": "2026-11-24T10:53:33.773Z",
   "item": "examples-eight-flightcase-corners-pythonscad",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -17,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "305e996e3b8c16ca25ae85cf1e40af78b8ce76dd670508e80256328daaa39be4"
+      "sha256": "90f70cedf72c703902e294ddf8503f6b221560e401ca3e70145a5b9aa851c075"
     }
   },
-  "run_finished_at": "2026-11-24T08:15:23.433Z",
-  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "run_finished_at": "2026-11-24T10:53:43.418Z",
+  "run_started_at": "2026-11-24T10:50:41.543Z",
   "schema": 6,
-  "started_at": "2026-11-24T08:13:44.466Z",
+  "started_at": "2026-11-24T10:53:33.630Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "66a0ec97480643703f084c252e701497cc53151d00cf6b4252de4e9551f84e58",
+  "target_spec_digest": "f59f8e5ca61b2bfe9ca12a8a1f6996089f055f5505b06ccf6788653f9b9ccb50",
   "timeout_seconds": null
 }

@@ -8,7 +8,7 @@
       "RotatedSketchCutter"
     ],
     "feature": 1,
-    "ms": 2.249742,
+    "ms": 3.4868289999999997,
     "name": "Box1",
     "removed_bodies": [],
     "warning": null
@@ -24,7 +24,8 @@
     "frame": "world",
     "name": "Left wedge",
     "projected": null,
-    "sketch": 2
+    "sketch": 2,
+    "sketching_view": 1
   },
   {
     "constraints": [],
@@ -65,7 +66,7 @@
     ],
     "created_bodies": [],
     "feature": 3,
-    "ms": 11.627399,
+    "ms": 17.873093,
     "name": "Extrude1",
     "removed_bodies": [],
     "warning": "the cut leaves a closed cavity inside `RotatedSketchCutter` that opens on no face, taking 256 mm³ (extend the tool through the face to open it)"
@@ -81,7 +82,8 @@
     "frame": "world",
     "name": "Right wedge",
     "projected": null,
-    "sketch": 4
+    "sketch": 4,
+    "sketching_view": 1
   },
   {
     "constraints": [],
@@ -122,7 +124,7 @@
     ],
     "created_bodies": [],
     "feature": 5,
-    "ms": 15.485616,
+    "ms": 24.626565,
     "name": "Extrude2",
     "removed_bodies": [],
     "warning": "the cut leaves a closed cavity inside `RotatedSketchCutter` that opens on no face, taking 256 mm³ (extend the tool through the face to open it)"

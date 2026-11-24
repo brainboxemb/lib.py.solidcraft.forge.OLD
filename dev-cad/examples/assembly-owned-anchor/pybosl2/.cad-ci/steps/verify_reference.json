@@ -3,13 +3,13 @@
   "action_type": "copy",
   "active_dependent_config_digests": {},
   "active_dependents": [],
-  "bundle_sha256": "ab1cf594d79f3e612a27d843544fe80e1319592447f261ee6406be1dc1fdbf81",
-  "duration_seconds": 0.059,
+  "bundle_sha256": "3ff033c3256b6e580e7f3571fdf3216356afb7cd9cc52d1e8ebe3b1cd3d288cd",
+  "duration_seconds": 0.183,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": null,
-  "finished_at": "2026-11-24T08:13:42.685Z",
+  "finished_at": "2026-11-24T10:53:31.377Z",
   "item": "examples-assembly-owned-anchor-pybosl2",
   "outcome": "BUILT",
   "output_state": "RESTORED",
@@ -17,15 +17,15 @@
     "references": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "fdc04c71ad68daa1dd67bb699c7dca37ae6c5589a8fdc7034f5e400bec6bd6ca"
+      "sha256": "0e771673c9ad3912c969edb04eba8addfaccf698197b5cb13be52d1bb64ce449"
     }
   },
-  "run_finished_at": "2026-11-24T08:15:23.433Z",
-  "run_started_at": "2026-11-24T08:12:12.210Z",
+  "run_finished_at": "2026-11-24T10:53:43.418Z",
+  "run_started_at": "2026-11-24T10:50:41.543Z",
   "schema": 6,
-  "started_at": "2026-11-24T08:13:42.626Z",
+  "started_at": "2026-11-24T10:53:31.193Z",
   "status": "pass",
   "step": "verify_reference",
-  "target_spec_digest": "96a3eab4eeca88cd40f349ab84172fdba82f32ca1761a256189d599d9e8b3758",
+  "target_spec_digest": "0229302c089c67d8067238cf15a8bc88a471b8c394ad2502b340e04b790a460b",
   "timeout_seconds": null
 }

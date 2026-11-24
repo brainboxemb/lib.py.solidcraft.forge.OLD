@@ -12,6 +12,7 @@
     "bracket": "3d51b9641dc89c6c48fe3eac509c538eb017c44123cd360c3343a25438c11122",
     "circle-negative-extrude": "17c7f55e185b7ac9d017c5c014f1a1a6c7b7d38bbd0bc5fe94f740440dfcba0a",
     "circular-feature-pattern": "bb9d3f38a34001f5b6d83613d0116eefe2b7b36dd670dcfa00731ac547e0cb69",
+    "component-cylinder-occurrence": "30f50d823d3ff9d6bc1c6ba24d9a6fd40c56f6ef55341a6d24ec3306cf82f865",
     "component-local-sketch-names": "3c88a49ed8efe8a50f22a646bbf31f7e2110193a904924d0d6b96bed1a4a7c60",
     "components": "d3d89469e403894878c9d4eace8f49590f2c4dfa71b06445e230f2c4477b1862",
     "cone-boolean": "58e42d54a2f3c61ea53a343af52fcb5c18ea4650dfc029398e5f90282282ee2d",
@@ -60,6 +61,7 @@
     "bracket",
     "circle-negative-extrude",
     "circular-feature-pattern",
+    "component-cylinder-occurrence",
     "component-local-sketch-names",
     "components",
     "cone-boolean",
@@ -97,13 +99,13 @@
     "top-sketch-after-chamfer",
     "xz-anchor"
   ],
-  "bundle_sha256": "792296f6b6e86e4ad33fc759d71700746f2d603b87e3e9263b59fde721b5731d",
-  "duration_seconds": 51.57,
+  "bundle_sha256": "a6f061f74cf0e1cedb28b425487f074db4f4155aace6e8c98b89051f1e58db1a",
+  "duration_seconds": 62.476,
   "engine": "scons",
   "engine_schema": 6,
   "error": null,
   "exit_code": 0,
-  "finished_at": "2026-11-24T08:44:37.245Z",
+  "finished_at": "2026-11-24T10:52:09.085Z",
   "item": "model-verification-batch",
   "outcome": "BUILT",
   "output_state": "UNCHANGED",
@@ -111,15 +113,15 @@
     "items": {
       "kind": "directory",
       "mode": 493,
-      "sha256": "4ccdf99756810d702301ab5a4d51f74669d6e31a196d3c2be51c6147b08ef49e"
+      "sha256": "33467ae047e7ecd07eee88872b34920b35222cac996adc26fad892b6a4c9e3b9"
     }
   },
-  "run_finished_at": "2026-11-24T08:45:23.184Z",
-  "run_started_at": "2026-11-24T08:43:35.528Z",
+  "run_finished_at": "2026-11-24T10:53:43.418Z",
+  "run_started_at": "2026-11-24T10:50:41.543Z",
   "schema": 6,
-  "started_at": "2026-11-24T08:43:45.679Z",
+  "started_at": "2026-11-24T10:51:06.616Z",
   "status": "pass",
   "step": "verify_models",
-  "target_spec_digest": "b93a344510497b5943b1a7ab71affc8b165514f205cd5aafc80c27ffd8ffa232",
+  "target_spec_digest": "38643a04b8528df53adef1ef02deb3bb04bc29dba1de5dc287ee0196d2402606",
   "timeout_seconds": null
 }
