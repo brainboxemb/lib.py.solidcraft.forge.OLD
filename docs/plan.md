@@ -66,6 +66,17 @@ main **ci-build-record**.
 
 ## Active execution
 
+### #826 — prepare and publish Forge v0.14.0
+
+Status: **now / release**.
+
+Stable main already contains accepted #785/#753/#823 behavior and exact durable
+main evidence. Prepare the 0.14.0 package/changelog/release metadata on a
+short-lived branch targeting main. After merge, require a green exact-sha main
+durable build before issuing the shared `/release v0.14.0 <sha>` command.
+
+
+
 ### #823 — adopt runtime v0.3.5 / SolidCraft 0.48.1
 
 Status: **now / primary blocker resolution**.
@@ -160,11 +171,8 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. complete #823 on `dev-cad`: immutable runtime v0.3.5 / SolidCraft 0.48.1,
-   canonical 0.48.1 command reference, full PR validation and durable branch
-   acceptance;
-2. close #753 and update downstream CAD #388 only after that durable acceptance;
-3. promote the accepted runtime-adoption batch to `main` and make the Forge
-   release decision from the stable main build;
-4. refresh #779 / PR #780 on the accepted runtime baseline;
-5. keep #788 measurement work independent and #751 lower priority.
+1. finish #826 release preparation and merge it to `main`;
+2. require the exact v0.14.0 main commit's durable build to be green;
+3. publish through the shared `/release v0.14.0 <exact-sha>` flow;
+4. record the published tag/source/build/run in release documentation;
+5. resume #779 only after the release record is complete.

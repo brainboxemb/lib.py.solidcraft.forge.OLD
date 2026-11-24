@@ -56,9 +56,25 @@ v0.13.x consumer baseline.
 
 The v0.12.0, v0.13.0 and v0.13.1 tags remain valid and immutable.
 
-### Unreleased baseline
+## Next release candidate
 
-Current unreleased Forge development is qualified against **SolidCraft 0.48.1**
+Candidate: **v0.14.0**.
+
+The release commit will carry:
+
+- canonical `model.yml.purpose` classification for curated Examples and the
+  broader Verification catalog (#785);
+- immutable runtime `docker.cad.solidcraft v0.3.5`;
+- qualified SolidCraft baseline **0.48.1** with canonical 866-command registry;
+- retained component-local joined-Cylinder occurrence regression (#753/#823);
+- first-class Sheet metal API Guide/Reference/Cheatsheet documentation (#786).
+
+Publication must not occur until the exact v0.14.0 release-prep commit is stable
+on `main` and its durable main build is green.
+
+### v0.14.0 candidate baseline
+
+The v0.14.0 candidate is qualified against **SolidCraft 0.48.1**
 through immutable `docker.cad.solidcraft v0.3.5`. The canonical command
 reference is `docs/reference/solidcraft/0.48.1/`.
 
