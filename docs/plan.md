@@ -156,7 +156,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
-| #175 HUB75-like AnchorFrame diagnostic change | **probably obsolete / reconcile with #325** | Preserve historical evidence; decide closure versus remaining unique acceptance work before any implementation resumes. |
+| #175 HUB75-like AnchorFrame diagnostic change | **later / diagnostic with #325** | Preserve the retained A/B evidence; resume its symbolic attached-seed/native comparison only as part of the #325 root-cause track. |
 | #82 Joints-folder visibility | **later** | Decide interaction/export policy separately. |
 | #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate together with #325 when needed. |
 | #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused qualified slices rather than one monolithic implementation. |
