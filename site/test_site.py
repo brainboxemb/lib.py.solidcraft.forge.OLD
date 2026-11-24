@@ -23,9 +23,57 @@ from html_writer import (
     qualification_setup_svg,
 )
 from qualification_view import _expected_body_rows, _raw_file_rows
+from example_metadata import discover_example_metadata
 
 
 class SiteSourceTests(unittest.TestCase):
+    def test_sheet_metal_api_is_first_class_in_reference_guide_and_cheatsheet(self):
+        reference = (SITE / "api_reference.py").read_text(encoding="utf-8")
+        guide_manifest = json.loads(
+            (SITE / "content" / "guides.json").read_text(encoding="utf-8")
+        )
+        guide = (
+            SITE / "content" / "guides" / "sheet-metal.html"
+        ).read_text(encoding="utf-8")
+        cheatsheet = (
+            SITE / "content" / "cheatsheet.yml"
+        ).read_text(encoding="utf-8")
+
+        expected_methods = (
+            "Sketch.sheet_metal",
+            "Shape.fold",
+            "Shape.flange",
+            "Shape.contour_flange",
+            "Shape.hem",
+            "Shape.path_flange",
+        )
+        for name in expected_methods:
+            with self.subTest(name=name):
+                self.assertIn(f'"{name}"', reference)
+
+        self.assertEqual(
+            sum(
+                1
+                for row in guide_manifest["guides"]
+                if row["slug"] == "sheet-metal"
+            ),
+            1,
+        )
+        for anchor in (
+            "base-sheet",
+            "fold",
+            "edge-flange",
+            "contour-flange",
+            "hem",
+            "path-flange",
+            "flat-pattern",
+        ):
+            self.assertIn(f'id="{anchor}"', guide)
+
+        self.assertIn("- heading: Sheet metal", cheatsheet)
+        for name in expected_methods:
+            self.assertIn(name, cheatsheet)
+
     def test_site_orchestrator_keeps_html_in_explicit_render_layer(self):
         build = (SITE / "build.py").read_text(encoding="utf-8")
         guides = (SITE / "guides.py").read_text(encoding="utf-8")
@@ -375,6 +423,14 @@ class SiteSourceTests(unittest.TestCase):
                     f"https://accepted.invalid/{name}.py",
                     rendered,
                 )
+    def test_native_only_verification_has_no_fabricated_reference(self):
+        rendered = qualification_reference_comparison({}, {})
+        self.assertIn(
+            "No independent reference implementation is declared",
+            rendered,
+        )
+        self.assertNotIn("qualification-reference-row", rendered)
+
     def test_generic_reference_without_preview_keeps_artifact_evidence(self):
         sources = {"cadquery": "# cadquery source\n"}
         source_urls = {"cadquery": "https://current.invalid/cadquery.py"}
@@ -502,10 +558,18 @@ class SiteSourceTests(unittest.TestCase):
             manifest = json.loads(
                 (out / "manifest.json").read_text(encoding="utf-8")
             )
-            expected_count = len(
-                tuple((ROOT / "examples").glob("*/model.yml"))
+            expected_examples = {
+                row.slug
+                for row in discover_example_metadata(purpose="example")
+            }
+            expected_verification = {
+                row.slug
+                for row in discover_example_metadata(purpose="verification")
+            }
+            self.assertEqual(
+                set(manifest["examples"]),
+                expected_examples,
             )
-            self.assertEqual(len(manifest["examples"]), expected_count)
 
             verification = json.loads(
                 (out / "verification" / "manifest.json").read_text(
@@ -513,8 +577,8 @@ class SiteSourceTests(unittest.TestCase):
                 )
             )
             self.assertEqual(
-                len(verification["cases"]),
-                expected_count,
+                set(verification["cases"]),
+                expected_verification,
             )
             self.assertEqual(
                 verification["evidence_source"],
@@ -527,11 +591,13 @@ class SiteSourceTests(unittest.TestCase):
                 "examples/simple-box/README.md",
             )
 
-            for slug in manifest["examples"]:
-                with self.subTest(slug=slug):
+            for slug in expected_examples:
+                with self.subTest(example=slug):
                     self.assertTrue(
                         (out / "examples" / slug / "index.html").is_file()
                     )
+            for slug in expected_verification:
+                with self.subTest(verification=slug):
                     self.assertTrue(
                         (
                             out
@@ -584,7 +650,7 @@ class SiteSourceTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
             self.assertIn("Verification results", results_page)
             self.assertIn("Current case results", results_page)
-            for slug in manifest["examples"]:
+            for slug in expected_verification:
                 self.assertIn(
                     f'href="../{slug}/"',
                     results_page,
@@ -651,7 +717,7 @@ class SiteSourceTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
             self.assertIn("../verification/", legacy_root)
             self.assertNotIn(">Qualification<", legacy_root)
-            for slug in manifest["examples"]:
+            for slug in expected_verification:
                 redirect = (
                     out / "qualification" / slug / "index.html"
                 ).read_text(encoding="utf-8")
@@ -679,6 +745,7 @@ class SiteSourceTests(unittest.TestCase):
                 "4 · Components and occurrences",
                 "5 · Anchors and local frames",
                 "6 · Associative relationships",
+                "7 · Sheet metal",
             ):
                 self.assertIn(heading, verification_index)
             self.assertLess(
@@ -724,6 +791,15 @@ class SiteSourceTests(unittest.TestCase):
                 verification_case,
             )
 
+            cheatsheet_page = (
+                out / "cheatsheet" / "index.html"
+            ).read_text(encoding="utf-8")
+            self.assertIn("../examples/simple-box/", cheatsheet_page)
+            self.assertIn("../verification/primitive-csg/", cheatsheet_page)
+            self.assertNotIn("../examples/primitive-csg/", cheatsheet_page)
+            self.assertNotIn("../examples/custom-anchor/", cheatsheet_page)
+            self.assertNotIn("../verification/custom-anchor/", cheatsheet_page)
+
             home = (out / "index.html").read_text(encoding="utf-8")
             self.assertIn("static/copy.js", home)
             self.assertIn("static/search.js", home)
@@ -737,8 +813,16 @@ class SiteSourceTests(unittest.TestCase):
                 if row["kind"] == "Example"
             ]
             self.assertEqual(
-                len(example_entries),
-                expected_count,
+                {row["url"].split("/")[1] for row in example_entries},
+                expected_examples,
+            )
+            verification_entries = [
+                row for row in search["entries"]
+                if row["kind"] == "Verification"
+            ]
+            self.assertEqual(
+                {row["url"].split("/")[1] for row in verification_entries},
+                expected_verification,
             )
 
 

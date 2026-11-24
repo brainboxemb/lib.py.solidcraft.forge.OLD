@@ -47,6 +47,33 @@ groups:
         snippet: "Sphere(12, anchor=LEFT)"
         example:
 
+  - heading: Sheet metal
+    items:
+      - title: "Sketch.sheet_metal(...)"
+        description: "Create a new native flat sheet body from one closed Sketch and define its shared material rule."
+        snippet: "sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)"
+        example:
+      - title: "Shape.fold(...)"
+        description: "Fold existing sheet material along one straight line; material values come from the active sheet rule."
+        snippet: "sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))"
+        example:
+      - title: "Shape.flange(...)"
+        description: "Grow a native flange from one or more fixed existing-sheet edge picks."
+        snippet: "sheet = sheet.flange(edges=[(40,0,2)], height=20, angle=90)"
+        example:
+      - title: "Shape.contour_flange(...)"
+        description: "Create a new native sheet body from a finished connected open Sketch chain."
+        snippet: "sheet = contour.contour_flange(distance=50, thickness=2.5, bend_radius=2.5)"
+        example:
+      - title: "Shape.hem(...)"
+        description: "Fold an existing sheet edge back while inheriting the active material rule."
+        snippet: "sheet = sheet.hem(edges=[(40,0,2)], length=12, gap=4)"
+        example:
+      - title: "Shape.path_flange(...)"
+        description: "Add a native flange to an existing edge using a finished line-only open Sketch path."
+        snippet: "sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)"
+        example:
+
   - heading: Features and placement
     items:
       - title: "sketch.extrude(distance)"
@@ -59,14 +86,6 @@ groups:
       - title: "sketch.extrude(..., profiles=[...])"
         description: "Extrude or cut only the closed Sketch regions selected by fixed sketch-local points."
         snippet: "cut = sketch.extrude(Depth.THROUGH_ALL, profiles=[(-30, 0), (30, 0)], exact_regions=True)"
-        example:
-      - title: "Sketch.sheet_metal(...)"
-        description: "Create a native flat sheet from a closed XY Sketch with an explicit sheet rule."
-        snippet: "sheet = sketch.sheet_metal(thickness=2, bend_radius=2, k_factor=0.5)"
-        example:
-      - title: "Shape.fold(...)"
-        description: "Fold existing sheet material along one straight line while keeping native sheet history."
-        snippet: "sheet = sheet.fold(line=((20,-20,0),(20,20,0)), angle=90, fixed=(-30,0,0))"
         example:
       - title: "Sketch.rectangular_pattern(...)"
         description: "Repeat a profile or earlier Sketch result as a native rectangular sketch pattern."

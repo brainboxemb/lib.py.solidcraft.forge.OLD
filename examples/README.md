@@ -2,7 +2,16 @@
 
 The `examples/` tree contains several deliberately different repository roles.
 
-A current full model Verification case owns all of:
+A model that participates in a public catalog owns canonical `model.yml`
+metadata. Catalog membership is explicit in that file:
+
+```yaml
+purpose: example
+purpose: verification
+purpose: [example, verification]
+```
+
+The source directory does not define the public role. A current model may own:
 
 ```text
 examples/<slug>/
@@ -11,18 +20,20 @@ examples/<slug>/
   README.md
   scpf/model.py
   verification/verify.py
-  build123d/{ci.yml,model.py}
-  cadquery/{ci.yml,model.py}
-  pybosl2/{ci.yml,model.py}
-  pythonscad/{ci.yml,model.py}
+  build123d/{ci.yml,model.py}      # optional independent evidence
+  cadquery/{ci.yml,model.py}       # optional independent evidence
+  pybosl2/{ci.yml,model.py}        # optional independent evidence
+  pythonscad/{ci.yml,model.py}     # optional independent evidence
 ```
 
-Those cases are discovered from their local files; there is no central
-executable model-case registry.
+Examples and Verification are discovered independently from `model.yml.purpose`;
+there is no central executable model-case registry and no separate
+`catalog.yml`.
 
-Any other top-level directory below `examples/` must contain `role.yml`.
-That file makes the exception explicit and records why the directory still
-exists, who currently owns it, and the current keep/promote/retire decision.
+A top-level directory without canonical `model.yml` may still contain
+`role.yml` as repository-maintenance metadata. That file records why the
+fixture exists, who owns it and the current keep/promote/retire decision. It is
+not the Example/Verification membership interface.
 
 Supported exception roles are:
 
@@ -38,5 +49,5 @@ reconciliation issue closes.
 The historical lineage of the current 32-case catalog and every current
 exception is recorded in `docs/background/example-history.md`.
 
-Do not create a new directory under `examples/` without either the complete
-Verification contract or an explicit local role.
+Do not create a new public model without canonical `model.yml.purpose`.
+Focused non-public fixtures may use an explicit local repository role.

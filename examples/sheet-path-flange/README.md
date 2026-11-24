@@ -1,37 +1,41 @@
-# Native sheet path-flange regression fixture
+# Native path flange
 
-This focused regression fixture qualifies Forge issue #776 against the pinned
-SolidCraft 0.45 runtime.
+**Group:** `sheet-metal`
+**Saved-design required:** `true`
 
-## Intent
+> Documentation provenance: Forge #785 promotes the released #776 path-flange fixture to public Verification.
 
-Start with one 80 × 40 × 2 mm native sheet base. On the right-hand top sheet
-edge, create one native path flange from a line-only open Sketch chain in the
-XZ plane.
+## Goal
 
-The public Forge operation is:
+Prove that an existing sheet edge can follow a reusable line-only open Sketch path as one native path-flange feature.
 
-```python
-sheet.path_flange(
-    edge=(40, 0, 2),
-    path=path,
-    radius=path_radius,
-)
-```
+## Forge API
 
-The active sheet rule continues to own thickness and K-factor. The explicit
-path-flange radius overrides only this feature's bend radius.
+`Sketch.chain(...)`, `line_to()`, `finish()` and `Shape.path_flange(edge=..., path=..., radius=...)`.
 
-## Saved-design qualification
+## Forge model
 
-Without rerunning Forge Python, the saved SolidCraft design changes:
+An 80 × 40 × 2 mm sheet uses a 14 mm open path and a 3 mm feature-radius override on the right edge.
 
-- `path_height: 14 -> 18 mm`;
-- `path_radius: 3 -> 4 mm`.
+## How Forge builds it in SolidCraft
 
-The rebuilt/reopened model must remain one connected closed sheet-metal body.
+Forge authors the reusable open path, resolves the fixed sheet edge and emits one native path-flange feature. Thickness and K-factor remain owned by the active rule.
 
-## Flat pattern
+## SolidCraft result
 
-Baseline inspection requires one recoverable flat pattern with one native bend,
-the path-flange radius override, and the inherited sheet rule/material values.
+One native sheet body contains one path flange with a recoverable flat pattern and one bend record.
+
+## Saved-design test
+
+Mutate path height from 14 to 18 mm and feature radius from 3 to 4 mm, then verify the rebuilt native history and flat pattern.
+
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #785 / #776 public capability promotion.
+**Bounds sufficient:** `false`
+
+The formed envelope cannot prove path reuse, feature-radius ownership or native flat-pattern history.
+
+## Reference notes
+
+- **Native SolidCraft history** — Path-flange verification targets native sheet history; external references are optional when they cannot represent the same feature contract.
