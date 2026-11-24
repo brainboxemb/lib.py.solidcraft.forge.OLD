@@ -28,7 +28,8 @@ PASSING_EXAMPLES = (
 
 EXPECTED_REJECTIONS = {
     "custom-anchor": (
-        "rotated Placement in a normal attachment is not supported yet"
+        "verification/regressions/custom-anchor",
+        "rotated Placement in a normal attachment is not supported yet",
     ),
 }
 
@@ -52,6 +53,7 @@ def verify_passing_example(slug: str, package: Path, destination: Path) -> None:
 
 def verify_expected_rejection(
     slug: str,
+    source_path: str,
     expected_message: str,
     package: Path,
     destination: Path,
@@ -65,7 +67,7 @@ def verify_expected_rejection(
     from scpf.compiler import ModelError
 
     try:
-        compile_commands(slug, package)
+        compile_commands(source_path, package)
     except ModelError as exc:
         message = str(exc)
         if expected_message not in message:
@@ -99,8 +101,14 @@ def main() -> int:
     for slug in PASSING_EXAMPLES:
         verify_passing_example(slug, package, destination)
 
-    for slug, message in EXPECTED_REJECTIONS.items():
-        verify_expected_rejection(slug, message, package, destination)
+    for slug, (source_path, message) in EXPECTED_REJECTIONS.items():
+        verify_expected_rejection(
+            slug,
+            source_path,
+            message,
+            package,
+            destination,
+        )
 
     print(
         "Forge release verification passed: "
