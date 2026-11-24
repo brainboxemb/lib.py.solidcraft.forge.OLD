@@ -54,28 +54,48 @@ def source_sha() -> str:
     ).strip()
 
 
-def processed_declarative_slugs() -> tuple[str, ...]:
-    """Return process:true models that own declarative verification data."""
+def processed_declarative_items() -> dict[str, str]:
+    """Return process:true declarative model IDs mapped to repository paths."""
 
-    slugs: list[str] = []
-    for verify in sorted((ROOT / "examples").glob("*/verification/verify.py")):
-        model_root = verify.parents[1]
-        ci_path = model_root / "ci.yml"
-        if not ci_path.is_file():
+    roots = (
+        ROOT / "examples",
+        ROOT / "verification" / "cases",
+        ROOT / "verification" / "regressions",
+    )
+    items: dict[str, str] = {}
+    for root in roots:
+        if not root.is_dir():
             continue
-        config = yaml.safe_load(ci_path.read_text(encoding="utf-8")) or {}
-        if config.get("process", True) is False:
-            continue
-        slugs.append(model_root.name)
-    if not slugs:
+        for verify in sorted(root.glob("*/verification/verify.py")):
+            model_root = verify.parents[1]
+            ci_path = model_root / "ci.yml"
+            if not ci_path.is_file():
+                continue
+            config = yaml.safe_load(ci_path.read_text(encoding="utf-8")) or {}
+            if config.get("process", True) is False:
+                continue
+            item_id = config.get("id", model_root.name)
+            if not isinstance(item_id, str) or not item_id:
+                raise RuntimeError(f"{ci_path}: model item id must be text")
+            source_path = model_root.relative_to(ROOT).as_posix()
+            if item_id in items:
+                raise RuntimeError(
+                    f"duplicate declarative model id: {item_id}"
+                )
+            items[item_id] = source_path
+    if not items:
         raise RuntimeError("no processed declarative models found")
-    return tuple(slugs)
+    return items
 
 
-def active_declarative_slugs(
-    processed: tuple[str, ...] | None = None,
-) -> tuple[str, ...]:
-    """Return the released CAD-CI active direct model dependents."""
+def processed_declarative_slugs() -> tuple[str, ...]:
+    """Return process:true declarative model IDs in stable order."""
+
+    return tuple(sorted(processed_declarative_items()))
+
+
+def _active_dependent_ids() -> tuple[str, ...]:
+    """Return released CAD-CI direct dependent IDs for the shared model batch."""
 
     raw = os.environ.get("CAD_CI_ACTIVE_DEPENDENTS_JSON")
     if raw is None:
@@ -96,36 +116,66 @@ def active_declarative_slugs(
         raise RuntimeError(
             "CAD_CI_ACTIVE_DEPENDENTS_JSON must be a unique string list"
         )
+    return tuple(value)
 
-    processed_slugs = (
-        processed_declarative_slugs()
+
+def active_declarative_items(
+    processed: dict[str, str] | None = None,
+) -> tuple[tuple[str, str], ...]:
+    """Return active direct model IDs with their repository source paths."""
+
+    processed_items = (
+        processed_declarative_items()
         if processed is None
-        else tuple(processed)
+        else dict(processed)
     )
-    allowed = set(processed_slugs)
+    value = _active_dependent_ids()
+    unknown = [item for item in value if item not in processed_items]
+    if unknown:
+        raise RuntimeError(
+            "unexpected model batch direct dependent(s): "
+            + ", ".join(unknown)
+        )
+    return tuple((item, processed_items[item]) for item in value)
+
+
+def active_declarative_slugs(
+    processed: tuple[str, ...] | None = None,
+) -> tuple[str, ...]:
+    """Compatibility view of the active model IDs used by focused tests."""
+
+    value = _active_dependent_ids()
+    allowed = (
+        set(processed_declarative_slugs())
+        if processed is None
+        else set(processed)
+    )
     unknown = [item for item in value if item not in allowed]
     if unknown:
         raise RuntimeError(
             "unexpected model batch direct dependent(s): "
             + ", ".join(unknown)
         )
-    return tuple(value)
+    return value
 
 
 def write_manifest(
     batch_root: Path,
     wheel: Path,
-    slugs: tuple[str, ...],
+    items: tuple[tuple[str, str], ...],
 ) -> Path:
     """Compile the selected model subset and write one runtime manifest."""
 
     rows = []
-    for slug in slugs:
-        case_root = batch_root / "examples" / slug
+    for slug, source_path in items:
+        case_root = batch_root / source_path
         case_root.mkdir(parents=True, exist_ok=True)
         command_path = case_root / "solidcraft.json"
         try:
-            write_commands(compile_commands(slug, wheel), command_path)
+            write_commands(
+                compile_commands(source_path, wheel),
+                command_path,
+            )
             compile_error = None
         except Exception as exc:  # compile all models before failing the batch
             compile_error = "".join(
@@ -138,8 +188,9 @@ def write_manifest(
         rows.append(
             {
                 "slug": slug,
-                "input": f"/output/items/examples/{slug}/solidcraft.json",
-                "output": f"/output/items/examples/{slug}/model_verify",
+                "source_path": source_path,
+                "input": f"/output/items/{source_path}/solidcraft.json",
+                "output": f"/output/items/{source_path}/model_verify",
                 "compile_error": compile_error,
             }
         )
@@ -170,20 +221,24 @@ def run_host_batch() -> int:
         shutil.rmtree(batch_root)
     batch_root.mkdir(parents=True)
 
-    slugs = active_declarative_slugs()
+    items = active_declarative_items()
     print(
         "FORGE BATCH selected models: "
-        + (", ".join(slugs) if slugs else "none"),
+        + (
+            ", ".join(f"{slug}={path}" for slug, path in items)
+            if items
+            else "none"
+        ),
         flush=True,
     )
-    if not slugs:
+    if not items:
         return 0
 
     forge_wheel = dependency_wheel("forge-package", "scpf-*.whl")
     verification_package = verification_wheel()
     batch_started = time.perf_counter()
     compile_started = time.perf_counter()
-    manifest = write_manifest(batch_root, forge_wheel, slugs)
+    manifest = write_manifest(batch_root, forge_wheel, items)
     print(
         "FORGE BATCH TIMING "
         f"compile_all_s={time.perf_counter() - compile_started:.3f}",
@@ -272,6 +327,7 @@ def run_inside_runtime(manifest_path: Path) -> int:
                 slug,
                 Path(row["input"]),
                 Path(row["output"]),
+                row["source_path"],
             )
             status = "pass" if code == 0 else "fail"
             error = None
