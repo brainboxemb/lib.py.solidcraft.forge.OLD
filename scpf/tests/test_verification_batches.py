@@ -96,7 +96,14 @@ class VerificationBatchContractTests(unittest.TestCase):
         self.assertIn("verification/cases/*/pythonscad/**", builder)
         self.assertIn("verification/cases/*/pybosl2/**", builder)
         self.assertIn("def processed_reference_items(", batch)
-        self.assertIn("items / source_path / implementation", batch)
+        self.assertIn(
+            "for slug, source_path in items_by_slug.items():",
+            batch,
+        )
+        self.assertIn(
+            '/ source_path\n                / implementation',
+            batch,
+        )
         self.assertNotIn("export_build123d", validation)
         self.assertFalse(
             (ROOT / "verification" / "build123d_export.py").exists()
