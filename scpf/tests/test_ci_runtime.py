@@ -33,27 +33,23 @@ def configured_variable(name: str) -> str:
 class CiRuntimeContractTests(unittest.TestCase):
     """Prove Forge consumes released owner runtime/workflow contracts."""
 
-    def test_runtime_roles_are_external_immutable_releases(self):
+    def test_runtime_roles_use_owner_candidate_edge_for_qualification(self):
         solidcraft = configured_variable("FORGE_RUNTIME_IMAGE")
         reference = configured_variable("REFERENCE_RUNTIME_IMAGE")
-        self.assertRegex(
+        self.assertEqual(
             solidcraft,
-            r"^ghcr\.io/brainboxemb/cad-solidcraft:v\d+\.\d+\.\d+$",
-        )
-        self.assertRegex(
-            reference,
-            r"^ghcr\.io/brainboxemb/cad-reference:v\d+\.\d+\.\d+$",
+            "ghcr.io/brainboxemb/cad-solidcraft:edge",
         )
         self.assertEqual(
-            solidcraft.rsplit(":", 1)[1],
-            reference.rsplit(":", 1)[1],
+            reference,
+            "ghcr.io/brainboxemb/cad-reference:edge",
         )
-        self.assertEqual(solidcraft.rsplit(":", 1)[1], "v0.3.4")
         config = CAD_CI.read_text(encoding="utf-8")
         self.assertIn(
-            'reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"',
+            'reference: "ghcr.io/brainboxemb/cad-reference:edge"',
             config,
         )
+        self.assertNotIn(":v0.3.5", config)
 
     def test_forge_owned_runtime_consumers_keep_separate_roles(self):
         model_text = MODEL_BATCH.read_text(encoding="utf-8")
