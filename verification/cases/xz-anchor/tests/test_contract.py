@@ -4,12 +4,12 @@ from pathlib import Path
 import unittest
 from scpf.runner import run_script
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommandContractTests(unittest.TestCase):
     def test_xz_anchor_command_contract(self):
-        rows = run_script(ROOT / "examples/xz-anchor/scpf/model.py")["commands"]
+        rows = run_script(CASE_ROOT / "scpf/model.py")["commands"]
         sketch = next(row["params"] for row in rows if row["command"] == "sketch.create")
         self.assertEqual(sketch, {"plane": "XZ", "name": "d1_Board__Profile"})
         joints = [row["params"] for row in rows if row["command"] == "joint.create"]
