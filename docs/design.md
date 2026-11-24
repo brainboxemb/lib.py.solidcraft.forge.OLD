@@ -944,7 +944,7 @@ The stable site source boundary is:
 
 ```text
 examples/<slug>/model.yml
-  generic section/priority/title/description/parameters/stages
+  canonical purpose/section/priority/title/description/parameters/stages
             |
 examples/<slug>/README.md
   preserved human engineering explanation
@@ -964,8 +964,11 @@ external templates + static assets
 generated Pages
 ```
 
-The generator discovers the 32 example directories. There is no central
-`EXAMPLES` catalog duplicating their local metadata or documentation.
+The generator discovers model directories with canonical `model.yml`
+metadata. It derives the small Examples view from purpose containing
+`example` and the broader Verification view from purpose containing
+`verification`. One model may appear in both. There is no central `EXAMPLES`
+or Verification membership registry.
 
 The example metadata loader validates the agreed `model.yml` presentation schema. A separate documentation loader reads the local `README.md` and
 preserves its engineering statements without inference. Numeric truth is not
@@ -1002,7 +1005,7 @@ reference, but they are not a source-code dependency.
 
 ### Documentation-only CI path
 
-The selection boundary for example documentation is:
+The selection boundary for model catalog documentation is:
 
 ```text
 examples/<slug>/model.yml
@@ -1314,10 +1317,11 @@ architecture.
 ### Verification catalog grouping
 
 The verification overview is not a flat alphabetical card list. The renderer
-uses the existing `ExampleMetadata.section` value loaded from each
-`examples/<slug>/model.yml` as the grouping key. Group membership therefore
-stays owned by each example and remains part of the agreed presentation metadata
-schema.
+first selects models whose normalized `model.yml.purpose` contains
+`verification`, then uses each model's `section` as the grouping key.
+Examples are selected independently from the same metadata by purpose containing
+`example`. Directory placement and `role.yml` do not participate in either
+selection.
 
 The renderer groups cards after discovery. Section order is determined by the
 section configuration's `priority`; example order inside a section is determined
@@ -1336,6 +1340,7 @@ parameters    -> 3 · Parameters and dependencies
 components    -> 4 · Components and occurrences
 anchors       -> 5 · Anchors and local frames
 associativity -> 6 · Associative relationships
+sheet-metal   -> 7 · Sheet metal
 ```
 
 
@@ -2355,9 +2360,12 @@ package to website tooling.
 
 The contract rejects unknown keys. There is deliberately no extension namespace
 inside `model.yml`: allowing arbitrary consumer fields would recreate the schema
-drift that #703 is intended to remove. A consumer-specific presentation setting
-must use a separately named presentation source; CI/source/verification/generated
-state remains in its existing owner layer.
+drift that #703 is intended to remove. The shared `purpose` field is part of the
+canonical contract and accepts `example`, `verification`, or both as a YAML
+list; it classifies human-facing use and does not encode CI status. A
+consumer-specific presentation setting must use a separately named presentation
+source; CI/source/verification/generated state remains in its existing owner
+layer.
 
 ## Component-local Sketch feature namespacing
 
