@@ -419,6 +419,26 @@ Requirements:
 The public API must not expose native feature ids or require a consumer to copy
 timeline names from a SolidCraft design.
 
+## Native exploded assembly views
+
+Forge exposes SolidCraft exploded views as assembly presentation state.
+
+Requirements:
+
+- views belong to a completed Assembly with at least two occurrences;
+- automatic mode lowers to one native `explode.create` with optional positive
+  fixed scale;
+- explicit mode accepts occurrence objects plus fixed finite XYZ translations
+  and resolves them to replay-bound native occurrence ids;
+- scale and explicit moves are mutually exclusive;
+- all normal occurrence placement/joint commands precede exploded-view commands;
+- exploded translations never lower as `occurrence.move`;
+- named views persist in the saved SolidCraft design;
+- `show_exploded(name)` and `show_assembled()` use native `explode.show`;
+- adding occurrences after presentation state is defined is rejected;
+- Verification covers at least three occurrences, automatic and explicit modes,
+  persistent saved-design views and assembled-state restoration.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
