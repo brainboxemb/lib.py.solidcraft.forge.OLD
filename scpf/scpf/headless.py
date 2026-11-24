@@ -19,24 +19,64 @@ class HeadlessReplayError(RuntimeError):
     """A replay could not be completed by solidcraft-cli."""
 
 
-def _phase_commands(chunk, variables, active_sketch):
-    """Resolve one replay phase and restore transient Sketch edit state.
+def _phase_commands(
+    chunk,
+    variables,
+    active_sketch,
+    active_component=None,
+):
+    """Resolve one replay phase and restore transient SolidCraft edit context.
 
-    A saved .sc file preserves the Sketch feature but not the session's
-    active-sketch flag. Headless replay starts a fresh CLI process for every
-    runtime-binding phase, so an unfinished Sketch must be explicitly reopened
-    before the next phase continues.
+    A saved .sc file preserves component/Sketch features but not the fresh CLI
+    process' active component or active-Sketch session state. Restore the
+    component first, then reopen any unfinished Sketch inside that context.
+    Transport restore commands are excluded from authored replay results/logs.
     """
     native = [resolved_command(item, variables) for item in chunk]
-    if active_sketch is None:
-        return native, 0
-    return [
-        {
+    transport = []
+    if active_component is not None:
+        transport.append({
+            "command": "component.activate",
+            "params": {"component": active_component},
+        })
+    if active_sketch is not None:
+        transport.append({
             "command": "sketch.edit",
             "params": {"sketch": active_sketch},
-        },
-        *native,
-    ], 1
+        })
+    return [*transport, *native], len(transport)
+
+
+def _active_component_after(items, results, active_component):
+    """Track the transient active component represented by replay commands."""
+    if len(items) != len(results):
+        raise HeadlessReplayError(
+            "SolidCraft did not return one result per replay command"
+        )
+
+    active = active_component
+    for item, result in zip(items, results):
+        command = item["command"]
+        params = item.get("params", {})
+        if command == "component.create":
+            target = params.get("name")
+            if target is None and isinstance(result, dict):
+                target = result.get("component")
+            if not isinstance(target, (int, str)) or target == "":
+                raise HeadlessReplayError(
+                    f"component.create has no usable component target: {result!r}"
+                )
+            active = target
+        elif command == "component.activate":
+            target = params.get("component")
+            if not isinstance(target, (int, str)) or target == "":
+                raise HeadlessReplayError(
+                    "component.activate has no usable component target"
+                )
+            active = None if target == "root" else target
+        elif command == "file.new":
+            active = None
+    return active
 
 
 def _active_sketch_after(items, results, active_sketch):
@@ -112,6 +152,7 @@ def run_document(
     entries = []
     all_results = []
     active_sketch = None
+    active_component = None
 
     owned_tmp = None
     if work_dir is None:
@@ -130,6 +171,7 @@ def run_document(
                     chunk,
                     variables,
                     active_sketch,
+                    active_component,
                 )
                 replay_native = native[transport_prefix:]
             else:
@@ -208,6 +250,11 @@ def run_document(
                     )
                 except ValueError as exc:
                     raise HeadlessReplayError(str(exc)) from exc
+                active_component = _active_component_after(
+                    replay_native,
+                    replay_results,
+                    active_component,
+                )
                 active_sketch = _active_sketch_after(
                     replay_native,
                     replay_results,
