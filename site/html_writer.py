@@ -118,13 +118,16 @@ def reference_notes(items):
     )
 
 
-def cheatsheet_link(slug, known_slugs):
-    if slug not in known_slugs:
+def cheatsheet_link(slug, example_slugs, verification_slugs=()):
+    if slug in example_slugs:
+        target = f"../examples/{escape(slug)}/"
+        label = "View working example →"
+    elif slug in verification_slugs:
+        target = f"../verification/{escape(slug)}/"
+        label = "View verification case →"
+    else:
         return ""
-    return (
-        f'<p class="tip"><a href="../examples/{escape(slug)}/">'
-        "View working example →</a></p>"
-    )
+    return f'<p class="tip"><a href="{target}">{label}</a></p>'
 
 
 def guide_sidebar(*, active=None, prefix=""):
