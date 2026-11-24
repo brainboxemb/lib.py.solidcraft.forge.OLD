@@ -133,7 +133,7 @@ class CiPackageDependencyContractTests(unittest.TestCase):
         self.assertIn("forge-model: ci/builders/forge-model", text)
         self.assertIn("verification:", text)
         self.assertIn("runtimes:", text)
-        self.assertIn('reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"', text)
+        self.assertIn('reference: "ghcr.io/brainboxemb/cad-reference:edge"', text)
 
     def test_consumers_resolve_dependency_wheels_without_packaging_them(self):
         tool_ci = (ROOT / "scripts" / "tool_ci.py").read_text(encoding="utf-8")
