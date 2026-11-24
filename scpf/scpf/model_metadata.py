@@ -7,7 +7,9 @@ from dataclasses import dataclass
 from typing import Any
 
 
+MODEL_PURPOSES = frozenset({"example", "verification"})
 MODEL_METADATA_FIELDS = (
+    "purpose",
     "section",
     "priority",
     "title",
@@ -22,6 +24,7 @@ MODEL_METADATA_FIELDS = (
 class ModelMetadata:
     """Validated canonical model.yml values, independent of the YAML loader."""
 
+    purpose: frozenset[str]
     section: str
     priority: int
     title: str
@@ -52,6 +55,35 @@ def _text_list(value: Any, label: str) -> tuple[str, ...]:
     )
 
 
+def _purpose(value: Any, label: str) -> frozenset[str]:
+    if isinstance(value, str):
+        values = (_text(value, label),)
+    elif isinstance(value, list) and value:
+        values = tuple(
+            _text(item, f"{label}[{index}]")
+            for index, item in enumerate(value)
+        )
+    else:
+        raise ValueError(
+            f"{label} must be 'example', 'verification' or a non-empty list"
+        )
+
+    duplicates = sorted(
+        {item for item in values if values.count(item) > 1}
+    )
+    if duplicates:
+        raise ValueError(
+            f"{label} contains duplicate purposes: " + ", ".join(duplicates)
+        )
+
+    unsupported = sorted(set(values) - MODEL_PURPOSES)
+    if unsupported:
+        raise ValueError(
+            f"{label} contains unsupported purposes: " + ", ".join(unsupported)
+        )
+    return frozenset(values)
+
+
 def validate_model_metadata(
     data: Mapping[str, Any],
     *,
@@ -79,6 +111,7 @@ def validate_model_metadata(
         )
 
     return ModelMetadata(
+        purpose=_purpose(data["purpose"], f"{label}.purpose"),
         section=_text(data["section"], f"{label}.section"),
         priority=_positive_int(data["priority"], f"{label}.priority"),
         title=_text(data["title"], f"{label}.title"),
