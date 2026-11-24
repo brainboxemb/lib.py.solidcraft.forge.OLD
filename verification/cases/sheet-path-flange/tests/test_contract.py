@@ -6,8 +6,8 @@ from pathlib import Path
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
-MODEL = ROOT / "examples/sheet-path-flange/scpf/model.py"
+CASE_ROOT = Path(__file__).resolve().parents[1]
+MODEL = CASE_ROOT / "scpf/model.py"
 
 
 class SheetPathFlangeContractTests(unittest.TestCase):
