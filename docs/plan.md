@@ -22,35 +22,30 @@ dev-ci
 Current permanent heads at this checkpoint:
 
 - `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
-- `dev-cad`: `704f344e93496e02c28d587faa57885f9be68eaf`;
+- `dev-cad`: `4ea3096f3f5b5d53eef48bfb25b62185908f96df`;
 - `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-The accidental #811 catalog-directory split has been fully reverted by #812 /
-PR #813. `dev-cad` now preserves that recovery in history while its tree is
-back on the pre-#811 content baseline.
+Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
+`45358578565` succeeded and published the accepted dev-cad build/Page state.
+The earlier accidental #811 directory split is fully reverted and is not part
+of the active architecture.
 
 Latest published Forge package: **v0.13.2** at exact
 `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
 
-Exact main branch build `45269510406` and central release run
-`45269991837` succeeded; the annotated `v0.13.2` tag and GitHub Release both
-resolve to that exact commit.
-
-The annotated `v0.12.0` tag and GitHub Release are valid and immutable. That
-release does not contain #746, #747, #749 or #750. The original `Cone`
-primitive itself predates v0.12.0; #746 is specifically native Boolean feature
-compilation for Cone.
+The exact v0.13.2 main branch build `45269510406` and central release run
+`45269991837` succeeded. No Forge release is currently active.
 
 ## Permanent branch rule
 
 - `main`: stable integration only.
-- `dev-cad`: Forge API/compiler/model/verification/site-content work.
+- `dev-cad`: Forge API/compiler/model/Verification/site-content work.
 - `dev-ci`: CI/release integration.
 - short-lived work branches are squash-merged;
 - exact `main -> dev-cad|dev-ci`: history-preserving sync;
-- exact `dev-cad|dev-ci -> main`: history-preserving sync;
+- exact `dev-cad|dev-ci -> main`: history-preserving promotion;
 - conflicted permanent-ref sync uses the released reviewed
-  `/merge-resolved` path with a separate `resolve/` review branch;
+  `/merge-resolved` path;
 - generic owner behavior is changed, released and externally accepted in its
   owner repository before Forge consumes it.
 
@@ -66,141 +61,117 @@ compilation for Cone.
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4`.
 
-The central release flow is proven by v0.12.0. Pages is web output and is not
-release evidence. The stable release evidence is the main **ci-build-record**.
+Pages is web output and is not release evidence. Stable release evidence is the
+main **ci-build-record**.
 
-## Active work
+## Active execution
 
-### CAD regression — #796 symbolic placed-Cylinder anchors
+### #817 — reconcile plan after #785
 
-Status: **complete; released in v0.13.2**.
+Status: **now / docs-only dev-cad**.
 
-The generic Forge fix is merged and qualified:
+This issue records the accepted #785 dev-cad state and restores complete open
+issue assessment before stable promotion. It contains no implementation change.
 
-- `dev-cad`: `926feda24ee61c01ab5bfe00521b6aae0c4ede2a`;
-- dev-cad branch build: `45267112890` green;
-- stable `main`: `9df3a2fa5634ea1d44046959a54b4a8f060ab603`;
-- main branch build: `45268325135` green.
+### #785 — canonical model purpose and public catalogs
 
-The fix keeps placed primitive coordinates typed through anchor arithmetic and
-covers the HUB75-style Cylinder path plus shared Box/Cone lowering. No
-product-CAD workaround was added.
+Status: **complete on dev-cad; stable promotion pending**.
 
-### Release — v0.13.2
+Accepted contract:
 
-Status: **complete**.
+```yaml
+purpose: example
+purpose: verification
+purpose: [example, verification]
+```
 
-- exact release source:
-  `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
-- exact main branch build: `45269510406` green;
-- central release run: `45269991837` green;
-- annotated `v0.13.2` tag resolves exactly to the release source;
-- GitHub Release `v0.13.2` is published and verified;
-- v0.13.2 is the corrected consumer target for the #796 regression.
+The source corpus remains under its existing model directories. There is no
+semantic `examples/` versus `verification/cases/` split, no `catalog.yml`,
+and `role.yml` is not public catalog membership.
 
-No active Forge release work remains.
+The four curated teaching models carry both Example and Verification purposes.
+The public Examples and Verification views select independently from normalized
+`model.yml.purpose`. Sheet metal is a first-class Verification group.
+Independent references and visual regression evidence are declaration-driven;
+native integration/model/geometry verification remains mandatory.
 
-### Release — v0.13.1
+Next action: promote accepted `dev-cad` through `main`. Close #785 after the
+stable promotion is accepted.
 
-Status: **complete**.
+### #779 — native whole-sheet perforation
 
-- v0.13.0 published the intended post-v0.12 CAD batch;
-- #789 added the missing release-boundary explanation as patch release v0.13.1;
-- exact main branch build `45262080873` passed at
-  `17a4e1d0e2edf0124d40daf5425891fdf65c24be`;
-- central release run `45262594629` published and verified v0.13.1;
-- v0.12.0, v0.13.0 and v0.13.1 remain immutable.
+Status: **now / dev-cad**.
 
-v0.13.1 and v0.13.2 are complete and immutable. No Forge release is currently active.
+PR #780 is based on the pre-#785 catalog contract and is 24 commits behind the
+accepted dev-cad line. Rebuild that existing issue branch from current
+`dev-cad` rather than copying stale plan/catalog files.
 
-### CAD — #779 whole-sheet perforation
+Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
 
-Status: **resume now**.
+- replace the old regression-only `role.yml` with canonical
+  `model.yml` using `purpose: verification` and `section: sheet-metal`;
+- keep the case at `examples/sheet-perforate/`;
+- add normal user-facing API documentation required by #786: Reference,
+  Sheet metal Guide, Cheatsheet and `docs/api.md`;
+- preserve native perforation/flat-pattern semantics and do not fabricate
+  repeated B-rep holes or external reference equivalents.
 
-PR #780 was intentionally kept outside the v0.13.x release batch. Refresh its
-branch from current `dev-cad`, finish the native perforation evidence, and make
-the feature a Sheet metal Verification item before completion.
+### #814 — Example basic validation selection
 
-### Model purpose / public catalogs — #785
+Status: **parallel design / blocked on stable sync to dev-ci**.
 
-Status: **now on dev-cad**.
+The existing first/basic Forge validation stage is already
+`forge-release` / `scripts/tool_verify.py`. It currently duplicates the four
+teaching slugs in `PASSING_EXAMPLES`.
 
-#785 extends the canonical shared `model.yml` metadata with `purpose`.
-Accepted semantics are:
+After #785 reaches `main`, sync `main -> dev-ci` through normal permanent-ref
+policy. Then #814 replaces that duplicate list with selection from canonical
+`model.yml` entries whose purpose contains `example`. The separate
+`custom-anchor` expected-rejection policy fixture remains explicit.
 
-- `purpose: example`;
-- `purpose: verification`;
-- or both purposes in one list.
+### #788 — CAD-CI concurrency measurement
 
-The source corpus stays in its existing model directories. No semantic
-`examples/` versus `verification/cases/` split and no `catalog.yml` is
-used. The four curated teaching models carry `example`; broader public
-capability cases carry `verification`; a model may carry both deliberately.
+Status: **parallel / performance**.
 
-The public Examples and Verification presentations select independently from
-the normalized purposes. Sheet metal becomes a first-class Verification group.
-#786 is already complete and remains the API-documentation baseline.
+Measure jobs=2/4/6 on one identical post-#785 representative full graph before
+changing Forge concurrency or designing bounded batch sharding. Do not remove
+Verification coverage or reintroduce per-model runtime startup.
 
-### CI — #814 Example basic validation set
-
-Status: **parallel design on dev-ci; implementation waits for accepted #785 metadata**.
-
-#814 makes Forge's first/basic model-validation stage select models whose
-canonical purpose contains `example`. It must not introduce a second
-hardcoded slug list or duplicate generic CAD-CI selection behavior.
-
-### Shared CAD-CI terminology
-
-`tool.cad.ci #180` tracks replacement of the public word `durable` with
-clear branch-build terminology. Forge must wait for a released/accepted shared
-change; do not add a local alias. The agreed release-evidence term
-`ci-build-record` remains unchanged.
-
-Exploded-view #751 remains deliberately lower priority.
-
-## CAD work released in v0.13.0+
-
-- #746 Cone Boolean feature compilation;
-- #747 Polygon2D explicit/attached Sketch;
-- #749 model-local import isolation;
-- #750 rotated standalone Sketch cutters;
-- #773 native sheet hem;
-- #776 native sheet path flange.
-
-## Other open work
+## Open issue assessment
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #796 Symbolic placed-Cylinder anchor arithmetic | **complete / v0.13.2** | Released and verified; downstream CAD should consume v0.13.2 without a model workaround. |
-| #800 Forge v0.13.2 hotfix release | **complete** | Published and verified at exact `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`. |
-| #789 Release Forge v0.13.1 clarification patch | **complete** | Published and verified at exact `17a4e1d0e2edf0124d40daf5425891fdf65c24be`. |
-| #779 Native whole-sheet perforation | **now / CAD** | Refresh from dev-cad, finish runtime evidence and publish as a Sheet metal Verification case. |
-| #785 Canonical model purpose / Examples + Verification | **now / dev-cad** | Add canonical `model.yml.purpose`, select both public catalogs from it, retain existing model paths and add Sheet metal Verification grouping. |
-| #814 Example basic validation selection | **parallel / dev-ci** | Design against `purpose: example`; implement after the accepted #785 metadata contract is available on dev-ci. |
-| #786 API documentation completeness | **complete** | Sheet metal is first-class in Reference, Guide, Cheatsheet and cross-object API documentation. |
-| #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on the same graph before changing batching. |
-| #753 Component-local Cylinder joins | **later** | Refresh focused work after current checkpoint. |
-| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/docs work. |
+| #817 Plan reconciliation after #785 | **now / docs-only** | Merge the current snapshot to dev-cad before stable promotion. |
+| #814 Example basic validation selection | **blocked on main -> dev-ci sync** | After #785 promotion, sync stable metadata to dev-ci and derive forge-release passing models from `purpose: example`. |
+| #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
+| #785 Examples / Verification purpose split | **complete on dev-cad / promotion pending** | Promote accepted dev-cad to main; then close. |
+| #779 Native whole-sheet perforation | **now / CAD** | Rebuild PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
+| #753 Component-local Cylinder joins | **later** | Refresh focused qualification after the active metal slice. |
+| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
-| #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates after owner migrations settle. |
-| #659 Build/verification/results terminology | **later / cross-repo** | Follow shared terminology work. |
-| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing source format. |
+| #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
+| #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
+| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
 | #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
 | #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
-| #325 AnchorFrame root cause | **later** | Resume when an active model requires it. |
+| #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
+| #175 HUB75-like AnchorFrame diagnostic change | **probably obsolete / reconcile with #325** | Preserve historical evidence; decide closure versus remaining unique acceptance work before any implementation resumes. |
 | #82 Joints-folder visibility | **later** | Decide interaction/export policy separately. |
-| #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate with #325. |
-| #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused slices. |
-| #8 Hollow primitives | **later** | Reconcile with native shell/pipe support when needed. |
+| #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate together with #325 when needed. |
+| #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused qualified slices rather than one monolithic implementation. |
+| #8 Hollow primitives | **later** | Reconcile with native shell/pipe support when a concrete model requires it. |
+| #5 Generic anchors and parametric constraints | **later / foundational epic** | Treat as historical umbrella; continue only through focused issues with current native contracts. |
 
 ## Next checkpoint
 
-1. finish #785 on `dev-cad`: canonical `purpose` metadata, independent
-   Example/Verification selection and Sheet metal Verification grouping;
-2. continue #814 design on `dev-ci`, then consume the accepted #785 contract
-   through the normal permanent-branch synchronization path before implementation;
-3. refresh #779 only after the accepted #785 catalog contract is available so
-   perforation joins Verification through `purpose: verification`;
-4. keep #788 as a separate measured performance lane and #751 exploded views at
-   lower priority.
+1. merge #817 docs-only plan reconciliation to `dev-cad`;
+2. in parallel:
+   - open the normal `dev-cad -> main` promotion for accepted #785;
+   - rebuild #779 / PR #780 on the post-#785 dev-cad line;
+   - keep #788 measurement work independent;
+3. after the stable promotion is green and merged:
+   - close #785;
+   - sync `main -> dev-ci`;
+   - implement #814 against the accepted purpose-aware metadata contract;
+4. keep #753 and #751 behind the active metal/runtime work.
