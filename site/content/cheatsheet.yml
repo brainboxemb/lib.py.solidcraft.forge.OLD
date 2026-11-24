@@ -158,6 +158,14 @@ groups:
         description: "Keep an in-plane attachment offset associative; parameter expressions become native planar-joint values."
         snippet: "part.attach(base, parent=Anchor.FRONT_TOP_LEFT, child=mount, offset=(0, -wall + 12))"
         example: components
+      - title: "assembly.with_exploded_view(...)"
+        description: "Store a native automatic or explicit exploded presentation without changing normal occurrence placements."
+        snippet: "assembly.with_exploded_view('Service', scale=1.25).show_exploded('Service')"
+        example: exploded-views
+      - title: "assembly.show_assembled()"
+        description: "Return presentation to the normal assembled occurrence placements."
+        snippet: "assembly.show_assembled()"
+        example: exploded-views
       - title: "assembly.with_anchor(...) / anchor(...)"
         description: "Expose a semantic attachment datum owned by an assembly without adding application-specific anchors to a generic component."
         snippet: |
