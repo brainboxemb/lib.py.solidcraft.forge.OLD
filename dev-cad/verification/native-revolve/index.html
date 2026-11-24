@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Native sketch revolve · SCPF Python library</title>
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="../../">SCPF <span>Python library</span></a>
+    <div class="site-search" data-search-index="../../search-index.json">
+      <label class="sr-only" for="site-search-input">Search SCPF documentation</label>
+      <input id="site-search-input" class="site-search-input" type="search"
+             autocomplete="off" spellcheck="false" placeholder="Search API…"
+             aria-label="Search SCPF documentation" aria-expanded="false"
+             aria-controls="site-search-results">
+      <span class="site-search-shortcut" aria-hidden="true">/</span>
+      <div id="site-search-results" class="site-search-results" role="listbox" hidden></div>
+    </div>
+    <nav aria-label="Main">
+      <a href="../../">Examples</a>
+      <a href="../../guide/">API Guide</a>
+      <a href="../../reference/">API Reference</a>
+      <a href="../../verification/">Verification</a>
+      <a href="../../cheatsheet/">Cheatsheet</a>
+      <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge">Source</a>
+    </nav>
+  </div>
+</header>
+<div class="development-banner" role="status">
+  <div class="wrap">
+    <strong>Development version.</strong>
+    Forge is under active development and testing. APIs, behaviour, coverage
+    and verification results may be incomplete or change without notice;
+    published PASS results are not a support guarantee or production-readiness claim.
+  </div>
+</div>
+<main class="wrap">
+  <div class="crumb"><a href="../">← Verification</a> / Native sketch revolve</div>
+
+  <section class="hero small">
+    <p class="eyebrow">Forge model example · 1 · Basic geometry</p>
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design PASS · Visual N/R</span></div>
+    <h1>Native sketch revolve</h1>
+  </section>
+
+  <section class="panel qualification-example-overview">
+    <h2>What this example makes</h2>
+    <p>One closed native revolved solid with one solved source Sketch and one native
+Revolve history feature. SolidCraft stores angle-valued parameters internally
+in radians while Forge authors and exposes their unit as degrees.</p>
+    <figure class="qualification-setup-diagram"><a href="setup.svg" class="qualification-image-link" target="_blank" rel="noopener" title="Open full-size setup diagram"><img src="setup.svg" alt="Native sketch revolve expected setup diagram"></a><figcaption>Expected setup — conceptual diagram, not verification output. Click for the full-size image.</figcaption></figure>
+    <figure class="qualification-case-preview"><a href="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/presentation/preview-iso.png" class="qualification-image-link" target="_blank" rel="noopener" title="Open full-size native preview"><img src="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/presentation/preview-iso.png" alt="Native sketch revolve native SolidCraft preview" loading="lazy"></a><figcaption>Native SolidCraft preview from the accepted durable build output.</figcaption></figure>
+  </section>
+
+  <section class="panel">
+    <h2>Forge code</h2>
+    <p>This is the complete Forge source used for this example.</p>
+    <pre><code>&quot;&quot;&quot;Native profile-driven revolve qualification.&quot;&quot;&quot;
+
+
+class NativeRevolve:
+    length = 10.0
+    radius = 4.0
+    sweep = 360.0
+
+    def build(self):
+        with Sketch(name=&quot;RadialProfile&quot;, plane=&quot;XZ&quot;) as sketch:
+            Polygon2D(
+                [(0, 0), (0, self.radius),
+                 (self.length, self.radius), (self.length, 0)],
+                plane=&quot;XZ&quot;,
+            )
+        return sketch.revolve(axis=Axis.X, angle=self.sweep)
+
+
+NativeRevolve()
+</code></pre>
+    <h3>API used</h3>
+    <p><code>`Sketch.revolve(axis=Axis.X, angle=..., sym=False)` on one completed standalone
+closed profile whose world axis lies in the Sketch plane.</code></p>
+    <p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/b3deec3eeb5c2284bde2dc41a61d67d52ee35554/examples/native-revolve/scpf/model.py">Open the editable Forge source in GitHub →</a></p>
+  </section>
+
+  <section class="panel">
+  <h2>Reference code</h2>
+  <p>
+    The same model is written independently with the reference libraries below.
+    This makes it easier to compare modelling style and the resulting shape.
+  </p>
+  <p class="meta">No independent reference implementation is declared for this native capability case; native SolidCraft verification remains the authoritative evidence.</p>
+  <div class="qualification-reference-list"></div>
+</section>
+
+
+  <section class="panel">
+    <h2>How Forge builds it in SolidCraft</h2>
+    <p>Forge emits the native Sketch and profile commands followed by
+`solid.revolve`. Root use creates a named body; Boolean use selects SolidCraft
+`join`, `cut` or `intersect` directly on the Revolve feature. No temporary
+body or primitive approximation is introduced.</p>
+  </section>
+
+  <section class="panel qualification-current">
+  <h2>SolidCraft result</h2>
+  <p>
+    Built and measured from the accepted durable SolidCraft evidence.
+    Open the measurement details to inspect body sizes and editable parameters.
+  </p>
+  <details class="qualification-detail-block"><summary><strong>Original model</strong> · 1 bodies</summary><h4>Editable parameters</h4><div class="qualification-table-scroll"><table class="api-table"><thead><tr><th>Parameter</th><th>Value</th><th>Unit</th><th>Expression</th></tr></thead><tbody><tr><td>radius</td><td>4.0</td><td>mm</td><td>4</td></tr><tr><td>length</td><td>10.0</td><td>mm</td><td>10</td></tr><tr><td>sweep</td><td>6.283185307179586</td><td>deg</td><td>360</td></tr></tbody></table></div><h4>Body size</h4><div class="qualification-table-scroll"><table class="api-table"><thead><tr><th>Body</th><th>Minimum</th><th>Maximum</th><th>Volume mm³</th><th>Faces</th><th>Edges</th><th>Closed</th></tr></thead><tbody><tr><td>NativeRevolve</td><td>[0.0, -4.0, -4.0]</td><td>[10.000000000000002, 4.0, 4.0]</td><td>502.654824574367</td><td>3</td><td>3</td><td>True</td></tr></tbody></table></div></details>
+  <h3>Saved-design results</h3><details class="qualification-detail-block"><summary>resize_revolved_solid</summary><p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/saved_designs/resize_revolved_solid/measurements.json" target="_blank" rel="noopener">Open durable measurements</a></p><pre><code>{
+  &quot;bodies&quot;: [
+    {
+      &quot;area_mm2&quot;: 335.61944901923454,
+      &quot;bbox&quot;: {
+        &quot;max&quot;: [
+          10.0,
+          5.0,
+          5.0
+        ],
+        &quot;min&quot;: [
+          0.0,
+          0.0,
+          -5.0
+        ]
+      },
+      &quot;center_of_mass&quot;: [
+        5.0,
+        2.1220659078919377,
+        -9.188031368828145e-17
+      ],
+      &quot;closed&quot;: true,
+      &quot;density_g_cm3&quot;: 1.29,
+      &quot;edges&quot;: 6,
+      &quot;face_types&quot;: {
+        &quot;cylinder&quot;: 1,
+        &quot;plane&quot;: 3
+      },
+      &quot;faces&quot;: 4,
+      &quot;kernel&quot;: {
+        &quot;edges&quot;: 9,
+        &quot;faces&quot;: 5,
+        &quot;shells&quot;: 1,
+        &quot;vertices&quot;: 6
+      },
+      &quot;mass_g&quot;: 0.5065818153913542,
+      &quot;material&quot;: &quot;Default&quot;,
+      &quot;measured_by&quot;: &quot;smlib&quot;,
+      &quot;name&quot;: &quot;NativeRevolve&quot;,
+      &quot;notes&quot;: [],
+      &quot;vertices&quot;: 4,
+      &quot;volume_mm3&quot;: 392.69908169872417
+    }
+  ],
+  &quot;body_count&quot;: 1,
+  &quot;params&quot;: [
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;5 mm&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;radius&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 5.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;10&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;length&quot;,
+      &quot;unit&quot;: &quot;mm&quot;,
+      &quot;value&quot;: 10.0
+    },
+    {
+      &quot;comment&quot;: &quot;&quot;,
+      &quot;error&quot;: null,
+      &quot;expression&quot;: &quot;180 deg&quot;,
+      &quot;model&quot;: false,
+      &quot;name&quot;: &quot;sweep&quot;,
+      &quot;unit&quot;: &quot;deg&quot;,
+      &quot;value&quot;: 3.141592653589793
+    }
+  ],
+  &quot;sketches&quot;: [
+    {
+      &quot;curves&quot;: 4,
+      &quot;dof&quot;: 0,
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;RadialProfile&quot;,
+      &quot;profiles&quot;: 1,
+      &quot;status&quot;: &quot;solved&quot;,
+      &quot;visible&quot;: false,
+      &quot;wires_ok&quot;: true
+    }
+  ],
+  &quot;timeline&quot;: [
+    {
+      &quot;error&quot;: null,
+      &quot;id&quot;: 1,
+      &quot;ms&quot;: 0.150723,
+      &quot;name&quot;: &quot;RadialProfile&quot;,
+      &quot;rolled_back&quot;: false,
+      &quot;suppressed&quot;: false,
+      &quot;type&quot;: &quot;Sketch&quot;,
+      &quot;warning&quot;: null
+    },
+    {
+      &quot;error&quot;: null,
+      &quot;id&quot;: 2,
+      &quot;ms&quot;: 4.376869,
+      &quot;name&quot;: &quot;Revolve1&quot;,
+      &quot;rolled_back&quot;: false,
+      &quot;suppressed&quot;: false,
+      &quot;type&quot;: &quot;RevolveFeature&quot;,
+      &quot;warning&quot;: null
+    }
+  ],
+  &quot;total&quot;: {
+    &quot;area_mm2&quot;: 335.61944901923454,
+    &quot;edges&quot;: 6,
+    &quot;faces&quot;: 4,
+    &quot;mass_g&quot;: 0.5065818153913542,
+    &quot;open_bodies_skipped&quot;: 0,
+    &quot;vertices&quot;: 4,
+    &quot;volume_mm3&quot;: 392.69908169872417
+  }
+}</code></pre></details>
+</section>
+<section class="notice">
+  <strong>Current visual verification: not required.</strong>
+  This model has no current <code>verification/visual.json</code> policy. The durable isometric image above is a current presentation preview, not a visual PASS claim.
+</section>
+
+
+<details class="panel qualification-technical-details">
+  <summary><strong>Technical test details</strong></summary>
+  <div class="qualification-technical-details-body">
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design PASS · Visual N/R</span></div>
+
+    <section class="qualification-technical-section">
+      <h3>Verification checks</h3>
+      <p class="meta">
+        Automated contract and geometry checks. Open an individual check for
+        its exact machine evidence.
+      </p>
+      <details class="qualification-detail-block">
+  <summary><code>baseline</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;body_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft body count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;body_envelopes&quot;: {
+    &quot;actual_count&quot;: 1,
+    &quot;expected_count&quot;: 1,
+    &quot;kind&quot;: &quot;body_envelopes&quot;,
+    &quot;matched_pairs&quot;: [
+      {
+        &quot;actual&quot;: {
+          &quot;label&quot;: &quot;NativeRevolve&quot;,
+          &quot;max&quot;: [
+            10.000000000000002,
+            4.0,
+            4.0
+          ],
+          &quot;min&quot;: [
+            0.0,
+            -4.0,
+            -4.0
+          ]
+        },
+        &quot;expected&quot;: {
+          &quot;label&quot;: null,
+          &quot;max&quot;: [
+            10.0,
+            4.0,
+            4.0
+          ],
+          &quot;min&quot;: [
+            0.0,
+            -4.0,
+            -4.0
+          ]
+        },
+        &quot;max_delta&quot;: 1.7763568394002505e-15
+      }
+    ],
+    &quot;pass&quot;: true,
+    &quot;tolerance&quot;: 0.01,
+    &quot;unmatched_actual&quot;: [],
+    &quot;unmatched_expected&quot;: []
+  },
+  &quot;named_bodies&quot;: [
+    {
+      &quot;closed&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body closed&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;selector&quot;: &quot;sole&quot;,
+      &quot;volume&quot;: {
+        &quot;actual&quot;: 502.654824574367,
+        &quot;delta&quot;: 1.1368683772161603e-13,
+        &quot;expected&quot;: 502.6548245743669,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;sole body volume&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.5
+      }
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;actual&quot;: {
+      &quot;length&quot;: 10.0,
+      &quot;radius&quot;: 4.0,
+      &quot;sweep&quot;: 6.283185307179586
+    },
+    &quot;expected&quot;: {
+      &quot;length&quot;: 10.0,
+      &quot;radius&quot;: 4.0,
+      &quot;sweep&quot;: 6.283185307179586
+    },
+    &quot;label&quot;: &quot;SolidCraft parameters&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketch_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft sketch count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;timeline&quot;: {
+    &quot;actual&quot;: [
+      {
+        &quot;name&quot;: &quot;RadialProfile&quot;,
+        &quot;type&quot;: &quot;Sketch&quot;
+      },
+      {
+        &quot;type&quot;: &quot;RevolveFeature&quot;
+      }
+    ],
+    &quot;expected&quot;: [
+      {
+        &quot;name&quot;: &quot;RadialProfile&quot;,
+        &quot;type&quot;: &quot;Sketch&quot;
+      },
+      {
+        &quot;type&quot;: &quot;RevolveFeature&quot;
+      }
+    ],
+    &quot;label&quot;: &quot;SolidCraft timeline&quot;,
+    &quot;pass&quot;: true
+  }
+}</code></pre>
+</details>
+<details class="qualification-detail-block">
+  <summary><code>saved_design_resize_revolved_solid</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;body_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft body count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;named_bodies&quot;: [
+    {
+      &quot;closed&quot;: {
+        &quot;actual&quot;: true,
+        &quot;expected&quot;: true,
+        &quot;label&quot;: &quot;sole body closed&quot;,
+        &quot;pass&quot;: true
+      },
+      &quot;selector&quot;: &quot;sole&quot;,
+      &quot;volume&quot;: {
+        &quot;actual&quot;: 392.69908169872417,
+        &quot;delta&quot;: 0.0,
+        &quot;expected&quot;: 392.69908169872417,
+        &quot;kind&quot;: &quot;scalar&quot;,
+        &quot;label&quot;: &quot;sole body volume&quot;,
+        &quot;pass&quot;: true,
+        &quot;tolerance&quot;: 0.5
+      }
+    }
+  ],
+  &quot;parameters&quot;: {
+    &quot;actual&quot;: {
+      &quot;length&quot;: 10.0,
+      &quot;radius&quot;: 5.0,
+      &quot;sweep&quot;: 3.141592653589793
+    },
+    &quot;expected&quot;: {
+      &quot;length&quot;: 10.0,
+      &quot;radius&quot;: 5.0,
+      &quot;sweep&quot;: 3.141592653589793
+    },
+    &quot;label&quot;: &quot;SolidCraft parameters&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;sketch_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft sketch count&quot;,
+    &quot;pass&quot;: true
+  }
+}</code></pre>
+</details>
+
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Geometry evidence</h3>
+      <p><strong>Are outer bounds sufficient?</strong> no</p>
+      <p>Bounds alone cannot distinguish a full revolved cylinder from another solid
+with the same envelope. Verification therefore requires body count, closed
+body state, analytic volume, parameter mutation and native timeline evidence.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Saved-design test</h3>
+      <p>The saved design changes radius from 4 mm to 5 mm and sweep from 360 degrees to
+180 degrees. Native recompute must produce a half-cylinder with the expected
+analytic volume while preserving the Sketch/Revolve history.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Raw test files</h3>
+      <p class="meta">
+        Exact accepted source files and durable build evidence used by this
+        Verification case.
+      </p>
+      <div class="qualification-file-groups"><section class="qualification-file-group"><h4>Accepted source files</h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/b3deec3eeb5c2284bde2dc41a61d67d52ee35554/examples/native-revolve/scpf/model.py" target="_blank" rel="noopener">Forge model source</a> <code class="qualification-file-path">examples/native-revolve/scpf/model.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/b3deec3eeb5c2284bde2dc41a61d67d52ee35554/examples/native-revolve/tests/test_contract.py" target="_blank" rel="noopener">Integration contract test</a> <code class="qualification-file-path">examples/native-revolve/tests/test_contract.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/b3deec3eeb5c2284bde2dc41a61d67d52ee35554/examples/native-revolve/verification/verify.py" target="_blank" rel="noopener">Verification contract</a> <code class="qualification-file-path">examples/native-revolve/verification/verify.py</code></li></ul></section><section class="qualification-file-group"><h4>SolidCraft model and verification evidence <span class="meta">(13 files)</span></h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/baseline/measurements.json" target="_blank" rel="noopener">Baseline measurements</a> <code class="qualification-file-path">model_verify/baseline/measurements.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/model.sc" target="_blank" rel="noopener">Native SolidCraft design</a> <code class="qualification-file-path">model_verify/native/model.sc</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/model.step" target="_blank" rel="noopener">Native STEP export</a> <code class="qualification-file-path">model_verify/native/model.step</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/replay-log.json" target="_blank" rel="noopener">Native replay log</a> <code class="qualification-file-path">model_verify/native/replay-log.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/replay_work/phase-1-results.json" target="_blank" rel="noopener">phase-1-results.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1-results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/replay_work/phase-1.json" target="_blank" rel="noopener">phase-1.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/native/results.json" target="_blank" rel="noopener">Native execution results</a> <code class="qualification-file-path">model_verify/native/results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/presentation/preview-iso.png" target="_blank" rel="noopener">Presentation preview image</a> <code class="qualification-file-path">model_verify/presentation/preview-iso.png</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/presentation/preview.json" target="_blank" rel="noopener">Presentation preview metadata</a> <code class="qualification-file-path">model_verify/presentation/preview.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/saved_designs/resize_revolved_solid/measurements.json" target="_blank" rel="noopener">measurements.json</a> <code class="qualification-file-path">model_verify/saved_designs/resize_revolved_solid/measurements.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/saved_designs/resize_revolved_solid/model.sc" target="_blank" rel="noopener">model.sc</a> <code class="qualification-file-path">model_verify/saved_designs/resize_revolved_solid/model.sc</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/model_verify/verification.json" target="_blank" rel="noopener">Verification result</a> <code class="qualification-file-path">model_verify/verification.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/59b271e4d5fa287ebabe169f875c71329d2151b1/dev-cad/examples/native-revolve/solidcraft.json" target="_blank" rel="noopener">Generated SolidCraft command JSON</a> <code class="qualification-file-path">solidcraft.json</code></li></ul></section></div>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Reference documentation</h3>
+      <ul><li><strong>SolidCraft</strong> — SolidCraft 0.48.1 supplies the native `solid.revolve` feature and saved-design recompute used by this qualification.</li><li><strong>Downstream latch</strong> — CAD issue #30 needs native turned rivets/pins; this fixture isolates only the reusable Revolve primitive required by that model.</li></ul>
+    </section>
+
+    <p class="source-stamp">
+      Site source <code>b3deec3eeb5c2284bde2dc41a61d67d52ee35554</code> · accepted model evidence source
+      <code>b3deec3eeb5c2284bde2dc41a61d67d52ee35554</code> · durable build <code>59b271e4d5fa287ebabe169f875c71329d2151b1</code>
+    </p>
+  </div>
+</details>
+
+
+  <section class="panel">
+    <h2>Sources of truth</h2>
+    <p>
+      General model/page metadata is stored in <code>model.yml</code>.
+      Preserved engineering explanation is stored in <code>README.md</code>.
+      Exact expected values and tolerances are defined by
+      <code>verification/verify.py</code>.
+    </p>
+    <p>
+      <a href="../../examples/native-revolve/">Open the example →</a>
+      · <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/b3deec3eeb5c2284bde2dc41a61d67d52ee35554/examples/native-revolve/verification/verify.py">Open verification/verify.py →</a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>SCPF</strong> generates commands; native SolidCraft creates the geometry.
+    <a href="https://brainboxemb.github.io/2026-011-02.cad.solidcraft/">Full SolidCraft CAD projects →</a>
+  </div>
+</footer>
+<script src="../../static/copy.js"></script>
+<script src="../../static/search.js"></script>
+</body>
+</html>
