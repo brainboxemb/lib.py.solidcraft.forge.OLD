@@ -1,8 +1,0 @@
-schema: 1
-role: regression-fixture
-decision: keep
-owner: scpf/tests/test_sketch_attachment.py
-reason: >
-  Minimal attached THROUGH_ALL regression from #249, extended by #747 to use
-  one closed Polygon2D profile. Unit tests check the generated command plan and
-  CAD-CI model verification replays the same fixture in released SolidCraft.

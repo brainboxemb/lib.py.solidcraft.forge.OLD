@@ -9,6 +9,14 @@ steps:
       - examples/*/verification/reference_geometry.json
       - examples/*/pybosl2/**
       - examples/*/pythonscad/**
+      - verification/cases/*/ci.yml
+      - verification/cases/*/verification/reference_geometry.json
+      - verification/cases/*/pybosl2/**
+      - verification/cases/*/pythonscad/**
+      - verification/regressions/*/ci.yml
+      - verification/regressions/*/verification/reference_geometry.json
+      - verification/regressions/*/pybosl2/**
+      - verification/regressions/*/pythonscad/**
       - scripts/forge_example.py
       - scripts/reference_verification_batch.py
       - verification/reference_validation.py

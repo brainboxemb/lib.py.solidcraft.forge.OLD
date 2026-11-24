@@ -149,6 +149,31 @@ Requirements:
 - Forge owns only the dependency pin and transport, never verification-library
   implementation.
 
+## Public catalog roots
+
+Forge must keep public teaching Examples, public Verification cases and
+non-public regressions as separate repository roles:
+
+```text
+examples/<slug>/
+verification/cases/<slug>/
+verification/regressions/<slug>/
+```
+
+Requirements:
+
+- `examples/` contains only deliberately curated teaching examples;
+- every teaching example owns local `catalog.yml` role declarations;
+- normal public capability cases live under `verification/cases/`;
+- non-public regression/release fixtures live under
+  `verification/regressions/`;
+- Example discovery and Verification discovery are independent;
+- adding a Verification case cannot change the public Example count;
+- adding an Example cannot silently create a Verification case;
+- public item slug and repository source path are distinct values;
+- CI/site/evidence code must follow the discovered source path and must not
+  hard-code `examples/<slug>` for generic model items.
+
 ## Declarative model verification
 
 A migrated Forge model owns only model-specific verification data.
@@ -401,7 +426,7 @@ without retaining the old qualification runner.
 - Q1 is reusable Forge API/compiler evidence and is covered by the normal
   `forge-tests` unit suite.
 - Q2 is model-owned command-contract evidence under
-  `examples/<model>/tests/`.
+  `<item-root>/tests/`.
 - Every processed declarative model verification item must run its own
   command-contract tests against the exact `forge-package` wheel before
   native SolidCraft replay.
@@ -411,8 +436,8 @@ without retaining the old qualification runner.
 - The fixed `forge-release` example set is release verification and is not a
   substitute for Q2 coverage of every processed model item.
 - A processed model item's CAD-CI watch/step inputs must include its
-  `examples/<model>/tests/**` files so changing the contract test invalidates
-  and reruns that model verification.
+  `<item-root>/tests/**` files so changing the contract test invalidates and
+  reruns that model verification.
 
 This restores command-contract coverage without reintroducing the historical
 qualification orchestration.
@@ -611,10 +636,10 @@ retry behavior remain CAD-CI responsibilities.
 Independent reference implementations for an active model are CAD-CI items in
 their own source directories.
 
-For a migrated model:
+For a public Verification item:
 
 ```text
-examples/<model>/
+<item-root>/
   verification/reference_geometry.json
   build123d/
     ci.yml
@@ -688,7 +713,7 @@ Released `lib.py.cad.verification` owns:
 Every active Verification model stores visual policy below its own verification directory:
 
 ```text
-examples/<model>/verification/
+<item-path>/verification/
   visual.json
   baselines/
     <view>.png | <view>.json
@@ -827,9 +852,9 @@ it must never be converted to `not-required`.
 A presentation preview is never evidence for a visual PASS and may not replace
 the required visual-verification evidence.
 
-Independent-reference summary input is read only from the canonical
-`examples/<slug>/<implementation>/` child items. Batch producer copies are not
-additional public/reference summary inputs.
+Independent-reference summary input is read only from the canonical child item
+below each model's explicit `<source-path>/<implementation>/`. Batch producer
+copies are not additional public/reference summary inputs.
 
 Missing/failed/error/review/blocked evidence must remain distinguishable.
 Evidence references must be preserved.
@@ -919,13 +944,13 @@ checks.
 Machine expectations, tolerances and saved-design checks remain solely in
 `verification/verify.py`.
 
-## Example-owned presentation metadata
+## Public item presentation metadata
 
-Every current Forge verification example is self-describing for generated
-documentation.
+Every public teaching Example and public Verification case is self-describing
+for generated documentation.
 
-`examples/<slug>/model.yml` is the authoritative source for human-facing
-example metadata. The required schema contains:
+`<item-root>/model.yml` is the authoritative source for human-facing metadata.
+The required schema contains:
 
 - `section`;
 - positive integer `priority`;
@@ -945,8 +970,9 @@ Generated Pages obtain actual status, measurements and evidence links from the
 accepted durable `build/main` item output. `model.yml` must never claim a
 current PASS/FAIL result.
 
-The site generator discovers examples from the filesystem and their local
-metadata. It must not maintain a central model-name/page-content registry.
+The site generator discovers Examples and Verification independently from
+their filesystem roots and local metadata. It must not maintain a central
+model-name/page-content registry.
 
 ## Site source separation
 
@@ -970,14 +996,14 @@ with page markup. HTML belongs to templates or to the dedicated HTML-rendering
 module; guide chapters and model-specific SVG galleries remain external data.
 
 The current site must not depend on retired `qualification.*` source modules.
-The 32 current `examples/` directories and durable `build/main` are the
-catalog/evidence sources.
+The explicit Example/Verification roots and accepted branch-build evidence are
+the catalog/evidence sources.
 
 
 ### Presentation metadata selection boundary
 
 `model.yml` is presentation/documentation metadata. Changing only
-`examples/<slug>/model.yml` must not select or invalidate model compilation,
+`<item-root>/model.yml` must not select or invalidate model compilation,
 SolidCraft verification or independent CAD reference verification.
 
 The lightweight site-source item owns `model.yml` and `README.md` validation
@@ -992,10 +1018,10 @@ Stable Pages combines current source documentation with the accepted generic
 `build/main` baseline. The stable site is never a source of verification
 truth itself.
 
-- canonical model evidence is read from
-  `build/main/examples/<slug>/`;
+- canonical model evidence is read from the model's explicit
+  `build/main/<source-path>/`;
 - canonical independent reference evidence is read from the corresponding
-  `build/main/examples/<slug>/<implementation>/` child item;
+  `build/main/<source-path>/<implementation>/` child item;
 - batch producer outputs under `build/main/ci/*-batch/` are implementation
   detail, not a second public evidence namespace;
 - `build/main/build.json` is authoritative for item membership and per-item
@@ -1070,25 +1096,26 @@ The current public concept is **verification**, not qualification.
 - reference source visibility is source-owned and must not depend on durable evidence availability; source-only builds still show all four reference sources, while stable builds add current durable result evidence beside them;
 - source links are supplementary; replacing inline source with links is a
   content regression;
-- displayed source must come from the owning example source tree, while
-  PASS/FAIL, measurements and generated CAD artifacts continue to come from the
-  accepted durable build evidence;
-- the verification index must group examples by the existing `section` field in
-  each example's `model.yml`;
+- displayed source must come from the owning public item's explicit source path,
+  while PASS/FAIL, measurements and generated CAD artifacts continue to come
+  from the accepted branch-build evidence;
+- the verification index must group public Verification cases by the existing
+  `section` field in each case's `model.yml`;
 - grouping order must be deterministic, and no second central catalog of group
   membership may be introduced;
-- each example declares a local integer `priority` in its `model.yml`; examples
-  inside one section are sorted by that priority and then slug as a deterministic
-  tie-breaker;
+- each public Verification case declares a local integer `priority` in its
+  `model.yml`; cases inside one section are sorted by that priority and then
+  slug as a deterministic tie-breaker;
 - section presentation configuration uses `priority`, not positional `order`;
 - public section label/priority translation is presentation configuration under
   `site/content/verification-sections.yml`, not Python source;
-- the six existing section slugs keep the preserved public labels and order:
-  `fundamentals` → `1 · Basic geometry`, `features` →
-  `2 · Parent/child features and faces`, `parameters` →
+- the section slugs keep the preserved public labels/order and extend with the
+  first-class Sheet metal domain: `fundamentals` → `1 · Basic geometry`,
+  `features` → `2 · Parent/child features and faces`, `parameters` →
   `3 · Parameters and dependencies`, `components` →
   `4 · Components and occurrences`, `anchors` → `5 · Anchors and local frames`,
-  and `associativity` → `6 · Associative relationships`.
+  `associativity` → `6 · Associative relationships`, and `sheet-metal` →
+  `7 · Sheet metal`.
 
 
 ## Verification cut-over compatibility

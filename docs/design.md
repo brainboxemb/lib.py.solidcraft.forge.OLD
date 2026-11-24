@@ -164,12 +164,12 @@ The final model-verification path has one Forge producer step followed by the
 released verification-library runner:
 
 ```text
-examples/<model>/scpf/model.py
+<item-root>/scpf/model.py
   -> scripts/model_verify_declarative.py
      -> exact built Forge wheel
      -> compile Forge model to command document
      -> replay command document to initial native model.sc
-     -> load examples/<model>/verification/verify.py
+     -> load <item-root>/verification/verify.py
      -> run_solidcraft_verification(model.sc, output, VERIFICATION)
         -> baseline evaluation/checks
         -> saved-design mutation/evaluation/checks
@@ -192,6 +192,30 @@ All current historical model-verification cases use the declarative
 model. The former procedural `verify_model.py` migration path is historical;
 new generic verification behavior must not be implemented in Forge.
 
+## Public catalog roots
+
+Forge deliberately separates repository source location from public catalog
+identity:
+
+```text
+examples/<slug>/                 small teaching catalog
+verification/cases/<slug>/       public capability Verification
+verification/regressions/<slug>/ non-public regression/release fixtures
+```
+
+The four teaching examples own local `catalog.yml` role declarations. A
+teaching example may also participate in Verification only through that explicit
+opt-in. A normal new public modelling capability belongs under
+`verification/cases/`, not under `examples/`.
+
+Public Verification discovery is independent from Example discovery. The site
+and accepted build-evidence adapters carry both slug and source path. Slug is
+stable public identity; source path tells CAD-CI/evidence where the item lives.
+No shared adapter may derive a source path by assuming `examples/<slug>`.
+
+Regression-only fixtures under `verification/regressions/` are executable
+repository checks but are not public Example or Verification pages.
+
 ## Model item participation
 
 Forge uses released CAD-CI `process` only as declarative repository
@@ -209,9 +233,10 @@ Forge item ci.yml
 Forge contains no helper that interprets `process`, no duplicate changed-path
 selection and no second execution policy.
 
-The staged proof is complete. All 36 current native model-verification items
-now declare `process: true` and participate in normal CAD-CI selection. Reference
-items remain independently selectable through their own changed paths and
+The staged proof is complete. Current native model-verification items across
+`examples/`, `verification/cases/` and `verification/regressions/` declare
+their normal `process` state and participate in CAD-CI selection. Reference
+items remain independently selectable through their own source paths and
 dependencies.
 
 The former five-model proof set and the activation history of the remaining
@@ -297,20 +322,21 @@ The current flow separates repository participation, Git selection and build
 execution:
 
 ```text
-examples/<model>/ci.yml
+<item-path>/ci.yml
   -> process participation
   -> released CAD-CI changed-path/dependency selection
   -> SCons target graph
   -> consumer action
-  -> build/<item>/.cad-ci evidence
+  -> build/<item-path>/.cad-ci evidence
 ```
 
 Forge owns only the declarative repository configuration. It does not reproduce
 the planner in Forge code or tests.
 
-All 36 current native model-verification items are active. Independent reference
-items remain independently selected by released CAD-CI; model and reference
-execution are not collapsed into one consumer-owned scheduler.
+Model-verification items remain independently addressable by stable item id and
+explicit repository source path. Independent reference items remain independently
+selected by released CAD-CI; model and reference execution are not collapsed
+into one consumer-owned scheduler.
 
 Run interpretation uses structured CAD-CI evidence, not buffered console order.
 Consumer output may be emitted late or grouped by SCons, so console timestamps
@@ -355,7 +381,7 @@ separate ordered CAD-CI steps:
 ```text
 forge-package wheel + CAD_CI_VERIFICATION_WHEEL
   -> contract_test
-     -> run model-owned examples/<model>/tests against the Forge wheel
+     -> run model-owned <item-path>/tests against the Forge wheel
   -> model_verify
      -> compile model to solidcraft.json with the Forge wheel
      -> start released SolidCraft runtime
@@ -781,11 +807,11 @@ to the existing public qualification semantics.
 
 ```text
 resolved evidence tree
-  examples/<case>/.cad-ci/steps/contract_test.json
-  examples/<case>/.cad-ci/steps/model_verify.json
-  examples/<case>/solidcraft.json
-  examples/<case>/model_verify/verification.json
-  examples/<case>/model_verify/visual.json
+  <source-path>/.cad-ci/steps/contract_test.json
+  <source-path>/.cad-ci/steps/model_verify.json
+  <source-path>/solidcraft.json
+  <source-path>/model_verify/verification.json
+  <source-path>/model_verify/visual.json
   reference verification.json files
        |
        v
@@ -924,9 +950,11 @@ item then materializes only the already-produced diagram evidence.
 
 ## Example documentation provenance
 
-The example directory is the ownership boundary for human model/test
-documentation. During #548, the last canonical legacy case records are moved
-into the corresponding example directories without rewriting their content.
+The public item's source directory is the ownership boundary for human
+model/test documentation. Teaching items live below `examples/`; normal public
+capability items live below `verification/cases/`. During #548, the last
+canonical legacy case records were moved into their then-current source
+directories without rewriting their content.
 
 The local documentation preserves the former case fields as readable sections:
 goal, Forge API, Forge model, SolidCraft lowering/result, saved-design test and
@@ -938,21 +966,21 @@ This local documentation is explanatory only. `verification/verify.py`
 remains the executable verification contract, and `model.yml` remains generic
 model/page metadata.
 
-## Example and Pages source flow
+## Public catalog and Pages source flow
 
-The stable site source boundary is:
+The stable public source boundary is:
 
 ```text
-examples/<slug>/model.yml
+<source-path>/model.yml
   generic section/priority/title/description/parameters/stages
             |
-examples/<slug>/README.md
+<source-path>/README.md
   preserved human engineering explanation
             |
-examples/<slug>/verification/verify.py
+<source-path>/verification/verify.py
   machine expected verification contract
             |
-build/main/examples/<slug>/
+build/main/<source-path>/
   accepted current evidence/status/artifacts
             |
             v
@@ -964,8 +992,11 @@ external templates + static assets
 generated Pages
 ```
 
-The generator discovers the 32 example directories. There is no central
-`EXAMPLES` catalog duplicating their local metadata or documentation.
+Examples membership is the deliberately small teaching catalog below
+`examples/`. Verification membership is discovered independently from
+`verification/cases/` plus teaching examples that explicitly opt in through
+`catalog.yml`. There is no central Python membership catalog duplicating local
+metadata or documentation.
 
 The example metadata loader validates the agreed `model.yml` presentation schema. A separate documentation loader reads the local `README.md` and
 preserves its engineering statements without inference. Numeric truth is not
@@ -1002,11 +1033,11 @@ reference, but they are not a source-code dependency.
 
 ### Documentation-only CI path
 
-The selection boundary for example documentation is:
+The selection boundary for public item documentation is:
 
 ```text
-examples/<slug>/model.yml
-examples/<slug>/README.md
+<source-path>/model.yml
+<source-path>/README.md
         |
         v
 ci/site-source
@@ -1029,14 +1060,14 @@ existing site view-model/template layer.
 
 ```text
 source checkout
-  examples/<slug>/model.yml
-  examples/<slug>/README.md
-  examples/<slug>/{scpf,build123d,cadquery,pybosl2,pythonscad}/model.py
+  <source-path>/model.yml
+  <source-path>/README.md
+  <source-path>/{scpf,build123d,cadquery,pybosl2,pythonscad}/model.py
           |
           +------------------------------+
                                          v
 immutable build commit -> build/main/build.json
-                         build/main/examples/<slug>/**
+                         build/main/<source-path>/**
                                          |
                                          v
                               site/build_evidence.py
@@ -1063,7 +1094,8 @@ For stable generation it receives:
 It validates:
 
 - `build.json` uses generic build schema 1 and scope `main`;
-- every current verified example has one `examples/<slug>` item row;
+- every current public Verification case resolves to one explicit source-path
+  item row;
 - each required reference implementation has its own child item row;
 - item evidence is read from the source-path item directory, never from the
   batch producer directory;
@@ -1186,7 +1218,7 @@ composition from the exact durable CAD-verification wheel stored in the same
 Reference gates read only:
 
 ```text
-examples/<slug>/<implementation>/
+<source-path>/<implementation>/
   references/<slug>/<implementation>/verification.json
 ```
 
@@ -1276,16 +1308,16 @@ for the separate live GitHub Pages source cut-over.
 
 The stable model page is primarily a source-and-result comparison page.
 
-For one `examples/<slug>` model, the presentation flow is:
+For one public Verification model at `<source-path>`, the presentation flow is:
 
 ```text
-examples/<slug>/scpf/model.py
+<source-path>/scpf/model.py
   -> inline Forge source
 
-examples/<slug>/{pythonscad,pybosl2,cadquery,build123d}/model.py
+<source-path>/{pythonscad,pybosl2,cadquery,build123d}/model.py
   -> inline independent reference source rows
 
-build/main/examples/<slug>/**
+build/main/<source-path>/**
   -> accepted status, measurements, previews and raw artifacts
 
 README.md + model.yml
@@ -1314,15 +1346,15 @@ architecture.
 ### Verification catalog grouping
 
 The verification overview is not a flat alphabetical card list. The renderer
-uses the existing `ExampleMetadata.section` value loaded from each
-`examples/<slug>/model.yml` as the grouping key. Group membership therefore
-stays owned by each example and remains part of the agreed presentation metadata
-schema.
+uses the `section` value from each discovered public Verification case's local
+`model.yml`. A case may live under `verification/cases/<slug>` or, for one
+of the four teaching examples that explicitly opts in, under
+`examples/<slug>`.
 
-The renderer groups cards after discovery. Section order is determined by the
-section configuration's `priority`; example order inside a section is determined
-by each example's local `model.yml.priority`, with slug only as a deterministic
-tie-breaker. No central section-membership or example-order registry is introduced.
+The renderer groups cards after independent Verification discovery. Section
+order comes from the section configuration's `priority`; case order inside a
+section comes from local `model.yml.priority`, with slug only as a
+deterministic tie-breaker. No central membership/order registry is introduced.
 
 The section slug-to-label/priority mapping is presentation metadata, not a model
 membership registry. It lives as declarative configuration in
@@ -1336,6 +1368,7 @@ parameters    -> 3 · Parameters and dependencies
 components    -> 4 · Components and occurrences
 anchors       -> 5 · Anchors and local frames
 associativity -> 6 · Associative relationships
+sheet-metal   -> 7 · Sheet metal
 ```
 
 
@@ -1673,7 +1706,7 @@ result.
 
 ```text
 ci/model-verification-batch
-  -> items/examples/<slug>/
+  -> items/<item-path>/
        solidcraft.json
        model_verify/...
 ```
@@ -1711,7 +1744,7 @@ verification library owns that output format. After the runtime returns, the
 Forge batch producer converts it once into child-owned projection roots:
 
 ```text
-items/examples/<slug>/<implementation>/
+items/<item-path>/<implementation>/
   references/
     verification.json
     <slug>/<implementation>/...
@@ -1844,7 +1877,7 @@ The initial Forge builder set covers the existing Forge-owned responsibilities:
 For build123d/CadQuery reference items:
 
 ```text
-examples/<slug>/<implementation>/model.py
+<source-path>/<implementation>/model.py
   -> built-in builder (lib.py.cad.ci)
   -> one shared reference container
   -> model.stl

@@ -4,6 +4,7 @@ import tempfile
 import unittest
 
 from scpf.runner import run_script
+from repository_fixtures import fixture_path
 from scpf.model_objects import Placement
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -1432,7 +1433,7 @@ class ComponentDefinitionTests(unittest.TestCase):
 
     def test_xz_rectangular_component_uses_standard_corner_anchor(self):
         commands = run_script(
-            ROOT / "examples/xz-anchor/scpf/model.py"
+            fixture_path("xz-anchor", "scpf", "model.py")
         )["commands"]
 
         joints = [
