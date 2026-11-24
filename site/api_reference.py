@@ -218,6 +218,27 @@ METHOD_REFERENCES = (
         guide_anchor="group",
     ),
     _method(
+        "Assembly.with_exploded_view",
+        "Assembly.with_exploded_view()",
+        Assembly.with_exploded_view,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
+        "Assembly.show_exploded",
+        "Assembly.show_exploded()",
+        Assembly.show_exploded,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
+        "Assembly.show_assembled",
+        "Assembly.show_assembled()",
+        Assembly.show_assembled,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
         "Assembly.with_anchor",
         "Assembly.with_anchor()",
         Assembly.with_anchor,
