@@ -10,6 +10,7 @@ from scpf.model_metadata import (
 
 
 VALID = {
+    "purpose": "verification",
     "section": "basic",
     "priority": 10,
     "title": "Plate",
@@ -25,6 +26,7 @@ class ModelMetadataTests(unittest.TestCase):
         self.assertEqual(
             MODEL_METADATA_FIELDS,
             (
+                "purpose",
                 "section",
                 "priority",
                 "title",
@@ -38,8 +40,23 @@ class ModelMetadataTests(unittest.TestCase):
     def test_valid_mapping_returns_typed_metadata(self):
         row = validate_model_metadata(VALID, label="plate")
         self.assertIsInstance(row, ModelMetadata)
+        self.assertEqual(row.purpose, ("verification",))
         self.assertEqual(row.priority, 10)
         self.assertEqual(row.stages, ("Create profile", "Extrude"))
+
+    def test_purpose_scalar_and_list_forms_normalize(self):
+        example = validate_model_metadata(dict(VALID, purpose="example"))
+        both = validate_model_metadata(
+            dict(VALID, purpose=["verification", "example"])
+        )
+        self.assertEqual(example.purpose, ("example",))
+        self.assertEqual(both.purpose, ("example", "verification"))
+
+    def test_invalid_purpose_is_rejected(self):
+        for value in ([], "", "other", ["verification", "verification"]):
+            with self.subTest(value=value):
+                with self.assertRaises(ValueError):
+                    validate_model_metadata(dict(VALID, purpose=value))
 
     def test_unknown_consumer_extension_is_rejected(self):
         data = dict(VALID, build={"process": True})
