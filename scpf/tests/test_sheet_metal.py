@@ -585,6 +585,123 @@ class SheetMetalTests(unittest.TestCase):
                 "NotSheet",
             )
 
+    def test_sheet_perforate_lowers_whole_sheet_native_field(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(
+            thickness=2,
+            bend_radius=2,
+            rule_name="Perforation Rule",
+        )
+
+        commands = compile_model(
+            sheet.perforate(
+                diameter=5,
+                pitch=8,
+            ),
+            "PerforatedSheet",
+        )["commands"]
+
+        self.assertEqual(
+            [row["command"] for row in commands],
+            [
+                "sheet.manage_rules",
+                "sketch.create",
+                "sketch.rectangle.two_point",
+                "sketch.finish",
+                "sheet.flange",
+                "sheet.perforate",
+            ],
+        )
+        self.assertEqual(
+            commands[-1]["params"],
+            {
+                "diameter": 5,
+                "pitch": 8,
+                "body": "PerforatedSheet",
+            },
+        )
+        self.assertNotIn("margin", commands[-1]["params"])
+        self.assertNotIn("pattern", commands[-1]["params"])
+
+    def test_sheet_perforate_preserves_parameters_and_square_pattern(self):
+        diameter = Parameter("perforation_diameter", 5)
+        pitch = Parameter("perforation_pitch", 8)
+        margin = Parameter("perforation_margin", 6)
+
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        commands = compile_model(
+            sheet.perforate(
+                diameter=diameter,
+                pitch=pitch,
+                margin=margin,
+                pattern="square",
+            ),
+            "ParametricPerforation",
+        )["commands"]
+
+        units = {
+            row["params"]["name"]: row["params"]["unit"]
+            for row in commands
+            if row["command"] == "parameters.add"
+        }
+        self.assertEqual(units["perforation_diameter"], "mm")
+        self.assertEqual(units["perforation_pitch"], "mm")
+        self.assertEqual(units["perforation_margin"], "mm")
+
+        perforate = commands[-1]["params"]
+        self.assertEqual(perforate["diameter"], "perforation_diameter")
+        self.assertEqual(perforate["pitch"], "perforation_pitch")
+        self.assertEqual(perforate["margin"], "perforation_margin")
+        self.assertEqual(perforate["pattern"], "square")
+
+    def test_sheet_perforate_validates_initial_contract(self):
+        with Sketch(name="Blank", plane="XY") as blank:
+            Rectangle2D(80, 40)
+        sheet = blank.sheet_metal(thickness=2, bend_radius=2)
+
+        for diameter in (0, -1, float("nan")):
+            with self.subTest(diameter=diameter), self.assertRaisesRegex(
+                ValueError, "diameter"
+            ):
+                sheet.perforate(diameter=diameter, pitch=8)
+
+        for pitch in (0, -1, float("nan")):
+            with self.subTest(pitch=pitch), self.assertRaisesRegex(
+                ValueError, "pitch"
+            ):
+                sheet.perforate(diameter=5, pitch=pitch)
+
+        for margin in (0, -1, float("nan")):
+            with self.subTest(margin=margin), self.assertRaisesRegex(
+                ValueError, "margin"
+            ):
+                sheet.perforate(
+                    diameter=5,
+                    pitch=8,
+                    margin=margin,
+                )
+
+        with self.assertRaisesRegex(ValueError, "pattern"):
+            sheet.perforate(
+                diameter=5,
+                pitch=8,
+                pattern="hex",
+            )
+
+        ordinary = Box(80, 40, 2, anchor=Anchor.BOTTOM)
+        with self.assertRaisesRegex(ModelError, "existing sheet material"):
+            compile_model(
+                ordinary.perforate(
+                    diameter=5,
+                    pitch=8,
+                ),
+                "NotSheet",
+            )
+
     def test_contour_flange_uses_native_open_chain_and_replay_curve_bindings(self):
         with Sketch(name="Contour", plane="XZ") as sketch:
             chain = sketch.chain(start=(0, 0))
