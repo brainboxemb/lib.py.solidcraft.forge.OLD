@@ -8,6 +8,8 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-24
+
 ### Changed
 
 - Adopt immutable `docker.cad.solidcraft v0.3.5` and qualify Forge against
