@@ -22,7 +22,7 @@ dev-ci
 Current permanent heads at this checkpoint:
 
 - `main`: `cd46d6797df319b9d13605c11568990113772700`;
-- `dev-cad`: `f87b93dd603b5dc808a3365638cdf39f6ec52d65`;
+- `dev-cad`: `d8e310afa8766ee9b240f924d6dd8f6453c39c96`;
 - `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
 Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
@@ -78,20 +78,27 @@ durable dev-cad run `45387642616` both succeeded; #779 is closed.
 
 ### #347 — generalized native pattern seeds
 
-Status: **now / dev-cad**.
+Status: **merged to dev-cad**.
 
-CAD #135 / parked PR #141 needs a native circular pattern whose source is an
-already-applied `Hole`, not an artificial Sketch extrusion. Generalize
-`Shape.rectangular_pattern()` and `Shape.circular_pattern()` around stable
-native history-feature identity:
+PR #831 merged as `d8e310afa8766ee9b240f924d6dd8f6453c39c96`
+after exact PR run `45389448588` succeeded. Downstream CAD #135 may refresh
+after the normal durable dev-cad acceptance.
 
-- preserve existing Sketch.extrude sources unchanged;
-- accept an already-applied native Hole source and other supported applied
-  feature Shapes without exposing SolidCraft history-name strings;
-- use one source feature and one native pattern feature;
-- share validation/identity rules between rectangular and circular patterns;
-- reject non-applied or unsupported Shapes clearly;
-- qualify the behaviour natively before downstream CAD #135 resumes.
+### #753 — component-local Cylinder history across occurrences
+
+Status: **reopened / primary product-CAD blocker**.
+
+CAD #388 consumed released Forge v0.14.0 and runtime v0.3.5 / SolidCraft 0.48.1.
+Its exact durable run `45389479040` succeeded, but the source-matched five-panel
+render still shows multiple detached joined-Cylinder features. The accepted
+Box+one-Cylinder fixture and v0.3.5 two-island smoke are therefore insufficient.
+
+Retain the owner boundary: no CAD-local geometry workaround. Expand the Forge
+reproducer to preserve the actual failing history shape — taper/rear cut,
+multiple Cylinder joins and Hole features, five copied/rotated occurrences —
+until the failure reproduces under the same 0.48.1 runtime. Then reduce the
+sequence to the smallest failing difference and move the fix to the owning
+Forge/SolidCraft layer.
 
 ### #788 — CAD-CI concurrency measurement
 
@@ -105,6 +112,7 @@ Verification coverage or reintroduce per-model runtime startup.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
+| #753 Component-local Cylinder history across occurrences | **now / primary blocker** | Reproduce the actual HUB75 multi-feature failure on SolidCraft 0.48.1 and isolate the smallest failing sequence. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
 | #779 Native whole-sheet perforation | **complete / durable-green** | Accepted at `f87b93dd603b5dc808a3365638cdf39f6ec52d65`; issue closed. |
 | #751 Native exploded views | **next / CAD unblocker** | After #347, expose native explode.create/show for CAD #367. |
@@ -113,7 +121,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
 | #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
 | #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
-| #347 Generalized pattern seeds | **now / CAD unblocker** | Implement shared applied-feature identity; unblock CAD #135 / PR #141. |
+| #347 Generalized pattern seeds | **merged / durable acceptance pending** | Refresh CAD #135 after normal dev-cad acceptance. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
 | #175 HUB75-like AnchorFrame diagnostic change | **later / diagnostic with #325** | Preserve the retained A/B evidence; resume its symbolic attached-seed/native comparison only as part of the #325 root-cause track. |
@@ -125,7 +133,10 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. finish #347 and require exact PR plus native Verification evidence on the
-   v0.14.0 / SolidCraft 0.48.1 baseline;
-2. resume #751 native exploded views for downstream CAD #367;
-3. keep #788 concurrency measurement independent.
+1. reproduce CAD #388 in the retained #753 owner-layer fixture using the real
+   multi-feature HUB75 history shape on runtime v0.3.5 / SolidCraft 0.48.1;
+2. reduce that reproducer to the smallest failing sequence and fix/block it at
+   the owning Forge/SolidCraft layer; do not add a product-CAD workaround;
+3. keep #751 exploded views and #788 performance work parallel where they do
+   not interfere with #753;
+4. refresh downstream CAD #135 after #347 durable acceptance.
