@@ -4,6 +4,7 @@ import unittest
 
 from scpf import Box, Placement, component
 from scpf.assembly import compile_assembly
+from scpf.model_objects import Assembly
 
 
 @component
@@ -134,9 +135,7 @@ class ExplodedViewTests(unittest.TestCase):
                 moves=[(second, (0, 0, 0))],
             )
         with self.assertRaisesRegex(ValueError, "at least two"):
-            (first + second).instances[0:1]  # keep the local ids alive
-            first_assembly = type(assembly)((first,))
-            first_assembly.with_exploded_view("Bad")
+            Assembly((first,)).with_exploded_view("Bad")
         with self.assertRaisesRegex(ValueError, "compose the final assembly"):
             assembly.with_exploded_view("Ready") + outsider
 
