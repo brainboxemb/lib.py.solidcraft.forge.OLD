@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import warnings
 
-TESTED_SOLIDCRAFT_VERSION = "0.45.0"
+TESTED_SOLIDCRAFT_VERSION = "0.48.1"
 _VERSION = re.compile(r"(?<!\d)(\d+)\.(\d+)\.(\d+)(?!\d)")
 _GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 
