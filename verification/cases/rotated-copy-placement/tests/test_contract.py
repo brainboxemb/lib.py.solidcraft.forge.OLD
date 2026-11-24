@@ -6,13 +6,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class RotatedCopyPlacementCommandTests(unittest.TestCase):
     def test_rotated_copy_binds_occurrence_before_move(self):
         document = run_script(
-            ROOT / "examples/rotated-copy-placement/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )
         commands = document["commands"]
         copy = next(
