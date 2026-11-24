@@ -1218,7 +1218,7 @@ composition from the exact durable CAD-verification wheel stored in the same
 Reference gates read only:
 
 ```text
-examples/<slug>/<implementation>/
+<source-path>/<implementation>/
   references/<slug>/<implementation>/verification.json
 ```
 
