@@ -25,10 +25,11 @@ Current permanent heads at this checkpoint:
 - `dev-cad`: `0b24df66481c43ff1cb798e749c728abd4ad6f33`;
 - `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
-Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
-`45358578565` succeeded and published the accepted dev-cad build/Page state.
-The earlier accidental #811 directory split is fully reverted and is not part
-of the active architecture.
+The complete post-v0.14 CAD/API batch is accepted on stable `main` through
+history-preserving promotion #837 at
+`b20e68b20ef5bec9c717f1e477eae064eec35a23`. Exact main durable run
+`45398101329` succeeded and `build/main` source-matches that commit. The
+earlier accidental #811 directory split remains fully reverted.
 
 Latest published Forge package: **v0.14.0** at exact
 `cd46d6797df319b9d13605c11568990113772700`.
@@ -143,16 +144,16 @@ Verification coverage or reintroduce per-model runtime startup.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #753 Component replay context across save/reopen | **now / fix** | Restore active component in headless replay phases and prove the HUB75 owner/product render becomes clean. |
+| #753 Component replay context across save/reopen | **release / product render pending** | Ship the accepted fix in v0.15.0; keep #753 open through final durable CAD #388 visual acceptance. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #779 Native whole-sheet perforation | **complete / durable-green** | Accepted at `f87b93dd603b5dc808a3365638cdf39f6ec52d65`; issue closed. |
-| #751 Native exploded views | **complete / durable-green** | Include in the next Forge release before CAD #367 consumes it. |
+| #779 Native whole-sheet perforation | **complete / v0.15.0 candidate** | Ship the accepted implementation in v0.15.0; issue already closed. |
+| #751 Native exploded views | **complete / v0.15.0 candidate** | Ship in v0.15.0, then CAD #367 can consume the immutable release. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
 | #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
 | #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
 | #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
-| #347 Generalized pattern seeds | **complete / durable-green** | Include in the next Forge release before CAD #135 consumes it. |
+| #347 Generalized pattern seeds | **complete / v0.15.0 candidate** | Ship in v0.15.0, then CAD #135 can consume the immutable release. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
 | #175 HUB75-like AnchorFrame diagnostic change | **later / diagnostic with #325** | Preserve the retained A/B evidence; resume its symbolic attached-seed/native comparison only as part of the #325 root-cause track. |
