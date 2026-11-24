@@ -3,29 +3,53 @@
 This file is the current source of truth for unfinished work in
 `lib.py.solidcraft.forge`.
 
-Forge owns the public CAD API/compiler/model behavior, Forge-specific release
-rules and model-specific verification. Generic CAD-CI, release build checks,
-tag/GitHub Release creation, Pages and merge policy stay in their owner
-repositories.
+Forge owns the public CAD API/compiler/model behavior, Forge-specific
+verification expectations and repository-specific release validation.
+Generic CAD-CI, shared release mechanics, reusable verification, runtime
+packaging, generated build branches, Pages and merge policy stay in their
+owner repositories.
 
-## Current permanent branches
+## Current repository state
+
+Permanent source refs:
 
 ```text
 main
-dev-ci
 dev-cad
+dev-ci
 ```
 
-Current heads:
+Current permanent heads at this checkpoint:
 
-- `main`: `74e44e98bb561992547609b24b2e2664356423a1`;
-- `dev-ci`: `8d8bf2ad7e229500a75f8c1e3043cb8245de01d6`;
-- `dev-cad`: `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`.
+- `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
+- `dev-cad`: `4ea3096f3f5b5d53eef48bfb25b62185908f96df`;
+- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
 
-`main` is already an ancestor of `dev-ci`; no additional `main -> dev-ci`
-sync is required before #739.
+Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
+`45358578565` succeeded and published the accepted dev-cad build/Page state.
+The earlier accidental #811 directory split is fully reverted and is not part
+of the active architecture.
 
-## Accepted shared CI/release stack
+Latest published Forge package: **v0.13.2** at exact
+`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`.
+
+The exact v0.13.2 main branch build `45269510406` and central release run
+`45269991837` succeeded. No Forge release is currently active.
+
+## Permanent branch rule
+
+- `main`: stable integration only.
+- `dev-cad`: Forge API/compiler/model/Verification/site-content work.
+- `dev-ci`: CI/release integration.
+- short-lived work branches are squash-merged;
+- exact `main -> dev-cad|dev-ci`: history-preserving sync;
+- exact `dev-cad|dev-ci -> main`: history-preserving promotion;
+- conflicted permanent-ref sync uses the released reviewed
+  `/merge-resolved` path;
+- generic owner behavior is changed, released and externally accepted in its
+  owner repository before Forge consumes it.
+
+## Accepted shared stack
 
 - `lib.py.cad.ci v0.18.2` @
   `088644a05ff698957aef2ddc6cc5de037ddfa158`;
@@ -37,121 +61,117 @@ sync is required before #739.
   `c7c145b7be0c602724e8cca874ef29990baaad1e`;
 - `docker.cad.solidcraft v0.3.4`.
 
-The central CAD release flow is externally accepted in
-`tool.cad.ci.test #256`.
+Pages is web output and is not release evidence. Stable release evidence is the
+main **ci-build-record**.
 
-Acceptance proved on exact test-consumer main commit
-`9558d1a2e49ddcc252b6e646f4a16c66e52d3ffa`:
+## Active execution
 
-- stale release source refused by the stable main `ci-build-record`;
-- exact main source released successfully;
-- repeated exact command succeeded without creating a second release;
-- the annotated tag resolved to the exact source commit;
-- Pages was not used as release evidence.
+### #817 — reconcile plan after #785
 
-## Active work
+Status: **now / docs-only dev-cad**.
 
-### dev-ci — #739 central release flow
+This issue records the accepted #785 dev-cad state and restores complete open
+issue assessment before stable promotion. It contains no implementation change.
 
-Status: **now**.
+### #785 — canonical model purpose and public catalogs
 
-Forge is now allowed to consume the released central flow.
+Status: **complete on dev-cad; stable promotion pending**.
 
-Required order:
+Accepted contract:
 
-1. replace `.github/workflows/release.yml` with the copy-ready
-   `tool.cad.ci v0.36.1` CAD release wrapper;
-2. pass `validator_path: scripts/release/validate_release.py`;
-3. reduce the Forge validator to Forge-owned rules only:
-   - release blocker file;
-   - package version;
-   - dated CHANGELOG release section / release notes;
-   - tested SolidCraft version;
-4. remove local CAD build-record and Pages release checks;
-5. remove the local generic release publisher and its tests;
-6. update `release-policy` to test only the Forge validator and wrapper
-   contract;
-7. require the #739 PR and resulting `dev-ci` build green;
-8. merge exact `dev-ci -> main`;
-9. require the new exact main build green;
-10. publish Forge v0.12.0 through the central CAD release flow and verify the
-    annotated tag/GitHub Release.
+```yaml
+purpose: example
+purpose: verification
+purpose: [example, verification]
+```
 
-Issue #763 is closed as **not planned**: Forge does not adapt its old local
-build/Page release checks.
+The source corpus remains under its existing model directories. There is no
+semantic `examples/` versus `verification/cases/` split, no `catalog.yml`,
+and `role.yml` is not public catalog membership.
 
-### dev-cad — Forge CAD/API work
+The four curated teaching models carry both Example and Verification purposes.
+The public Examples and Verification views select independently from normalized
+`model.yml.purpose`. Sheet metal is a first-class Verification group.
+Independent references and visual regression evidence are declaration-driven;
+native integration/model/geometry verification remains mandatory.
 
-Work completed on `dev-cad`:
+Next action: promote accepted `dev-cad` through `main`. Close #785 after the
+stable promotion is accepted.
 
-- #746 Cone boolean join/cut — merge `611762e4...`;
-- #747 Polygon2D explicit/attached Sketch — merge `4625e57b...`;
-- #748 STL export — closed; native SolidCraft CLI export is consumer/build
-  adapter responsibility;
-- #749 model-local Python import isolation — merge `fd836e47...`;
-- #750 rotated standalone Sketch cutters — merge
-  `84cb5b4b6b7085eb92865eafe28fd7478bb2665e`.
+### #779 — native whole-sheet perforation
 
-The exact #750 dev-cad build run `45246647800` is green.
+Status: **now / dev-cad**.
 
-Current order:
+PR #780 is based on the pre-#785 catalog contract and is 24 commits behind the
+accepted dev-cad line. Rebuild that existing issue branch from current
+`dev-cad` rather than copying stale plan/catalog files.
 
-1. **now** — #751 native SolidCraft exploded views;
-2. #753 component-local native Cylinder joins across copied/rotated
-   occurrences.
+Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
 
-Keep CAD/API changes on `dev-cad`; do not mix release-flow changes into these
-branches.
+- replace the old regression-only `role.yml` with canonical
+  `model.yml` using `purpose: verification` and `section: sheet-metal`;
+- keep the case at `examples/sheet-perforate/`;
+- add normal user-facing API documentation required by #786: Reference,
+  Sheet metal Guide, Cheatsheet and `docs/api.md`;
+- preserve native perforation/flat-pattern semantics and do not fabricate
+  repeated B-rep holes or external reference equivalents.
 
-## Open issue assessment — 2026-11-23
+### #814 — Example basic validation selection
 
-| Issue | Branch/owner | Status | Next |
-| --- | --- | --- | --- |
-| #739 central CAD release flow | dev-ci | **now** | Consume exact released v0.36.1 wrapper, remove local publisher/build/Page checks. |
-| #714 Release Forge 0.12.0 | main/release | **blocked on #739** | Publish after #739 reaches main and the exact main build is green. |
-| #746 Cone boolean compilation | dev-cad | **implemented on dev-cad** | Close/promote with the current CAD batch. |
-| #747 Polygon2D explicit/attached Sketch | dev-cad | **implemented on dev-cad** | Close/promote with the current CAD batch. |
-| #749 model-local Python imports | dev-cad | **implemented on dev-cad** | Close/promote with the current CAD batch. |
-| #750 rotated standalone Sketch cutters | dev-cad | **implemented on dev-cad** | Downstream CornerBracket may consume after a Forge release containing it. |
-| #751 native exploded views | dev-cad | **now** | Wrap native explode.create/show behavior and qualify real SolidCraft replay. |
-| #753 component-local Cylinder joins | dev-cad | **next** | Refresh focused draft after #751. |
-| #713 audit/reduce Forge scripts | repository | later | Reassess after #739 removes local release plumbing. |
-| #737 historical changelog alignment | docs | later / docs-only | Keep separate. |
-| #659 build/verification/results terminology | cross-repo | later | Follow shared plain-language work. |
-| #570 CADCraft diagram replacement | dev-cad | later | Preserve presentation behavior while replacing source format. |
-| #349 remaining SOLID CREATE coverage | dev-cad | later | Focused slices only. |
-| #347 generalized pattern seeds | dev-cad | later | Generalize by native feature identity. |
-| #335 build123d Sheet Metal reference | dev-cad | later | Replace approximation when needed. |
-| #325 AnchorFrame root cause | dev-cad | later | Resume with an active consumer need. |
-| #175 HUB75 AnchorFrame diagnostic | dev-cad | probably obsolete | Move unique evidence to #325. |
-| #82 Joints-folder visibility | dev-cad | later | Decide later. |
-| #81 rotated occurrence-local AnchorFrame | dev-cad | later | Investigate with #325. |
-| #9 Sketch/constraints/workplanes epic | dev-cad | later | Deliver focused issues separately. |
-| #8 hollow primitives | dev-cad | later | Reconcile with native shell/pipe/boolean support. |
-| #5 generic anchors/constraints | dev-cad | probably obsolete | Separate any remaining scope from #9. |
+Status: **parallel design / blocked on stable sync to dev-ci**.
 
-## Boundary
+The existing first/basic Forge validation stage is already
+`forge-release` / `scripts/tool_verify.py`. It currently duplicates the four
+teaching slugs in `PASSING_EXAMPLES`.
 
-Forge may own:
+After #785 reaches `main`, sync `main -> dev-ci` through normal permanent-ref
+policy. Then #814 replaces that duplicate list with selection from canonical
+`model.yml` entries whose purpose contains `example`. The separate
+`custom-anchor` expected-rejection policy fixture remains explicit.
 
-- CAD API/compiler/model behavior;
-- Forge-specific version/changelog/blocker release checks;
-- model-specific SolidCraft verification;
-- presentation/site content.
+### #788 — CAD-CI concurrency measurement
 
-Forge must not own:
+Status: **parallel / performance**.
 
-- generic CAD-CI build checks;
-- parsing `main/build.json` for release qualification;
-- Pages as release evidence;
-- generic `/release` parsing;
-- tag/GitHub Release creation or idempotency;
-- generic release reporting;
-- merge-policy mechanics.
+Measure jobs=2/4/6 on one identical post-#785 representative full graph before
+changing Forge concurrency or designing bounded batch sharding. Do not remove
+Verification coverage or reintroduce per-model runtime startup.
+
+## Open issue assessment
+
+| Issue | Status | Next action |
+| --- | --- | --- |
+| #817 Plan reconciliation after #785 | **now / docs-only** | Merge the current snapshot to dev-cad before stable promotion. |
+| #814 Example basic validation selection | **blocked on main -> dev-ci sync** | After #785 promotion, sync stable metadata to dev-ci and derive forge-release passing models from `purpose: example`. |
+| #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
+| #785 Examples / Verification purpose split | **complete on dev-cad / promotion pending** | Promote accepted dev-cad to main; then close. |
+| #779 Native whole-sheet perforation | **now / CAD** | Rebuild PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
+| #753 Component-local Cylinder joins | **later** | Refresh focused qualification after the active metal slice. |
+| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
+| #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
+| #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
+| #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
+| #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
+| #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
+| #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
+| #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
+| #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
+| #175 HUB75-like AnchorFrame diagnostic change | **later / diagnostic with #325** | Preserve the retained A/B evidence; resume its symbolic attached-seed/native comparison only as part of the #325 root-cause track. |
+| #82 Joints-folder visibility | **later** | Decide interaction/export policy separately. |
+| #81 Rotated occurrence-local AnchorFrame references | **later** | Investigate together with #325 when needed. |
+| #9 First-class Sketch/constraints/workplanes | **later / epic** | Continue through focused qualified slices rather than one monolithic implementation. |
+| #8 Hollow primitives | **later** | Reconcile with native shell/pipe support when a concrete model requires it. |
+| #5 Generic anchors and parametric constraints | **later / foundational epic** | Treat as historical umbrella; continue only through focused issues with current native contracts. |
 
 ## Next checkpoint
 
-Finish #739 on `dev-ci` and #751 on `dev-cad` independently.
-
-After #739 reaches stable `main` and the exact main build is green, publish
-Forge v0.12.0 through the central CAD release flow.
+1. merge #817 docs-only plan reconciliation to `dev-cad`;
+2. in parallel:
+   - open the normal `dev-cad -> main` promotion for accepted #785;
+   - rebuild #779 / PR #780 on the post-#785 dev-cad line;
+   - keep #788 measurement work independent;
+3. after the stable promotion is green and merged:
+   - close #785;
+   - sync `main -> dev-ci`;
+   - implement #814 against the accepted purpose-aware metadata contract;
+4. keep #753 and #751 behind the active metal/runtime work.

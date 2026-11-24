@@ -1,36 +1,41 @@
-# Native sheet edge-flange regression fixture
+# Native sheet edge flange
 
-This non-public regression fixture qualifies Forge issue #682 against the
-pinned SolidCraft 0.45 runtime.
+**Group:** `sheet-metal`
+**Saved-design required:** `true`
 
-## Intent
+> Documentation provenance: Forge #785 promotes the released #682 edge-flange fixture to public Verification.
 
-Start with one 80 × 40 × 2 mm native sheet base and add one native edge flange
-from the right-hand sheet edge.
+## Goal
 
-The public Forge operation is:
+Prove that an existing sheet edge can grow one native editable flange while material values remain owned by the active sheet rule.
 
-```python
-sheet.flange(
-    edges=[(40, 0, 2)],
-    height=flange_height,
-    angle=flange_angle,
-)
-```
+## Forge API
 
-The existing sheet rule owns thickness, K-factor and bend radius. The edge
-flange does not repeat those material fields.
+`Sketch.sheet_metal(...)` creates the blank; `Shape.flange(edges=..., height=..., angle=...)` adds the existing-edge feature.
 
-## Saved-design qualification
+## Forge model
 
-Without rerunning Forge Python, the saved SolidCraft design changes:
+An 80 × 40 × 2 mm sheet receives a flange on its right edge. Height starts at 20 mm and angle at 90 degrees.
 
-- `flange_height: 20 -> 25 mm`;
-- `flange_angle: 90 -> 75 deg`.
+## How Forge builds it in SolidCraft
 
-The rebuilt/reopened model must remain one connected closed sheet-metal body.
+Forge creates one sheet rule and flat sheet body, resolves the fixed edge pick and emits one native edge-flange feature. Height and angle remain feature dimensions.
 
-## Flat pattern
+## SolidCraft result
 
-Baseline inspection requires a recoverable flat pattern with one native bend
-using the same sheet rule, thickness and bend radius.
+One native sheet body has one inherited-rule edge flange and a recoverable flat pattern.
+
+## Saved-design test
+
+Mutate flange height from 20 to 25 mm and bend angle from 90 to 75 degrees, then verify rebuilt native feature and flat-pattern evidence.
+
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #785 / #682 public capability promotion.
+**Bounds sufficient:** `false`
+
+The formed bounds do not prove inherited rule ownership or native flange/flat-pattern history; inspection of sheet and bend records is required.
+
+## Reference notes
+
+- **Native SolidCraft history** — The verification target is native sheet-rule and flange history, so independent solid-only references are optional rather than fabricated.

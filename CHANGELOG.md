@@ -8,6 +8,119 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Documentation
+
+- Added a first-class Sheet metal API Guide chapter and complete generated
+  Reference/Cheatsheet coverage for `Sketch.sheet_metal()`,
+  `Shape.fold()`, `Shape.flange()`, `Shape.contour_flange()`,
+  `Shape.hem()` and `Shape.path_flange()` (#786).
+
+
+## [0.13.2] - 2026-11-23
+
+### Hotfix context
+
+v0.13.2 is the consumer hotfix for the symbolic placed-primitive regression
+found while the product-CAD repository adopted v0.13.1.
+
+v0.13.1 remains a valid immutable release, but an existing parametrically
+placed `Cylinder` could fail during Forge command generation when its placement
+coordinate had already become a native expression while its height was still a
+Forge `Expression`. The detailed `hub75-panel` model exposed this as:
+
+```text
+TypeError: can only concatenate str (not "Expression") to str
+```
+
+v0.13.2 keeps symbolic placement/dimension values typed until Box, Cylinder or
+Cone anchor arithmetic is complete and converts them to native SolidCraft
+expressions only when the final primitive command is emitted.
+
+For Cylinder axial anchors, BOTTOM/LEFT/FRONT now also keep the native base
+directly on the placed coordinate instead of creating a synthetic
+`+height/2 -height/2` dependency.
+
+This patch adds no new public modelling API beyond v0.13.1. Downstream users
+adopting the v0.13.x capability batch should use **v0.13.2 or newer**.
+
+### Fixed
+
+- Preserve symbolic primitive placement through anchor arithmetic (#796),
+  including the HUB75-style symbolic Cylinder boolean join and the equivalent
+  Box/Cone lowering boundary.
+
+## [0.13.1] - 2026-11-23
+
+### Release clarification
+
+v0.13.1 is a patch release that corrects Forge release documentation and
+version guidance. It does **not** add new modelling behavior beyond v0.13.0.
+
+The important release boundary is:
+
+- v0.12.0 is a valid, immutable release, but it was published before the later
+  `dev-cad` model-unblocking batch reached stable `main`;
+- v0.13.0 is the first release that actually contains that post-v0.12 CAD
+  batch;
+- v0.13.1 republishes the same modelling baseline with corrected release notes
+  so downstream users are not told to upgrade only to v0.12.0 for fixes that
+  are absent from that tag.
+
+The post-v0.12 fixes first available in v0.13.0 are:
+
+- #746 Cone participation in native Boolean feature compilation;
+- #747 `Polygon2D` in explicit and face-attached Sketches;
+- #749 model-local Python import isolation;
+- #750 rotated standalone Sketch cutters.
+
+The original `Cone` primitive already existed before v0.12.0. The missing
+Cone change was specifically #746's native Boolean feature support.
+
+v0.13.0 also introduced the next native sheet-metal API slices:
+
+- #773 `Shape.hem(...)` on existing sheet bodies;
+- #776 `Shape.path_flange(...)` using reusable open Sketch-chain history.
+
+Downstream models that depend on #746, #747, #749 or #750 require
+**v0.13.0 or newer**. v0.13.1 is the recommended patch level because its
+release metadata now states that boundary explicitly.
+
+### Changed
+
+- Corrected the release documentation and version guidance for the v0.12.0 to
+  v0.13.x transition (#789).
+
+## [0.13.0] - 2026-11-23
+
+### Added
+
+- Added native `Shape.hem(...)` sheet-metal history on existing sheet bodies.
+  Hem length and optional gap remain parameterized in mm while the active sheet
+  rule owns thickness, K-factor and bend radius (#773).
+
+- Added native `Shape.path_flange(...)` on existing sheet bodies using the
+  reusable open connected Sketch-chain replay identity. The qualified initial
+  contract is line-only with an optional parameterized bend-radius override
+  (#776).
+
+### Fixed
+
+- Cone primitives now participate in native feature-compiler Boolean
+  join/cut/intersect operations instead of being limited to the primitive-only
+  CSG route (#746).
+
+- `Polygon2D` now lowers correctly inside explicit and face-attached Sketches,
+  including attached through-all cutter workflows (#747).
+
+- `run_script()` isolates model-local Python modules between independent model
+  roots so one CAD model cannot reuse another model's local import accidentally
+  (#749).
+
+- Standalone extruded Sketch cutters preserve an explicit rotated local Sketch
+  frame before normal Boolean CSG, enabling rotated cutter Shapes without a
+  consumer-local workaround (#750).
+
+
 ## [0.12.0] - 2026-11-23
 
 ### Added

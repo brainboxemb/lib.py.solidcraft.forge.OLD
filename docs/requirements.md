@@ -314,6 +314,85 @@ SolidCraft 0.45 explicitly supports `new|join|cut|intersect|auto` on
 `solid.extrude.operation`; Forge only exposes the deterministic operations
 required by the public Boolean operators.
 
+## Primitive Boolean operands
+
+Direct and positioned native primitives must use one Boolean lowering contract
+whether the existing body is a pure primitive CSG body or already contains
+ordered native features.
+
+Requirements:
+
+- direct and positioned `Cylinder` and `Cone` operands support native
+  `join`, `cut` and `intersect` operations when used with Forge Boolean
+  operators;
+- primitive-only expressions remain on the primitive CSG compiler;
+- when the existing body needs ordered feature compilation, the primitive
+  operand reuses the same native primitive operation code instead of duplicating
+  Cylinder/Cone command generation in the feature compiler;
+- Cone lowering preserves authored `diameter`, `top_diameter`, `height`,
+  axis and axial-anchor-derived base;
+- join/cut/intersect target the existing body directly through SolidCraft's
+  native `targets` field; Forge must not create a temporary second body.
+
+## Polygon2D in explicit and attached Sketches
+
+A closed `Polygon2D` is a normal Sketch profile. It must work in an explicit
+or body-attached `Sketch` wherever other closed straight-edged profiles work.
+
+Requirements:
+
+- the explicit/attached Sketch compiler accepts `Polygon2D`;
+- Polygon2D lowers to one native `sketch.line` command with `closed=true`;
+- authored vertex order and optional edge ids are preserved;
+- Sketch-local placement offsets are applied to authored polygon coordinates;
+- the Polygon2D plane must match the explicit Sketch plane;
+- extrusion uses the existing native Sketch extrusion path, including
+  `join` and `cut` on an existing body;
+- standalone and explicit/attached Polygon2D use one shared command builder;
+- Forge keeps a focused attached Polygon2D regression fixture that is replayed
+  in the released SolidCraft runtime, not only compiled to a command document.
+
+## Model-local Python import isolation
+
+Each `run_script(path)` call must resolve Python modules owned beside that
+model's `model.py` independently from earlier model executions in the same
+Python process.
+
+Requirements:
+
+- two model roots may use the same local top-level package/module name and each
+  run resolves its own source;
+- local modules loaded during one run do not remain available to a later model
+  root through `sys.modules`;
+- a module that existed under the same name before `run_script()` is restored
+  after the run;
+- the temporary model import path is removed after execution;
+- project-shared imports such as `models.components.*` remain shared and are
+  not broadly purged;
+- installed Forge modules and Python standard-library modules are not broadly
+  removed from `sys.modules`;
+- repeated execution of one model root is deterministic.
+
+## Rotated explicit Sketch frames
+
+A standalone or explicitly world-positioned Sketch may define a fixed local
+rotation before extrusion.
+
+Requirements:
+
+- `Sketch(..., rotation=(rx, ry, rz))` accepts exactly three finite numeric
+  degree values;
+- rotations are applied about local X, then Y, then Z;
+- `origin=(x, y, z)` is the world translation of the local Sketch origin;
+- the compiler lowers the frame to native `sketch.create` `origin`,
+  `x_dir` and `y_dir`; Forge does not add a model-specific transform
+  command;
+- a standalone rotated Sketch extrusion can be used as the normal operand of
+  CSG join/cut/intersect;
+- `offset` is not combined with an explicit rotated frame;
+- rotated Sketch sheet-metal and open-chain authoring remain unsupported until
+  separately qualified.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
@@ -833,9 +912,9 @@ particular, the explanation of why outer bounds are or are not sufficient is
 human engineering documentation, not a value to reconstruct later from machine
 checks.
 
-`model.yml` keeps only the agreed generic page metadata fields:
-`section`, `priority`, `title`, `tagline`, `description`, `parameters`, and
-`stages`. It is not a second verification contract.
+`model.yml` keeps only the agreed generic model metadata fields:
+`purpose`, `section`, `priority`, `title`, `tagline`, `description`,
+`parameters`, and `stages`. It is not a second verification contract.
 
 Machine expectations, tolerances and saved-design checks remain solely in
 `verification/verify.py`.
@@ -848,6 +927,7 @@ documentation.
 `examples/<slug>/model.yml` is the authoritative source for human-facing
 example metadata. The required schema contains:
 
+- `purpose`: `example`, `verification`, or both;
 - `section`;
 - positive integer `priority`;
 - `title`;
@@ -859,15 +939,25 @@ example metadata. The required schema contains:
 Verification explanation and historical engineering rationale live in the
 example documentation, not in additional `model.yml` verification fields.
 
-These fields describe the example for navigation/presentation. `priority` is presentation-only and controls ordering within the example's section; lower values render first. These fields must not become a second machine verification contract. Exact expected geometry, parameters, tolerances and saved-design
+`purpose` is canonical human-facing classification and is the only public
+Example/Verification membership source. Scalar and list syntax normalize to the
+same semantic set; unknown, empty and duplicate purposes are invalid. A model
+with both purposes participates in both catalogs without duplicated source.
+
+The remaining fields describe the model for navigation/presentation. `priority`
+is presentation-only and controls ordering within the model's section; lower
+values render first. These fields must not become a second machine verification contract. Exact expected geometry, parameters, tolerances and saved-design
 expectations remain in `verification/verify.py`.
 
 Generated Pages obtain actual status, measurements and evidence links from the
 accepted durable `build/main` item output. `model.yml` must never claim a
 current PASS/FAIL result.
 
-The site generator discovers examples from the filesystem and their local
-metadata. It must not maintain a central model-name/page-content registry.
+The site generator discovers models from the filesystem and their local
+metadata. The Examples catalog selects models whose purpose contains
+`example`; Verification selects models whose purpose contains
+`verification`. It must not maintain a central model-name/page-content or
+membership registry.
 
 ## Site source separation
 
@@ -881,7 +971,7 @@ HTML generation must be structurally separated from site data/orchestration.
 - prose-heavy guide content belongs in external Markdown or template content;
 - CSS and browser JavaScript belong in static files;
 - generated API facts continue to come from the public implementation/docstrings;
-- example page metadata comes from local `model.yml`;
+- model page metadata and public catalog purpose come from local `model.yml`;
 - preserved engineering explanation comes from local `README.md`;
 - executable model facts come from source/verification files and durable evidence.
 
@@ -891,15 +981,19 @@ with page markup. HTML belongs to templates or to the dedicated HTML-rendering
 module; guide chapters and model-specific SVG galleries remain external data.
 
 The current site must not depend on retired `qualification.*` source modules.
-The 32 current `examples/` directories and durable `build/main` are the
-catalog/evidence sources.
+The existing model directories and durable `build/main` are the
+source/evidence roots; catalog membership is derived from `model.yml.purpose`,
+not directory naming.
 
 
 ### Presentation metadata selection boundary
 
-`model.yml` is presentation/documentation metadata. Changing only
-`examples/<slug>/model.yml` must not select or invalidate model compilation,
-SolidCraft verification or independent CAD reference verification.
+`model.yml` is canonical descriptive/classification metadata. Changing only
+`examples/<slug>/model.yml` must not select or invalidate full model
+compilation, SolidCraft Verification or independent CAD reference Verification.
+The `example` purpose may additionally select the existing small Forge
+basic/release-validation stage; #814 owns that dev-ci interpretation. This does
+not turn `purpose` into generic CAD-CI process state.
 
 The lightweight site-source item owns `model.yml` and `README.md` validation
 and generated documentation checks. CAD verification inputs are the model source,
@@ -994,8 +1088,16 @@ The current public concept is **verification**, not qualification.
 - displayed source must come from the owning example source tree, while
   PASS/FAIL, measurements and generated CAD artifacts continue to come from the
   accepted durable build evidence;
-- the verification index must group examples by the existing `section` field in
-  each example's `model.yml`;
+- the verification index must include only models whose normalized `purpose`
+  contains `verification`, then group them by the existing `section` field
+  in each model's `model.yml`;
+- the Examples index must include only models whose normalized `purpose`
+  contains `example`;
+- one model may carry both purposes and appear in both without duplicated source;
+- native integration/model/geometry evidence remains mandatory for public
+  Verification; independent reference implementations and visual
+  regression/expected-shape evidence are required only when that model declares
+  those evidence layers;
 - grouping order must be deterministic, and no second central catalog of group
   membership may be introduced;
 - each example declares a local integer `priority` in its `model.yml`; examples
@@ -1004,12 +1106,14 @@ The current public concept is **verification**, not qualification.
 - section presentation configuration uses `priority`, not positional `order`;
 - public section label/priority translation is presentation configuration under
   `site/content/verification-sections.yml`, not Python source;
-- the six existing section slugs keep the preserved public labels and order:
+- the existing section slugs keep their preserved public labels and order, with
+  the new Sheet metal section appended:
   `fundamentals` → `1 · Basic geometry`, `features` →
   `2 · Parent/child features and faces`, `parameters` →
   `3 · Parameters and dependencies`, `components` →
   `4 · Components and occurrences`, `anchors` → `5 · Anchors and local frames`,
-  and `associativity` → `6 · Associative relationships`.
+  `associativity` → `6 · Associative relationships`, and `sheet-metal`
+  → `7 · Sheet metal`.
 
 
 ## Verification cut-over compatibility
@@ -1306,6 +1410,80 @@ Qualification must include a native sheet base plus edge flange, saved-design
 mutation of both flange height and angle, save/reopen verification and native
 flat-pattern evidence proving one connected sheet body remains.
 
+## Native sheet hem
+
+An existing Forge sheet body supports one focused native hem operation:
+
+```python
+sheet.hem(
+    edges=[(40, 0, 2)],
+    length=12,
+    gap=None,
+    flip=False,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.hem`;
+- `edges` is a non-empty sequence of explicit fixed finite XYZ points
+  selecting existing sheet edges;
+- `length` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression in the native command;
+- `gap=None` omits the native field so the sheet rule supplies the default;
+  an explicit `gap` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression;
+- `flip` is boolean and is emitted only when true;
+- Forge supplies the current sheet body name;
+- thickness, K-factor, bend radius and material remain inherited from the
+  existing sheet rule and are not hem arguments;
+- the operation is valid only on feature history known by Forge to be sheet
+  material;
+- this first slice does not accept generic edge selectors or compound native
+  edge descriptors;
+- no extruded, revolved or fused-solid approximation is permitted.
+
+Qualification must include saved-design mutation of hem length/gap, save/reopen
+verification and native flat-pattern bend evidence proving one connected closed
+sheet-metal body remains.
+
+## Native sheet path flange
+
+An existing Forge sheet body supports one focused native path-flange operation:
+
+```python
+sheet.path_flange(
+    edge=(40, 0, 2),
+    path=path,
+    radius=None,
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.path_flange`;
+- `edge` is one explicit fixed finite XYZ pick point on an existing sheet edge;
+- `path` is the finished reusable open connected Sketch chain from #683;
+- this first runtime-qualified slice accepts a non-empty **line-only** open chain;
+  tangent-arc path segments stay outside the public contract until the native
+  path-flange runtime proves them;
+- Forge compiles the path with the existing ordered replay curve binding and
+  passes the authored Sketch name plus bound curve list to SolidCraft;
+- optional `radius` is positive, expressed in mm and may remain a Forge
+  Parameter/Expression; `None` omits the native field so the active sheet rule
+  supplies the bend radius;
+- Forge supplies the current sheet body name;
+- thickness, K-factor and material remain inherited from the existing sheet
+  rule and are not path-flange arguments;
+- applying the operation to non-sheet geometry is a compiler error;
+- generic edge selectors, caller-authored native curve ids and a second path
+  representation are not introduced;
+- no extruded/fused-solid approximation is permitted.
+
+Qualification must include the native command/replay contract, parameterized
+path/radius values, saved-design rebuild/reopen and recoverable flat-pattern
+bend evidence on one connected closed sheet-metal body.
+
 ## Reusable open connected Sketch chains
 
 Forge supports a standalone open Sketch chain as a distinct authoring concept
@@ -1419,8 +1597,9 @@ replay bindings rather than guessed tangent-arc ids.
 Forge owns the reusable human-facing `model.yml` contract used by Forge examples
 and CAD consumer repositories.
 
-The canonical document contains exactly these seven fields:
+The canonical document contains exactly these eight fields:
 
+- `purpose`: `example`, `verification`, or both;
 - `section`: non-empty string;
 - `priority`: positive integer;
 - `title`: non-empty string;
@@ -1430,6 +1609,9 @@ The canonical document contains exactly these seven fields:
 - `stages`: non-empty list of non-empty strings.
 
 The contract is exact: `model.yml` has no consumer-specific extension mechanism.
+`purpose` is shared classification, not execution state. The validator accepts
+a scalar string or non-empty list, normalizes both forms to an ordered unique
+semantic tuple/set, and rejects unknown, empty or duplicate purpose values.
 Operational build/source inputs, dependency declarations, verification
 expectations, generated facts and consumer-only presentation controls must live
 in their owning files rather than extending `model.yml`.

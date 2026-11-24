@@ -739,6 +739,40 @@ def _implicit_shape(body):
         body[-1] = ast.copy_location(ast.Return(value=body[-1].value), body[-1])
 
 
+def _model_local_import_names(path: Path) -> set[str]:
+    """Return top-level Python import names owned beside one model.py."""
+
+    names: set[str] = set()
+    for entry in path.parent.iterdir():
+        if entry == path or entry.name == "__pycache__":
+            continue
+        if entry.is_file():
+            if (
+                entry.suffix == ".py"
+                and entry.stem != "__init__"
+                and entry.stem.isidentifier()
+            ):
+                names.add(entry.stem)
+            continue
+        if (
+            entry.is_dir()
+            and entry.name.isidentifier()
+            and any(child.suffix == ".py" for child in entry.rglob("*.py"))
+        ):
+            names.add(entry.name)
+    return names
+
+
+def _model_local_modules(names: set[str]) -> dict[str, object]:
+    """Return currently loaded modules shadowed by model-local import names."""
+
+    return {
+        name: module
+        for name, module in tuple(sys.modules.items())
+        if name.partition(".")[0] in names
+    }
+
+
 @contextmanager
 def _model_import_context(path: Path):
     """Make project-local component imports available for a model script.
@@ -748,13 +782,23 @@ def _model_import_context(path: Path):
     the repository root or from the script's own directory.
 
     Only the execution of this trusted script receives these import paths.
-    Restore sys.path afterwards; do not require user-set PYTHONPATH.
+    Imports owned beside model.py are isolated for this execution so two model
+    roots may use the same local package names. The broader project root stays
+    shared for imports such as models.components.*. Restore sys.path and the
+    caller's pre-existing local-name modules afterwards; do not require
+    user-set PYTHONPATH.
     """
-    roots = [path.parent]
+    local_root = path.parent
+    roots = [local_root]
     for ancestor in path.parents:
         if ancestor.name == "models":
             roots.append(ancestor.parent)
             break
+
+    local_names = _model_local_import_names(path)
+    original_modules = _model_local_modules(local_names)
+    for module_name in original_modules:
+        sys.modules.pop(module_name, None)
 
     original = sys.path[:]
     original_dont_write_bytecode = sys.dont_write_bytecode
@@ -770,6 +814,13 @@ def _model_import_context(path: Path):
             sys.path.insert(0, folder)
         yield
     finally:
+        # Imports owned beside model.py are private to this run. Remove modules
+        # loaded from that local namespace, then restore anything the caller
+        # had loaded under the same name before run_script().
+        for module_name in tuple(sys.modules):
+            if module_name.partition(".")[0] in local_names:
+                sys.modules.pop(module_name, None)
+        sys.modules.update(original_modules)
         sys.path[:] = original
         sys.dont_write_bytecode = original_dont_write_bytecode
 

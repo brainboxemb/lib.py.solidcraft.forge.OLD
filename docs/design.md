@@ -944,7 +944,7 @@ The stable site source boundary is:
 
 ```text
 examples/<slug>/model.yml
-  generic section/priority/title/description/parameters/stages
+  generic purpose/section/priority/title/description/parameters/stages
             |
 examples/<slug>/README.md
   preserved human engineering explanation
@@ -964,8 +964,10 @@ external templates + static assets
 generated Pages
 ```
 
-The generator discovers the 32 example directories. There is no central
-`EXAMPLES` catalog duplicating their local metadata or documentation.
+The generator discovers canonical model metadata from the existing model
+directories. It derives the curated Examples and public Verification catalogs
+independently from normalized `model.yml.purpose`. There is no central
+`EXAMPLES` or Verification membership registry duplicating local metadata.
 
 The example metadata loader validates the agreed `model.yml` presentation schema. A separate documentation loader reads the local `README.md` and
 preserves its engineering statements without inference. Numeric truth is not
@@ -1313,13 +1315,14 @@ architecture.
 
 ### Verification catalog grouping
 
-The verification overview is not a flat alphabetical card list. The renderer
-uses the existing `ExampleMetadata.section` value loaded from each
-`examples/<slug>/model.yml` as the grouping key. Group membership therefore
-stays owned by each example and remains part of the agreed presentation metadata
-schema.
+The verification overview is not a flat alphabetical card list. A model is a
+Verification case only when its normalized canonical `purpose` contains
+`verification`. The renderer then uses that model's `section` value as the
+grouping key. A model whose purpose contains `example` is independently
+eligible for the curated Examples presentation; a model may intentionally carry
+both purposes without duplicating source.
 
-The renderer groups cards after discovery. Section order is determined by the
+The renderer groups Verification cards after purpose selection. Section order is determined by the
 section configuration's `priority`; example order inside a section is determined
 by each example's local `model.yml.priority`, with slug only as a deterministic
 tie-breaker. No central section-membership or example-order registry is introduced.
@@ -1336,6 +1339,7 @@ parameters    -> 3 · Parameters and dependencies
 components    -> 4 · Components and occurrences
 anchors       -> 5 · Anchors and local frames
 associativity -> 6 · Associative relationships
+sheet-metal   -> 7 · Sheet metal
 ```
 
 
@@ -1547,6 +1551,121 @@ Implementation boundary:
 This preserves one editable native Sketch + Extrude history and keeps authored
 Sketch coordinates/parameters unchanged.
 
+
+## Primitive Boolean lowering
+
+Primitive Boolean operations have one implementation boundary in `scpf/csg.py`.
+
+```text
+pure primitive expression
+  -> CSG compiler
+  -> _csg_apply()
+  -> solid.cylinder / solid.cone
+
+ordered feature body + primitive operand
+  -> feature compiler builds the existing body
+  -> delegate the primitive operand to _csg_apply()
+  -> solid.cylinder / solid.cone with operation + targets
+```
+
+The feature compiler decides ordering only. It does not reimplement native
+Cylinder or Cone validation, base calculation or command fields. This keeps
+direct and positioned primitives consistent with the pure CSG path and ensures
+Cone parameters and axial anchors follow the same code in both cases.
+
+`_is_pure_csg_tree()` therefore recognizes positioned Cone as well as
+positioned Cylinder. A later non-primitive feature still moves the full
+expression to ordered feature compilation, where only the primitive operand is
+delegated back to the shared CSG primitive operation.
+
+## Polygon2D Sketch lowering
+
+Polygon2D command creation is shared between standalone and explicit/attached
+Sketch compilation:
+
+```text
+Polygon2D
+  -> _polygon_profile_command()
+  -> sketch.line(points=..., closed=true, ids=...)
+
+standalone Sketch
+  -> same helper at the standalone Sketch origin
+
+explicit/attached Sketch
+  -> same helper with the Sketch-local offset
+  -> sketch.finish
+  -> solid.extrude(operation=join|cut, targets=[body])
+```
+
+The feature compiler owns Sketch order and target selection only. It does not
+carry a second Polygon2D validation or command implementation.
+
+The existing `attached-through-all` regression fixture is the native runtime
+proof for this path. Its model uses one closed Polygon2D cut on the top face of
+a Box. The ordinary Forge tests inspect the command plan; the declarative
+model-verification batch replays the same source in the released SolidCraft
+runtime and verifies the resulting body.
+
+## run_script model-local import isolation
+
+`run_script()` temporarily adds two kinds of import path:
+
+```text
+model.py parent directory   -> model-local helpers/packages
+project root                -> shared models.components.* imports
+```
+
+Only top-level Python names that are physically present beside `model.py` are
+isolated. Before execution, any already-loaded modules under those names are
+saved and temporarily removed from `sys.modules`. After execution, modules
+loaded under those local names are removed and the caller's saved modules are
+restored.
+
+```text
+discover local names beside model.py
+  -> save matching sys.modules entries
+  -> remove matching entries
+  -> add temporary import paths
+  -> execute model
+  -> remove newly loaded local-name modules
+  -> restore saved modules
+  -> restore sys.path
+```
+
+The broader project-root import path is deliberately not used to choose module
+names for removal. This preserves legitimate shared packages such as
+`models.components.*` while preventing independent model roots from sharing a
+cached `assemblies.*`, `parts.*` or other local package by accident.
+
+## Rotated Sketch cutter frame
+
+Issue #750 uses the native arbitrary Sketch frame already accepted by
+SolidCraft rather than inventing a new solid-transform command.
+
+```text
+Sketch(
+  plane="XY",
+  origin=(x, y, z),
+  rotation=(rx, ry, rz),
+)
+  -> fixed Euler rotation X -> Y -> Z
+  -> rotated local x_dir / y_dir
+  -> sketch.create(
+       plane={
+         origin: [...],
+         x_dir: [...],
+         y_dir: [...],
+       }
+     )
+  -> existing Sketch profile commands
+  -> existing solid.extrude
+  -> normal CSG join/cut/intersect
+```
+
+The frame conversion is shared by standalone Sketch extrusion and explicit
+world-plane Sketches on an existing body. It keeps the cutter editable as a
+native Sketch + extrusion and avoids browser-name selectors or consumer-local
+coordinate expansion.
 
 ## Shared-batch item projection with CAD-CI copy
 
@@ -1970,6 +2089,82 @@ Height and angle stay as authored Forge Parameter/Expression values and lower vi
 `command_value()`. XYZ selection points are fixed finite pick coordinates because
 they identify topology rather than drive geometry.
 
+## Native sheet-hem lowering
+
+`Shape.hem()` follows the same existing-sheet feature-history boundary as
+`Shape.flange()` and `Shape.fold()`.
+
+```text
+sheet_base / later sheet history
+  -> Shape(kind="sheet_hem", ...)
+  -> recurse existing history
+  -> require base metadata sheet=True
+  -> sheet.hem(
+       edges=[[x,y,z], ...],
+       length=<expression>,
+       gap?=<expression>,
+       body=<current body name>,
+       flip?=true
+     )
+```
+
+The feature does not create a second sheet rule and does not repeat thickness,
+K-factor or bend radius. SolidCraft owns hem geometry and flat-pattern
+development.
+
+### Selection and parameter boundary
+
+The initial hem slice reuses the explicit finite XYZ topology-pick vocabulary
+already qualified for edge flange. `length` and optional `gap` are ordinary
+mm-valued Forge Parameter/Expression fields. `gap=None` is semantically
+different from an explicit value and is therefore omitted from the native
+command, allowing the active sheet rule to supply its default.
+
+A generic sheet-edge selector, multiple hem profile types and rule/material
+authoring are separate future API decisions and are not inferred by this
+feature.
+
+## Native sheet path-flange lowering
+
+`Shape.path_flange()` composes two already-qualified histories instead of
+creating another path abstraction:
+
+```text
+existing sheet history
+  -> Shape(kind="sheet_path_flange", existing, edge, path, radius)
+  -> recurse existing history; require base metadata sheet=True
+  -> compile_open_chain_with_curves(path)
+       -> sketch.create
+       -> ordered sketch.line ...
+       -> replay-bound complete curves list
+       -> sketch.finish
+  -> sheet.path_flange(
+       edge=[x,y,z],
+       sketch=<authored path Sketch name>,
+       curves=<bound ordered curve list>,
+       radius?=<expression>,
+       body=<current body name>
+     )
+```
+
+The open-chain object and replay binding remain owned by #683. #776 only
+connects that existing identity to an existing sheet body. It does not parse
+Sketch internals into a new public structure and callers never supply native
+curve ids.
+
+### Initial native-contract boundary
+
+SolidCraft 0.45 documents `sheet.path_flange` as consuming an open chain of
+Sketch **lines**. Although #683 can also author a tangent arc for contour-flange
+consumers, the first path-flange slice therefore rejects non-line segments.
+This can be broadened later only with direct runtime qualification.
+
+The XYZ sheet-edge pick is fixed topology-identification data, matching the
+existing edge-flange/hem selection policy. Path coordinates and optional
+`radius` remain normal Forge Parameter/Expression inputs. Omitting `radius`
+delegates bend radius to the active sheet rule; providing it overrides only the
+path-flange feature.
+
 ## Open connected Sketch-chain design
 
 #683 deliberately does not reuse `connected_profile`. A closed selectable
@@ -2162,11 +2357,21 @@ CAD repositories do the same through their existing catalog loader. This gives
 both repositories one executable schema definition without coupling the Forge
 package to website tooling.
 
-The contract rejects unknown keys. There is deliberately no extension namespace
-inside `model.yml`: allowing arbitrary consumer fields would recreate the schema
-drift that #703 is intended to remove. A consumer-specific presentation setting
-must use a separately named presentation source; CI/source/verification/generated
-state remains in its existing owner layer.
+The contract rejects unknown keys. `purpose` is part of the canonical shared
+contract, not a consumer extension. It accepts `example`, `verification`, or
+both values and normalizes scalar/list YAML forms to one semantic set. Public
+catalog membership is derived only from that canonical field.
+
+The `example` value also provides the canonical input to Forge's existing
+small basic/release-validation stage. The dev-ci consumer resolves that
+classification in #814 instead of maintaining a second slug registry.
+`verification` does not replace normal CAD-CI item participation or native
+Verification configuration.
+
+There is deliberately no extension namespace inside `model.yml`: allowing
+arbitrary consumer fields would recreate the schema drift that #703 is intended
+to remove. CI execution state, verification expectations and generated state
+remain in their existing owner layers.
 
 ## Component-local Sketch feature namespacing
 

@@ -167,6 +167,109 @@ class GeometryPrimitives(unittest.TestCase):
         self.assertIn("height", str(cylinder["base"][2]))
         self.assertNotEqual(cylinder["base"][2], -10)
 
+    def test_symbolic_cylinder_bottom_anchor_join_preserves_parameter_arithmetic(self):
+        from scpf import BOTTOM, Box, Cylinder, Parameter
+        from scpf.compiler import compile_model
+
+        depth = Parameter("depth", 80)
+        front_depth = Parameter("front_depth", 10)
+        height = depth + 5 - front_depth
+
+        commands = compile_model(
+            Box(120, 80, 4, anchor=BOTTOM)
+            + Cylinder(d=8, h=height, anchor=BOTTOM).at(
+                20,
+                15,
+                front_depth,
+                anchor=BOTTOM,
+            ),
+            "SymbolicCylinderJoin",
+        )["commands"]
+
+        cylinder = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cylinder"
+        )
+        self.assertEqual(cylinder["operation"], "join")
+        self.assertEqual(cylinder["base"], [20, 15, "front_depth"])
+        self.assertEqual(
+            cylinder["height"],
+            "(depth + 5 mm) - (front_depth)",
+        )
+        self.assertEqual(
+            [
+                row["params"]["name"]
+                for row in commands
+                if row["command"] == "parameters.add"
+            ],
+            ["depth", "front_depth"],
+        )
+
+    def test_runner_keeps_hub75_style_symbolic_cylinder_join_typed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            script = Path(directory) / "model.py"
+            script.write_text(
+                "class Panel:\n"
+                "    depth = 80.0\n"
+                "    front_depth = 10.0\n"
+                "    def build(self):\n"
+                "        body = Box(120, 80, 4, anchor=Anchor.BOTTOM)\n"
+                "        tube = Cylinder(\n"
+                "            d=8,\n"
+                "            h=self.depth + 5 - self.front_depth,\n"
+                "            anchor=Anchor.BOTTOM,\n"
+                "        ).at(20, 15, self.front_depth, anchor=Anchor.BOTTOM)\n"
+                "        return body + tube\n"
+                "Panel()\n",
+                encoding="utf-8",
+            )
+            commands = run_script(script)["commands"]
+
+        cylinder = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cylinder"
+        )
+        self.assertEqual(cylinder["operation"], "join")
+        self.assertEqual(cylinder["base"], [20, 15, "front_depth"])
+        self.assertEqual(
+            cylinder["height"],
+            "(depth + 5 mm) - (front_depth)",
+        )
+
+    def test_symbolic_box_and_cone_placement_anchor_arithmetic_stays_symbolic(self):
+        from scpf import BOTTOM, TOP, Box, Cone, Parameter
+        from scpf.compiler import compile_model
+
+        height = Parameter("height", 20)
+        z = Parameter("z", 30)
+        body = Box(100, 80, 8, anchor=BOTTOM)
+
+        box_commands = compile_model(
+            body + Box(10, 12, height).at(5, 6, z, anchor=TOP),
+            "SymbolicBoxJoin",
+        )["commands"]
+        box = [
+            row["params"] for row in box_commands
+            if row["command"] == "solid.box"
+        ][-1]
+        self.assertEqual(box["operation"], "join")
+        self.assertEqual(box["corner"][:2], [0, 0])
+        self.assertIn("z", str(box["corner"][2]))
+        self.assertIn("height", str(box["corner"][2]))
+
+        cone_commands = compile_model(
+            body + Cone(d=12, top_d=8, h=height).at(5, 6, z),
+            "SymbolicConeJoin",
+        )["commands"]
+        cone = next(
+            row["params"] for row in cone_commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "join")
+        self.assertEqual(cone["base"][:2], [5, 6])
+        self.assertIn("z", str(cone["base"][2]))
+        self.assertIn("height", str(cone["base"][2]))
+
     def test_cylinder_has_no_type_specific_orient_shortcut(self):
         from scpf.core import Cylinder
         self.assertFalse(hasattr(Cylinder(d=8, h=20), "orient"))
@@ -194,6 +297,93 @@ class GeometryPrimitives(unittest.TestCase):
         self.assertEqual(cone["diameter"], "diameter")
         self.assertIn("interference", str(cone["top_diameter"]))
         self.assertEqual(cone["height"], 20)
+
+    def test_cone_boolean_feature_join_and_placed_join_use_native_cone(self):
+        from scpf import BOTTOM, Box, Cone, Edges, Parameter
+        from scpf.compiler import compile_model
+
+        diameter = Parameter("diameter", 20)
+        interference = Parameter("interference", 0.2)
+        body = Box(50, 40, 20).fillet(2, edges=Edges.VERTICAL)
+
+        direct = compile_model(
+            body + Cone(
+                d=diameter,
+                top_d=diameter + interference,
+                h=8,
+                anchor=BOTTOM,
+            ),
+            "DirectConeJoin",
+        )["commands"]
+        direct_cone = next(
+            row["params"] for row in direct
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(direct_cone["operation"], "join")
+        self.assertEqual(direct_cone["targets"], ["DirectConeJoin"])
+        self.assertEqual(direct_cone["base"], [0, 0, 0])
+        self.assertEqual(direct_cone["diameter"], "diameter")
+        self.assertIn("interference", str(direct_cone["top_diameter"]))
+
+        placed = compile_model(
+            body + Cone(
+                d=12,
+                top_d=10,
+                h=6,
+                anchor=BOTTOM,
+            ).at(4, 5, 6, anchor=BOTTOM),
+            "PlacedConeJoin",
+        )["commands"]
+        placed_cone = next(
+            row["params"] for row in placed
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(placed_cone["operation"], "join")
+        self.assertEqual(placed_cone["targets"], ["PlacedConeJoin"])
+        self.assertEqual(placed_cone["base"], [4, 5, 6])
+
+    def test_cone_boolean_feature_cut_preserves_axis_and_axial_anchor(self):
+        from scpf import LEFT, Axis, Box, Cone, Edges
+        from scpf.compiler import compile_model
+
+        body = Box(50, 40, 20).fillet(2, edges=Edges.VERTICAL)
+        commands = compile_model(
+            body - Cone(
+                d=12,
+                top_d=8,
+                h=10,
+                axis=Axis.X,
+                anchor=LEFT,
+            ),
+            "ConeCut",
+        )["commands"]
+        cone = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "cut")
+        self.assertEqual(cone["targets"], ["ConeCut"])
+        self.assertEqual(cone["axis"], "X")
+        self.assertEqual(cone["base"], [0, 0, 0])
+
+    def test_placed_cone_keeps_pure_primitive_csg_path(self):
+        from scpf import BOTTOM, Box, Cone
+        from scpf.compiler import compile_model
+
+        commands = compile_model(
+            Box(40, 40, 20)
+            + Cone(d=12, top_d=10, h=6, anchor=BOTTOM).at(
+                3, 4, 5, anchor=BOTTOM
+            ),
+            "PureConeJoin",
+        )["commands"]
+        cone = next(
+            row["params"] for row in commands
+            if row["command"] == "solid.cone"
+        )
+        self.assertEqual(cone["operation"], "join")
+        self.assertEqual(cone["targets"], ["PureConeJoin"])
+        self.assertEqual(cone["base"], [3, 4, 5])
 
     def test_cone_supports_only_center_or_axial_end_anchors(self):
         from scpf import BOTTOM, LEFT, Axis, Cone

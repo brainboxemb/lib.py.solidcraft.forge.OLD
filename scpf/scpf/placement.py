@@ -25,12 +25,13 @@ def _is_unshifted_rectangular_base(shape):
 
     (
         _, plane, origin, plane_offset, profiles, _, direction,
-        _operations, _profile_picks, _exact_regions,
+        _operations, _profile_picks, _exact_regions, rotation,
     ) = shape.data
     if (
         plane != "XY"
         or origin is not None
         or plane_offset is not None
+        or rotation is not None
         or direction != "positive"
         or len(profiles) != 1
         or profiles[0][0].kind != "rectangle"
@@ -84,9 +85,15 @@ def _base_rectangle(shape):
     if shape.kind == "sketch_base_extrusion":
         (
             _, plane, origin, plane_offset, profiles, height, direction,
-            _operations, _profile_picks, _exact_regions,
+            _operations, _profile_picks, _exact_regions, rotation,
         ) = shape.data
-        if plane != "XY" or origin is not None or plane_offset is not None or direction != "positive":
+        if (
+            plane != "XY"
+            or origin is not None
+            or plane_offset is not None
+            or rotation is not None
+            or direction != "positive"
+        ):
             raise ValueError("anchoring requires a positive XY rectangular Sketch")
         if len(profiles) != 1 or profiles[0][0].kind != "rectangle":
             raise ValueError("anchoring requires one rectangular Sketch profile")
@@ -148,13 +155,14 @@ def _base_rectangle_center(shape):
             )
     if shape.kind == "sketch_base_extrusion":
         (
-        _, plane, origin, plane_offset, profiles, _, direction,
-        _operations, _profile_picks, _exact_regions,
-    ) = shape.data
+            _, plane, origin, plane_offset, profiles, _, direction,
+            _operations, _profile_picks, _exact_regions, rotation,
+        ) = shape.data
         if (
             plane != "XY"
             or origin is not None
             or plane_offset is not None
+            or rotation is not None
             or direction != "positive"
         ):
             raise ValueError(

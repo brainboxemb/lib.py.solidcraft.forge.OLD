@@ -8,6 +8,7 @@ from scpf import (
     CENTER,
     Rectangle2D,
     Circle2D,
+    Polygon2D,
     Depth,
     Edges,
     Sketch,
@@ -48,10 +49,54 @@ class SketchAttachmentTests(unittest.TestCase):
                 self.assertEqual(extrude["operation"], "cut")
                 self.assertNotIn("distance", extrude)
 
+    def test_attached_polygon_lowers_closed_native_line_and_cut(self):
+        base = Box(80, 60, 5, anchor=Anchor.BOTTOM)
+        with Sketch(name="Polygon cut", on=base, parent=Anchor.TOP) as sketch:
+            Polygon2D([
+                (-10, -8),
+                (10, -8),
+                (10, 8),
+                (-10, 8),
+            ])
+
+        commands = compile_model(
+            base - sketch.extrude(Depth.THROUGH_ALL),
+            "PolygonCut",
+        )["commands"]
+
+        polygon = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.line"
+        )
+        self.assertTrue(polygon["closed"])
+        self.assertEqual(
+            polygon["points"],
+            [[-10, -8], [10, -8], [10, 8], [-10, 8]],
+        )
+        self.assertEqual(len(polygon["ids"]), 4)
+
+        extrude = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.extrude"
+        )
+        self.assertEqual(extrude["operation"], "cut")
+        self.assertTrue(extrude["through_all"])
+        self.assertEqual(extrude["direction"], "negative")
+
     def test_focused_attached_through_all_example_still_compiles(self):
         document = run_script(
             ROOT / "examples/attached-through-all/scpf/model.py"
         )
+        polygon = next(
+            row["params"]
+            for row in document["commands"]
+            if row["command"] == "sketch.line"
+        )
+        self.assertTrue(polygon["closed"])
+        self.assertEqual(len(polygon["points"]), 4)
+
         extrude = next(
             row["params"]
             for row in document["commands"]
@@ -191,6 +236,74 @@ class SketchAttachmentTests(unittest.TestCase):
             "model.faces",
             [row["command"] for row in commands],
         )
+
+    def test_rotated_standalone_polygon_cutter_uses_world_sketch_frame(self):
+        base = Box(60, 60, 20)
+        with Sketch(
+            name="Wedge",
+            plane="XY",
+            origin=(10, 5, 3),
+            rotation=(90, 0, 45),
+        ) as wedge:
+            Polygon2D([(0, 0), (12, 0), (0, 6)])
+
+        commands = compile_model(
+            base - wedge.extrude(8),
+            "RotatedCut",
+        )["commands"]
+
+        create = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.create"
+            and row["params"]["name"] == "Wedge"
+        )
+        self.assertEqual(create["plane"]["origin"], [10, 5, 3])
+        for actual, expected in zip(
+            create["plane"]["x_dir"],
+            (2 ** -0.5, 2 ** -0.5, 0.0),
+        ):
+            self.assertAlmostEqual(actual, expected, places=9)
+        for actual, expected in zip(
+            create["plane"]["y_dir"],
+            (0.0, 0.0, 1.0),
+        ):
+            self.assertAlmostEqual(actual, expected, places=9)
+
+        extrude = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.extrude"
+        )
+        self.assertEqual(extrude["operation"], "cut")
+        self.assertEqual(extrude["targets"], ["RotatedCut"])
+
+    def test_rotated_sketch_supports_second_reference_orientation(self):
+        with Sketch(
+            name="Second",
+            plane="XY",
+            rotation=(0, 45, 90),
+        ) as sketch:
+            Polygon2D([(0, 0), (8, 0), (0, 4)])
+
+        commands = compile_model(sketch.extrude(5), "Second")["commands"]
+        create = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "sketch.create"
+        )
+        expected_x = (0.0, 2 ** -0.5, -(2 ** -0.5))
+        expected_y = (-1.0, 0.0, 0.0)
+        for actual, expected in zip(create["plane"]["x_dir"], expected_x):
+            self.assertAlmostEqual(actual, expected, places=9)
+        for actual, expected in zip(create["plane"]["y_dir"], expected_y):
+            self.assertAlmostEqual(actual, expected, places=9)
+
+    def test_sketch_rotation_requires_fixed_three_axis_degrees(self):
+        for rotation in ((0, 45), (0, float("inf"), 0), ("90", 0, 0)):
+            with self.subTest(rotation=rotation):
+                with self.assertRaises(ValueError):
+                    Sketch(plane="XY", rotation=rotation)
 
     def test_bottom_attached_sketch_keeps_rectangular_body_requirement(self):
         with Sketch(name="Disc", plane="XY") as disc:

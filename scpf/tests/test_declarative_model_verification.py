@@ -160,8 +160,8 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         verification = ROOT / "examples" / "simple-box" / "verification"
         self.assertTrue((verification / "change_length.json").is_file())
 
-    def test_qualification_catalog_has_no_procedural_verifiers(self):
-        """All 32 Qualification cases use declarative verification data."""
+    def test_historical_reference_rich_suite_has_no_procedural_verifiers(self):
+        """The 32 historical reference-rich cases use declarative verification data."""
 
         self.assertEqual(len(MIGRATED_MODELS), 32)
         self.assertEqual(
@@ -169,8 +169,8 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
             [],
         )
 
-    def test_all_qualification_models_are_processed_with_references(self):
-        """All 32 declarative cases are active with four reference children."""
+    def test_historical_reference_rich_models_are_processed_with_references(self):
+        """The historical reference-rich suite retains its four reference children."""
 
         for slug in MIGRATED_MODELS:
             with self.subTest(slug=slug):

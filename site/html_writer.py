@@ -118,13 +118,16 @@ def reference_notes(items):
     )
 
 
-def cheatsheet_link(slug, known_slugs):
-    if slug not in known_slugs:
+def cheatsheet_link(slug, example_slugs, verification_slugs=()):
+    if slug in example_slugs:
+        target = f"../examples/{escape(slug)}/"
+        label = "View working example →"
+    elif slug in verification_slugs:
+        target = f"../verification/{escape(slug)}/"
+        label = "View verification case →"
+    else:
         return ""
-    return (
-        f'<p class="tip"><a href="../examples/{escape(slug)}/">'
-        "View working example →</a></p>"
-    )
+    return f'<p class="tip"><a href="{target}">{label}</a></p>'
 
 
 def guide_sidebar(*, active=None, prefix=""):
@@ -1008,14 +1011,22 @@ def qualification_reference_comparison(
             )
         )
 
-    description = (
-        "Each source is shown from the current Forge tree. Stable result "
-        "evidence is unavailable in this source-only build."
-        if not rows_by_implementation
-        else
-        "Each source is shown from the current Forge tree beside the accepted "
-        "durable result for that independent implementation."
-    )
+    if not reference_sources:
+        description = (
+            "No independent reference implementation is declared for this "
+            "native capability case; native SolidCraft verification remains "
+            "the authoritative evidence."
+        )
+    elif not rows_by_implementation:
+        description = (
+            "Each source is shown from the current Forge tree. Stable result "
+            "evidence is unavailable in this source-only build."
+        )
+    else:
+        description = (
+            "Each source is shown from the current Forge tree beside the "
+            "accepted durable result for that independent implementation."
+        )
     return render_template(
         "verification-references.html",
         description=escape(description),

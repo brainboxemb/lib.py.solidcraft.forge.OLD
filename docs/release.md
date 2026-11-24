@@ -35,19 +35,26 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.11.0**.
+Latest actual Forge release: **v0.13.2**.
 
-- tag: `v0.11.0`;
+- annotated tag: `v0.13.2`;
 - exact source:
-  `9258d54079981604b6dd777a4c4face897c190fe`;
-- qualified SolidCraft: `0.45.0`.
+  `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
+- published GitHub Release: `v0.13.2`;
+- qualified SolidCraft: `0.45.0`;
+- exact main branch build: `45269510406`;
+- central release run: `45269991837`.
 
-The v0.12.0 source preparation is already present in the current integration
-history. Publication waits for #739 to reach stable `main` and for the exact
-resulting main build to be green.
+The annotated tag resolves exactly to the release source above.
 
-The earlier failed v0.12.0 release attempt created no v0.12.0 tag or GitHub
-Release.
+v0.13.2 is the consumer hotfix for #796. It preserves symbolic placed-primitive
+dimensions through Box/Cylinder/Cone anchor arithmetic and fixes the
+v0.13.1-adoption failure exposed by the existing `hub75-panel` model.
+
+v0.13.2 adds no new public modelling API beyond v0.13.1. It is the recommended
+v0.13.x consumer baseline.
+
+The v0.12.0, v0.13.0 and v0.13.1 tags remain valid and immutable.
 
 ## Consumer workflow
 
@@ -116,5 +123,8 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-The next planned release is **v0.12.0** under #714, after #739 reaches
-`main` and the exact main build is green.
+No Forge release is currently active.
+
+Resume the post-v0.13.2 CAD/API/documentation work. Product-CAD PR #406 should
+consume the exact released v0.13.2 source before any later Forge release is
+considered.
