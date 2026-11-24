@@ -783,6 +783,15 @@ class SiteSourceTests(unittest.TestCase):
                 verification_case,
             )
 
+            cheatsheet_page = (
+                out / "cheatsheet" / "index.html"
+            ).read_text(encoding="utf-8")
+            self.assertIn("../examples/simple-box/", cheatsheet_page)
+            self.assertIn("../verification/primitive-csg/", cheatsheet_page)
+            self.assertNotIn("../examples/primitive-csg/", cheatsheet_page)
+            self.assertNotIn("../examples/custom-anchor/", cheatsheet_page)
+            self.assertNotIn("../verification/custom-anchor/", cheatsheet_page)
+
             home = (out / "index.html").read_text(encoding="utf-8")
             self.assertIn("static/copy.js", home)
             self.assertIn("static/search.js", home)
