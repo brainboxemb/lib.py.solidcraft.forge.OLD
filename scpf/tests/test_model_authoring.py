@@ -8,7 +8,6 @@ from pathlib import Path
 
 from scpf.compiler import ModelError
 from scpf.runner import run_script
-from repository_fixtures import fixture_path
 from scpf import Sketch
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,7 +17,7 @@ class ModelAuthoring(unittest.TestCase):
         """Run the exact #213 fixture without making native Q3+ claims."""
 
         commands = run_script(
-            fixture_path("model_authoring", "scpf", "model.py")
+            ROOT / "examples/model_authoring/scpf/model.py"
         )["commands"]
 
         parameters = [

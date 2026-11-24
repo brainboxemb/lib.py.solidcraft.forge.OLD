@@ -10,8 +10,6 @@ import tempfile
 import unittest
 from unittest import mock
 
-from repository_fixtures import FIXTURE_ROOTS, fixture_root
-
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts" / "model_visual.py"
@@ -128,7 +126,7 @@ class ModelVisualTests(unittest.TestCase):
         for slug in STAGED_MODELS:
             with self.subTest(slug=slug):
                 policy_path = (
-                    fixture_root(slug) / "verification" / "visual.json"
+                    ROOT / "examples" / slug / "verification" / "visual.json"
                 )
                 policy = self.visual.load_visual_policy(policy_path)
                 self.assertEqual(
@@ -156,7 +154,7 @@ class ModelVisualTests(unittest.TestCase):
                     self.assertTrue(payload["data"])
 
                 ci_text = (
-                    fixture_root(slug) / "ci.yml"
+                    ROOT / "examples" / slug / "ci.yml"
                 ).read_text(encoding="utf-8")
                 self.assertIn("process: true", ci_text)
 
@@ -237,23 +235,26 @@ class ModelVisualTests(unittest.TestCase):
             "missing",
         )
 
-    def test_visual_qualified_models_keep_approved_visual_policy(self):
-        visual_roots = sorted(
-            (
-                path.parent.parent
-                for root in FIXTURE_ROOTS
-                for path in root.glob("*/verification/visual.json")
-            ),
-            key=lambda path: path.name,
+    def test_every_active_model_owns_approved_visual_policy(self):
+        active = sorted(
+            path.parent.name
+            for path in (ROOT / "examples").glob("*/model.yml")
+        )
+        visual = sorted(
+            path.parent.parent.name
+            for path in (ROOT / "examples").glob(
+                "*/verification/visual.json"
+            )
         )
 
-        self.assertEqual(len(visual_roots), 36)
+        self.assertEqual(len(active), 36)
+        self.assertEqual(visual, active)
 
-        for model_root in visual_roots:
-            slug = model_root.name
+        for slug in active:
             with self.subTest(slug=slug):
-                self.assertTrue((model_root / "model.yml").is_file())
-                policy_path = model_root / "verification" / "visual.json"
+                policy_path = (
+                    ROOT / "examples" / slug / "verification" / "visual.json"
+                )
                 policy = self.visual.load_visual_policy(policy_path)
                 self.assertEqual(
                     tuple(policy["views"]),

@@ -250,11 +250,7 @@ def _visual_check(case_root: Path) -> dict[str, Any]:
     }
 
 
-def _reference_check(
-    evidence_root: Path,
-    slug: str,
-    source_path: str,
-):
+def _reference_check(evidence_root: Path, slug: str):
     """Return the canonical reference gate from each owner-defined report."""
 
     SemanticCheck, _, compose_semantic_result, _ = _semantic_api()
@@ -262,7 +258,7 @@ def _reference_check(
     evidence = []
     builtins = {"cadquery", "build123d"}
     for implementation in REFERENCE_IMPLEMENTATIONS:
-        item_root = Path(evidence_root) / source_path / implementation
+        item_root = Path(evidence_root) / "examples" / slug / implementation
         if implementation in builtins:
             path = item_root / "verification" / "verification.json"
         else:
@@ -320,16 +316,11 @@ def _reference_check(
     return compose_semantic_result(checks), evidence
 
 
-def compose_case(
-    evidence_root: Path,
-    slug: str,
-    source_path: str | None = None,
-):
+def compose_case(evidence_root: Path, slug: str):
     """Compose one public qualification result and one internal publication gate."""
 
     evidence_root = Path(evidence_root)
-    source_path = source_path or f"examples/{slug}"
-    case_root = evidence_root / source_path
+    case_root = evidence_root / "examples" / slug
 
     checks = {
         "integration": _integration_check(case_root),
@@ -349,11 +340,7 @@ def compose_case(
         )
         for name in PUBLIC_CHECKS
     )
-    reference_semantic, reference_evidence = _reference_check(
-        evidence_root,
-        slug,
-        source_path,
-    )
+    reference_semantic, reference_evidence = _reference_check(evidence_root, slug)
     publication_semantic = compose_semantic_result(
         (
             SemanticCheck(
@@ -390,19 +377,14 @@ def compose_case(
     return public_result, publication_semantic
 
 
-def compose_cases(evidence_root: Path, cases_or_slugs):
+def compose_cases(evidence_root: Path, slugs: tuple[str, ...]):
     """Compose ordered case results and the internal all-case publication gate."""
 
     _, compose_item_results, _, _ = _semantic_api()
     cases = {}
     gates = []
-    for row in cases_or_slugs:
-        if isinstance(row, str):
-            slug = row
-            source_path = f"examples/{slug}"
-        else:
-            slug, source_path = row
-        result, gate = compose_case(evidence_root, slug, source_path)
+    for slug in slugs:
+        result, gate = compose_case(evidence_root, slug)
         cases[slug] = result
         gates.append((slug, gate))
     return {

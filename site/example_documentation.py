@@ -11,13 +11,9 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
-from example_metadata import (
-    discover_example_metadata,
-    discover_verification_metadata,
-)
-
 
 ROOT = Path(__file__).resolve().parents[1]
+EXAMPLES_ROOT = ROOT / "examples"
 LEGACY_CASE_SOURCE_COMMIT = "be40b09e7454a90e87d83768a9e7453c52ba5d76"
 _DOCUMENTATION_PROVENANCE = re.compile(
     r"^> Documentation provenance:\s+.+$",
@@ -175,34 +171,19 @@ def load_example_documentation(example_root: Path) -> ExampleDocumentation:
     )
 
 
-def _discover_documentation(metadata, *, label: str):
-    """Load documentation from the source roots selected by one public catalog."""
+def discover_example_documentation(
+    root: Path = EXAMPLES_ROOT,
+) -> tuple[ExampleDocumentation, ...]:
+    """Discover public example documentation from model.yml membership."""
 
-    rows = tuple(
-        load_example_documentation(row.source_root)
-        for row in metadata
-    )
+    rows = [
+        load_example_documentation(path.parent)
+        for path in sorted(Path(root).glob("*/model.yml"))
+    ]
     if not rows:
-        raise ValueError(f"no documented {label} entries discovered")
+        raise ValueError(f"no verified examples found below {root}")
+
     slugs = [row.slug for row in rows]
     if len(slugs) != len(set(slugs)):
-        raise ValueError(f"duplicate documented {label} slugs discovered")
-    return rows
-
-
-def discover_example_documentation() -> tuple[ExampleDocumentation, ...]:
-    """Discover documentation for the curated public teaching examples."""
-
-    return _discover_documentation(
-        discover_example_metadata(),
-        label="Example",
-    )
-
-
-def discover_verification_documentation() -> tuple[ExampleDocumentation, ...]:
-    """Discover documentation for the independent Verification catalog."""
-
-    return _discover_documentation(
-        discover_verification_metadata(),
-        label="Verification",
-    )
+        raise ValueError("duplicate documented example slugs discovered")
+    return tuple(rows)

@@ -99,26 +99,10 @@ def python_environment(package: Path) -> dict[str, str]:
     return env
 
 
-def item_root(item: str | Path) -> Path:
-    """Resolve a repository item path without assuming the Examples root."""
+def run_contract_tests(slug: str, package: Path) -> None:
+    """Run one example's command-contract tests against the built wheel."""
 
-    raw = Path(item)
-    if raw.is_absolute() or ".." in raw.parts:
-        raise RuntimeError(f"unsafe Forge item path: {item}")
-    direct = (ROOT / raw).resolve()
-    if len(raw.parts) == 1 and not direct.exists():
-        direct = (ROOT / "examples" / raw).resolve()
-    try:
-        direct.relative_to(ROOT.resolve())
-    except ValueError as exc:
-        raise RuntimeError(f"Forge item path escapes repository: {item}") from exc
-    return direct
-
-
-def run_contract_tests(item: str | Path, package: Path) -> None:
-    """Run one model item's command-contract tests against the built wheel."""
-
-    tests = item_root(item) / "tests"
+    tests = ROOT / "examples" / slug / "tests"
     if not tests.is_dir():
         raise RuntimeError(f"missing contract-test directory: {tests}")
 
@@ -140,8 +124,8 @@ def run_contract_tests(item: str | Path, package: Path) -> None:
     )
 
 
-def compile_commands(item: str | Path, package: Path) -> dict:
-    """Compile one Forge model item to a replayable SolidCraft document."""
+def compile_commands(slug: str, package: Path) -> dict:
+    """Compile one Forge example to a replayable SolidCraft document."""
 
     package_text = str(package)
     if package_text not in sys.path:
@@ -149,7 +133,7 @@ def compile_commands(item: str | Path, package: Path) -> dict:
 
     from scpf.runner import run_script
 
-    model = item_root(item) / "scpf" / "model.py"
+    model = ROOT / "examples" / slug / "scpf" / "model.py"
     if not model.is_file():
         raise RuntimeError(f"missing Forge model: {model}")
 

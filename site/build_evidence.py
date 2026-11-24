@@ -43,10 +43,9 @@ class ReferenceEvidence:
 
 @dataclass(frozen=True)
 class ExampleBuildEvidence:
-    """Accepted build evidence for one public Forge Verification case."""
+    """Accepted durable evidence for one verified Forge example."""
 
     slug: str
-    source_path: str
     item: ItemEvidence
     command_path: Path
     verification_path: Path
@@ -202,12 +201,11 @@ def _reference(
     root: Path,
     manifest_items: dict[str, Any],
     slug: str,
-    case_source_path: str,
     implementation: str,
 ) -> ReferenceEvidence:
     """Load one accepted reference child from its owner-defined output shape."""
 
-    source_path = f"{case_source_path}/{implementation}"
+    source_path = f"examples/{slug}/{implementation}"
     item = _item(root, manifest_items, source_path)
     if item.status != "pass":
         raise ValueError(
@@ -318,10 +316,10 @@ def _example(
     root: Path,
     manifest_items: dict[str, Any],
     slug: str,
-    source_path: str,
 ) -> ExampleBuildEvidence:
-    """Load one accepted public Verification item and its references."""
+    """Load one accepted model item and all four independent references."""
 
+    source_path = f"examples/{slug}"
     item = _item(root, manifest_items, source_path)
     if item.status != "pass":
         raise ValueError(f"{slug}: durable model item is not pass")
@@ -426,19 +424,12 @@ def _example(
         )
 
     references = tuple(
-        _reference(
-            root,
-            manifest_items,
-            slug,
-            source_path,
-            implementation,
-        )
+        _reference(root, manifest_items, slug, implementation)
         for implementation in IMPLEMENTATIONS
     )
 
     return ExampleBuildEvidence(
         slug=slug,
-        source_path=source_path,
         item=item,
         command_path=command_path,
         verification_path=verification_path,
@@ -519,38 +510,12 @@ def load_stable_build_evidence(
     if not isinstance(manifest_items, dict):
         raise ValueError(f"build/{scope} manifest has no item map")
 
-    normalized_cases = []
-    for row in slugs:
-        if isinstance(row, str):
-            slug = row
-            source_path = f"examples/{slug}"
-        else:
-            try:
-                slug, source_path = row
-            except Exception as exc:
-                raise ValueError(
-                    "site evidence cases must be slugs or (slug, source_path) pairs"
-                ) from exc
-        if not isinstance(slug, str) or not slug.strip():
-            raise ValueError("site evidence case slug must be non-empty text")
-        if not isinstance(source_path, str) or not source_path.strip():
-            raise ValueError(
-                f"{slug}: site evidence source_path must be non-empty text"
-            )
-        source = Path(source_path)
-        if source.is_absolute() or ".." in source.parts:
-            raise ValueError(f"{slug}: unsafe source path: {source_path}")
-        normalized_cases.append((slug.strip(), source.as_posix()))
-
-    normalized_cases = tuple(sorted(set(normalized_cases)))
-    if not normalized_cases:
-        raise ValueError("site evidence requires at least one Verification case")
-    if len({slug for slug, _source in normalized_cases}) != len(normalized_cases):
-        raise ValueError("site evidence has duplicate Verification slugs")
-
+    normalized_slugs = tuple(sorted(set(slugs)))
+    if not normalized_slugs:
+        raise ValueError("site evidence requires at least one verified example")
     examples = tuple(
-        _example(root, manifest_items, slug, source_path)
-        for slug, source_path in normalized_cases
+        _example(root, manifest_items, slug)
+        for slug in normalized_slugs
     )
 
     wheels = tuple(

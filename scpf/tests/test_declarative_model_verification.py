@@ -5,8 +5,6 @@ from __future__ import annotations
 from pathlib import Path
 import unittest
 
-from repository_fixtures import FIXTURE_ROOTS, fixture_root
-
 
 ROOT = Path(__file__).resolve().parents[2]
 LAUNCHER = ROOT / "scripts" / "model_verify_declarative.py"
@@ -98,12 +96,12 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
 
         for slug in MIGRATED_MODELS:
             with self.subTest(slug=slug):
-                verification = fixture_root(slug) / "verification"
+                verification = ROOT / "examples" / slug / "verification"
                 self.assertTrue((verification / "verify.py").is_file())
                 self.assertFalse((verification / "verify_model.py").exists())
 
                 ci = (
-                    fixture_root(slug) / "ci.yml"
+                    ROOT / "examples" / slug / "ci.yml"
                 ).read_text(encoding="utf-8")
                 self.assertIn("template: forge-model-declarative", ci)
                 self.assertNotIn("steps:", ci)
@@ -134,7 +132,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         for slug in BATCH_ONE_MODELS:
             with self.subTest(slug=slug):
                 text = (
-                    fixture_root(slug) / "verification" / "verify.py"
+                    ROOT / "examples" / slug / "verification" / "verify.py"
                 ).read_text(encoding="utf-8")
                 has_saved_design = "SolidCraftSavedDesign(" in text
                 self.assertEqual(
@@ -148,7 +146,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         for slug in BATCH_TWO_MODELS:
             with self.subTest(slug=slug):
                 text = (
-                    fixture_root(slug) / "verification" / "verify.py"
+                    ROOT / "examples" / slug / "verification" / "verify.py"
                 ).read_text(encoding="utf-8")
                 has_saved_design = "SolidCraftSavedDesign(" in text
                 self.assertEqual(
@@ -159,19 +157,17 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
     def test_simple_box_keeps_its_model_specific_mutation(self):
         """The representative model keeps its own mutation command data."""
 
-        verification = fixture_root("simple-box") / "verification"
+        verification = ROOT / "examples" / "simple-box" / "verification"
         self.assertTrue((verification / "change_length.json").is_file())
 
-    def test_reference_qualification_set_has_no_procedural_verifiers(self):
-        """The historical reference-qualified set stays declarative after moves."""
+    def test_qualification_catalog_has_no_procedural_verifiers(self):
+        """All 32 Qualification cases use declarative verification data."""
 
         self.assertEqual(len(MIGRATED_MODELS), 32)
-        procedural = [
-            path
-            for root in FIXTURE_ROOTS
-            for path in root.glob("*/verification/verify_model.py")
-        ]
-        self.assertEqual(procedural, [])
+        self.assertEqual(
+            list(ROOT.glob("examples/*/verification/verify_model.py")),
+            [],
+        )
 
     def test_all_qualification_models_are_processed_with_references(self):
         """All 32 declarative cases are active with four reference children."""
@@ -179,7 +175,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         for slug in MIGRATED_MODELS:
             with self.subTest(slug=slug):
                 ci = (
-                    fixture_root(slug) / "ci.yml"
+                    ROOT / "examples" / slug / "ci.yml"
                 ).read_text(encoding="utf-8")
                 self.assertIn("process: true", ci)
 
@@ -189,7 +185,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
                     "pybosl2",
                     "pythonscad",
                 ):
-                    child = fixture_root(slug) / engine / "ci.yml"
+                    child = ROOT / "examples" / slug / engine / "ci.yml"
                     self.assertTrue(
                         child.is_file(),
                         f"missing reference child: {child}",
@@ -201,7 +197,7 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         for slug in ACTIVATED_FINAL_SIX:
             with self.subTest(slug=slug):
                 ci = (
-                    fixture_root(slug) / "ci.yml"
+                    ROOT / "examples" / slug / "ci.yml"
                 ).read_text(encoding="utf-8")
                 self.assertIn("template: forge-model-declarative", ci)
 
@@ -211,10 +207,12 @@ class DeclarativeModelVerificationBoundaryTests(unittest.TestCase):
         self.assertIn('"docker"', text)
         self.assertIn('"run"', text)
         self.assertIn("for row in rows:", text)
-        self.assertIn("for slug, source_path in items:", text)
-        self.assertIn("case_root = batch_root / source_path", text)
         self.assertIn(
-            'f"/output/items/{source_path}/model_verify"',
+            'case_root = batch_root / "examples" / slug',
+            text,
+        )
+        self.assertIn(
+            '"/output/items/examples/{slug}/model_verify"',
             text,
         )
         self.assertNotIn("dependency_output_root", text)
