@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Cone as a native Boolean feature · SCPF Python library</title>
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="../../">SCPF <span>Python library</span></a>
+    <div class="site-search" data-search-index="../../search-index.json">
+      <label class="sr-only" for="site-search-input">Search SCPF documentation</label>
+      <input id="site-search-input" class="site-search-input" type="search"
+             autocomplete="off" spellcheck="false" placeholder="Search API…"
+             aria-label="Search SCPF documentation" aria-expanded="false"
+             aria-controls="site-search-results">
+      <span class="site-search-shortcut" aria-hidden="true">/</span>
+      <div id="site-search-results" class="site-search-results" role="listbox" hidden></div>
+    </div>
+    <nav aria-label="Main">
+      <a href="../../">Examples</a>
+      <a href="../../guide/">API Guide</a>
+      <a href="../../reference/">API Reference</a>
+      <a href="../../verification/">Verification</a>
+      <a href="../../cheatsheet/">Cheatsheet</a>
+      <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge">Source</a>
+    </nav>
+  </div>
+</header>
+<div class="development-banner" role="status">
+  <div class="wrap">
+    <strong>Development version.</strong>
+    Forge is under active development and testing. APIs, behaviour, coverage
+    and verification results may be incomplete or change without notice;
+    published PASS results are not a support guarantee or production-readiness claim.
+  </div>
+</div>
+<main class="wrap">
+  <div class="crumb"><a href="../">← Verification</a> / Cone as a native Boolean feature</div>
+
+  <section class="hero small">
+    <p class="eyebrow">Forge model example · 2 · Parent/child features and faces</p>
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design N/R · Visual N/R</span></div>
+    <h1>Cone as a native Boolean feature</h1>
+  </section>
+
+  <section class="panel qualification-example-overview">
+    <h2>What this example makes</h2>
+    <p>One connected native body retains the filleted Box history and the joined tapered Cone.</p>
+    <figure class="qualification-setup-diagram"><a href="setup.svg" class="qualification-image-link" target="_blank" rel="noopener" title="Open full-size setup diagram"><img src="setup.svg" alt="Cone as a native Boolean feature expected setup diagram"></a><figcaption>Expected setup — conceptual diagram, not verification output. Click for the full-size image.</figcaption></figure>
+    <figure class="qualification-case-preview"><a href="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/presentation/preview-iso.png" class="qualification-image-link" target="_blank" rel="noopener" title="Open full-size native preview"><img src="https://raw.githubusercontent.com/brainboxemb/lib.py.solidcraft.forge/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/presentation/preview-iso.png" alt="Cone as a native Boolean feature native SolidCraft preview" loading="lazy"></a><figcaption>Native SolidCraft preview from the accepted durable build output.</figcaption></figure>
+  </section>
+
+  <section class="panel">
+    <h2>Forge code</h2>
+    <p>This is the complete Forge source used for this example.</p>
+    <pre><code>&quot;&quot;&quot;Public Verification model for Cone Boolean feature compilation (#746).&quot;&quot;&quot;
+
+
+class ConeBoolean:
+    def build(self):
+        body = Box(
+            50,
+            40,
+            20,
+            anchor=Anchor.BOTTOM,
+        ).fillet(2, edges=Edges.VERTICAL)
+        flare = Cone(
+            d=18,
+            top_d=10,
+            h=8,
+            anchor=Anchor.BOTTOM,
+        ).at(0, 0, 18, anchor=Anchor.BOTTOM)
+        return body + flare
+
+
+ConeBoolean()
+</code></pre>
+    <h3>API used</h3>
+    <p><code>`Box(...).fillet(...)`, `Cone(...).at(...)` and the normal `+` Boolean operator.</code></p>
+    <p><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/80bc83e72e34e0dce6e6df745d2ebf8f96111379/examples/cone-boolean/scpf/model.py">Open the editable Forge source in GitHub →</a></p>
+  </section>
+
+  <section class="panel">
+  <h2>Reference code</h2>
+  <p>
+    The same model is written independently with the reference libraries below.
+    This makes it easier to compare modelling style and the resulting shape.
+  </p>
+  <p class="meta">No independent reference implementation is declared for this native capability case; native SolidCraft verification remains the authoritative evidence.</p>
+  <div class="qualification-reference-list"></div>
+</section>
+
+
+  <section class="panel">
+    <h2>How Forge builds it in SolidCraft</h2>
+    <p>The Box and fillet establish ordered feature history. Forge then delegates the placed Cone operand to the shared primitive Boolean lowering and emits native `solid.cone` with `operation=join`, the existing body as target and the authored placed base.</p>
+  </section>
+
+  <section class="panel qualification-current">
+  <h2>SolidCraft result</h2>
+  <p>
+    Built and measured from the accepted durable SolidCraft evidence.
+    Open the measurement details to inspect body sizes and editable parameters.
+  </p>
+  <details class="qualification-detail-block"><summary><strong>Original model</strong> · 1 bodies</summary><h4>Editable parameters</h4><p class="meta">No rows.</p><h4>Body size</h4><div class="qualification-table-scroll"><table class="api-table"><thead><tr><th>Body</th><th>Minimum</th><th>Maximum</th><th>Volume mm³</th><th>Faces</th><th>Edges</th><th>Closed</th></tr></thead><tbody><tr><td>ConeBoolean</td><td>[-25.0, -20.0, 0.0]</td><td>[25.0, 20.0, 26.0]</td><td>40741.85831691334</td><td>12</td><td>27</td><td>True</td></tr></tbody></table></div></details>
+  
+</section>
+<section class="notice">
+  <strong>Current visual verification: not required.</strong>
+  This model has no current <code>verification/visual.json</code> policy. The durable isometric image above is a current presentation preview, not a visual PASS claim.
+</section>
+
+
+<details class="panel qualification-technical-details">
+  <summary><strong>Technical test details</strong></summary>
+  <div class="qualification-technical-details-body">
+    <div class="qualification-status-line"><span class="qualification-status pass">PASS</span><span class="qualification-levels">Integration PASS · Native model PASS · Geometry PASS · Saved design N/R · Visual N/R</span></div>
+
+    <section class="qualification-technical-section">
+      <h3>Verification checks</h3>
+      <p class="meta">
+        Automated contract and geometry checks. Open an individual check for
+        its exact machine evidence.
+      </p>
+      <details class="qualification-detail-block">
+  <summary><code>baseline</code> · <span class="qualification-status pass">PASS</span></summary>
+  
+  <pre><code>{
+  &quot;body_count&quot;: {
+    &quot;actual&quot;: 1,
+    &quot;expected&quot;: 1,
+    &quot;label&quot;: &quot;SolidCraft body count&quot;,
+    &quot;pass&quot;: true
+  },
+  &quot;body_envelopes&quot;: {
+    &quot;actual_count&quot;: 1,
+    &quot;expected_count&quot;: 1,
+    &quot;kind&quot;: &quot;body_envelopes&quot;,
+    &quot;matched_pairs&quot;: [
+      {
+        &quot;actual&quot;: {
+          &quot;label&quot;: &quot;ConeBoolean&quot;,
+          &quot;max&quot;: [
+            25.0,
+            20.0,
+            26.0
+          ],
+          &quot;min&quot;: [
+            -25.0,
+            -20.0,
+            0.0
+          ]
+        },
+        &quot;expected&quot;: {
+          &quot;label&quot;: null,
+          &quot;max&quot;: [
+            25.0,
+            20.0,
+            26.0
+          ],
+          &quot;min&quot;: [
+            -25.0,
+            -20.0,
+            0.0
+          ]
+        },
+        &quot;max_delta&quot;: 0.0
+      }
+    ],
+    &quot;pass&quot;: true,
+    &quot;tolerance&quot;: 0.01,
+    &quot;unmatched_actual&quot;: [],
+    &quot;unmatched_expected&quot;: []
+  }
+}</code></pre>
+</details>
+
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Geometry evidence</h3>
+      <p><strong>Are outer bounds sufficient?</strong> yes</p>
+      <p>The focused native model must remain one body with the unchanged Box footprint and a top extent of Z26. The command-contract test separately proves that the taper is authored as native `solid.cone` Boolean history rather than a temporary solid approximation.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Saved-design test</h3>
+      <p>Not required for this focused compiler-route case. Parameterized Cone expressions, direct joins and Cone cuts remain covered by the #746 reusable compiler tests.</p>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Raw test files</h3>
+      <p class="meta">
+        Exact accepted source files and durable build evidence used by this
+        Verification case.
+      </p>
+      <div class="qualification-file-groups"><section class="qualification-file-group"><h4>Accepted source files</h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/80bc83e72e34e0dce6e6df745d2ebf8f96111379/examples/cone-boolean/scpf/model.py" target="_blank" rel="noopener">Forge model source</a> <code class="qualification-file-path">examples/cone-boolean/scpf/model.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/80bc83e72e34e0dce6e6df745d2ebf8f96111379/examples/cone-boolean/tests/test_contract.py" target="_blank" rel="noopener">Integration contract test</a> <code class="qualification-file-path">examples/cone-boolean/tests/test_contract.py</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/80bc83e72e34e0dce6e6df745d2ebf8f96111379/examples/cone-boolean/verification/verify.py" target="_blank" rel="noopener">Verification contract</a> <code class="qualification-file-path">examples/cone-boolean/verification/verify.py</code></li></ul></section><section class="qualification-file-group"><h4>SolidCraft model and verification evidence <span class="meta">(11 files)</span></h4><ul class="qualification-file-list"><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/baseline/measurements.json" target="_blank" rel="noopener">Baseline measurements</a> <code class="qualification-file-path">model_verify/baseline/measurements.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/model.sc" target="_blank" rel="noopener">Native SolidCraft design</a> <code class="qualification-file-path">model_verify/native/model.sc</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/model.step" target="_blank" rel="noopener">Native STEP export</a> <code class="qualification-file-path">model_verify/native/model.step</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/replay-log.json" target="_blank" rel="noopener">Native replay log</a> <code class="qualification-file-path">model_verify/native/replay-log.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/replay_work/phase-1-results.json" target="_blank" rel="noopener">phase-1-results.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1-results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/replay_work/phase-1.json" target="_blank" rel="noopener">phase-1.json</a> <code class="qualification-file-path">model_verify/native/replay_work/phase-1.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/native/results.json" target="_blank" rel="noopener">Native execution results</a> <code class="qualification-file-path">model_verify/native/results.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/presentation/preview-iso.png" target="_blank" rel="noopener">Presentation preview image</a> <code class="qualification-file-path">model_verify/presentation/preview-iso.png</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/presentation/preview.json" target="_blank" rel="noopener">Presentation preview metadata</a> <code class="qualification-file-path">model_verify/presentation/preview.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/model_verify/verification.json" target="_blank" rel="noopener">Verification result</a> <code class="qualification-file-path">model_verify/verification.json</code></li><li><a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/2260e0ce57a8cc03ccb658faab0845241afac9c1/main/examples/cone-boolean/solidcraft.json" target="_blank" rel="noopener">Generated SolidCraft command JSON</a> <code class="qualification-file-path">solidcraft.json</code></li></ul></section></div>
+    </section>
+
+    <section class="qualification-technical-section">
+      <h3>Reference documentation</h3>
+      <ul><li><strong>Native SolidCraft history</strong> — This case verifies Forge-to-SolidCraft native feature lowering; external kernel references are optional and are not fabricated.</li></ul>
+    </section>
+
+    <p class="source-stamp">
+      Site source <code>80bc83e72e34e0dce6e6df745d2ebf8f96111379</code> · accepted model evidence source
+      <code>80bc83e72e34e0dce6e6df745d2ebf8f96111379</code> · durable build <code>2260e0ce57a8cc03ccb658faab0845241afac9c1</code>
+    </p>
+  </div>
+</details>
+
+
+  <section class="panel">
+    <h2>Sources of truth</h2>
+    <p>
+      General model/page metadata is stored in <code>model.yml</code>.
+      Preserved engineering explanation is stored in <code>README.md</code>.
+      Exact expected values and tolerances are defined by
+      <code>verification/verify.py</code>.
+    </p>
+    <p>
+      <a href="../../examples/cone-boolean/">Open the example →</a>
+      · <a href="https://github.com/brainboxemb/lib.py.solidcraft.forge/blob/80bc83e72e34e0dce6e6df745d2ebf8f96111379/examples/cone-boolean/verification/verify.py">Open verification/verify.py →</a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>SCPF</strong> generates commands; native SolidCraft creates the geometry.
+    <a href="https://brainboxemb.github.io/2026-011-02.cad.solidcraft/">Full SolidCraft CAD projects →</a>
+  </div>
+</footer>
+<script src="../../static/copy.js"></script>
+<script src="../../static/search.js"></script>
+</body>
+</html>
