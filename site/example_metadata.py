@@ -1,4 +1,4 @@
-"""Load and validate example-owned presentation metadata."""
+"""Load and validate purpose-based Forge model presentation metadata."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ from scpf.model_metadata import validate_model_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES_ROOT = ROOT / "examples"
+SECTION_CONFIG = ROOT / "site" / "content" / "verification-sections.yml"
 
 
 def _text(value: Any, label: str) -> str:
@@ -24,9 +25,10 @@ def _text(value: Any, label: str) -> str:
 
 @dataclass(frozen=True)
 class ExampleMetadata:
-    """Validated human-facing metadata for one Forge example."""
+    """Validated human-facing metadata for one Forge model catalog item."""
 
     slug: str
+    purpose: frozenset[str]
     section: str
     priority: int
     title: str
@@ -34,10 +36,6 @@ class ExampleMetadata:
     description: str
     parameters: str
     stages: tuple[str, ...]
-
-
-
-SECTION_CONFIG = ROOT / "site" / "content" / "verification-sections.yml"
 
 
 def load_section_presentation(
@@ -84,11 +82,11 @@ def section_presentation(section: str) -> tuple[int, str, str]:
     try:
         return sections[section]
     except KeyError as exc:
-        raise ValueError(f"unknown example section: {section}") from exc
+        raise ValueError(f"unknown model section: {section}") from exc
 
 
 def load_example_metadata(path: Path) -> ExampleMetadata:
-    """Load one example model.yml presentation contract."""
+    """Load one canonical model.yml presentation contract."""
 
     path = Path(path)
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -99,6 +97,7 @@ def load_example_metadata(path: Path) -> ExampleMetadata:
     metadata = validate_model_metadata(data, label=f"{slug}.model.yml")
     return ExampleMetadata(
         slug=slug,
+        purpose=metadata.purpose,
         section=metadata.section,
         priority=metadata.priority,
         title=metadata.title,
@@ -109,19 +108,49 @@ def load_example_metadata(path: Path) -> ExampleMetadata:
     )
 
 
-def discover_example_metadata(
+def discover_model_metadata(
     root: Path = EXAMPLES_ROOT,
 ) -> tuple[ExampleMetadata, ...]:
-    """Discover examples from local model.yml files, with no central registry."""
+    """Discover every model that owns canonical model.yml metadata."""
 
     rows = [
         load_example_metadata(path)
         for path in sorted(Path(root).glob("*/model.yml"))
     ]
     if not rows:
-        raise ValueError(f"no example model.yml files found below {root}")
+        raise ValueError(f"no model.yml files found below {root}")
 
     slugs = [row.slug for row in rows]
     if len(slugs) != len(set(slugs)):
-        raise ValueError("duplicate example slugs discovered")
+        raise ValueError("duplicate model slugs discovered")
     return tuple(rows)
+
+
+def _purpose_rows(
+    purpose: str,
+    root: Path,
+) -> tuple[ExampleMetadata, ...]:
+    rows = tuple(
+        row
+        for row in discover_model_metadata(root)
+        if purpose in row.purpose
+    )
+    if not rows:
+        raise ValueError(f"no {purpose} models discovered below {root}")
+    return rows
+
+
+def discover_example_metadata(
+    root: Path = EXAMPLES_ROOT,
+) -> tuple[ExampleMetadata, ...]:
+    """Discover the curated public teaching Example catalog."""
+
+    return _purpose_rows("example", Path(root))
+
+
+def discover_verification_metadata(
+    root: Path = EXAMPLES_ROOT,
+) -> tuple[ExampleMetadata, ...]:
+    """Discover the broader public Verification capability catalog."""
+
+    return _purpose_rows("verification", Path(root))
