@@ -90,6 +90,7 @@ def _is_feature_tree(shape):
         "sheet_edge_flange",
         "sheet_hem",
         "sheet_path_flange",
+        "sheet_perforate",
         "sheet_fold",
     ):
         return True
@@ -1290,6 +1291,14 @@ def _non_count_parameter_names(node, found=None):
             _non_count_parameter_names(original, found)
             _non_count_parameter_names((edge, path, radius), found)
             return found
+        if node.kind == "sheet_perforate":
+            original, diameter, pitch, margin, pattern = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names(
+                (diameter, pitch, margin, pattern),
+                found,
+            )
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1582,6 +1591,24 @@ def _to_commands(shape, name):
         return steps + sketch + [
             _command("sheet.path_flange", **params)
         ], base
+
+    if shape.kind == "sheet_perforate":
+        original, diameter, pitch, margin, pattern = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError(
+                "sheet perforation requires existing sheet material"
+            )
+        params = {
+            "diameter": command_value(diameter),
+            "pitch": command_value(pitch),
+            "body": name,
+        }
+        if margin is not None:
+            params["margin"] = command_value(margin)
+        if pattern != "staggered":
+            params["pattern"] = pattern
+        return steps + [_command("sheet.perforate", **params)], base
 
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data
