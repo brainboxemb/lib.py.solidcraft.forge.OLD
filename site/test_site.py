@@ -423,6 +423,14 @@ class SiteSourceTests(unittest.TestCase):
                     f"https://accepted.invalid/{name}.py",
                     rendered,
                 )
+    def test_native_only_verification_has_no_fabricated_reference(self):
+        rendered = qualification_reference_comparison({}, {})
+        self.assertIn(
+            "No independent reference implementation is declared",
+            rendered,
+        )
+        self.assertNotIn("qualification-reference-row", rendered)
+
     def test_generic_reference_without_preview_keeps_artifact_evidence(self):
         sources = {"cadquery": "# cadquery source\n"}
         source_urls = {"cadquery": "https://current.invalid/cadquery.py"}
