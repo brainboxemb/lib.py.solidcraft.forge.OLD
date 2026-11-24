@@ -694,18 +694,21 @@ def build(
         verification_url = (
             f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/verification/verify.py"
         )
-        reference_sources = {
-            implementation: (
-                info.source_root / implementation / "model.py"
-            ).read_text(encoding="utf-8")
+        reference_source_paths = {
+            implementation: info.source_root / implementation / "model.py"
             for implementation in IMPLEMENTATIONS
+            if (info.source_root / implementation / "model.py").is_file()
+        }
+        reference_sources = {
+            implementation: path.read_text(encoding="utf-8")
+            for implementation, path in reference_source_paths.items()
         }
         reference_source_urls = {
             implementation: (
                 f"{LIBRARY_URL}/blob/{sha}/{info.source_path}/"
                 f"{implementation}/model.py"
             )
-            for implementation in IMPLEMENTATIONS
+            for implementation in reference_source_paths
         }
         if stable is not None:
             stable_view = stable_view_by_slug[slug]
