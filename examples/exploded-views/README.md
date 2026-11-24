@@ -1,11 +1,13 @@
 # Native exploded assembly views
 
+**Group:** `components`
+**Saved-design required:** `true`
+
 > Documentation provenance: Forge #751 publishes native SolidCraft exploded assembly presentation as public Verification. Machine verification lives in [`verification/verify.py`](verification/verify.py).
 
 ## Goal
 
-Qualify SolidCraft exploded views as persistent presentation state on a real
-Forge component/occurrence assembly.
+Verify that Forge can store persistent native exploded presentations for a reusable component assembly without changing the occurrences' normal design placements.
 
 ## Forge API
 
@@ -22,18 +24,31 @@ assembly = assembly.with_exploded_view(
 assembly = assembly.show_assembled()
 ```
 
-## Native lowering
+## Forge model
 
-Forge establishes normal component occurrences and placements first. It then
-emits two native `explode.create` commands. Explicit moves reference the
-actual occurrence ids bound by `component.create` / `occurrence.copy`.
-Finally `explode.show(view=None)` selects assembled presentation.
+Three occurrences of one reusable `ExplodeBlock` component are placed at X=0, 40 and 80 mm. The completed Assembly owns two presentation views: one automatic scale-based view and one explicit instruction view.
 
-No exploded translation is lowered as `occurrence.move`.
+## How Forge builds it in SolidCraft
 
-## Saved-design proof
+Forge creates the reusable component and all three normal occurrence placements first. It then emits two native `explode.create` commands. Explicit moves reference the actual replay-bound occurrence ids derived from the Forge occurrence objects. Finally `explode.show(view=None)` selects assembled presentation. No exploded translation is lowered as `occurrence.move`.
 
-The saved design is reopened and asked to show each stored exploded view. The
-commands must succeed without rerunning Python. A second command returns the
-explicit view to assembled presentation. Model verification continues to see
-the original occurrence placements because exploded state is presentation only.
+## SolidCraft result
+
+The saved SolidCraft design retains three normally placed component occurrences plus two persistent exploded views. Showing either view changes presentation only; the authored occurrence placements remain unchanged.
+
+## Saved-design test
+
+Without rerunning Forge Python, reopen the saved design and show the stored `Automatic` view. Separately show the `Instructions` view and then return to assembled presentation with `explode.show(view=None)`. Both operations must succeed while model verification continues to see the original occurrence envelopes.
+
+## Geometry evidence
+
+> Geometry-rationale provenance: Forge #751 native exploded-view qualification.
+
+**Bounds sufficient:** `false`
+
+The three assembled body envelopes prove that normal occurrence placement is retained, but bounds alone cannot prove persistence of named presentation views. Saved-design replay of `explode.show` is therefore required evidence.
+
+## Reference notes
+
+- **Native SolidCraft presentation** — `explode.create` and `explode.show` own persistent exploded-view state independently of occurrence placement.
+- **Forge occurrence identity** — Explicit exploded moves use Forge occurrence objects and are resolved to replay-bound native occurrence ids during assembly lowering.
