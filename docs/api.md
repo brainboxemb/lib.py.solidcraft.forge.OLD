@@ -682,9 +682,26 @@ See [change 0037](background/changes/0037-explicit-native-hole-family.md).
 ### Native history patterns
 
 `rectangular_pattern()` and `circular_pattern()` operate on already-applied
-native history features rather than expanding independent Python copies.
-Circular patterns support the currently documented principal/fixed XYZ axis and
-optional fixed axis origin forms.
+native history features rather than expanding independent Python copies. The
+source argument is the Forge `Shape` that was applied to the body; callers do
+not pass SolidCraft timeline-name strings. Forge resolves that exact source to
+its native history identity. This includes direct native Hole-family features
+(`Hole1`, `Hole2`, ...), native primitive features and the existing named
+`Sketch.extrude()` path.
+
+For example:
+
+```python
+bolt_hole = Hole(d=8, direction=(0, 0, -1)).at(30, 0, 6)
+plate = plate + bolt_hole
+plate = plate.circular_pattern(bolt_hole, count=6, axis=Axis.Z)
+```
+
+The source feature is emitted once and the pattern remains one native history
+feature. Circular patterns support the currently documented principal/fixed XYZ
+axis and optional fixed axis origin forms. A Shape that is not an already-
+applied single native history feature is rejected rather than being expanded in
+Python.
 
 See [change 0036](background/changes/0036-native-circular-feature-patterns.md).
 
