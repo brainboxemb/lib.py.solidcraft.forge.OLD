@@ -4,12 +4,12 @@ from pathlib import Path
 import unittest
 from scpf.runner import run_script
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommandContractTests(unittest.TestCase):
     def test_parametric_anchor_command_contract(self):
-        rows = run_script(ROOT / "examples/parametric-anchor/scpf/model.py")["commands"]
+        rows = run_script(CASE_ROOT / "scpf/model.py")["commands"]
         parameter = next(row["params"] for row in rows if row["command"] == "parameters.add" and row["params"]["name"] == "base_width")
         self.assertEqual((parameter["expression"], parameter["unit"]), ("40", "mm"))
         box = next(row["params"] for row in rows if row["command"] == "solid.box" and row["params"]["body_name"] == "Base")
