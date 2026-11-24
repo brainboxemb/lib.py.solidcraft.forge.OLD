@@ -6,13 +6,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class GroupHierarchyCommandTests(unittest.TestCase):
     def test_group_lowers_to_real_nested_component(self):
         commands = run_script(
-            ROOT / "examples/group-hierarchy/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )["commands"]
 
         created = [
