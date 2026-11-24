@@ -149,6 +149,31 @@ Requirements:
 - Forge owns only the dependency pin and transport, never verification-library
   implementation.
 
+## Public catalog roots
+
+Forge must keep public teaching Examples, public Verification cases and
+non-public regressions as separate repository roles:
+
+```text
+examples/<slug>/
+verification/cases/<slug>/
+verification/regressions/<slug>/
+```
+
+Requirements:
+
+- `examples/` contains only deliberately curated teaching examples;
+- every teaching example owns local `catalog.yml` role declarations;
+- normal public capability cases live under `verification/cases/`;
+- non-public regression/release fixtures live under
+  `verification/regressions/`;
+- Example discovery and Verification discovery are independent;
+- adding a Verification case cannot change the public Example count;
+- adding an Example cannot silently create a Verification case;
+- public item slug and repository source path are distinct values;
+- CI/site/evidence code must follow the discovered source path and must not
+  hard-code `examples/<slug>` for generic model items.
+
 ## Declarative model verification
 
 A migrated Forge model owns only model-specific verification data.
@@ -401,7 +426,7 @@ without retaining the old qualification runner.
 - Q1 is reusable Forge API/compiler evidence and is covered by the normal
   `forge-tests` unit suite.
 - Q2 is model-owned command-contract evidence under
-  `examples/<model>/tests/`.
+  `<item-root>/tests/`.
 - Every processed declarative model verification item must run its own
   command-contract tests against the exact `forge-package` wheel before
   native SolidCraft replay.
@@ -411,8 +436,8 @@ without retaining the old qualification runner.
 - The fixed `forge-release` example set is release verification and is not a
   substitute for Q2 coverage of every processed model item.
 - A processed model item's CAD-CI watch/step inputs must include its
-  `examples/<model>/tests/**` files so changing the contract test invalidates
-  and reruns that model verification.
+  `<item-root>/tests/**` files so changing the contract test invalidates and
+  reruns that model verification.
 
 This restores command-contract coverage without reintroducing the historical
 qualification orchestration.
@@ -611,10 +636,10 @@ retry behavior remain CAD-CI responsibilities.
 Independent reference implementations for an active model are CAD-CI items in
 their own source directories.
 
-For a migrated model:
+For a public Verification item:
 
 ```text
-examples/<model>/
+<item-root>/
   verification/reference_geometry.json
   build123d/
     ci.yml
@@ -919,13 +944,13 @@ checks.
 Machine expectations, tolerances and saved-design checks remain solely in
 `verification/verify.py`.
 
-## Example-owned presentation metadata
+## Public item presentation metadata
 
-Every current Forge verification example is self-describing for generated
-documentation.
+Every public teaching Example and public Verification case is self-describing
+for generated documentation.
 
-`examples/<slug>/model.yml` is the authoritative source for human-facing
-example metadata. The required schema contains:
+`<item-root>/model.yml` is the authoritative source for human-facing metadata.
+The required schema contains:
 
 - `section`;
 - positive integer `priority`;
@@ -945,8 +970,9 @@ Generated Pages obtain actual status, measurements and evidence links from the
 accepted durable `build/main` item output. `model.yml` must never claim a
 current PASS/FAIL result.
 
-The site generator discovers examples from the filesystem and their local
-metadata. It must not maintain a central model-name/page-content registry.
+The site generator discovers Examples and Verification independently from
+their filesystem roots and local metadata. It must not maintain a central
+model-name/page-content registry.
 
 ## Site source separation
 
@@ -970,14 +996,14 @@ with page markup. HTML belongs to templates or to the dedicated HTML-rendering
 module; guide chapters and model-specific SVG galleries remain external data.
 
 The current site must not depend on retired `qualification.*` source modules.
-The 32 current `examples/` directories and durable `build/main` are the
-catalog/evidence sources.
+The explicit Example/Verification roots and accepted branch-build evidence are
+the catalog/evidence sources.
 
 
 ### Presentation metadata selection boundary
 
 `model.yml` is presentation/documentation metadata. Changing only
-`examples/<slug>/model.yml` must not select or invalidate model compilation,
+`<item-root>/model.yml` must not select or invalidate model compilation,
 SolidCraft verification or independent CAD reference verification.
 
 The lightweight site-source item owns `model.yml` and `README.md` validation
