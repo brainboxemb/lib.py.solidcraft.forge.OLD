@@ -1728,7 +1728,10 @@ def _to_commands(shape, name):
         ) = shape.data
         steps, base = _to_commands(original, name)
         params = dict(
-            features=[_native_feature_name(source) for source in sources],
+            features=[
+                _native_feature_name(original, source, name)
+                for source in sources
+            ],
             dir1=list(dir1),
             count1=command_value(count1),
             spacing1=command_value(spacing1),
