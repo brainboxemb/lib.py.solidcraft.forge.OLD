@@ -11,16 +11,11 @@ watch:
   - scpf/scpf/**
   - scpf/pyproject.toml
   - scripts/tool_verify.py
+  - scripts/model_selection.py
   - scripts/forge_example.py
-  - examples/simple-box/scpf/**
-  - examples/simple-box/tests/**
-  - examples/anchored-holes/scpf/**
-  - examples/anchored-holes/tests/**
-  - examples/components/scpf/**
-  - examples/components/tests/**
-  - examples/corner-anchor/scpf/**
-  - examples/corner-anchor/tests/**
-  - examples/custom-anchor/scpf/**
+  - examples/*/model.yml
+  - examples/*/scpf/**
+  - examples/*/tests/**
 strategy:
   reuse: true
 builder: forge-release
