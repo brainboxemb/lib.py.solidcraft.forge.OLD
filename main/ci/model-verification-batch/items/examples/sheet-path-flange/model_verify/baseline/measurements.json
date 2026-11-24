@@ -10,13 +10,13 @@
         ],
         "min": [
           -40.0,
-          -20.0,
+          -20.000000000000004,
           -9.99999999982041
         ]
       },
       "center_of_mass": [
-        3.6444631892105495,
-        1.7196150192879736e-15,
+        3.6444631892105486,
+        -9.99303271572207e-16,
         0.3056502472102234
       ],
       "closed": true,
@@ -33,14 +33,14 @@
         "shells": 1,
         "vertices": 16
       },
-      "mass_g": 9.110824723682397,
+      "mass_g": 9.110824723682393,
       "material": "Default",
       "measured_by": "smlib",
       "name": "SheetPathFlange",
       "notes": [],
       "sheet_metal": true,
       "vertices": 16,
-      "volume_mm3": 7062.654824559997
+      "volume_mm3": 7062.654824559995
     }
   ],
   "body_count": 1,
@@ -135,7 +135,7 @@
     {
       "error": null,
       "id": 1,
-      "ms": 0.261963,
+      "ms": 0.148632,
       "name": "Blank",
       "rolled_back": false,
       "suppressed": false,
@@ -145,7 +145,7 @@
     {
       "error": null,
       "id": 2,
-      "ms": 1.6027179999999999,
+      "ms": 1.613952,
       "name": "BaseFlange1",
       "rolled_back": false,
       "suppressed": false,
@@ -155,7 +155,7 @@
     {
       "error": null,
       "id": 3,
-      "ms": 0.049854,
+      "ms": 0.051064,
       "name": "Path",
       "rolled_back": false,
       "suppressed": false,
@@ -165,7 +165,7 @@
     {
       "error": null,
       "id": 4,
-      "ms": 7.932086,
+      "ms": 8.946249,
       "name": "PathFlange1",
       "rolled_back": false,
       "suppressed": false,
@@ -177,9 +177,9 @@
     "area_mm2": 7575.787565788153,
     "edges": 24,
     "faces": 10,
-    "mass_g": 9.110824723682397,
+    "mass_g": 9.110824723682393,
     "open_bodies_skipped": 0,
     "vertices": 16,
-    "volume_mm3": 7062.654824559997
+    "volume_mm3": 7062.654824559995
   }
 }

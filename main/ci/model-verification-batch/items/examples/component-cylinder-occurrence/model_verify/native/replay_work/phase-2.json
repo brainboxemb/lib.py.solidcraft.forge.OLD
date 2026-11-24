@@ -1,0 +1,39 @@
+{
+  "commands": [
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 2,
+        "translate": [
+          -30,
+          0,
+          0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "angle": "90 deg",
+        "move_grounded": true
+      }
+    },
+    {
+      "command": "occurrence.move",
+      "params": {
+        "occurrence": 5,
+        "translate": [
+          30,
+          0,
+          0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "angle": "90 deg"
+      }
+    }
+  ]
+}
