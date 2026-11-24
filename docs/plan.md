@@ -22,7 +22,7 @@ dev-ci
 Current permanent heads at this checkpoint:
 
 - `main`: `cd46d6797df319b9d13605c11568990113772700`;
-- `dev-cad`: `51363f3481b9dda7634ad426c8266cf278c5a75b`;
+- `dev-cad`: `f87b93dd603b5dc808a3365638cdf39f6ec52d65`;
 - `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
 Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
@@ -70,21 +70,28 @@ main **ci-build-record**.
 
 ### #779 — native whole-sheet perforation
 
+Status: **merged to dev-cad; durable validation in progress**.
+
+PR #780 merged through the repository policy as
+`f87b93dd603b5dc808a3365638cdf39f6ec52d65`. Its exact PR validation passed.
+Close #779 after the current durable dev-cad run accepts the same source.
+
+### #347 — generalized native pattern seeds
+
 Status: **now / dev-cad**.
 
-PR #780 is refreshed on the published v0.14.0 / SolidCraft 0.48.1 baseline.
-Preserve the existing issue/branch/PR identity and qualify the focused native
-perforation slice against the immutable v0.3.5 runtime.
+CAD #135 / parked PR #141 needs a native circular pattern whose source is an
+already-applied `Hole`, not an artificial Sketch extrusion. Generalize
+`Shape.rectangular_pattern()` and `Shape.circular_pattern()` around stable
+native history-feature identity:
 
-Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
-
-- replace the old regression-only `role.yml` with canonical
-  `model.yml` using `purpose: verification` and `section: sheet-metal`;
-- keep the case at `examples/sheet-perforate/`;
-- add normal user-facing API documentation required by #786: Reference,
-  Sheet metal Guide, Cheatsheet and `docs/api.md`;
-- preserve native perforation/flat-pattern semantics and do not fabricate
-  repeated B-rep holes or external reference equivalents.
+- preserve existing Sketch.extrude sources unchanged;
+- accept an already-applied native Hole source and other supported applied
+  feature Shapes without exposing SolidCraft history-name strings;
+- use one source feature and one native pattern feature;
+- share validation/identity rules between rectangular and circular patterns;
+- reject non-applied or unsupported Shapes clearly;
+- qualify the behaviour natively before downstream CAD #135 resumes.
 
 ### #788 — CAD-CI concurrency measurement
 
@@ -99,14 +106,14 @@ Verification coverage or reintroduce per-model runtime startup.
 | Issue | Status | Next action |
 | --- | --- | --- |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #779 Native whole-sheet perforation | **now / CAD** | Finish PR #780 on v0.14.0 / SolidCraft 0.48.1 and require exact PR plus durable dev-cad acceptance. |
-| #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
+| #779 Native whole-sheet perforation | **merged / durable pending** | Close after durable dev-cad accepts `f87b93dd603b5dc808a3365638cdf39f6ec52d65`. |
+| #751 Native exploded views | **next / CAD unblocker** | After #347, expose native explode.create/show for CAD #367. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
 | #659 Build/verification/results terminology | **later / cross-repo** | Follow the released shared terminology work; do not add Forge-local aliases. |
 | #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
 | #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required. |
-| #347 Generalized pattern seeds | **later** | Generalize through native feature identity. |
+| #347 Generalized pattern seeds | **now / CAD unblocker** | Implement shared applied-feature identity; unblock CAD #135 / PR #141. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root-cause work. |
 | #175 HUB75-like AnchorFrame diagnostic change | **later / diagnostic with #325** | Preserve the retained A/B evidence; resume its symbolic attached-seed/native comparison only as part of the #325 root-cause track. |
@@ -118,6 +125,8 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. finish #779 / PR #780 on the current v0.14.0 / SolidCraft 0.48.1 dev-cad baseline;
-2. require exact PR validation and durable dev-cad acceptance;
-3. keep #788 concurrency measurement independent and #751 lower priority.
+1. finish #347 and require exact PR plus native Verification evidence on the
+   v0.14.0 / SolidCraft 0.48.1 baseline;
+2. close #779 once its merged dev-cad durable run is green;
+3. resume #751 native exploded views for downstream CAD #367;
+4. keep #788 concurrency measurement independent.
