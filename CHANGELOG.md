@@ -75,6 +75,9 @@ adopting the v0.13.x capability batch should use **v0.13.2 or newer**.
 
 ### Fixed
 
+- Restore active component context across headless replay phases before
+  continuing component-local native features; this prevents joined feature/tool
+  geometry from remaining visible in root/world space after save/reopen (#753).
 - Preserve symbolic primitive placement through anchor arithmetic (#796),
   including the HUB75-style symbolic Cylinder boolean join and the equivalent
   Box/Cone lowering boundary.
