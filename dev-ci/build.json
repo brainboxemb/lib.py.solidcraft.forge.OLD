@@ -32,22 +32,22 @@
       "engine_schema": 6,
       "final_bundle_sha256": "ff111949a1d54d98aa2270eb7cd9ee1ba50487699ee22ef94c2d235cf97ec367",
       "final_step": "tool_verify",
-      "final_target_spec_digest": "4388a2847b14b69c9ebc95654f1e2f826f17918385c9738e3fb67dae55a0efdf",
+      "final_target_spec_digest": "d58a4fab7c57d0e7deeffecc3d48d65628cc6c035be922ece1d921bbd7d1cd4f",
       "item_id": "forge-release",
       "outputs": [
         "tool_verify"
       ],
-      "source_commit": "8c24f884b18eb17b25cce3b3c3237dee67de71eb"
+      "source_commit": "ac47a97cbd2646f292c01c90f2defb95963e48bf"
     },
     "ci/forge-tests": {
       "engine": "scons",
       "engine_schema": 6,
       "final_bundle_sha256": "5774d9064d078820bb920e45fbb49877eacfad4e3ef5fdd2f3f9e2ede19dc3d6",
       "final_step": "tool_test",
-      "final_target_spec_digest": "2878ea7fb0279433baf461b7bdc328684879ece9f23d1666b60390f95d64b24a",
+      "final_target_spec_digest": "5738837f41af6848899622207d99cacd40c17f43b67be31a280ab16d991bf87e",
       "item_id": "forge-tests",
       "outputs": [],
-      "source_commit": "8c24f884b18eb17b25cce3b3c3237dee67de71eb"
+      "source_commit": "ac47a97cbd2646f292c01c90f2defb95963e48bf"
     },
     "ci/model-verification-batch": {
       "engine": "scons",
@@ -82,7 +82,7 @@
       "final_target_spec_digest": "3fc64841c1dc34e42a423af4f87cdfc855c96b976ec5199e155f4f2033b28f26",
       "item_id": "release-policy",
       "outputs": [],
-      "source_commit": "8c24f884b18eb17b25cce3b3c3237dee67de71eb"
+      "source_commit": "ac47a97cbd2646f292c01c90f2defb95963e48bf"
     },
     "ci/site-source": {
       "engine": "scons",
@@ -2530,5 +2530,5 @@
   "name": "dev-ci",
   "schema": 1,
   "scope": "named",
-  "source_commit": "8c24f884b18eb17b25cce3b3c3237dee67de71eb"
+  "source_commit": "ac47a97cbd2646f292c01c90f2defb95963e48bf"
 }
