@@ -1,120 +1,714 @@
 {
   "bodies": [
     {
-      "area_mm2": 683.9822971502571,
+      "area_mm2": 142213.44974735918,
       "bbox": {
         "max": [
-          -20.0,
-          2.0000000000000004,
-          5.0
+          79.85,
+          156.25000000000003,
+          319.855
         ],
         "min": [
-          -40.0,
-          -5.500000000000001,
-          -5.0
+          -79.85,
+          -156.25000000000003,
+          0.14500000000001023
         ]
       },
       "center_of_mass": [
-        -29.687323082732195,
-        -0.19542307329237762,
-        -1.829504593067114e-16
+        -0.2984994860023613,
+        -5.64812882706455,
+        153.88508997434556
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 15,
+      "edges": 236,
       "face_types": {
-        "cylinder": 1,
-        "plane": 7
+        "cylinder": 39,
+        "plane": 79
       },
-      "faces": 8,
+      "faces": 118,
       "kernel": {
-        "edges": 15,
-        "faces": 8,
-        "shells": 1,
-        "vertices": 10
+        "edges": 275,
+        "faces": 131,
+        "shells": 7,
+        "vertices": 182
       },
-      "mass_g": 1.0887371633238316,
+      "mass_g": 442.42399144974786,
       "material": "Default",
       "measured_by": "smlib",
-      "name": "BossedPanel",
+      "name": "Hub75HistoryPanel",
       "notes": [],
-      "vertices": 10,
-      "volume_mm3": 843.9822971502571
+      "vertices": 156,
+      "volume_mm3": 342964.3344571689
     },
     {
-      "area_mm2": 683.9822971502571,
+      "area_mm2": 142213.4497473592,
       "bbox": {
         "max": [
-          40.0,
-          2.0000000000000004,
-          5.0
+          -240.15,
+          156.25000000000003,
+          319.855
         ],
         "min": [
-          20.0,
-          -5.500000000000001,
-          -5.0
+          -399.85,
+          -156.25000000000003,
+          0.14500000000001023
         ]
       },
       "center_of_mass": [
-        30.312676917267805,
-        -0.19542307329237762,
-        -1.7216763011810254e-16
+        -320.29849948600236,
+        -5.648128827064565,
+        153.8850899743456
       ],
       "closed": true,
       "density_g_cm3": 1.29,
-      "edges": 15,
+      "edges": 236,
       "face_types": {
-        "cylinder": 1,
-        "plane": 7
+        "cylinder": 39,
+        "plane": 79
       },
-      "faces": 8,
+      "faces": 118,
       "kernel": {
-        "edges": 15,
-        "faces": 8,
-        "shells": 1,
-        "vertices": 10
+        "edges": 275,
+        "faces": 131,
+        "shells": 7,
+        "vertices": 182
       },
-      "mass_g": 1.0887371633238316,
+      "mass_g": 442.423991449748,
       "material": "Default",
       "measured_by": "smlib",
-      "name": "BossedPanel (BossedPanel:2)",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:2)",
       "notes": [],
-      "vertices": 10,
-      "volume_mm3": 843.9822971502571
+      "vertices": 156,
+      "volume_mm3": 342964.334457169
+    },
+    {
+      "area_mm2": 142213.44974735918,
+      "bbox": {
+        "max": [
+          -80.14999999999999,
+          156.25000000000003,
+          319.85499999999996
+        ],
+        "min": [
+          -239.85000000000002,
+          -156.24999999999997,
+          0.14500000000003865
+        ]
+      },
+      "center_of_mass": [
+        -159.70150051399762,
+        -5.648128827064507,
+        166.1149100256545
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 236,
+      "face_types": {
+        "cylinder": 39,
+        "plane": 79
+      },
+      "faces": 118,
+      "kernel": {
+        "edges": 275,
+        "faces": 131,
+        "shells": 7,
+        "vertices": 182
+      },
+      "mass_g": 442.4239914497481,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:3)",
+      "notes": [],
+      "vertices": 156,
+      "volume_mm3": 342964.33445716905
+    },
+    {
+      "area_mm2": 142213.44974735915,
+      "bbox": {
+        "max": [
+          239.85000000000002,
+          156.25000000000003,
+          319.85499999999996
+        ],
+        "min": [
+          80.14999999999999,
+          -156.24999999999997,
+          0.14500000000003865
+        ]
+      },
+      "center_of_mass": [
+        160.29849948600238,
+        -5.648128827064518,
+        166.1149100256545
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 236,
+      "face_types": {
+        "cylinder": 39,
+        "plane": 79
+      },
+      "faces": 118,
+      "kernel": {
+        "edges": 275,
+        "faces": 131,
+        "shells": 7,
+        "vertices": 182
+      },
+      "mass_g": 442.4239914497481,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:4)",
+      "notes": [],
+      "vertices": 156,
+      "volume_mm3": 342964.33445716905
+    },
+    {
+      "area_mm2": 142213.4497473592,
+      "bbox": {
+        "max": [
+          399.85,
+          156.25000000000003,
+          319.855
+        ],
+        "min": [
+          240.15,
+          -156.25000000000003,
+          0.14500000000001023
+        ]
+      },
+      "center_of_mass": [
+        319.70150051399764,
+        -5.648128827064537,
+        153.8850899743456
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 236,
+      "face_types": {
+        "cylinder": 39,
+        "plane": 79
+      },
+      "faces": 118,
+      "kernel": {
+        "edges": 275,
+        "faces": 131,
+        "shells": 7,
+        "vertices": 182
+      },
+      "mass_g": 442.423991449748,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "Hub75HistoryPanel (Hub75HistoryPanel:5)",
+      "notes": [],
+      "vertices": 156,
+      "volume_mm3": 342964.334457169
     }
   ],
-  "body_count": 2,
+  "body_count": 5,
   "params": [],
-  "sketches": [],
+  "sketches": [
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 3,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel footprint",
+      "profiles": 1,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
+    },
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 5,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear start",
+      "profiles": 1,
+      "status": "solved",
+      "visible": true,
+      "wires_ok": true
+    },
+    {
+      "curves": 4,
+      "dof": 4,
+      "id": 6,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear perimeter",
+      "profiles": 1,
+      "status": "solved",
+      "visible": true,
+      "wires_ok": true
+    },
+    {
+      "curves": 16,
+      "dof": 16,
+      "id": 8,
+      "name": "d1_Hub75HistoryPanel__Rear electronics bays",
+      "profiles": 4,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
+    }
+  ],
   "timeline": [
     {
       "error": null,
       "id": 3,
-      "ms": 2.6762349999999997,
-      "name": "Box1",
+      "ms": 0.151162,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel footprint",
       "rolled_back": false,
       "suppressed": false,
-      "type": "BoxFeature",
+      "type": "Sketch",
       "warning": null
     },
     {
       "error": null,
       "id": 4,
-      "ms": 6.787349,
+      "ms": 3.577573,
+      "name": "Extrude1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "ExtrudeFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 5,
+      "ms": 0.088054,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear start",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 6,
+      "ms": 0.09616,
+      "name": "d1_Hub75HistoryPanel__Hub75HistoryPanel rear perimeter",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 7,
+      "ms": 6.520541000000001,
+      "name": "Loft1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "LoftFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 8,
+      "ms": 0.343301,
+      "name": "d1_Hub75HistoryPanel__Rear electronics bays",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 9,
+      "ms": 20.443568,
+      "name": "Rear electronics bays",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "ExtrudeFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 10,
+      "ms": 28.051686,
+      "name": "Hole1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 11,
+      "ms": 32.135021,
       "name": "Cylinder1",
       "rolled_back": false,
       "suppressed": false,
       "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 2 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 12,
+      "ms": 49.577465000000004,
+      "name": "Hole2",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
       "warning": null
+    },
+    {
+      "error": null,
+      "id": 13,
+      "ms": 39.152947,
+      "name": "Cylinder2",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 14,
+      "ms": 60.002854,
+      "name": "Hole3",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 15,
+      "ms": 53.467118,
+      "name": "Cylinder3",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 3 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 16,
+      "ms": 66.934338,
+      "name": "Hole4",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 17,
+      "ms": 72.055963,
+      "name": "Cylinder4",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 4 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 18,
+      "ms": 77.625624,
+      "name": "Hole5",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 19,
+      "ms": 77.690194,
+      "name": "Cylinder5",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 20,
+      "ms": 85.880189,
+      "name": "Hole6",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 21,
+      "ms": 93.755416,
+      "name": "Cylinder6",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 5 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 22,
+      "ms": 125.265761,
+      "name": "Cylinder7",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 23,
+      "ms": 118.62059799999999,
+      "name": "Hole7",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 24,
+      "ms": 121.237608,
+      "name": "Hole8",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 25,
+      "ms": 150.316753,
+      "name": "Cylinder8",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 26,
+      "ms": 139.94847,
+      "name": "Hole9",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 27,
+      "ms": 135.36766599999999,
+      "name": "Hole10",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 28,
+      "ms": 158.424967,
+      "name": "Cylinder9",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 29,
+      "ms": 163.548268,
+      "name": "Hole11",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 30,
+      "ms": 157.57706,
+      "name": "Hole12",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 31,
+      "ms": 184.759028,
+      "name": "Cylinder10",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 32,
+      "ms": 241.82768499999997,
+      "name": "Hole13",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [72, -11, 14.5] is no longer on face `F7:end`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 33,
+      "ms": 250.65528999999998,
+      "name": "Hole14",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 34,
+      "ms": 261.781386,
+      "name": "Cylinder11",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 35,
+      "ms": 263.37811700000003,
+      "name": "Hole15",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [-72, 141, 14.5] is no longer on face `F7:end`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 36,
+      "ms": 282.787681,
+      "name": "Hole16",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 37,
+      "ms": 285.83061100000003,
+      "name": "Cylinder12",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 38,
+      "ms": 293.800487,
+      "name": "Hole17",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [72, 141, 14.5] is no longer on face `F7:end`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 39,
+      "ms": 304.98461100000003,
+      "name": "Hole18",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 40,
+      "ms": 298.53813299999996,
+      "name": "Cylinder13",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 6 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 41,
+      "ms": 326.58030199999996,
+      "name": "Cylinder14",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "CylinderFeature",
+      "warning": "the joined piece doesn't touch `Hub75HistoryPanel`, so `Hub75HistoryPanel` is now in 7 separate pieces (New Body makes it a body of its own)"
+    },
+    {
+      "error": null,
+      "id": 42,
+      "ms": 279.511534,
+      "name": "Hole19",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [-72, -152, 15] is no longer on face `F11:top`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 43,
+      "ms": 325.22939499999995,
+      "name": "Hole20",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [-72, 0, 15] is no longer on face `F13:top`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 44,
+      "ms": 312.118092,
+      "name": "Hole21",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [-72, 152, 15] is no longer on face `F15:top`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 45,
+      "ms": 370.383633,
+      "name": "Hole22",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [72, -152, 15] is no longer on face `F17:top`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 46,
+      "ms": 335.229369,
+      "name": "Hole23",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [72, 0, 15] is no longer on face `F19:top`: it stays where it was placed"
+    },
+    {
+      "error": null,
+      "id": 47,
+      "ms": 325.33866900000004,
+      "name": "Hole24",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "HoleFeature",
+      "warning": "the hole's position [72, 152, 15] is no longer on face `F21:top`: it stays where it was placed"
     }
   ],
   "total": {
-    "area_mm2": 1367.9645943005141,
-    "edges": 30,
-    "faces": 16,
-    "mass_g": 2.1774743266476633,
+    "area_mm2": 711067.248736796,
+    "edges": 1180,
+    "faces": 590,
+    "mass_g": 2212.11995724874,
     "open_bodies_skipped": 0,
-    "vertices": 20,
-    "volume_mm3": 1687.9645943005141
+    "vertices": 780,
+    "volume_mm3": 1714821.672285845
   }
 }
