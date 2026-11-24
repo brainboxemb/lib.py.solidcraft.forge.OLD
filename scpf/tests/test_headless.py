@@ -4,6 +4,7 @@ import unittest
 
 from scpf.headless import (
     HeadlessReplayError,
+    _active_component_after,
     _active_sketch_after,
     _phase_commands,
 )
@@ -62,6 +63,99 @@ class HeadlessSketchReplayTests(unittest.TestCase):
             _active_sketch_after(
                 [{"command": "sketch.create", "params": {"name": "Pattern"}}],
                 [{"name": "Pattern"}],
+                None,
+            )
+
+
+class HeadlessComponentReplayTests(unittest.TestCase):
+    def test_next_phase_reactivates_component_before_native_commands(self):
+        chunk = [{
+            "command": "solid.cylinder",
+            "params": {
+                "diameter": 4,
+                "height": 4,
+                "operation": "join",
+                "targets": ["Panel"],
+            },
+        }]
+        native, prefix = _phase_commands(
+            chunk,
+            {},
+            None,
+            "Panel",
+        )
+
+        self.assertEqual(prefix, 1)
+        self.assertEqual(
+            native[0],
+            {
+                "command": "component.activate",
+                "params": {"component": "Panel"},
+            },
+        )
+        self.assertEqual(native[1]["command"], "solid.cylinder")
+
+    def test_component_restore_precedes_sketch_restore(self):
+        chunk = [{
+            "command": "sketch.circle.center",
+            "params": {"center": [0, 0], "diameter": 4},
+        }]
+        native, prefix = _phase_commands(
+            chunk,
+            {},
+            17,
+            "Panel",
+        )
+
+        self.assertEqual(prefix, 2)
+        self.assertEqual(
+            [row["command"] for row in native[:2]],
+            ["component.activate", "sketch.edit"],
+        )
+        self.assertEqual(
+            native[0]["params"]["component"],
+            "Panel",
+        )
+        self.assertEqual(native[1]["params"]["sketch"], 17)
+
+    def test_component_create_and_activate_update_tracked_context(self):
+        active = _active_component_after(
+            [
+                {
+                    "command": "component.create",
+                    "params": {"name": "Panel"},
+                },
+            ],
+            [{"component": 1, "occurrence": 2}],
+            None,
+        )
+        self.assertEqual(active, "Panel")
+
+        active = _active_component_after(
+            [
+                {
+                    "command": "component.activate",
+                    "params": {"component": "root"},
+                },
+            ],
+            [{}],
+            active,
+        )
+        self.assertIsNone(active)
+
+    def test_component_create_requires_usable_identity(self):
+        with self.assertRaisesRegex(
+            HeadlessReplayError,
+            "no usable component target",
+        ):
+            _active_component_after(
+                [
+                    {
+                        "command": "component.create",
+                        "params": {},
+                    },
+                ],
+                [{}],
                 None,
             )
 

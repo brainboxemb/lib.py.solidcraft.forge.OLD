@@ -2165,6 +2165,39 @@ existing edge-flange/hem selection policy. Path coordinates and optional
 delegates bend radius to the active sheet rule; providing it overrides only the
 path-flange feature.
 
+## Native whole-sheet perforation lowering
+
+`Shape.perforate()` is an existing-sheet history feature:
+
+```text
+existing sheet history
+  -> Shape(kind="sheet_perforate", diameter, pitch, margin, pattern)
+  -> recurse existing history; require base metadata sheet=True
+  -> sheet.perforate(
+       diameter=<expression>,
+       pitch=<expression>,
+       margin?=<expression>,
+       pattern?="square",
+       body=<current body name>
+     )
+```
+
+No new geometry compiler is involved. The feature deliberately preserves the
+native distinction between manufacturing perforations and B-rep holes:
+SolidCraft owns the flat-pattern/DXF/measurement effect while Forge does not
+populate the folded B-rep with repeated circular cuts.
+
+### Default and scope boundary
+
+`margin=None` is omitted so SolidCraft applies its documented default equal to
+the perforation diameter. `pattern="staggered"` is likewise omitted because it
+is the native default; `square` is written explicitly.
+
+The first slice does not accept `sketch` or `profiles`. A future bounded
+perforation-region API must reuse qualified Sketch/profile identity rather than
+adding caller-authored native ids. Generic pattern placement/alignment controls
+are not invented beyond the SolidCraft 0.45 command contract.
+
 ## Open connected Sketch-chain design
 
 #683 deliberately does not reuse `connected_profile`. A closed selectable
@@ -2372,6 +2405,41 @@ There is deliberately no extension namespace inside `model.yml`: allowing
 arbitrary consumer fields would recreate the schema drift that #703 is intended
 to remove. CI execution state, verification expectations and generated state
 remain in their existing owner layers.
+
+## Native pattern source identity
+
+Shape patterns keep the Python source object in the pattern node. At lowering,
+Forge finds the exact Boolean-history prefix whose right-hand feature is that
+source and compiles only that prefix to determine the native history identity.
+
+Two identity forms are supported:
+
+1. an emitted feature command with an explicit `name` (for example an
+   explicit `Sketch.extrude()`) keeps that authored name;
+2. an unnamed native primitive/Hole feature uses SolidCraft's deterministic
+   type-local history name. Forge derives its ordinal by counting that command
+   type in the exact prefix, yielding names such as `Hole1`,
+   `Cylinder2`, or `Cone1`.
+
+The full original history is still compiled only once for the actual model.
+Prefix compilation is identity analysis, not another emitted geometry path.
+The final pattern command receives the resolved feature names. No public
+history-name parameter, duplicated source geometry or model-specific Hole
+special case is introduced.
+
+## Native exploded-view lowering
+
+Assembly owns exploded-view intent because explicit moves refer to physical
+Forge occurrences. Each move stores the stable `ModelInstance.occurrence_id`,
+the same identity already preserved by grouping and attachment.
+
+Assembly lowering first creates/copies occurrences, applies normal placements
+and joints, then emits native `explode.create`. Explicit move targets reuse the
+existing replay-bound occurrence variables. `explode.show` is emitted only
+when the model explicitly selects an exploded or assembled presentation.
+
+Exploded translations never participate in Placement, anchor or joint
+calculation and are never lowered as ordinary `occurrence.move`.
 
 ## Component-local Sketch feature namespacing
 

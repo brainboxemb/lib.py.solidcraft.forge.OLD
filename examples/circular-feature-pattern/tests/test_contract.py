@@ -26,7 +26,7 @@ class CircularFeaturePatternContractTests(unittest.TestCase):
         self.assertEqual(
             patterns[0]["params"],
             {
-                "features": ["BoltHole"],
+                "features": ["Hole1"],
                 "axis": "Z",
                 "count": "bolts",
                 "alignment": "right",
@@ -43,16 +43,16 @@ class CircularFeaturePatternContractTests(unittest.TestCase):
         self.assertEqual(units["bolts"], "")
         self.assertEqual(units["pcd"], "mm")
 
-    def test_source_cut_is_not_expanded_in_python(self):
+    def test_source_hole_is_one_direct_native_feature(self):
         self.assertEqual(
-            [row["command"] for row in self.commands].count("solid.extrude"),
+            [row["command"] for row in self.commands].count("solid.hole"),
             1,
         )
-        self.assertEqual(
-            [row["command"] for row in self.commands].count(
-                "sketch.circle.center"
-            ),
-            1,
+        self.assertFalse(
+            any(row["command"] == "solid.extrude" for row in self.commands)
+        )
+        self.assertFalse(
+            any(row["command"] == "sketch.create" for row in self.commands)
         )
 
     def test_saved_design_mutation_changes_pattern_count(self):

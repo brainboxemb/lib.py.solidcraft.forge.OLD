@@ -272,6 +272,88 @@ class GeometryFeatures(unittest.TestCase):
             },
         )
 
+    def test_native_hole_source_uses_native_circular_pattern(self):
+        from scpf.compiler import compile_model
+        from scpf.core import Anchor, Axis, Box, Hole
+
+        flange = Box(100, 80, 6, anchor=Anchor.BOTTOM)
+        bolt_hole = Hole(
+            d=9,
+            depth=6,
+            direction=(0, 0, -1),
+        ).at(30, 0, 6)
+        flange = flange + bolt_hole
+
+        commands = compile_model(
+            flange.circular_pattern(
+                bolt_hole,
+                count=6,
+                axis=Axis.Z,
+            ),
+            "Flange",
+        )["commands"]
+
+        self.assertEqual(
+            [row["command"] for row in commands].count("solid.hole"),
+            1,
+        )
+        pattern = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.pattern.circular"
+        )
+        self.assertEqual(pattern["features"], ["Hole1"])
+        self.assertEqual(pattern["count"], 6)
+        self.assertEqual(pattern["axis"], "Z")
+
+    def test_second_native_hole_source_keeps_history_ordinal(self):
+        from scpf.compiler import compile_model
+        from scpf.core import Anchor, Axis, Box, Hole
+
+        plate = Box(100, 60, 6, anchor=Anchor.BOTTOM)
+        first = Hole(d=6, depth=6, direction=(0, 0, -1)).at(-20, 0, 6)
+        second = Hole(d=8, depth=6, direction=(0, 0, -1)).at(0, 0, 6)
+        plate = plate + first
+        plate = plate + second
+
+        commands = compile_model(
+            plate.rectangular_pattern(
+                second,
+                count=3,
+                spacing=20,
+                direction=Axis.X,
+            ),
+            "Plate",
+        )["commands"]
+
+        self.assertEqual(
+            [row["command"] for row in commands].count("solid.hole"),
+            2,
+        )
+        pattern = next(
+            row["params"]
+            for row in commands
+            if row["command"] == "solid.pattern.rectangular"
+        )
+        self.assertEqual(pattern["features"], ["Hole2"])
+        self.assertEqual(pattern["count1"], 3)
+
+    def test_pattern_rejects_body_as_non_applied_feature_source(self):
+        from scpf.compiler import ModelError, compile_model
+        from scpf.core import Anchor, Axis, Box
+
+        plate = Box(80, 50, 4, anchor=Anchor.BOTTOM)
+        patterned = plate.circular_pattern(
+            plate,
+            count=4,
+            axis=Axis.Z,
+        )
+        with self.assertRaisesRegex(
+            ModelError,
+            "already-applied native history feature",
+        ):
+            compile_model(patterned, "Plate")
+
     def test_circular_pattern_validates_shared_feature_and_axis_options(self):
         from scpf.core import Anchor, Axis, Box, Circle2D, Depth
 

@@ -218,6 +218,27 @@ METHOD_REFERENCES = (
         guide_anchor="group",
     ),
     _method(
+        "Assembly.with_exploded_view",
+        "Assembly.with_exploded_view()",
+        Assembly.with_exploded_view,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
+        "Assembly.show_exploded",
+        "Assembly.show_exploded()",
+        Assembly.show_exploded,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
+        "Assembly.show_assembled",
+        "Assembly.show_assembled()",
+        Assembly.show_assembled,
+        guide="assembly-basics",
+        guide_anchor="exploded-views",
+    ),
+    _method(
         "Assembly.with_anchor",
         "Assembly.with_anchor()",
         Assembly.with_anchor,
@@ -277,6 +298,13 @@ METHOD_REFERENCES = (
         Shape.path_flange,
         guide="sheet-metal",
         guide_anchor="path-flange",
+    ),
+    _method(
+        "Shape.perforate",
+        "Shape.perforate()",
+        Shape.perforate,
+        guide="sheet-metal",
+        guide_anchor="perforation",
     ),
     _method(
         "Shape.rectangular_pattern",

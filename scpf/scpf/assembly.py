@@ -819,6 +819,29 @@ def _compile_assembly_with_dependencies(value, name):
             visible=False,
         ))
 
+    # Exploded views are presentation state only. Create them after all
+    # occurrence placements and joints are established so the design's normal
+    # assembly poses remain authoritative.
+    for view in assembly.exploded_views:
+        params = {"name": view.name}
+        if view.moves:
+            params["moves"] = [
+                {
+                    "occurrence": occurrence_refs[occurrence_id],
+                    "translate": list(translation),
+                }
+                for occurrence_id, translation in view.moves
+            ]
+        elif view.scale is not None:
+            params["scale"] = view.scale
+        commands.append(_command("explode.create", **params))
+
+    if assembly.exploded_display_set:
+        commands.append(_command(
+            "explode.show",
+            view=assembly.exploded_display,
+        ))
+
     if not commands:
         raise ModelError(f"{name} contains no component instances")
     dependencies = _native_dependencies(commands)

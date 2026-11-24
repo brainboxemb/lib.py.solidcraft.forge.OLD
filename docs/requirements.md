@@ -393,6 +393,52 @@ Requirements:
 - rotated Sketch sheet-metal and open-chain authoring remain unsupported until
   separately qualified.
 
+## Native feature pattern source identity
+
+Shape-level native patterns accept Forge feature Shapes, not caller-authored
+SolidCraft history-name strings.
+
+Requirements:
+
+- `Shape.rectangular_pattern()` and `Shape.circular_pattern()` share one
+  source-validation and history-identity contract;
+- every source Shape must already be applied to the patterned body;
+- the existing explicit `Sketch.extrude()` source keeps its authored native
+  feature name;
+- direct native Hole-family sources resolve through SolidCraft's deterministic
+  Hole history identity (`Hole1`, `Hole2`, ...);
+- native primitive feature sources use the same deterministic type-local history
+  identity where the SolidCraft command creates one feature;
+- Forge emits the source once and exactly one native pattern command; it does
+  not expand repeated cuts/solids in Python;
+- unsupported Shapes that do not resolve to one stable native history feature
+  fail with a pattern-source error;
+- count/spacing/angle parameter semantics and saved-design associativity remain
+  unchanged.
+
+The public API must not expose native feature ids or require a consumer to copy
+timeline names from a SolidCraft design.
+
+## Native exploded assembly views
+
+Forge exposes SolidCraft exploded views as assembly presentation state.
+
+Requirements:
+
+- views belong to a completed Assembly with at least two occurrences;
+- automatic mode lowers to one native `explode.create` with optional positive
+  fixed scale;
+- explicit mode accepts occurrence objects plus fixed finite XYZ translations
+  and resolves them to replay-bound native occurrence ids;
+- scale and explicit moves are mutually exclusive;
+- all normal occurrence placement/joint commands precede exploded-view commands;
+- exploded translations never lower as `occurrence.move`;
+- named views persist in the saved SolidCraft design;
+- `show_exploded(name)` and `show_assembled()` use native `explode.show`;
+- adding occurrences after presentation state is defined is rejected;
+- Verification covers at least three occurrences, automatic and explicit modes,
+  persistent saved-design views and assembled-state restoration.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
@@ -1483,6 +1529,42 @@ Requirements:
 Qualification must include the native command/replay contract, parameterized
 path/radius values, saved-design rebuild/reopen and recoverable flat-pattern
 bend evidence on one connected closed sheet-metal body.
+
+## Native whole-sheet perforation
+
+An existing Forge sheet body supports one focused native perforation field:
+
+```python
+sheet.perforate(
+    diameter=5,
+    pitch=8,
+    margin=None,
+    pattern="staggered",
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.perforate`;
+- `diameter` and `pitch` are positive mm-valued Forge
+  Parameter/Expression inputs;
+- optional `margin` is positive and mm-valued; `None` omits the field so
+  SolidCraft keeps its native diameter-sized default margin;
+- `pattern` is limited to `staggered` and `square`; the default
+  `staggered` value is omitted from the native command;
+- Forge supplies the current sheet body name;
+- this first slice applies to the whole flat sheet only and does not expose the
+  native sketch/profile outline restriction;
+- perforations remain native manufacturing/flat-pattern/DXF/measurement
+  semantics and are not translated to repeated Hole features or Boolean cuts;
+- applying the operation to non-sheet geometry is a compiler error.
+
+Qualification must include exact command lowering, parameter units, both
+patterns, omitted/explicit margin, saved-design parameter mutation, one
+connected closed sheet-metal body after reopen and native flat-pattern evidence
+for the perforation field. If SolidCraft exposes perforation-adjusted volume
+through stable inspection output, qualify that output rather than inferring
+volume from B-rep holes.
 
 ## Reusable open connected Sketch chains
 

@@ -3,7 +3,7 @@ role: regression-fixture
 decision: keep
 owner: examples/component-cylinder-occurrence/verification/verify.py
 reason: >
-  Issue #753 qualifies that a native Cylinder join authored inside a reusable
-  component remains entirely component-local when copied occurrences are moved
-  or rotated. CAD #388 is the concrete downstream blocker. This fixture is
-  Forge/runtime regression evidence, not a public Verification catalog model.
+  Issue #753 qualifies that native Cylinder joins authored inside a reusable multi-feature
+  component remain entirely component-local when copied occurrences are moved
+  or rotated. CAD #388 is the concrete downstream blocker. This fixture preserves the failing HUB75-style history while it is
+  minimized and is Forge/runtime regression evidence, not a public Verification catalog model.

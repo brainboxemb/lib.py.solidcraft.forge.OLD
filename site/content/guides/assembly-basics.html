@@ -56,6 +56,26 @@ belong to one assembly”. It does <strong>not</strong> Boolean-union their soli
 is created or copied. It does not create a mechanical relationship; use
 <code>attach()</code> when another occurrence owns the relationship.</p>
 
+<h2 id="exploded-views">Exploded views are presentation, not placement</h2>
+<p>Define an exploded view after composing the final assembly. Forge stores the
+view in SolidCraft without changing the occurrences' normal
+<code>Placement</code> or joints.</p>
+<pre class="code-block"><code>assembly = first + second + third
+assembly = assembly.with_exploded_view("Service", scale=1.25)
+assembly = assembly.with_exploded_view(
+    "Instructions",
+    moves=[
+        (second, (0, 25, 0)),
+        (third, (0, 50, 10)),
+    ],
+)
+assembly = assembly.show_assembled()</code></pre>
+<p>Automatic mode uses SolidCraft's native scale-based explosion. Explicit mode
+takes occurrence objects and fixed XYZ translations; Forge resolves those
+objects to native occurrence ids during replay. Use
+<code>show_exploded("Service")</code> to display one stored view and
+<code>show_assembled()</code> to return to normal presentation. Do not model an
+explosion with ordinary occurrence moves.</p>
 <h2 id="reusable-assembly">3. Use @assembly when the composition itself is reusable</h2>
 <p>You do not need <code>@assembly</code> merely because a script contains
 several components. Use it when the <em>composition itself</em> is a reusable

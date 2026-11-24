@@ -8,27 +8,27 @@
 
 ## Goal
 
-Qualify one real SolidCraft circular History pattern over an existing cut feature, rather than Forge-expanded repeated holes.
+Qualify one real SolidCraft circular History pattern over an existing direct native Hole feature, rather than Forge-expanded repeated holes.
 
 ## Forge API
 
-source = bolt.extrude(Depth.THROUGH_ALL); body = body - source; body.circular_pattern(source, count=bolts, axis=Axis.Z)
+source = Hole(d=8, direction=(0, 0, -1)).at(pcd / 2, 0, 6); body = body + source; body.circular_pattern(source, count=bolts, axis=Axis.Z)
 
 ## Forge model
 
-One 100 x 100 x 6 mm plate, one native Ø8 source cut on a 60 mm pitch circle and one native six-instance circular feature pattern.
+One 100 x 100 x 6 mm plate, one direct native Ø8 Hole source on a 60 mm pitch circle and one native six-instance circular feature pattern.
 
 ## How Forge builds it in SolidCraft
 
-Forge emits the source Sketch/cut once, then exactly one solid.pattern.circular with features=['BoltHole']; bolts is a dimensionless native count parameter and pcd remains a millimetre parameter used by the source profile position.
+Forge emits one direct `solid.hole` source, resolves its native history identity as `Hole1`, then emits exactly one `solid.pattern.circular` with `features=['Hole1']`; `bolts` is a dimensionless native count parameter and `pcd` remains a millimetre parameter used by the source position.
 
 ## SolidCraft result
 
-SolidCraft saves one plate with six through holes and one native CircularPatternFeature that references the original BoltHole cut.
+SolidCraft saves one plate with six through holes, one native HoleFeature named `Hole1`, and one native CircularPatternFeature that references that Hole feature.
 
 ## Saved-design test
 
-Required because bolts is a saved native pattern-count parameter. Change bolts from 6 to 4 in the saved .sc design; the pattern must rebuild to four holes without rerunning Python while retaining one source cut and one CircularPatternFeature.
+Required because bolts is a saved native pattern-count parameter. Change bolts from 6 to 4 in the saved .sc design; the pattern must rebuild to four holes without rerunning Python while retaining one direct source Hole and one CircularPatternFeature.
 
 ## Geometry evidence
 

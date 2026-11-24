@@ -73,6 +73,10 @@ groups:
         description: "Add a native flange to an existing edge using a finished line-only open Sketch path."
         snippet: "sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)"
         example:
+      - title: "Shape.perforate(...)"
+        description: "Apply a native whole-sheet manufacturing perforation field without repeated solid hole cuts."
+        snippet: "sheet = sheet.perforate(diameter=5, pitch=10, margin=5, pattern='square')"
+        example: sheet-perforate
 
   - heading: Features and placement
     items:
@@ -101,11 +105,11 @@ groups:
         example: anchored-holes
       - title: "shape.rectangular_pattern(...)"
         description: "Repeat an already-applied native feature in one or two linear directions."
-        snippet: "plate.rectangular_pattern(cut, count=4, spacing=20, direction=Axis.X)"
+        snippet: "plate.rectangular_pattern(hole, count=4, spacing=20, direction=Axis.X)"
         example:
       - title: "shape.circular_pattern(...)"
         description: "Repeat an already-applied native feature around a fixed axis."
-        snippet: "plate.circular_pattern(cut, count=6, axis=Axis.Z)"
+        snippet: "plate.circular_pattern(hole, count=6, axis=Axis.Z)"
         example:
       - title: "shape.at(target, anchor=..., child=...)"
         description: "Place a direct CSG shape anchor on another shape anchor; CENTER-to-CENTER is supported first."
@@ -154,6 +158,14 @@ groups:
         description: "Keep an in-plane attachment offset associative; parameter expressions become native planar-joint values."
         snippet: "part.attach(base, parent=Anchor.FRONT_TOP_LEFT, child=mount, offset=(0, -wall + 12))"
         example: components
+      - title: "assembly.with_exploded_view(...)"
+        description: "Store a native automatic or explicit exploded presentation without changing normal occurrence placements."
+        snippet: "assembly.with_exploded_view('Service', scale=1.25).show_exploded('Service')"
+        example: exploded-views
+      - title: "assembly.show_assembled()"
+        description: "Return presentation to the normal assembled occurrence placements."
+        snippet: "assembly.show_assembled()"
+        example: exploded-views
       - title: "assembly.with_anchor(...) / anchor(...)"
         description: "Expose a semantic attachment datum owned by an assembly without adding application-specific anchors to a generic component."
         snippet: |

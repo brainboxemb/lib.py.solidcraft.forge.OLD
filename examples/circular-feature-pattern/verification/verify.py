@@ -10,7 +10,6 @@ from cad_verification import (
     SolidCraftBodyExpectation,
     SolidCraftModelExpectation,
     SolidCraftSavedDesign,
-    SolidCraftSketchExpectation,
     SolidCraftTimelineExpectation,
     SolidCraftVerification,
 )
@@ -24,11 +23,7 @@ TIMELINE = (
         check_error=False, check_warning=False,
     ),
     SolidCraftTimelineExpectation(
-        "Sketch", name="BoltHole", check_name=True,
-        check_error=False, check_warning=False,
-    ),
-    SolidCraftTimelineExpectation(
-        "ExtrudeFeature", name="BoltHole", check_name=True,
+        "HoleFeature", name="Hole1", check_name=True,
         check_error=False, check_warning=False,
     ),
     SolidCraftTimelineExpectation(
@@ -53,11 +48,7 @@ VERIFICATION = SolidCraftVerification(
                 face_type_counts={"cylinder": 6},
             ),
         ),
-        sketches=(
-            SolidCraftSketchExpectation(
-                name="BoltHole", curves=1, profiles=1, status="solved",
-            ),
-        ),
+        sketch_count=0,
         timeline=TIMELINE,
     ),
     saved_designs=(

@@ -8,6 +8,28 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Fixed
+
+- Restore active component context across headless replay phases before
+  continuing component-local native features; this prevents joined feature/tool
+  geometry from remaining visible in root/world space after save/reopen (#753).
+
+### Changed
+
+- Generalized native feature-pattern sources so rectangular/circular patterns
+  accept already-applied Hole and native primitive Shapes as well as named
+  Sketch extrusions, while keeping SolidCraft history names internal (#347).
+
+### Added
+
+- Added native exploded assembly views with automatic scale or explicit
+  occurrence translations plus explicit exploded/assembled presentation
+  selection, without mutating normal occurrence placements (#751).
+- Added native whole-sheet `Shape.perforate(...)` fields with parameterized
+  diameter, pitch and optional margin plus staggered/square layout. Forge keeps
+  perforations as SolidCraft flat-pattern/DXF/measurement semantics instead of
+  approximating them with repeated B-rep holes (#779).
+
 ## [0.14.0] - 2026-11-24
 
 ### Changed

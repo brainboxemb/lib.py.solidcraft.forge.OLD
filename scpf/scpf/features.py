@@ -90,6 +90,7 @@ def _is_feature_tree(shape):
         "sheet_edge_flange",
         "sheet_hem",
         "sheet_path_flange",
+        "sheet_perforate",
         "sheet_fold",
     ):
         return True
@@ -1290,6 +1291,14 @@ def _non_count_parameter_names(node, found=None):
             _non_count_parameter_names(original, found)
             _non_count_parameter_names((edge, path, radius), found)
             return found
+        if node.kind == "sheet_perforate":
+            original, diameter, pitch, margin, pattern = node.data
+            _non_count_parameter_names(original, found)
+            _non_count_parameter_names(
+                (diameter, pitch, margin, pattern),
+                found,
+            )
+            return found
         if node.kind == "sheet_fold":
             original, line, _angle, fixed, position, flip = node.data
             _non_count_parameter_names(original, found)
@@ -1388,14 +1397,71 @@ def _sheet_dimensionless_parameter_names(node, found=None):
     return found
 
 
-def _native_feature_name(feature):
-    """Resolve the native history feature referenced by a pattern source."""
-    if feature.kind == "explicit_sketch_extrusion":
-        return feature.data[0]
-    raise ModelError(
-        "feature patterns currently support features produced by "
-        "Sketch.extrude()"
-    )
+_AUTO_HISTORY_FEATURE_NAMES = {
+    "solid.box": "Box",
+    "solid.sphere": "Sphere",
+    "solid.cylinder": "Cylinder",
+    "solid.cone": "Cone",
+    "solid.hole": "Hole",
+}
+
+
+def _applied_feature_prefix(root, source):
+    """Return the model-history prefix ending at the exact applied source."""
+    if not isinstance(root, Shape):
+        return None
+
+    if root.kind in ("rectangular_pattern", "circular_pattern"):
+        return _applied_feature_prefix(root.data[0], source)
+
+    if root.kind in ("fillet", "chamfer", "shell", "material_assignment"):
+        return _applied_feature_prefix(root.data[0], source)
+
+    if root.kind in ("union", "difference", "intersection"):
+        original, added = root.data
+        candidate = added.data[0] if added.kind == "labeled" else added
+        if candidate is source:
+            return root
+        return _applied_feature_prefix(original, source)
+
+    return None
+
+
+def _native_feature_name(root, feature, model_name):
+    """Resolve an applied Forge Shape to its SolidCraft history identity.
+
+    Explicit Sketch extrusions already carry their authored feature name.
+    Native primitives such as Hole/Cylinder/Cone use SolidCraft's deterministic
+    type-local history names (Hole1, Cylinder2, ...), derived from the exact
+    history prefix that applies the source feature.
+    """
+    prefix = _applied_feature_prefix(root, feature)
+    if prefix is None:
+        raise ModelError(
+            "pattern source must be one already-applied native history feature"
+        )
+
+    commands, _ = _to_commands(prefix, model_name)
+    if not commands:
+        raise ModelError("pattern source produced no native history feature")
+
+    last = commands[-1]
+    params = last.get("params", {})
+    explicit_name = params.get("name")
+    if isinstance(explicit_name, str) and explicit_name:
+        return explicit_name
+
+    command = last.get("command")
+    base_name = _AUTO_HISTORY_FEATURE_NAMES.get(command)
+    if base_name is None:
+        raise ModelError(
+            "pattern source does not expose a stable native history-feature "
+            f"identity: {feature.kind}"
+        )
+    ordinal = sum(row.get("command") == command for row in commands)
+    if ordinal < 1:
+        raise ModelError("pattern source native history ordinal is missing")
+    return f"{base_name}{ordinal}"
 
 
 def _to_commands(shape, name):
@@ -1583,6 +1649,24 @@ def _to_commands(shape, name):
             _command("sheet.path_flange", **params)
         ], base
 
+    if shape.kind == "sheet_perforate":
+        original, diameter, pitch, margin, pattern = shape.data
+        steps, base = _to_commands(original, name)
+        if not base or not base.get("sheet"):
+            raise ModelError(
+                "sheet perforation requires existing sheet material"
+            )
+        params = {
+            "diameter": command_value(diameter),
+            "pitch": command_value(pitch),
+            "body": name,
+        }
+        if margin is not None:
+            params["margin"] = command_value(margin)
+        if pattern != "staggered":
+            params["pattern"] = pattern
+        return steps + [_command("sheet.perforate", **params)], base
+
     if shape.kind == "sheet_fold":
         original, line, angle, fixed, position, flip = shape.data
         steps, base = _to_commands(original, name)
@@ -1620,7 +1704,10 @@ def _to_commands(shape, name):
                 "dir": list(direction),
             }
         params = dict(
-            features=[_native_feature_name(source) for source in sources],
+            features=[
+                _native_feature_name(original, source, name)
+                for source in sources
+            ],
             axis=native_axis,
             count=command_value(count),
             alignment=alignment,
@@ -1643,7 +1730,10 @@ def _to_commands(shape, name):
         ) = shape.data
         steps, base = _to_commands(original, name)
         params = dict(
-            features=[_native_feature_name(source) for source in sources],
+            features=[
+                _native_feature_name(original, source, name)
+                for source in sources
+            ],
             dir1=list(dir1),
             count1=command_value(count1),
             spacing1=command_value(spacing1),

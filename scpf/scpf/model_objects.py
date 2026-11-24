@@ -672,11 +672,23 @@ class AssemblyAnchor:
 
 
 @dataclass(frozen=True)
+class ExplodedView:
+    """One persistent native exploded presentation owned by an Assembly."""
+
+    name: str
+    scale: float | None = None
+    moves: tuple[tuple[int, tuple[float, float, float]], ...] = ()
+
+
+@dataclass(frozen=True)
 class Assembly:
     """Ordered collection of reusable model occurrences."""
 
     instances: tuple[ModelInstance, ...]
     anchors: tuple[tuple[str, AssemblyAnchor], ...] = ()
+    exploded_views: tuple[ExplodedView, ...] = ()
+    exploded_display: str | None = None
+    exploded_display_set: bool = False
 
     def group(self, name):
         """Wrap these assembly occurrences in a real nested native component.
@@ -736,7 +748,130 @@ class Assembly:
             )
             for anchor_name, anchor in self.anchors
         )
-        return Assembly(grouped, anchors)
+        return replace(
+            self,
+            instances=grouped,
+            anchors=anchors,
+        )
+
+    def with_exploded_view(self, name, *, scale=None, moves=None):
+        """Add one native SolidCraft exploded presentation to this Assembly.
+
+        Define exploded views after composing the final Assembly. Use either
+        automatic scale mode or explicit occurrence translations.
+        """
+        if len(self.instances) < 2:
+            raise ValueError("exploded view requires at least two occurrences")
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("exploded view name must be non-empty text")
+        name = name.strip()
+        if any(view.name == name for view in self.exploded_views):
+            raise ValueError(f"exploded view {name!r} already exists")
+        if moves is not None and scale is not None:
+            raise ValueError("exploded view uses either scale or explicit moves")
+
+        normalized_scale = None
+        if scale is not None:
+            if (
+                isinstance(scale, bool)
+                or not isinstance(scale, (int, float))
+                or not isfinite(scale)
+                or scale <= 0
+            ):
+                raise ValueError(
+                    "exploded view scale must be a positive finite number"
+                )
+            normalized_scale = float(scale)
+
+        normalized_moves = ()
+        if moves is not None:
+            if not isinstance(moves, (tuple, list)) or not moves:
+                raise ValueError(
+                    "exploded view moves must be a non-empty sequence"
+                )
+            owned = {instance.occurrence_id for instance in self.instances}
+            seen = set()
+            result = []
+            for item in moves:
+                if not isinstance(item, (tuple, list)) or len(item) != 2:
+                    raise ValueError(
+                        "each exploded move must be "
+                        "(model_instance, (dx, dy, dz))"
+                    )
+                instance, translation = item
+                if not isinstance(instance, ModelInstance):
+                    raise TypeError(
+                        "exploded move target must be a model object"
+                    )
+                if instance.occurrence_id not in owned:
+                    raise ValueError(
+                        "exploded move target must belong to this assembly"
+                    )
+                if instance.occurrence_id in seen:
+                    raise ValueError(
+                        "one occurrence cannot have two moves in one "
+                        "exploded view"
+                    )
+                if (
+                    not isinstance(translation, (tuple, list))
+                    or len(translation) != 3
+                ):
+                    raise ValueError(
+                        "exploded move translation must be an XYZ triple"
+                    )
+                values = []
+                for value in translation:
+                    if (
+                        isinstance(value, bool)
+                        or not isinstance(value, (int, float))
+                        or not isfinite(value)
+                    ):
+                        raise ValueError(
+                            "exploded move translation must contain fixed "
+                            "finite numbers"
+                        )
+                    values.append(float(value))
+                if not any(values):
+                    raise ValueError(
+                        "exploded move translation must be non-zero"
+                    )
+                seen.add(instance.occurrence_id)
+                result.append((instance.occurrence_id, tuple(values)))
+            normalized_moves = tuple(result)
+
+        return replace(
+            self,
+            exploded_views=self.exploded_views + (
+                ExplodedView(
+                    name=name,
+                    scale=normalized_scale,
+                    moves=normalized_moves,
+                ),
+            ),
+        )
+
+    def show_exploded(self, name):
+        """Show one named exploded view after the assembly is built."""
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("exploded view name must be non-empty text")
+        name = name.strip()
+        if not any(view.name == name for view in self.exploded_views):
+            raise KeyError(
+                f"assembly has no exploded view named {name!r}"
+            )
+        return replace(
+            self,
+            exploded_display=name,
+            exploded_display_set=True,
+        )
+
+    def show_assembled(self):
+        """Explicitly show the normal assembled placement."""
+        return replace(
+            self,
+            exploded_display=None,
+            exploded_display_set=True,
+        )
 
     def with_anchor(self, name, target, reference, *, offset=(0, 0)):
         """Expose one named attachment datum owned by this assembly.
@@ -857,10 +992,46 @@ class Assembly:
                     f"assembly anchor {name!r} target is not in this assembly"
                 )
 
+        view_names = [view.name for view in self.exploded_views]
+        duplicate_views = sorted({
+            name for name in view_names if view_names.count(name) > 1
+        })
+        if duplicate_views:
+            raise ValueError(
+                "exploded view names must be unique: "
+                + ", ".join(duplicate_views)
+            )
+        owned_occurrences = {
+            instance.occurrence_id for instance in self.instances
+        }
+        for view in self.exploded_views:
+            if not isinstance(view, ExplodedView):
+                raise TypeError("assembly exploded view is invalid")
+            for occurrence_id, _translation in view.moves:
+                if occurrence_id not in owned_occurrences:
+                    raise ValueError(
+                        f"exploded view {view.name!r} references an "
+                        "occurrence outside this assembly"
+                    )
+        if self.exploded_display_set and self.exploded_display is not None:
+            if self.exploded_display not in view_names:
+                raise ValueError(
+                    f"shown exploded view {self.exploded_display!r} "
+                    "is not defined"
+                )
+
     def __add__(self, other):
+        if self.exploded_views or self.exploded_display_set:
+            raise ValueError(
+                "compose the final assembly before defining exploded views"
+            )
         if isinstance(other, ModelInstance):
             return Assembly(self.instances + (other,), self.anchors)
         if isinstance(other, Assembly):
+            if other.exploded_views or other.exploded_display_set:
+                raise ValueError(
+                    "compose the final assembly before defining exploded views"
+                )
             return Assembly(
                 self.instances + other.instances,
                 self.anchors + other.anchors,
