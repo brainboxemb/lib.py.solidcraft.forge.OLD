@@ -5,13 +5,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class FourCornerLCommandTests(unittest.TestCase):
     def test_parametric_profile_placement_uses_replay_variables(self):
         commands = run_script(
-            ROOT / "examples/four-corner-l/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )["commands"]
         copies = [
             command for command in commands
