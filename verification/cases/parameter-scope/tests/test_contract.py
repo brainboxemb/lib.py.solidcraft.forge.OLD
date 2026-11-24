@@ -5,13 +5,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class ParameterScopeCommandTests(unittest.TestCase):
     def test_generated_parameter_contract(self):
         document = run_script(
-            ROOT / "examples/parameter-scope/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )
 
         params = _parameter_commands(document)
