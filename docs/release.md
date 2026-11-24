@@ -35,52 +35,45 @@ Forge owns only repository-specific validation:
 
 ## Current release state
 
-Latest actual Forge release: **v0.13.2**.
+Latest actual Forge release: **v0.14.0**.
 
-- annotated tag: `v0.13.2`;
+- annotated tag: `v0.14.0`;
+- annotated tag object:
+  `71464de5f5290a29b2b235ecf065b8bab35ad2c0`;
 - exact source:
-  `ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`;
-- published GitHub Release: `v0.13.2`;
-- qualified SolidCraft: `0.45.0`;
-- exact main branch build: `45269510406`;
-- central release run: `45269991837`.
+  `cd46d6797df319b9d13605c11568990113772700`;
+- published GitHub Release: `v0.14.0`;
+- qualified runtime: `docker.cad.solidcraft v0.3.5`;
+- qualified SolidCraft: `0.48.1`;
+- canonical SolidCraft registry: 866 commands under
+  `docs/reference/solidcraft/0.48.1/`;
+- exact main branch build: `45381336046`;
+- central release run: `45381885774`.
 
 The annotated tag resolves exactly to the release source above.
 
-v0.13.2 is the consumer hotfix for #796. It preserves symbolic placed-primitive
-dimensions through Box/Cylinder/Cone anchor arithmetic and fixes the
-v0.13.1-adoption failure exposed by the existing `hub75-panel` model.
-
-v0.13.2 adds no new public modelling API beyond v0.13.1. It is the recommended
-v0.13.x consumer baseline.
-
-The v0.12.0, v0.13.0 and v0.13.1 tags remain valid and immutable.
-
-## Next release candidate
-
-Candidate: **v0.14.0**.
-
-The release commit will carry:
+v0.14.0 is the first Forge release carrying:
 
 - canonical `model.yml.purpose` classification for curated Examples and the
   broader Verification catalog (#785);
-- immutable runtime `docker.cad.solidcraft v0.3.5`;
-- qualified SolidCraft baseline **0.48.1** with canonical 866-command registry;
-- retained component-local joined-Cylinder occurrence regression (#753/#823);
+- immutable runtime v0.3.5 / SolidCraft 0.48.1 adoption with the retained
+  component-local joined-Cylinder occurrence regression (#753/#823);
 - first-class Sheet metal API Guide/Reference/Cheatsheet documentation (#786).
 
-Publication must not occur until the exact v0.14.0 release-prep commit is stable
-on `main` and its durable main build is green.
+This release supersedes v0.13.2 as the recommended consumer baseline for the
+current CAD repository. Product-CAD consumers that need the HUB75 five-panel
+component fix should use Forge v0.14.0 together with the qualified
+`cad-solidcraft:v0.3.5` runtime.
 
-### v0.14.0 candidate baseline
+### Previous v0.13.2 baseline
 
-The v0.14.0 candidate is qualified against **SolidCraft 0.48.1**
-through immutable `docker.cad.solidcraft v0.3.5`. The canonical command
-reference is `docs/reference/solidcraft/0.48.1/`.
+v0.13.2 remains valid and immutable at exact source
+`ea5710a5d2d33b0633b93c5da95dd5b74f126aa4`, qualified against SolidCraft
+0.45.0. Its exact main build was `45269510406` and its central release run was
+`45269991837`.
 
-This does not rewrite the v0.13.2 release record above: v0.13.2 remains
-qualified against SolidCraft 0.45.0. A later Forge release must explicitly carry
-the 0.48.1 baseline and retained #753 component-Cylinder regression evidence.
+v0.13.2 was the consumer hotfix for #796 and remains part of the historical
+release chain; the v0.14.0 record above does not rewrite it.
 
 ## Consumer workflow
 
