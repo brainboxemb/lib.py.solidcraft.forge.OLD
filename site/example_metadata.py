@@ -8,7 +8,7 @@ from typing import Any
 
 import yaml
 
-from scpf.model_metadata import validate_model_metadata
+from scpf.model_metadata import MODEL_PURPOSES, validate_model_metadata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +27,7 @@ class ExampleMetadata:
     """Validated human-facing metadata for one Forge example."""
 
     slug: str
+    purpose: tuple[str, ...]
     section: str
     priority: int
     title: str
@@ -99,6 +100,7 @@ def load_example_metadata(path: Path) -> ExampleMetadata:
     metadata = validate_model_metadata(data, label=f"{slug}.model.yml")
     return ExampleMetadata(
         slug=slug,
+        purpose=metadata.purpose,
         section=metadata.section,
         priority=metadata.priority,
         title=metadata.title,
@@ -111,15 +113,23 @@ def load_example_metadata(path: Path) -> ExampleMetadata:
 
 def discover_example_metadata(
     root: Path = EXAMPLES_ROOT,
+    *,
+    purpose: str | None = None,
 ) -> tuple[ExampleMetadata, ...]:
-    """Discover examples from local model.yml files, with no central registry."""
+    """Discover canonical model metadata, optionally filtered by purpose."""
+
+    if purpose is not None and purpose not in MODEL_PURPOSES:
+        raise ValueError(f"unknown model purpose: {purpose}")
 
     rows = [
         load_example_metadata(path)
         for path in sorted(Path(root).glob("*/model.yml"))
     ]
+    if purpose is not None:
+        rows = [row for row in rows if purpose in row.purpose]
     if not rows:
-        raise ValueError(f"no example model.yml files found below {root}")
+        label = f" purpose {purpose!r}" if purpose is not None else ""
+        raise ValueError(f"no model.yml files{label} found below {root}")
 
     slugs = [row.slug for row in rows]
     if len(slugs) != len(set(slugs)):
