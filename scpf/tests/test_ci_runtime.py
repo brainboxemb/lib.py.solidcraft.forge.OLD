@@ -48,10 +48,10 @@ class CiRuntimeContractTests(unittest.TestCase):
             solidcraft.rsplit(":", 1)[1],
             reference.rsplit(":", 1)[1],
         )
-        self.assertEqual(solidcraft.rsplit(":", 1)[1], "v0.3.4")
+        self.assertEqual(solidcraft.rsplit(":", 1)[1], "v0.3.5")
         config = CAD_CI.read_text(encoding="utf-8")
         self.assertIn(
-            'reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"',
+            'reference: "ghcr.io/brainboxemb/cad-reference:v0.3.5"',
             config,
         )
 

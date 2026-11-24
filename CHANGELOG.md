@@ -8,6 +8,18 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Changed
+
+- Adopt immutable `docker.cad.solidcraft v0.3.5` and qualify Forge against
+  SolidCraft **0.48.1**. The retained #753 component-local joined-Cylinder
+  occurrence regression is green on that runtime; Forge now checks the exact
+  0.48.1 command registry and no longer consumes runtime v0.3.4 / SolidCraft
+  0.45.0 for current development (#823).
+- Canonical `model.yml` metadata now includes explicit `purpose`
+  classification for Example and Verification membership, allowing the curated
+  teaching catalog and the broader capability catalog to evolve independently
+  without moving model source directories (#785).
+
 ### Documentation
 
 - Added a first-class Sheet metal API Guide chapter and complete generated
