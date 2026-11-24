@@ -21,9 +21,9 @@ dev-ci
 
 Current permanent heads at this checkpoint:
 
-- `main`: `42f27142888d19fd87d84db9365bf3aed0cc73f2`;
-- `dev-cad`: `4ea3096f3f5b5d53eef48bfb25b62185908f96df`;
-- `dev-ci`: `68905bdbd4d999d73248858b4c3f9336ad47cf6e`.
+- `main`: `80bc83e72e34e0dce6e6df745d2ebf8f96111379`;
+- `dev-cad`: `e4ea4bcaf8fba1e3fd9d18dac84aaadaf7d261d3`;
+- `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
 Forge #785 / PR #816 is accepted on `dev-cad`. Exact durable branch run
 `45358578565` succeeded and published the accepted dev-cad build/Page state.
@@ -66,64 +66,55 @@ main **ci-build-record**.
 
 ## Active execution
 
-### #817 — reconcile plan after #785
+### #823 — adopt runtime v0.3.5 / SolidCraft 0.48.1
 
-Status: **now / docs-only dev-cad**.
+Status: **now / primary blocker resolution**.
 
-This issue records the accepted #785 dev-cad state and restores complete open
-issue assessment before stable promotion. It contains no implementation change.
+Runtime owner `docker.cad.solidcraft` has released immutable **v0.3.5** at
+exact source `cb4295271173ac88deed92627c74456300c0393f`, qualified against
+SolidCraft **0.48.1**. Authoritative tag build `45366783017` is green for both
+runtime roles and published the GitHub Release.
 
-### #785 — canonical model purpose and public catalogs
+Pre-release external Forge qualification #821 is complete: temporary PR #822
+used runtime-main `:edge` only for evidence and final Forge run
+`45366059337` passed. The retained #753
+`component-cylinder-occurrence` model verification passed on that candidate.
+PR #822 was closed unmerged so no mutable edge pin entered a permanent lane.
 
-Status: **complete on dev-cad; stable promotion pending**.
+Adopt the immutable release now:
 
-Accepted contract:
-
-```yaml
-purpose: example
-purpose: verification
-purpose: [example, verification]
-```
-
-The source corpus remains under its existing model directories. There is no
-semantic `examples/` versus `verification/cases/` split, no `catalog.yml`,
-and `role.yml` is not public catalog membership.
-
-The four curated teaching models carry both Example and Verification purposes.
-The public Examples and Verification views select independently from normalized
-`model.yml.purpose`. Sheet metal is a first-class Verification group.
-Independent references and visual regression evidence are declaration-driven;
-native integration/model/geometry verification remains mandatory.
-
-Next action: promote accepted `dev-cad` through `main`. Close #785 after the
-stable promotion is accepted.
+- pin both runtime roles to v0.3.5;
+- set the tested SolidCraft contract to 0.48.1;
+- capture the canonical 0.48.1 command registry from immutable v0.3.5;
+- update immutable runtime-consumption/reference tests and provenance;
+- retain #753 as the product-blocking regression case;
+- require full PR and durable dev-cad acceptance before stable promotion.
 
 ### #753 — component-local Cylinder joins across occurrences
 
-Status: **now / blocking product CAD**.
+Status: **blocked only on #823 immutable runtime adoption**.
 
 CAD #388 is the highest-priority downstream blocker for the five-panel HUB75
 assembly: component bodies are placed correctly, but one loose set of native
 Cylinder join/tool geometry can remain visible at the component-definition
 origin.
 
-Draft PR #754 owns the smallest reusable reproducer: one Box body, one native
-Cylinder join, one copied occurrence and rotated placements. Refresh it from the
-current dev-cad line and run the native SolidCraft path now that the earlier
-dev-cad CI blocker is gone.
+PR #754 is merged and the retained fixture is durable-green on dev-cad. Runtime
+owner qualification proved SolidCraft 0.48.1 renders the retained geometry as
+exactly two occurrence islands with no stale third tool object; external Forge
+candidate qualification #821 also passed.
 
-Do not add a product-CAD geometry workaround. First determine whether released
-SolidCraft reproduces the stale tool/frame behavior. If runtime-owned, retain
-the exact runtime blocker and qualification here; change Forge lowering only if
-the runtime fix is insufficient.
+Do not add a product-CAD geometry workaround. Close #753 only after #823 pins
+immutable runtime v0.3.5 / SolidCraft 0.48.1 and the durable Forge dev-cad run
+passes the retained fixture.
 
 ### #779 — native whole-sheet perforation
 
 Status: **now / dev-cad in parallel**.
 
-PR #780 is based on the pre-#785 catalog contract and is 24 commits behind the
-accepted dev-cad line. Rebuild that existing issue branch from current
-`dev-cad` rather than copying stale plan/catalog files.
+PR #780 has already been rebuilt on the purpose-aware catalog contract and was
+green before the #753 blocker fixture advanced dev-cad. Refresh it only after
+#823 is accepted so perforation inherits the qualified v0.3.5 runtime baseline.
 
 Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
 
@@ -134,19 +125,6 @@ Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
   Sheet metal Guide, Cheatsheet and `docs/api.md`;
 - preserve native perforation/flat-pattern semantics and do not fabricate
   repeated B-rep holes or external reference equivalents.
-
-### #814 — Example basic validation selection
-
-Status: **parallel design / blocked on stable sync to dev-ci**.
-
-The existing first/basic Forge validation stage is already
-`forge-release` / `scripts/tool_verify.py`. It currently duplicates the four
-teaching slugs in `PASSING_EXAMPLES`.
-
-After #785 reaches `main`, sync `main -> dev-ci` through normal permanent-ref
-policy. Then #814 replaces that duplicate list with selection from canonical
-`model.yml` entries whose purpose contains `example`. The separate
-`custom-anchor` expected-rejection policy fixture remains explicit.
 
 ### #788 — CAD-CI concurrency measurement
 
@@ -160,12 +138,10 @@ Verification coverage or reintroduce per-model runtime startup.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #817 Plan reconciliation after #785 | **now / docs-only** | Merge the current snapshot to dev-cad before stable promotion. |
-| #814 Example basic validation selection | **blocked on main -> dev-ci sync** | After #785 promotion, sync stable metadata to dev-ci and derive forge-release passing models from `purpose: example`. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #785 Examples / Verification purpose split | **complete on dev-cad / promotion pending** | Promote accepted dev-cad to main; then close. |
-| #753 Component-local Cylinder joins | **now / blocker** | Refresh PR #754 on current dev-cad and run the native copied/rotated component reproducer; CAD #388 stays blocked until ownership/fix is qualified. |
-| #779 Native whole-sheet perforation | **now / CAD in parallel** | Finish PR #780 on post-#785 dev-cad, publish as Sheet metal Verification and complete API docs. |
+| #823 Adopt runtime v0.3.5 / SolidCraft 0.48.1 | **now / blocker resolution** | Pin immutable v0.3.5, capture 0.48.1 reference evidence and require retained #753 verification. |
+| #753 Component-local Cylinder joins | **blocked on #823 adoption only** | Close after immutable v0.3.5 is durable-green in Forge; then unblock CAD #388. |
+| #779 Native whole-sheet perforation | **next / CAD** | Refresh PR #780 after #823 so it inherits the qualified v0.3.5 runtime baseline. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
@@ -184,13 +160,11 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. merge #817 docs-only plan reconciliation to `dev-cad`;
-2. in parallel:
-   - open the normal `dev-cad -> main` promotion for accepted #785;
-   - rebuild #779 / PR #780 on the post-#785 dev-cad line;
-   - keep #788 measurement work independent;
-3. after the stable promotion is green and merged:
-   - close #785;
-   - sync `main -> dev-ci`;
-   - implement #814 against the accepted purpose-aware metadata contract;
-4. keep #753 and #751 behind the active metal/runtime work.
+1. complete #823 on `dev-cad`: immutable runtime v0.3.5 / SolidCraft 0.48.1,
+   canonical 0.48.1 command reference, full PR validation and durable branch
+   acceptance;
+2. close #753 and update downstream CAD #388 only after that durable acceptance;
+3. promote the accepted runtime-adoption batch to `main` and make the Forge
+   release decision from the stable main build;
+4. refresh #779 / PR #780 on the accepted runtime baseline;
+5. keep #788 measurement work independent and #751 lower priority.
