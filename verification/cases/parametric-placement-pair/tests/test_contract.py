@@ -6,13 +6,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class ParametricPlacementPairCommandTests(unittest.TestCase):
     def test_symmetric_parametric_pair_uses_bound_occurrences(self):
         document = run_script(
-            ROOT / "examples/parametric-placement-pair/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )
         commands = document["commands"]
         moves = [
