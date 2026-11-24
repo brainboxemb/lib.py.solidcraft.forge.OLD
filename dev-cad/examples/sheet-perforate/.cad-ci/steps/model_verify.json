@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "58300ba96652e668e2f663cde6ad14791c4a5b0a8c4907b4da488ea844756c1f",
+  "duration_seconds": 0.234,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T11:50:15.748Z",
+  "item": "sheet-perforate",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "22fa32dd22ed6bf9167c77fd7a99af10e44ce57addbc160f962d7cde137d8701"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "25e07ab302faf7f359755aad4b55e32bab37987c6b8f6a13ee14cc30e5e0115c"
+    }
+  },
+  "run_finished_at": "2026-11-24T11:51:15.945Z",
+  "run_started_at": "2026-11-24T11:49:19.905Z",
+  "schema": 6,
+  "started_at": "2026-11-24T11:50:15.514Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "9cfa51538302f8852d0de33c28591376a491f2904143a6526fd0066fa95b4348",
+  "timeout_seconds": null
+}
