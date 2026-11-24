@@ -2362,6 +2362,12 @@ contract, not a consumer extension. It accepts `example`, `verification`, or
 both values and normalizes scalar/list YAML forms to one semantic set. Public
 catalog membership is derived only from that canonical field.
 
+The `example` value also provides the canonical input to Forge's existing
+small basic/release-validation stage. The dev-ci consumer resolves that
+classification in #814 instead of maintaining a second slug registry.
+`verification` does not replace normal CAD-CI item participation or native
+Verification configuration.
+
 There is deliberately no extension namespace inside `model.yml`: allowing
 arbitrary consumer fields would recreate the schema drift that #703 is intended
 to remove. CI execution state, verification expectations and generated state
