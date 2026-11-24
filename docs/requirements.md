@@ -393,6 +393,32 @@ Requirements:
 - rotated Sketch sheet-metal and open-chain authoring remain unsupported until
   separately qualified.
 
+## Native feature pattern source identity
+
+Shape-level native patterns accept Forge feature Shapes, not caller-authored
+SolidCraft history-name strings.
+
+Requirements:
+
+- `Shape.rectangular_pattern()` and `Shape.circular_pattern()` share one
+  source-validation and history-identity contract;
+- every source Shape must already be applied to the patterned body;
+- the existing explicit `Sketch.extrude()` source keeps its authored native
+  feature name;
+- direct native Hole-family sources resolve through SolidCraft's deterministic
+  Hole history identity (`Hole1`, `Hole2`, ...);
+- native primitive feature sources use the same deterministic type-local history
+  identity where the SolidCraft command creates one feature;
+- Forge emits the source once and exactly one native pattern command; it does
+  not expand repeated cuts/solids in Python;
+- unsupported Shapes that do not resolve to one stable native history feature
+  fail with a pattern-source error;
+- count/spacing/angle parameter semantics and saved-design associativity remain
+  unchanged.
+
+The public API must not expose native feature ids or require a consumer to copy
+timeline names from a SolidCraft design.
+
 ## Model command-contract coverage
 
 The staged model-verification path preserves the former Q1/Q2 ownership split
