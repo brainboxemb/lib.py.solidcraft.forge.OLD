@@ -350,6 +350,26 @@ class StableBuildEvidenceTests(unittest.TestCase):
                 ["joint.svg"],
             )
 
+    def test_model_evidence_allows_no_independent_references(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.make_complete_tree(root)
+            manifest_path = root / "build.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            for implementation in IMPLEMENTATIONS:
+                manifest["items"].pop(
+                    f"examples/simple-box/{implementation}"
+                )
+            write_json(manifest_path, manifest)
+
+            evidence = load_stable_build_evidence(
+                root,
+                "c" * 40,
+                ("simple-box",),
+            )
+
+            self.assertEqual(evidence.examples[0].references, ())
+
     def test_named_complete_scope_preserves_scope_in_artifact_urls(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
