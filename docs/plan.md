@@ -21,8 +21,8 @@ dev-ci
 
 Current permanent heads at this checkpoint:
 
-- `main`: `efc88bfcaf452051d721347f2e5ca561decad654`;
-- `dev-cad`: `0b24df66481c43ff1cb798e749c728abd4ad6f33`;
+- `main`: `8ddcf7e6f58e8da12750d63a5d3604101c9c2824`;
+- `dev-cad`: `3b57d4c6808fa00bc5c29ed8f86b7a8cda73d6cf`;
 - `dev-ci`: `ac47a97cbd2646f292c01c90f2defb95963e48bf`.
 
 Latest published Forge package: **v0.15.0** at exact
@@ -80,15 +80,17 @@ main **ci-build-record**.
 
 ## Active execution
 
-### #839 — record published v0.15.0 and synchronize the CAD lane
+### #843 — expose native solid.revolve
 
-Status: **now / post-release administration**.
+Status: **now / concrete CAD blocker**.
 
-Record the immutable v0.15.0 source/tag/build/release and final #753 product
-acceptance on stable `main`. After this docs-only change is durable-green,
-synchronize exact `main -> dev-cad` through the normal history-preserving
-permanent-lane path. Close #839 after the synchronized dev-cad durable build is
-source-matched.
+CAD `2026-011-02.cad.solidcraft.NEW` #30 requires the native revolved
+fasteners from its supplied latch history. Implement the smallest reusable
+profile-driven Revolve API against the pinned SolidCraft 0.48.1
+`solid.revolve` contract, qualify it natively, and do not introduce
+latch-specific primitive approximations.
+
+This is the active concrete slice of parent coverage issue #349.
 
 ### #788 — CAD-CI concurrency measurement
 
@@ -118,13 +120,13 @@ critical path.
 
 | Issue | Status | Next action |
 | --- | --- | --- |
-| #839 v0.15.0 post-release record | **now** | Merge docs-only record to main, then exact history-preserving main -> dev-cad sync and durable acceptance. |
+| #843 Native solid.revolve | **now / CAD blocker** | Implement, qualify and document reusable profile-driven Revolve for CAD #30. |
 | #788 Re-benchmark Forge CAD-CI concurrency | **next / performance** | Controlled jobs=2/4/6 A/B on identical source/full graph. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
 | #659 Build/verification/results terminology | **later / cross-repo** | Follow released shared terminology work; do not add Forge-local aliases. |
 | #570 Remove CADCraft from verification diagrams | **later** | Preserve presentation while replacing the source format. |
-| #349 Remaining SOLID CREATE coverage | **later** | Deliver focused reusable features when required by real consumers. |
+| #349 Remaining SOLID CREATE coverage | **active parent** | #843 is the current concrete Revolve slice required by CAD #30; keep other create features later until demanded. |
 | #335 build123d Sheet Metal reference | **blocked upstream** | Wait for a released upstream Sheet Metal API. |
 | #325 AnchorFrame root cause | **later / research** | Resume when an active product model requires the unresolved root cause. |
 | #175 HUB75-like AnchorFrame diagnostic | **later / with #325** | Preserve retained A/B evidence; resume only as part of #325. |
@@ -136,9 +138,7 @@ critical path.
 
 ## Next checkpoint
 
-1. complete #839 on stable main;
-2. synchronize exact `main -> dev-cad` history-preserving and require durable
-   source-matched acceptance;
-3. start #788 controlled jobs=2/4/6 measurement on one identical representative
-   full Forge source/graph;
+1. complete #843 native Revolve on `dev-cad` with unit + native verification;
+2. promote the accepted CAD lane to `main` and publish the next qualified Forge release needed by downstream CAD #30;
+3. resume #788 controlled jobs=2/4/6 measurement independently;
 4. make no scheduler or batch-sharding change before the measurement evidence.

@@ -2536,3 +2536,14 @@ emits explicit local Sketch names plus name-based downstream references.
 Other timeline-feature kinds should only join this namespace when Forge emits a
 reproduced component-local collision and their definition/reference fields are
 specified explicitly. Do not generalize by rewriting every `name` field.
+
+## Native standalone Sketch revolve (#843)
+
+`Sketch.revolve()` produces a distinct feature-tree node. The existing
+standalone Sketch compiler generates the profile, then `compile_base()`
+appends `solid.revolve` with the authored Sketch name, axis and sweep.
+New bodies use `body_name`; applied Boolean features use explicit operation
+and targets. Sweep participates in the existing angle parameter collector,
+not the length collector. No temporary body or primitive substitution is
+introduced. The native verification fixture checks geometry and saved-design
+mutation independently of the command contract tests.

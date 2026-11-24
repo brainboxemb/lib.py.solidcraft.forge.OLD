@@ -1024,3 +1024,14 @@ This first API slice applies to the whole sheet only. Forge does not expose the
 native Sketch/profile-bounded perforation region yet. Perforations remain
 SolidCraft manufacturing, flat-pattern, DXF and measurement semantics: Forge
 does **not** translate them into repeated `Hole` features or Boolean B-rep cuts.
+
+### Native Sketch revolve
+
+After a standalone, closed, single-profile Sketch scope, use
+`Sketch.revolve(axis=Axis.X, angle=360, sym=False)` to produce native
+`solid.revolve` history. The world axis must lie in the unshifted and
+unrotated XY, XZ or YZ Sketch plane. Angle is in degrees (0 < angle <= 360)
+and may be a symbolic parameter. A standalone revolve is also an ordinary
+solid Boolean operand: `+`, `-` and `&` select join, cut and intersect.
+Attached Sketches, arbitrary axis references and shifted/rotated frames are
+not part of this first qualified slice.

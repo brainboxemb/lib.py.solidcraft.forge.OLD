@@ -190,6 +190,13 @@
       "guide": "guide/geometry/#profile-selection",
       "signature": "Sketch.extrude(self, distance, *, sym=False, profiles=None, exact_regions=False)"
     },
+    "Sketch.revolve": {
+      "kind": "callable",
+      "summary": "Revolve one completed closed Sketch profile around an in-plane world axis.",
+      "reference": "reference/Sketch.revolve/",
+      "guide": "guide/geometry/#profiles",
+      "signature": "Sketch.revolve(self, *, axis, angle=360, sym=False)"
+    },
     "Box": {
       "kind": "callable",
       "summary": "Create a native rectangular solid around a declared anchor datum.",
