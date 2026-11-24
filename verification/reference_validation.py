@@ -25,12 +25,29 @@ from verification.reference_preview import render_reference_preview
 
 ROOT = Path(__file__).resolve().parents[1]
 IMPLEMENTATIONS = ("pythonscad", "pybosl2")
+ITEM_ROOTS = (
+    ROOT / "examples",
+    ROOT / "verification" / "cases",
+    ROOT / "verification" / "regressions",
+)
+
+
+def model_root(slug: str) -> Path:
+    """Return the unique repository source root for one reference model."""
+
+    matches = tuple(root / slug for root in ITEM_ROOTS if (root / slug).is_dir())
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"{slug}: expected exactly one reference source root, found "
+            + ", ".join(path.as_posix() for path in matches)
+        )
+    return matches[0]
 
 
 def contract_path(slug: str) -> Path:
     """Return one required model-local geometry contract."""
 
-    path = ROOT / "examples" / slug / "verification" / "reference_geometry.json"
+    path = model_root(slug) / "verification" / "reference_geometry.json"
     if not path.is_file():
         raise RuntimeError(f"{slug}: missing local reference contract: {path}")
     return path
@@ -39,7 +56,7 @@ def contract_path(slug: str) -> Path:
 def source_path(slug: str, implementation: str) -> Path:
     """Return one required Forge-owned reference source."""
 
-    path = ROOT / "examples" / slug / implementation / "model.py"
+    path = model_root(slug) / implementation / "model.py"
     if not path.is_file():
         raise RuntimeError(
             f"{slug}: missing {implementation} reference source: {path}"
@@ -216,14 +233,19 @@ def selected_slugs(value: str) -> tuple[str, ...]:
     """Parse explicit cases or discover every reference contract."""
 
     if value.strip().lower() == "all":
-        return tuple(
-            path.parents[1].name
-            for path in sorted(
-                (ROOT / "examples").glob(
-                    "*/verification/reference_geometry.json"
+        slugs = []
+        for root in ITEM_ROOTS:
+            if not root.is_dir():
+                continue
+            slugs.extend(
+                path.parents[1].name
+                for path in sorted(
+                    root.glob("*/verification/reference_geometry.json")
                 )
             )
-        )
+        if len(slugs) != len(set(slugs)):
+            raise RuntimeError("duplicate reference model slug across source roots")
+        return tuple(slugs)
     return tuple(
         item for item in value.replace(",", " ").split() if item
     )
