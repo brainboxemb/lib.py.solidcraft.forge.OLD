@@ -975,7 +975,10 @@ class Sketch:
 
         Example:
             with Sketch(name="Rivet profile", plane="XZ") as profile:
-                Polygon2D([(0, 0), (0, 6), (2, 6), (12, 4), (12, 0)])
+                Polygon2D(
+                    [(0, 0), (0, 6), (2, 6), (12, 4), (12, 0)],
+                    plane="XZ",
+                )
             rivet = profile.revolve(axis=Axis.X)
         """
         if not self._closed:
