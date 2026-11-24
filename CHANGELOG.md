@@ -16,6 +16,9 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ### Added
 
+- Added native exploded assembly views with automatic scale or explicit
+  occurrence translations plus explicit exploded/assembled presentation
+  selection, without mutating normal occurrence placements (#751).
 - Added native whole-sheet `Shape.perforate(...)` fields with parameterized
   diameter, pitch and optional margin plus staggered/square layout. Forge keeps
   perforations as SolidCraft flat-pattern/DXF/measurement semantics instead of
