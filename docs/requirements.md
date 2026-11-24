@@ -713,7 +713,7 @@ Released `lib.py.cad.verification` owns:
 Every active Verification model stores visual policy below its own verification directory:
 
 ```text
-examples/<model>/verification/
+<item-path>/verification/
   visual.json
   baselines/
     <view>.png | <view>.json
@@ -852,9 +852,9 @@ it must never be converted to `not-required`.
 A presentation preview is never evidence for a visual PASS and may not replace
 the required visual-verification evidence.
 
-Independent-reference summary input is read only from the canonical
-`examples/<slug>/<implementation>/` child items. Batch producer copies are not
-additional public/reference summary inputs.
+Independent-reference summary input is read only from the canonical child item
+below each model's explicit `<source-path>/<implementation>/`. Batch producer
+copies are not additional public/reference summary inputs.
 
 Missing/failed/error/review/blocked evidence must remain distinguishable.
 Evidence references must be preserved.
@@ -1018,10 +1018,10 @@ Stable Pages combines current source documentation with the accepted generic
 `build/main` baseline. The stable site is never a source of verification
 truth itself.
 
-- canonical model evidence is read from
-  `build/main/examples/<slug>/`;
+- canonical model evidence is read from the model's explicit
+  `build/main/<source-path>/`;
 - canonical independent reference evidence is read from the corresponding
-  `build/main/examples/<slug>/<implementation>/` child item;
+  `build/main/<source-path>/<implementation>/` child item;
 - batch producer outputs under `build/main/ci/*-batch/` are implementation
   detail, not a second public evidence namespace;
 - `build/main/build.json` is authoritative for item membership and per-item
@@ -1096,25 +1096,26 @@ The current public concept is **verification**, not qualification.
 - reference source visibility is source-owned and must not depend on durable evidence availability; source-only builds still show all four reference sources, while stable builds add current durable result evidence beside them;
 - source links are supplementary; replacing inline source with links is a
   content regression;
-- displayed source must come from the owning example source tree, while
-  PASS/FAIL, measurements and generated CAD artifacts continue to come from the
-  accepted durable build evidence;
-- the verification index must group examples by the existing `section` field in
-  each example's `model.yml`;
+- displayed source must come from the owning public item's explicit source path,
+  while PASS/FAIL, measurements and generated CAD artifacts continue to come
+  from the accepted branch-build evidence;
+- the verification index must group public Verification cases by the existing
+  `section` field in each case's `model.yml`;
 - grouping order must be deterministic, and no second central catalog of group
   membership may be introduced;
-- each example declares a local integer `priority` in its `model.yml`; examples
-  inside one section are sorted by that priority and then slug as a deterministic
-  tie-breaker;
+- each public Verification case declares a local integer `priority` in its
+  `model.yml`; cases inside one section are sorted by that priority and then
+  slug as a deterministic tie-breaker;
 - section presentation configuration uses `priority`, not positional `order`;
 - public section label/priority translation is presentation configuration under
   `site/content/verification-sections.yml`, not Python source;
-- the six existing section slugs keep the preserved public labels and order:
-  `fundamentals` → `1 · Basic geometry`, `features` →
-  `2 · Parent/child features and faces`, `parameters` →
+- the section slugs keep the preserved public labels/order and extend with the
+  first-class Sheet metal domain: `fundamentals` → `1 · Basic geometry`,
+  `features` → `2 · Parent/child features and faces`, `parameters` →
   `3 · Parameters and dependencies`, `components` →
   `4 · Components and occurrences`, `anchors` → `5 · Anchors and local frames`,
-  and `associativity` → `6 · Associative relationships`.
+  `associativity` → `6 · Associative relationships`, and `sheet-metal` →
+  `7 · Sheet metal`.
 
 
 ## Verification cut-over compatibility
