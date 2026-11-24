@@ -912,9 +912,9 @@ particular, the explanation of why outer bounds are or are not sufficient is
 human engineering documentation, not a value to reconstruct later from machine
 checks.
 
-`model.yml` keeps only the agreed generic page metadata fields:
-`section`, `priority`, `title`, `tagline`, `description`, `parameters`, and
-`stages`. It is not a second verification contract.
+`model.yml` keeps only the agreed generic model metadata fields:
+`purpose`, `section`, `priority`, `title`, `tagline`, `description`,
+`parameters`, and `stages`. It is not a second verification contract.
 
 Machine expectations, tolerances and saved-design checks remain solely in
 `verification/verify.py`.
@@ -927,6 +927,7 @@ documentation.
 `examples/<slug>/model.yml` is the authoritative source for human-facing
 example metadata. The required schema contains:
 
+- `purpose`: `example`, `verification`, or both;
 - `section`;
 - positive integer `priority`;
 - `title`;
@@ -938,15 +939,25 @@ example metadata. The required schema contains:
 Verification explanation and historical engineering rationale live in the
 example documentation, not in additional `model.yml` verification fields.
 
-These fields describe the example for navigation/presentation. `priority` is presentation-only and controls ordering within the example's section; lower values render first. These fields must not become a second machine verification contract. Exact expected geometry, parameters, tolerances and saved-design
+`purpose` is canonical human-facing classification and is the only public
+Example/Verification membership source. Scalar and list syntax normalize to the
+same semantic set; unknown, empty and duplicate purposes are invalid. A model
+with both purposes participates in both catalogs without duplicated source.
+
+The remaining fields describe the model for navigation/presentation. `priority`
+is presentation-only and controls ordering within the model's section; lower
+values render first. These fields must not become a second machine verification contract. Exact expected geometry, parameters, tolerances and saved-design
 expectations remain in `verification/verify.py`.
 
 Generated Pages obtain actual status, measurements and evidence links from the
 accepted durable `build/main` item output. `model.yml` must never claim a
 current PASS/FAIL result.
 
-The site generator discovers examples from the filesystem and their local
-metadata. It must not maintain a central model-name/page-content registry.
+The site generator discovers models from the filesystem and their local
+metadata. The Examples catalog selects models whose purpose contains
+`example`; Verification selects models whose purpose contains
+`verification`. It must not maintain a central model-name/page-content or
+membership registry.
 
 ## Site source separation
 
@@ -960,7 +971,7 @@ HTML generation must be structurally separated from site data/orchestration.
 - prose-heavy guide content belongs in external Markdown or template content;
 - CSS and browser JavaScript belong in static files;
 - generated API facts continue to come from the public implementation/docstrings;
-- example page metadata comes from local `model.yml`;
+- model page metadata and public catalog purpose come from local `model.yml`;
 - preserved engineering explanation comes from local `README.md`;
 - executable model facts come from source/verification files and durable evidence.
 
@@ -970,8 +981,9 @@ with page markup. HTML belongs to templates or to the dedicated HTML-rendering
 module; guide chapters and model-specific SVG galleries remain external data.
 
 The current site must not depend on retired `qualification.*` source modules.
-The 32 current `examples/` directories and durable `build/main` are the
-catalog/evidence sources.
+The existing model directories and durable `build/main` are the
+source/evidence roots; catalog membership is derived from `model.yml.purpose`,
+not directory naming.
 
 
 ### Presentation metadata selection boundary
@@ -1073,8 +1085,12 @@ The current public concept is **verification**, not qualification.
 - displayed source must come from the owning example source tree, while
   PASS/FAIL, measurements and generated CAD artifacts continue to come from the
   accepted durable build evidence;
-- the verification index must group examples by the existing `section` field in
-  each example's `model.yml`;
+- the verification index must include only models whose normalized `purpose`
+  contains `verification`, then group them by the existing `section` field
+  in each model's `model.yml`;
+- the Examples index must include only models whose normalized `purpose`
+  contains `example`;
+- one model may carry both purposes and appear in both without duplicated source;
 - grouping order must be deterministic, and no second central catalog of group
   membership may be introduced;
 - each example declares a local integer `priority` in its `model.yml`; examples
@@ -1083,12 +1099,14 @@ The current public concept is **verification**, not qualification.
 - section presentation configuration uses `priority`, not positional `order`;
 - public section label/priority translation is presentation configuration under
   `site/content/verification-sections.yml`, not Python source;
-- the six existing section slugs keep the preserved public labels and order:
+- the existing section slugs keep their preserved public labels and order, with
+  the new Sheet metal section appended:
   `fundamentals` → `1 · Basic geometry`, `features` →
   `2 · Parent/child features and faces`, `parameters` →
   `3 · Parameters and dependencies`, `components` →
   `4 · Components and occurrences`, `anchors` → `5 · Anchors and local frames`,
-  and `associativity` → `6 · Associative relationships`.
+  `associativity` → `6 · Associative relationships`, and `sheet-metal`
+  → `7 · Sheet metal`.
 
 
 ## Verification cut-over compatibility
@@ -1572,8 +1590,9 @@ replay bindings rather than guessed tangent-arc ids.
 Forge owns the reusable human-facing `model.yml` contract used by Forge examples
 and CAD consumer repositories.
 
-The canonical document contains exactly these seven fields:
+The canonical document contains exactly these eight fields:
 
+- `purpose`: `example`, `verification`, or both;
 - `section`: non-empty string;
 - `priority`: positive integer;
 - `title`: non-empty string;
@@ -1583,6 +1602,9 @@ The canonical document contains exactly these seven fields:
 - `stages`: non-empty list of non-empty strings.
 
 The contract is exact: `model.yml` has no consumer-specific extension mechanism.
+`purpose` is shared classification, not execution state. The validator accepts
+a scalar string or non-empty list, normalizes both forms to an ordered unique
+semantic tuple/set, and rejects unknown, empty or duplicate purpose values.
 Operational build/source inputs, dependency declarations, verification
 expectations, generated facts and consumer-only presentation controls must live
 in their owning files rather than extending `model.yml`.
