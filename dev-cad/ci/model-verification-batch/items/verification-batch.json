@@ -2,12 +2,27 @@
   "models": [
     {
       "error": null,
-      "model": "anchor-topology-mutation",
+      "model": "anchored-holes",
       "status": "pass"
     },
     {
       "error": null,
-      "model": "anchored-holes",
+      "model": "components",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "corner-anchor",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "simple-box",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "anchor-topology-mutation",
       "status": "pass"
     },
     {
@@ -52,26 +67,6 @@
     },
     {
       "error": null,
-      "model": "component-local-sketch-names",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "components",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "connected-profile-sheet",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "corner-anchor",
-      "status": "pass"
-    },
-    {
-      "error": null,
       "model": "eight-corner-brackets",
       "status": "pass"
     },
@@ -93,11 +88,6 @@
     {
       "error": null,
       "model": "hole-family",
-      "status": "pass"
-    },
-    {
-      "error": null,
-      "model": "open-sketch-chain",
       "status": "pass"
     },
     {
@@ -202,11 +192,6 @@
     },
     {
       "error": null,
-      "model": "simple-box",
-      "status": "pass"
-    },
-    {
-      "error": null,
       "model": "sketch-pattern-mirror",
       "status": "pass"
     },
@@ -224,9 +209,24 @@
       "error": null,
       "model": "xz-anchor",
       "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "component-local-sketch-names",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "connected-profile-sheet",
+      "status": "pass"
+    },
+    {
+      "error": null,
+      "model": "open-sketch-chain",
+      "status": "pass"
     }
   ],
   "schema": 1,
-  "source_sha": "3d0f33ab68bf0d3eb14024ba76c4a5415f580026",
+  "source_sha": "d53672f475c871e202e4a3fae37713a7aad07307",
   "status": "pass"
 }

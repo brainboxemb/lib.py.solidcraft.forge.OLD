@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "5e54177da57848c092ff4e64b51ec170f4f8f8372b9cac75c17687afce847422",
+  "duration_seconds": 0.074,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:08:37.443Z",
+  "item": "verification-cases-rotated-copy-placement-pythonscad",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "references": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "c187c32d7960b71815eaf9a0aa5148f598e423bf50fd67c2a73235e922925aed"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:10:10.250Z",
+  "run_started_at": "2026-11-24T08:06:58.898Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:08:37.368Z",
+  "status": "pass",
+  "step": "verify_reference",
+  "target_spec_digest": "c9ce662ca322a33abe13f9ed51daee712573f74ddf74d84425c6a58a495066d9",
+  "timeout_seconds": null
+}

@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "baseline/measurements.json",
+          "sha256": "0ce80c0b9ca0012be9d8a79c13e199f6fe092b821f10d5d7a4ced5a6c69253e9",
+          "size": 2184
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_envelopes": {
+          "actual_count": 2,
+          "expected_count": 2,
+          "kind": "body_envelopes",
+          "matched_pairs": [
+            {
+              "actual": {
+                "label": "Base",
+                "max": [
+                  20.0,
+                  15.0,
+                  5.0
+                ],
+                "min": [
+                  -20.0,
+                  -15.0,
+                  -5.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  20.0,
+                  15.0,
+                  5.0
+                ],
+                "min": [
+                  -20.0,
+                  -15.0,
+                  -5.0
+                ]
+              },
+              "max_delta": 0.0
+            },
+            {
+              "actual": {
+                "label": "Marker",
+                "max": [
+                  55.0,
+                  35.0,
+                  19.0
+                ],
+                "min": [
+                  45.0,
+                  5.0,
+                  11.0
+                ]
+              },
+              "expected": {
+                "label": null,
+                "max": [
+                  55.0,
+                  35.0,
+                  19.0
+                ],
+                "min": [
+                  45.0,
+                  5.0,
+                  11.0
+                ]
+              },
+              "max_delta": 0.0
+            }
+          ],
+          "pass": true,
+          "tolerance": 0.001,
+          "unmatched_actual": [],
+          "unmatched_expected": []
+        }
+      },
+      "id": "baseline",
+      "reason": null,
+      "status": "pass"
+    }
+  ],
+  "input": "/output/items/verification/cases/as-built-attach/model_verify/native/model.sc",
+  "metadata": {},
+  "schema": "cad-verification",
+  "schema_version": 1,
+  "status": "pass",
+  "verification_id": "as-built-attach"
+}

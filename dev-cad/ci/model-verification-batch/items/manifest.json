@@ -2,275 +2,320 @@
   "models": [
     {
       "compile_error": null,
-      "input": "/output/items/examples/anchor-topology-mutation/solidcraft.json",
-      "output": "/output/items/examples/anchor-topology-mutation/model_verify",
-      "slug": "anchor-topology-mutation"
-    },
-    {
-      "compile_error": null,
       "input": "/output/items/examples/anchored-holes/solidcraft.json",
       "output": "/output/items/examples/anchored-holes/model_verify",
-      "slug": "anchored-holes"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/as-built-attach/solidcraft.json",
-      "output": "/output/items/examples/as-built-attach/model_verify",
-      "slug": "as-built-attach"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/assembly-decorator/solidcraft.json",
-      "output": "/output/items/examples/assembly-decorator/model_verify",
-      "slug": "assembly-decorator"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/assembly-owned-anchor/solidcraft.json",
-      "output": "/output/items/examples/assembly-owned-anchor/model_verify",
-      "slug": "assembly-owned-anchor"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/attach-angle/solidcraft.json",
-      "output": "/output/items/examples/attach-angle/model_verify",
-      "slug": "attach-angle"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/attached-through-all/solidcraft.json",
-      "output": "/output/items/examples/attached-through-all/model_verify",
-      "slug": "attached-through-all"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/bracket/solidcraft.json",
-      "output": "/output/items/examples/bracket/model_verify",
-      "slug": "bracket"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/circle-negative-extrude/solidcraft.json",
-      "output": "/output/items/examples/circle-negative-extrude/model_verify",
-      "slug": "circle-negative-extrude"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/circular-feature-pattern/solidcraft.json",
-      "output": "/output/items/examples/circular-feature-pattern/model_verify",
-      "slug": "circular-feature-pattern"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/component-local-sketch-names/solidcraft.json",
-      "output": "/output/items/examples/component-local-sketch-names/model_verify",
-      "slug": "component-local-sketch-names"
+      "slug": "anchored-holes",
+      "source_path": "examples/anchored-holes"
     },
     {
       "compile_error": null,
       "input": "/output/items/examples/components/solidcraft.json",
       "output": "/output/items/examples/components/model_verify",
-      "slug": "components"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/connected-profile-sheet/solidcraft.json",
-      "output": "/output/items/examples/connected-profile-sheet/model_verify",
-      "slug": "connected-profile-sheet"
+      "slug": "components",
+      "source_path": "examples/components"
     },
     {
       "compile_error": null,
       "input": "/output/items/examples/corner-anchor/solidcraft.json",
       "output": "/output/items/examples/corner-anchor/model_verify",
-      "slug": "corner-anchor"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/eight-corner-brackets/solidcraft.json",
-      "output": "/output/items/examples/eight-corner-brackets/model_verify",
-      "slug": "eight-corner-brackets"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/eight-flightcase-corners/solidcraft.json",
-      "output": "/output/items/examples/eight-flightcase-corners/model_verify",
-      "slug": "eight-flightcase-corners"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/four-corner-l/solidcraft.json",
-      "output": "/output/items/examples/four-corner-l/model_verify",
-      "slug": "four-corner-l"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/group-hierarchy/solidcraft.json",
-      "output": "/output/items/examples/group-hierarchy/model_verify",
-      "slug": "group-hierarchy"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/hole-family/solidcraft.json",
-      "output": "/output/items/examples/hole-family/model_verify",
-      "slug": "hole-family"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/open-sketch-chain/solidcraft.json",
-      "output": "/output/items/examples/open-sketch-chain/model_verify",
-      "slug": "open-sketch-chain"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parameter-scope/solidcraft.json",
-      "output": "/output/items/examples/parameter-scope/model_verify",
-      "slug": "parameter-scope"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parametric-anchor/solidcraft.json",
-      "output": "/output/items/examples/parametric-anchor/model_verify",
-      "slug": "parametric-anchor"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parametric-attach/solidcraft.json",
-      "output": "/output/items/examples/parametric-attach/model_verify",
-      "slug": "parametric-attach"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parametric-move/solidcraft.json",
-      "output": "/output/items/examples/parametric-move/model_verify",
-      "slug": "parametric-move"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parametric-offset/solidcraft.json",
-      "output": "/output/items/examples/parametric-offset/model_verify",
-      "slug": "parametric-offset"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parametric-placement-pair/solidcraft.json",
-      "output": "/output/items/examples/parametric-placement-pair/model_verify",
-      "slug": "parametric-placement-pair"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/parent-derived-child-size/solidcraft.json",
-      "output": "/output/items/examples/parent-derived-child-size/model_verify",
-      "slug": "parent-derived-child-size"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/primitive-csg/solidcraft.json",
-      "output": "/output/items/examples/primitive-csg/model_verify",
-      "slug": "primitive-csg"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/rectangular-pattern/solidcraft.json",
-      "output": "/output/items/examples/rectangular-pattern/model_verify",
-      "slug": "rectangular-pattern"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/repeated-parent-attachments/solidcraft.json",
-      "output": "/output/items/examples/repeated-parent-attachments/model_verify",
-      "slug": "repeated-parent-attachments"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/rotated-copy-placement/solidcraft.json",
-      "output": "/output/items/examples/rotated-copy-placement/model_verify",
-      "slug": "rotated-copy-placement"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/rotated-sketch-cutter/solidcraft.json",
-      "output": "/output/items/examples/rotated-sketch-cutter/model_verify",
-      "slug": "rotated-sketch-cutter"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/round-top-sketch/solidcraft.json",
-      "output": "/output/items/examples/round-top-sketch/model_verify",
-      "slug": "round-top-sketch"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/rounded-rectangle-sketch/solidcraft.json",
-      "output": "/output/items/examples/rounded-rectangle-sketch/model_verify",
-      "slug": "rounded-rectangle-sketch"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/selective-profile-extrude/solidcraft.json",
-      "output": "/output/items/examples/selective-profile-extrude/model_verify",
-      "slug": "selective-profile-extrude"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/sheet-contour-flange/solidcraft.json",
-      "output": "/output/items/examples/sheet-contour-flange/model_verify",
-      "slug": "sheet-contour-flange"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/sheet-edge-flange/solidcraft.json",
-      "output": "/output/items/examples/sheet-edge-flange/model_verify",
-      "slug": "sheet-edge-flange"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/sheet-fold/solidcraft.json",
-      "output": "/output/items/examples/sheet-fold/model_verify",
-      "slug": "sheet-fold"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/sheet-hem/solidcraft.json",
-      "output": "/output/items/examples/sheet-hem/model_verify",
-      "slug": "sheet-hem"
-    },
-    {
-      "compile_error": null,
-      "input": "/output/items/examples/sheet-path-flange/solidcraft.json",
-      "output": "/output/items/examples/sheet-path-flange/model_verify",
-      "slug": "sheet-path-flange"
+      "slug": "corner-anchor",
+      "source_path": "examples/corner-anchor"
     },
     {
       "compile_error": null,
       "input": "/output/items/examples/simple-box/solidcraft.json",
       "output": "/output/items/examples/simple-box/model_verify",
-      "slug": "simple-box"
+      "slug": "simple-box",
+      "source_path": "examples/simple-box"
     },
     {
       "compile_error": null,
-      "input": "/output/items/examples/sketch-pattern-mirror/solidcraft.json",
-      "output": "/output/items/examples/sketch-pattern-mirror/model_verify",
-      "slug": "sketch-pattern-mirror"
+      "input": "/output/items/verification/cases/anchor-topology-mutation/solidcraft.json",
+      "output": "/output/items/verification/cases/anchor-topology-mutation/model_verify",
+      "slug": "anchor-topology-mutation",
+      "source_path": "verification/cases/anchor-topology-mutation"
     },
     {
       "compile_error": null,
-      "input": "/output/items/examples/slot-family/solidcraft.json",
-      "output": "/output/items/examples/slot-family/model_verify",
-      "slug": "slot-family"
+      "input": "/output/items/verification/cases/as-built-attach/solidcraft.json",
+      "output": "/output/items/verification/cases/as-built-attach/model_verify",
+      "slug": "as-built-attach",
+      "source_path": "verification/cases/as-built-attach"
     },
     {
       "compile_error": null,
-      "input": "/output/items/examples/top-sketch-after-chamfer/solidcraft.json",
-      "output": "/output/items/examples/top-sketch-after-chamfer/model_verify",
-      "slug": "top-sketch-after-chamfer"
+      "input": "/output/items/verification/cases/assembly-decorator/solidcraft.json",
+      "output": "/output/items/verification/cases/assembly-decorator/model_verify",
+      "slug": "assembly-decorator",
+      "source_path": "verification/cases/assembly-decorator"
     },
     {
       "compile_error": null,
-      "input": "/output/items/examples/xz-anchor/solidcraft.json",
-      "output": "/output/items/examples/xz-anchor/model_verify",
-      "slug": "xz-anchor"
+      "input": "/output/items/verification/cases/assembly-owned-anchor/solidcraft.json",
+      "output": "/output/items/verification/cases/assembly-owned-anchor/model_verify",
+      "slug": "assembly-owned-anchor",
+      "source_path": "verification/cases/assembly-owned-anchor"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/attach-angle/solidcraft.json",
+      "output": "/output/items/verification/cases/attach-angle/model_verify",
+      "slug": "attach-angle",
+      "source_path": "verification/cases/attach-angle"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/attached-through-all/solidcraft.json",
+      "output": "/output/items/verification/cases/attached-through-all/model_verify",
+      "slug": "attached-through-all",
+      "source_path": "verification/cases/attached-through-all"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/bracket/solidcraft.json",
+      "output": "/output/items/verification/cases/bracket/model_verify",
+      "slug": "bracket",
+      "source_path": "verification/cases/bracket"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/circle-negative-extrude/solidcraft.json",
+      "output": "/output/items/verification/cases/circle-negative-extrude/model_verify",
+      "slug": "circle-negative-extrude",
+      "source_path": "verification/cases/circle-negative-extrude"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/circular-feature-pattern/solidcraft.json",
+      "output": "/output/items/verification/cases/circular-feature-pattern/model_verify",
+      "slug": "circular-feature-pattern",
+      "source_path": "verification/cases/circular-feature-pattern"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/eight-corner-brackets/solidcraft.json",
+      "output": "/output/items/verification/cases/eight-corner-brackets/model_verify",
+      "slug": "eight-corner-brackets",
+      "source_path": "verification/cases/eight-corner-brackets"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/eight-flightcase-corners/solidcraft.json",
+      "output": "/output/items/verification/cases/eight-flightcase-corners/model_verify",
+      "slug": "eight-flightcase-corners",
+      "source_path": "verification/cases/eight-flightcase-corners"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/four-corner-l/solidcraft.json",
+      "output": "/output/items/verification/cases/four-corner-l/model_verify",
+      "slug": "four-corner-l",
+      "source_path": "verification/cases/four-corner-l"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/group-hierarchy/solidcraft.json",
+      "output": "/output/items/verification/cases/group-hierarchy/model_verify",
+      "slug": "group-hierarchy",
+      "source_path": "verification/cases/group-hierarchy"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/hole-family/solidcraft.json",
+      "output": "/output/items/verification/cases/hole-family/model_verify",
+      "slug": "hole-family",
+      "source_path": "verification/cases/hole-family"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parameter-scope/solidcraft.json",
+      "output": "/output/items/verification/cases/parameter-scope/model_verify",
+      "slug": "parameter-scope",
+      "source_path": "verification/cases/parameter-scope"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parametric-anchor/solidcraft.json",
+      "output": "/output/items/verification/cases/parametric-anchor/model_verify",
+      "slug": "parametric-anchor",
+      "source_path": "verification/cases/parametric-anchor"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parametric-attach/solidcraft.json",
+      "output": "/output/items/verification/cases/parametric-attach/model_verify",
+      "slug": "parametric-attach",
+      "source_path": "verification/cases/parametric-attach"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parametric-move/solidcraft.json",
+      "output": "/output/items/verification/cases/parametric-move/model_verify",
+      "slug": "parametric-move",
+      "source_path": "verification/cases/parametric-move"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parametric-offset/solidcraft.json",
+      "output": "/output/items/verification/cases/parametric-offset/model_verify",
+      "slug": "parametric-offset",
+      "source_path": "verification/cases/parametric-offset"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parametric-placement-pair/solidcraft.json",
+      "output": "/output/items/verification/cases/parametric-placement-pair/model_verify",
+      "slug": "parametric-placement-pair",
+      "source_path": "verification/cases/parametric-placement-pair"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/parent-derived-child-size/solidcraft.json",
+      "output": "/output/items/verification/cases/parent-derived-child-size/model_verify",
+      "slug": "parent-derived-child-size",
+      "source_path": "verification/cases/parent-derived-child-size"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/primitive-csg/solidcraft.json",
+      "output": "/output/items/verification/cases/primitive-csg/model_verify",
+      "slug": "primitive-csg",
+      "source_path": "verification/cases/primitive-csg"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/rectangular-pattern/solidcraft.json",
+      "output": "/output/items/verification/cases/rectangular-pattern/model_verify",
+      "slug": "rectangular-pattern",
+      "source_path": "verification/cases/rectangular-pattern"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/repeated-parent-attachments/solidcraft.json",
+      "output": "/output/items/verification/cases/repeated-parent-attachments/model_verify",
+      "slug": "repeated-parent-attachments",
+      "source_path": "verification/cases/repeated-parent-attachments"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/rotated-copy-placement/solidcraft.json",
+      "output": "/output/items/verification/cases/rotated-copy-placement/model_verify",
+      "slug": "rotated-copy-placement",
+      "source_path": "verification/cases/rotated-copy-placement"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/rotated-sketch-cutter/solidcraft.json",
+      "output": "/output/items/verification/cases/rotated-sketch-cutter/model_verify",
+      "slug": "rotated-sketch-cutter",
+      "source_path": "verification/cases/rotated-sketch-cutter"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/round-top-sketch/solidcraft.json",
+      "output": "/output/items/verification/cases/round-top-sketch/model_verify",
+      "slug": "round-top-sketch",
+      "source_path": "verification/cases/round-top-sketch"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/rounded-rectangle-sketch/solidcraft.json",
+      "output": "/output/items/verification/cases/rounded-rectangle-sketch/model_verify",
+      "slug": "rounded-rectangle-sketch",
+      "source_path": "verification/cases/rounded-rectangle-sketch"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/selective-profile-extrude/solidcraft.json",
+      "output": "/output/items/verification/cases/selective-profile-extrude/model_verify",
+      "slug": "selective-profile-extrude",
+      "source_path": "verification/cases/selective-profile-extrude"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sheet-contour-flange/solidcraft.json",
+      "output": "/output/items/verification/cases/sheet-contour-flange/model_verify",
+      "slug": "sheet-contour-flange",
+      "source_path": "verification/cases/sheet-contour-flange"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sheet-edge-flange/solidcraft.json",
+      "output": "/output/items/verification/cases/sheet-edge-flange/model_verify",
+      "slug": "sheet-edge-flange",
+      "source_path": "verification/cases/sheet-edge-flange"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sheet-fold/solidcraft.json",
+      "output": "/output/items/verification/cases/sheet-fold/model_verify",
+      "slug": "sheet-fold",
+      "source_path": "verification/cases/sheet-fold"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sheet-hem/solidcraft.json",
+      "output": "/output/items/verification/cases/sheet-hem/model_verify",
+      "slug": "sheet-hem",
+      "source_path": "verification/cases/sheet-hem"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sheet-path-flange/solidcraft.json",
+      "output": "/output/items/verification/cases/sheet-path-flange/model_verify",
+      "slug": "sheet-path-flange",
+      "source_path": "verification/cases/sheet-path-flange"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/sketch-pattern-mirror/solidcraft.json",
+      "output": "/output/items/verification/cases/sketch-pattern-mirror/model_verify",
+      "slug": "sketch-pattern-mirror",
+      "source_path": "verification/cases/sketch-pattern-mirror"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/slot-family/solidcraft.json",
+      "output": "/output/items/verification/cases/slot-family/model_verify",
+      "slug": "slot-family",
+      "source_path": "verification/cases/slot-family"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/top-sketch-after-chamfer/solidcraft.json",
+      "output": "/output/items/verification/cases/top-sketch-after-chamfer/model_verify",
+      "slug": "top-sketch-after-chamfer",
+      "source_path": "verification/cases/top-sketch-after-chamfer"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/cases/xz-anchor/solidcraft.json",
+      "output": "/output/items/verification/cases/xz-anchor/model_verify",
+      "slug": "xz-anchor",
+      "source_path": "verification/cases/xz-anchor"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/regressions/component-local-sketch-names/solidcraft.json",
+      "output": "/output/items/verification/regressions/component-local-sketch-names/model_verify",
+      "slug": "component-local-sketch-names",
+      "source_path": "verification/regressions/component-local-sketch-names"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/regressions/connected-profile-sheet/solidcraft.json",
+      "output": "/output/items/verification/regressions/connected-profile-sheet/model_verify",
+      "slug": "connected-profile-sheet",
+      "source_path": "verification/regressions/connected-profile-sheet"
+    },
+    {
+      "compile_error": null,
+      "input": "/output/items/verification/regressions/open-sketch-chain/solidcraft.json",
+      "output": "/output/items/verification/regressions/open-sketch-chain/model_verify",
+      "slug": "open-sketch-chain",
+      "source_path": "verification/regressions/open-sketch-chain"
     }
   ],
   "schema": 1,
-  "source_sha": "3d0f33ab68bf0d3eb14024ba76c4a5415f580026"
+  "source_sha": "d53672f475c871e202e4a3fae37713a7aad07307"
 }

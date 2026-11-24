@@ -1,0 +1,137 @@
+{
+  "bodies": [
+    {
+      "area_mm2": 9484.601535159018,
+      "bbox": {
+        "max": [
+          60.00000000000001,
+          20.000000000000004,
+          2.0
+        ],
+        "min": [
+          -60.00000000000001,
+          -20.0,
+          0.0
+        ]
+      },
+      "center_of_mass": [
+        1.474924807141324e-15,
+        4.0027334644884115e-16,
+        1.0
+      ],
+      "closed": true,
+      "density_g_cm3": 1.29,
+      "edges": 12,
+      "face_types": {
+        "cylinder": 2,
+        "plane": 4
+      },
+      "faces": 6,
+      "kernel": {
+        "edges": 12,
+        "faces": 6,
+        "shells": 1,
+        "vertices": 8
+      },
+      "mass_g": 11.498123618504666,
+      "material": "Default",
+      "measured_by": "smlib",
+      "name": "ConnectedProfileSheet",
+      "notes": [],
+      "sheet_metal": true,
+      "vertices": 8,
+      "volume_mm3": 8913.274122871833
+    }
+  ],
+  "body_count": 1,
+  "params": [
+    {
+      "comment": "",
+      "error": null,
+      "expression": "40",
+      "model": false,
+      "name": "half_span",
+      "unit": "mm",
+      "value": 40.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "20",
+      "model": false,
+      "name": "radius",
+      "unit": "mm",
+      "value": 20.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "2",
+      "model": false,
+      "name": "thickness",
+      "unit": "mm",
+      "value": 2.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "2",
+      "model": false,
+      "name": "bend_radius",
+      "unit": "mm",
+      "value": 2.0
+    },
+    {
+      "comment": "",
+      "error": null,
+      "expression": "0.5",
+      "model": false,
+      "name": "k_factor",
+      "unit": "",
+      "value": 0.5
+    }
+  ],
+  "sketches": [
+    {
+      "curves": 4,
+      "dof": 0,
+      "id": 1,
+      "name": "Connected blank",
+      "profiles": 1,
+      "status": "solved",
+      "visible": false,
+      "wires_ok": true
+    }
+  ],
+  "timeline": [
+    {
+      "error": null,
+      "id": 1,
+      "ms": 0.307034,
+      "name": "Connected blank",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "Sketch",
+      "warning": null
+    },
+    {
+      "error": null,
+      "id": 2,
+      "ms": 2.6876510000000002,
+      "name": "BaseFlange1",
+      "rolled_back": false,
+      "suppressed": false,
+      "type": "BaseFlangeFeature",
+      "warning": null
+    }
+  ],
+  "total": {
+    "area_mm2": 9484.601535159018,
+    "edges": 12,
+    "faces": 6,
+    "mass_g": 11.498123618504666,
+    "open_bodies_skipped": 0,
+    "vertices": 8,
+    "volume_mm3": 8913.274122871833
+  }
+}

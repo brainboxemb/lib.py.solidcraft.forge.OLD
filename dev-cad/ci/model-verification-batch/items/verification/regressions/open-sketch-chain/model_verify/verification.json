@@ -1,0 +1,144 @@
+{
+  "checks": [
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "baseline/measurements.json",
+          "sha256": "0129a99cde5cb70af49f9db50f4b75c95fdaef371a185c417869a5753e7d3213",
+          "size": 997
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_count": {
+          "actual": 0,
+          "expected": 0,
+          "label": "SolidCraft body count",
+          "pass": true
+        },
+        "parameters": {
+          "actual": {
+            "end_height": 30.0,
+            "length": 40.0
+          },
+          "expected": {
+            "end_height": 30.0,
+            "length": 40.0
+          },
+          "label": "SolidCraft parameters",
+          "pass": true
+        },
+        "sketch_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft sketch count",
+          "pass": true
+        },
+        "sketches": [
+          {
+            "actual": {
+              "curves": 3,
+              "name": "Contour Path",
+              "profiles": 0
+            },
+            "expected": {
+              "curves": 3,
+              "name": "Contour Path",
+              "profiles": 0
+            },
+            "label": "Contour Path sketch",
+            "pass": true
+          }
+        ],
+        "timeline": {
+          "actual": [
+            {
+              "name": "Contour Path",
+              "type": "Sketch"
+            }
+          ],
+          "expected": [
+            {
+              "name": "Contour Path",
+              "type": "Sketch"
+            }
+          ],
+          "label": "SolidCraft timeline",
+          "pass": true
+        }
+      },
+      "id": "baseline",
+      "reason": null,
+      "status": "pass"
+    },
+    {
+      "artifacts": [
+        {
+          "kind": "file",
+          "path": "saved_designs/resize_open_chain/model.sc",
+          "sha256": "faf33a30015028d2dddd8717d2b3767fc727615db02c4a3678e0db262d58eee3",
+          "size": 845
+        },
+        {
+          "kind": "file",
+          "path": "saved_designs/resize_open_chain/measurements.json",
+          "sha256": "ba0bc0c9048220151289539f99f217d1d557fd92c11677a6d14f0d25b7b27528",
+          "size": 1003
+        }
+      ],
+      "error": null,
+      "evidence": {
+        "body_count": {
+          "actual": 0,
+          "expected": 0,
+          "label": "SolidCraft body count",
+          "pass": true
+        },
+        "parameters": {
+          "actual": {
+            "end_height": 35.0,
+            "length": 45.0
+          },
+          "expected": {
+            "end_height": 35.0,
+            "length": 45.0
+          },
+          "label": "SolidCraft parameters",
+          "pass": true
+        },
+        "sketch_count": {
+          "actual": 1,
+          "expected": 1,
+          "label": "SolidCraft sketch count",
+          "pass": true
+        },
+        "sketches": [
+          {
+            "actual": {
+              "curves": 3,
+              "name": "Contour Path",
+              "profiles": 0
+            },
+            "expected": {
+              "curves": 3,
+              "name": "Contour Path",
+              "profiles": 0
+            },
+            "label": "Contour Path sketch",
+            "pass": true
+          }
+        ]
+      },
+      "id": "saved_design_resize_open_chain",
+      "reason": null,
+      "status": "pass"
+    }
+  ],
+  "input": "/output/items/verification/regressions/open-sketch-chain/model_verify/native/model.sc",
+  "metadata": {},
+  "schema": "cad-verification",
+  "schema_version": 1,
+  "status": "pass",
+  "verification_id": "open-sketch-chain"
+}

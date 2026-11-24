@@ -1,0 +1,36 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "cb7bfabd3a20e1ee3b18a02e174f95fd907315661a8fa47dbd571a9b13b44e50",
+  "duration_seconds": 0.315,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:09:51.666Z",
+  "item": "anchor-topology-mutation",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model_verify": {
+      "kind": "directory",
+      "mode": 493,
+      "sha256": "9e7b438bb7669e9c8ae0c1a055bae0f503d4d49526cf078986a089def166b393"
+    },
+    "solidcraft.json": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "92c0febbd8c027be51a07283af44704be821780484ba9e7461026aa4e4695f94"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:10:10.250Z",
+  "run_started_at": "2026-11-24T08:06:58.898Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:09:51.351Z",
+  "status": "pass",
+  "step": "model_verify",
+  "target_spec_digest": "883acaf6920bfe54e666fca8e3d8dcbd4ee1389e1f6b60cf9b3dfad34306f860",
+  "timeout_seconds": null
+}

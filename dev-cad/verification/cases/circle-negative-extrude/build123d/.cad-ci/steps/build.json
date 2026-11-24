@@ -1,0 +1,31 @@
+{
+  "action_executed": true,
+  "action_type": "copy",
+  "active_dependent_config_digests": {},
+  "active_dependents": [],
+  "bundle_sha256": "f1eb123b78a073df03daeb8ed192a69235f4ad355a8733e586bb4ef0e6fe756a",
+  "duration_seconds": 0.02,
+  "engine": "scons",
+  "engine_schema": 6,
+  "error": null,
+  "exit_code": null,
+  "finished_at": "2026-11-24T08:08:33.149Z",
+  "item": "verification-cases-circle-negative-extrude-build123d",
+  "outcome": "BUILT",
+  "output_state": "RESTORED",
+  "outputs": {
+    "model.stl": {
+      "kind": "file",
+      "mode": 420,
+      "sha256": "0a673d12ce7470b360bf3e29373ca376eebdf5dbb1ba013d60ac4f4822b6b703"
+    }
+  },
+  "run_finished_at": "2026-11-24T08:10:10.250Z",
+  "run_started_at": "2026-11-24T08:06:58.898Z",
+  "schema": 6,
+  "started_at": "2026-11-24T08:08:33.129Z",
+  "status": "pass",
+  "step": "build",
+  "target_spec_digest": "becc9668468ddf16ea12e190cc67ad6fdd5d7cc26d222f24865e1f83d59756cc",
+  "timeout_seconds": null
+}
