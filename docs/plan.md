@@ -66,6 +66,27 @@ main **ci-build-record**.
 
 ## Active execution
 
+### #821 — external SolidCraft 0.48.1 runtime candidate qualification
+
+Status: **now / temporary dev-cad qualification**.
+
+Runtime owner `docker.cad.solidcraft#26` / PR #27 has qualified the exact
+Forge #753 component + joined-Cylinder render shape on SolidCraft 0.48.1: the
+owner smoke reports exactly two substantial rendered occurrence islands and no
+third stale tool object.
+
+After the accepted runtime candidate reaches runtime `main` and publishes
+`cad-solidcraft:edge` / `cad-reference:edge`, use this short-lived branch to
+exercise Forge against that candidate before immutable runtime v0.3.5 is tagged.
+
+This branch is evidence-only and must not merge mutable `:edge` pins into
+`dev-cad`. It temporarily sets the Forge tested SolidCraft contract to 0.48.1
+and both runtime roles to `:edge`, runs the retained #753 fixture through the
+normal Forge graph, records the exact runtime main commit/run and Forge run,
+then closes unmerged. A normal immutable v0.3.5 adoption PR follows only after
+the runtime release exists.
+
+
 ### #817 — reconcile plan after #785
 
 Status: **now / docs-only dev-cad**.
