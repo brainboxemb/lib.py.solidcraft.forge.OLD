@@ -60,10 +60,10 @@ v0.14.0 is the first Forge release carrying:
   component-local joined-Cylinder occurrence regression (#753/#823);
 - first-class Sheet metal API Guide/Reference/Cheatsheet documentation (#786).
 
-This release supersedes v0.13.2 as the recommended consumer baseline for the
-current CAD repository. Product-CAD consumers that need the HUB75 five-panel
-component fix should use Forge v0.14.0 together with the qualified
-`cad-solidcraft:v0.3.5` runtime.
+v0.14.0 remains a valid immutable runtime/catalog baseline, but later product
+qualification in CAD #388 proved that it did **not** fix the real HUB75
+five-panel save/reopen replay-context defect. Do not cite v0.14.0 as the #753
+product fix; that Forge replay fix first ships in the v0.15.0 candidate below.
 
 ### Previous v0.13.2 baseline
 
@@ -74,6 +74,34 @@ v0.13.2 remains valid and immutable at exact source
 
 v0.13.2 was the consumer hotfix for #796 and remains part of the historical
 release chain; the v0.14.0 record above does not rewrite it.
+
+## Next release candidate
+
+Candidate: **v0.15.0**.
+
+The accepted post-v0.14 batch contains:
+
+- generalized native feature-pattern sources, including applied Hole/native
+  primitive seeds (#347);
+- native exploded Assembly presentation without mutating assembled placements
+  (#751);
+- native whole-sheet `Shape.perforate(...)` manufacturing fields (#779);
+- active-component restoration across headless save/reopen replay phases
+  (#753).
+
+The stable pre-release integration point is main
+`b20e68b20ef5bec9c717f1e477eae064eec35a23`. Exact main durable run
+`45398101329` succeeded and `build/main` source-matches that commit.
+
+For #753, the retained Forge owner preview is visually clean on the accepted
+fix, and temporary CAD #388 qualification run `45396787004` rebuilt the full
+16-root consumer graph successfully on the same Forge fix without product
+geometry changes. Final product-render visual acceptance remains intentionally
+post-release on the normal durable CAD adoption path.
+
+Publication must not occur until the exact v0.15.0 release-preparation commit is
+stable on `main`, its durable main build is green/source-matched, and the
+shared release flow accepts that exact SHA.
 
 ## Consumer workflow
 
@@ -142,8 +170,8 @@ conflicting tag or mismatched release is rejected by the shared flow.
 
 ## Next checkpoint
 
-No Forge release is currently active.
-
-Resume the post-v0.13.2 CAD/API/documentation work. Product-CAD PR #406 should
-consume the exact released v0.13.2 source before any later Forge release is
-considered.
+Forge v0.15.0 release preparation is active under #836. Validate and merge the
+release-metadata PR to `main`, require exact durable main provenance, then
+publish only through the shared `/release v0.15.0 <exact-sha>` flow. After
+publication, downstream CAD adopts the immutable release and performs the final
+durable five-panel render acceptance for #753/#388.
