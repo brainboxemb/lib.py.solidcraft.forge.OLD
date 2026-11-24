@@ -321,7 +321,7 @@ def _raw_file_rows(
     example: ExampleBuildEvidence,
 ) -> tuple[dict[str, Any], ...]:
     """Enumerate the complete accepted human-facing evidence inventory."""
-    item_root = stable.root / "examples" / example.slug
+    item_root = stable.root / example.source_path
     rows = []
     for path in sorted(item_root.rglob("*")):
         if not path.is_file() or path.stat().st_size <= 0:
@@ -348,33 +348,34 @@ def _source_file_rows(
     """Expose exact accepted source files that produced the durable evidence."""
     slug = example.slug
     source_commit = example.item.source_commit
+    base = example.source_path
     rows = [
         {
             "label": "Forge model source",
-            "path": f"examples/{slug}/scpf/model.py",
-            "url": _source_url(source_commit, f"examples/{slug}/scpf/model.py"),
+            "path": f"{base}/scpf/model.py",
+            "url": _source_url(source_commit, f"{base}/scpf/model.py"),
         },
         {
             "label": "Integration contract test",
-            "path": f"examples/{slug}/tests/test_contract.py",
+            "path": f"{base}/tests/test_contract.py",
             "url": _source_url(
                 source_commit,
-                f"examples/{slug}/tests/test_contract.py",
+                f"{base}/tests/test_contract.py",
             ),
         },
         {
             "label": "Verification contract",
-            "path": f"examples/{slug}/verification/verify.py",
+            "path": f"{base}/verification/verify.py",
             "url": _source_url(
                 source_commit,
-                f"examples/{slug}/verification/verify.py",
+                f"{base}/verification/verify.py",
             ),
         },
     ]
     for reference in example.references:
         source = reference.verification.get("source")
         if not isinstance(source, str) or not source.strip():
-            source = f"examples/{slug}/{reference.implementation}/model.py"
+            source = f"{base}/{reference.implementation}/model.py"
         rows.append(
             {
                 "label": f"{reference.implementation} reference source",
@@ -407,11 +408,11 @@ def qualification_case_view(
         ),
         "model_source_url": _source_url(
             example.item.source_commit,
-            f"examples/{example.slug}/scpf/model.py",
+            f"{example.source_path}/scpf/model.py",
         ),
         "verification_source_url": _source_url(
             site_source_commit,
-            f"examples/{example.slug}/verification/verify.py",
+            f"{example.source_path}/verification/verify.py",
         ),
         "commands_url": _artifact_url(stable, example.command_path),
         "verification_url": _artifact_url(stable, example.verification_path),
