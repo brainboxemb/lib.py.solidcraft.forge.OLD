@@ -1765,3 +1765,13 @@ Qualification must cover:
    namespace behavior;
 5. successful SolidCraft 0.45 replay/save for the focused multi-component
    regression fixture.
+
+## Native standalone Sketch revolve (#843)
+
+A completed standalone single-profile world-plane Sketch supports native
+Revolve around a world axis in its plane, with a positive sweep of at most
+360 degrees and optional symmetric sweep. Angle parameters retain degree
+units and native dependencies. Boolean operands lower to native join, cut
+or intersect; a standalone result creates a new named body. Qualification
+requires native saved-design recomputation and independent analytic volume
+expectations. Attached and custom-axis Sketches are outside this slice.
