@@ -56,6 +56,16 @@ v0.13.x consumer baseline.
 
 The v0.12.0, v0.13.0 and v0.13.1 tags remain valid and immutable.
 
+### Unreleased baseline
+
+Current unreleased Forge development is qualified against **SolidCraft 0.48.1**
+through immutable `docker.cad.solidcraft v0.3.5`. The canonical command
+reference is `docs/reference/solidcraft/0.48.1/`.
+
+This does not rewrite the v0.13.2 release record above: v0.13.2 remains
+qualified against SolidCraft 0.45.0. A later Forge release must explicitly carry
+the 0.48.1 baseline and retained #753 component-Cylinder regression evidence.
+
 ## Consumer workflow
 
 Forge keeps a copy-ready thin wrapper in:

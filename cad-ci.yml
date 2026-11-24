@@ -2,12 +2,12 @@
 schema: 1
 
 variables:
-  FORGE_RUNTIME_IMAGE: "ghcr.io/brainboxemb/cad-solidcraft:v0.3.4"
-  REFERENCE_RUNTIME_IMAGE: "ghcr.io/brainboxemb/cad-reference:v0.3.4"
-  SOLIDCRAFT_VERSION: "0.45.0"
+  FORGE_RUNTIME_IMAGE: "ghcr.io/brainboxemb/cad-solidcraft:v0.3.5"
+  REFERENCE_RUNTIME_IMAGE: "ghcr.io/brainboxemb/cad-reference:v0.3.5"
+  SOLIDCRAFT_VERSION: "0.48.1"
 
 runtimes:
-  reference: "ghcr.io/brainboxemb/cad-reference:v0.3.4"
+  reference: "ghcr.io/brainboxemb/cad-reference:v0.3.5"
 
 verification:
   package:

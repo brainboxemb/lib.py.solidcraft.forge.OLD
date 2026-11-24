@@ -11,8 +11,8 @@ steps:
       - python
       - ../../scripts/verify_solidcraft_reference_runtime.py
       - --image
-      - ghcr.io/brainboxemb/cad-solidcraft:v0.3.4
+      - ghcr.io/brainboxemb/cad-solidcraft:v0.3.5
       - --version
-      - 0.45.0
+      - 0.48.1
       - --snapshot
-      - docs/reference/solidcraft/0.45.0/commands.json
+      - docs/reference/solidcraft/0.48.1/commands.json
