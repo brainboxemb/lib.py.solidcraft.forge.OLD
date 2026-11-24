@@ -1450,6 +1450,63 @@ class Shape:
             ),
         )
 
+    def perforate(
+        self,
+        *,
+        diameter,
+        pitch,
+        margin=None,
+        pattern="staggered",
+    ):
+        """Add a native whole-sheet perforation field.
+
+        Parameters:
+            diameter: Positive perforation diameter in mm.
+            pitch: Positive centre-to-centre perforation pitch in mm.
+            margin: Optional positive clear margin in mm. When omitted,
+                SolidCraft uses the perforation diameter.
+            pattern: Native perforation layout: "staggered" or "square".
+                Defaults to "staggered".
+
+        Use when:
+            Describe manufacturing perforations that belong to sheet flat-pattern,
+            DXF and measured-volume semantics without cutting repeated B-rep holes.
+
+        Limits:
+            This first slice covers the whole sheet only. Sketch/profile-bounded
+            local perforation regions are intentionally outside the contract.
+        """
+        diameter_value = _pv(diameter)
+        if not isfinite(diameter_value) or diameter_value <= 0:
+            raise ValueError("sheet perforation diameter must be positive")
+
+        pitch_value = _pv(pitch)
+        if not isfinite(pitch_value) or pitch_value <= 0:
+            raise ValueError("sheet perforation pitch must be positive")
+
+        if margin is not None:
+            margin_value = _pv(margin)
+            if not isfinite(margin_value) or margin_value <= 0:
+                raise ValueError(
+                    "sheet perforation margin must be positive when provided"
+                )
+
+        if pattern not in ("staggered", "square"):
+            raise ValueError(
+                "sheet perforation pattern must be staggered or square"
+            )
+
+        return Shape(
+            "sheet_perforate",
+            (
+                self,
+                diameter,
+                pitch,
+                margin,
+                pattern,
+            ),
+        )
+
     def path_flange(
         self,
         *,

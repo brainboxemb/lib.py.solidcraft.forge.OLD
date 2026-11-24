@@ -738,11 +738,12 @@ There are two body-creation paths:
 - `Shape.contour_flange(...)` creates a sheet from a finished connected open
   Sketch chain and defines the rule for that new body.
 
-Operations on an existing sheet — `fold()`, `flange()`, `hem()` and
-`path_flange()` — inherit the active material rule instead of repeating
+Operations on an existing sheet — `fold()`, `flange()`, `hem()`,
+`path_flange()` and `perforate()` — preserve the active sheet history instead
+of repeating
 thickness/K-factor/default-radius fields. A feature may still own its own
-editable dimensions, such as flange height, hem length/gap or an explicit
-path-flange radius override.
+editable dimensions, such as flange height, hem length/gap, an explicit
+path-flange radius override, or perforation diameter/pitch/margin.
 
 Use Parameters/Expressions for dimensions where the method contract permits
 them. Current edge picks and straight fold-line coordinates are deliberately
@@ -955,3 +956,27 @@ non-empty **line-only** open chain. Tangent arcs and generic edge selectors are
 not yet qualified for path flange. `radius` is optional; omitting it inherits
 the active sheet rule, while supplying it overrides only this feature's bend
 radius. Thickness and K-factor always remain owned by the existing sheet rule.
+
+### Whole-sheet perforation
+
+Apply a native manufacturing perforation field to existing sheet material:
+
+```python
+sheet = sheet.perforate(
+    diameter=5,
+    pitch=10,
+    margin=5,
+    pattern="square",
+)
+```
+
+`diameter` and `pitch` are positive millimetre values and may remain Forge
+Parameters/Expressions. `margin` is optional and positive when supplied;
+`None` omits the native field so SolidCraft keeps its documented default equal
+to the perforation diameter. `pattern` accepts `"staggered"` or `"square"`;
+the default staggered value is omitted from the native command.
+
+This first API slice applies to the whole sheet only. Forge does not expose the
+native Sketch/profile-bounded perforation region yet. Perforations remain
+SolidCraft manufacturing, flat-pattern, DXF and measurement semantics: Forge
+does **not** translate them into repeated `Hole` features or Boolean B-rep cuts.

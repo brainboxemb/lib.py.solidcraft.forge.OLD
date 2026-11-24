@@ -70,11 +70,11 @@ main **ci-build-record**.
 
 ### #779 — native whole-sheet perforation
 
-Status: **next / dev-cad after release-record sync**.
+Status: **now / dev-cad**.
 
-PR #780 has already been rebuilt on the purpose-aware catalog contract and was
-green before the #753 blocker fixture advanced dev-cad. Refresh it only after
-#823 is accepted so perforation inherits the qualified v0.3.5 runtime baseline.
+PR #780 is refreshed on the published v0.14.0 / SolidCraft 0.48.1 baseline.
+Preserve the existing issue/branch/PR identity and qualify the focused native
+perforation slice against the immutable v0.3.5 runtime.
 
 Keep the focused native `Shape.perforate()` API/compiler/runtime work, but:
 
@@ -99,7 +99,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | Issue | Status | Next action |
 | --- | --- | --- |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #779 Native whole-sheet perforation | **next / CAD** | Refresh PR #780 after main -> dev-cad release-record sync; retain v0.3.5 / SolidCraft 0.48.1 baseline. |
+| #779 Native whole-sheet perforation | **now / CAD** | Finish PR #780 on v0.14.0 / SolidCraft 0.48.1 and require exact PR plus durable dev-cad acceptance. |
 | #751 Native exploded views | **lower priority** | Resume after higher-priority metal/runtime work. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
@@ -118,7 +118,6 @@ Verification coverage or reintroduce per-model runtime startup.
 
 ## Next checkpoint
 
-1. merge #828 release-record documentation to `main`;
-2. synchronize exact `main -> dev-cad` through the normal permanent-lane policy;
-3. refresh and finish #779 / PR #780 on that post-v0.14.0 dev-cad baseline;
-4. keep #788 concurrency measurement independent and #751 lower priority.
+1. finish #779 / PR #780 on the current v0.14.0 / SolidCraft 0.48.1 dev-cad baseline;
+2. require exact PR validation and durable dev-cad acceptance;
+3. keep #788 concurrency measurement independent and #751 lower priority.

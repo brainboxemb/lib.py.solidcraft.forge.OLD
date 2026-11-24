@@ -1484,6 +1484,42 @@ Qualification must include the native command/replay contract, parameterized
 path/radius values, saved-design rebuild/reopen and recoverable flat-pattern
 bend evidence on one connected closed sheet-metal body.
 
+## Native whole-sheet perforation
+
+An existing Forge sheet body supports one focused native perforation field:
+
+```python
+sheet.perforate(
+    diameter=5,
+    pitch=8,
+    margin=None,
+    pattern="staggered",
+)
+```
+
+Requirements:
+
+- lowering uses SolidCraft 0.45 `sheet.perforate`;
+- `diameter` and `pitch` are positive mm-valued Forge
+  Parameter/Expression inputs;
+- optional `margin` is positive and mm-valued; `None` omits the field so
+  SolidCraft keeps its native diameter-sized default margin;
+- `pattern` is limited to `staggered` and `square`; the default
+  `staggered` value is omitted from the native command;
+- Forge supplies the current sheet body name;
+- this first slice applies to the whole flat sheet only and does not expose the
+  native sketch/profile outline restriction;
+- perforations remain native manufacturing/flat-pattern/DXF/measurement
+  semantics and are not translated to repeated Hole features or Boolean cuts;
+- applying the operation to non-sheet geometry is a compiler error.
+
+Qualification must include exact command lowering, parameter units, both
+patterns, omitted/explicit margin, saved-design parameter mutation, one
+connected closed sheet-metal body after reopen and native flat-pattern evidence
+for the perforation field. If SolidCraft exposes perforation-adjusted volume
+through stable inspection output, qualify that output rather than inferring
+volume from B-rep holes.
+
 ## Reusable open connected Sketch chains
 
 Forge supports a standalone open Sketch chain as a distinct authoring concept

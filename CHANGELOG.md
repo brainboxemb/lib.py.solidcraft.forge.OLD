@@ -8,6 +8,13 @@ by `scpf.version.TESTED_SOLIDCRAFT_VERSION`.
 
 ## [Unreleased]
 
+### Added
+
+- Added native whole-sheet `Shape.perforate(...)` fields with parameterized
+  diameter, pitch and optional margin plus staggered/square layout. Forge keeps
+  perforations as SolidCraft flat-pattern/DXF/measurement semantics instead of
+  approximating them with repeated B-rep holes (#779).
+
 ## [0.14.0] - 2026-11-24
 
 ### Changed

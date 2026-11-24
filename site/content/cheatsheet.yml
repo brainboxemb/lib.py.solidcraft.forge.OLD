@@ -73,6 +73,10 @@ groups:
         description: "Add a native flange to an existing edge using a finished line-only open Sketch path."
         snippet: "sheet = sheet.path_flange(edge=(40,0,2), path=path, radius=3)"
         example:
+      - title: "Shape.perforate(...)"
+        description: "Apply a native whole-sheet manufacturing perforation field without repeated solid hole cuts."
+        snippet: "sheet = sheet.perforate(diameter=5, pitch=10, margin=5, pattern='square')"
+        example: sheet-perforate
 
   - heading: Features and placement
     items:

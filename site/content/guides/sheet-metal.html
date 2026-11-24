@@ -94,6 +94,23 @@ qualified SolidCraft 0.45 contract is line-only. Omitting <code>radius</code>
 inherits the active rule; supplying it overrides only this feature's bend
 radius.</p>
 
+<h2 id="perforation">Apply a whole-sheet perforation field</h2>
+<pre class="code-block"><code>sheet = sheet.perforate(
+    diameter=5,
+    pitch=10,
+    margin=5,
+    pattern="square",
+)</code></pre>
+<p><a href="../../reference/Shape.perforate/"><code>Shape.perforate()</code></a>
+adds native manufacturing perforation semantics to existing sheet material.
+Diameter and pitch are positive millimetre dimensions. <code>margin</code> is
+optional; omitting it leaves SolidCraft's native diameter-sized margin default
+in control. <code>pattern</code> is <code>staggered</code> by default or may be
+<code>square</code>.</p>
+<p>The first Forge contract applies to the whole sheet. It deliberately does not
+expose SolidCraft's Sketch/profile-bounded region fields. Perforations remain
+flat-pattern/DXF/measurement semantics rather than repeated B-rep holes.</p>
+
 <h2 id="parameters-and-picks">Editable dimensions versus topology picks</h2>
 <p>Keep design dimensions symbolic when the method accepts
 <code>Parameter</code>/<code>Expression</code> values. Current edge picks and
