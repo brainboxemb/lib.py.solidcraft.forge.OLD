@@ -6,13 +6,13 @@ import unittest
 from scpf.runner import run_script
 
 
-ROOT = Path(__file__).resolve().parents[3]
+CASE_ROOT = Path(__file__).resolve().parents[1]
 
 
 class RepeatedParentAttachmentCommandTests(unittest.TestCase):
     def test_two_authored_rigid_joints_use_bound_occurrences(self):
         commands = run_script(
-            ROOT / "examples/repeated-parent-attachments/scpf/model.py"
+            CASE_ROOT / "scpf/model.py"
         )["commands"]
 
         parameter = next(
