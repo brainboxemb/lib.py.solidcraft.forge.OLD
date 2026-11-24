@@ -70,11 +70,11 @@ main **ci-build-record**.
 
 ### #779 — native whole-sheet perforation
 
-Status: **merged to dev-cad; durable validation in progress**.
+Status: **complete / durable-green on dev-cad**.
 
 PR #780 merged through the repository policy as
-`f87b93dd603b5dc808a3365638cdf39f6ec52d65`. Its exact PR validation passed.
-Close #779 after the current durable dev-cad run accepts the same source.
+`f87b93dd603b5dc808a3365638cdf39f6ec52d65`. Exact PR run `45386835984` and
+durable dev-cad run `45387642616` both succeeded; #779 is closed.
 
 ### #347 — generalized native pattern seeds
 
@@ -106,7 +106,7 @@ Verification coverage or reintroduce per-model runtime startup.
 | Issue | Status | Next action |
 | --- | --- | --- |
 | #788 Re-benchmark Forge CAD-CI concurrency | **parallel / performance** | Measure jobs=2/4/6 on one identical post-#785 full graph. |
-| #779 Native whole-sheet perforation | **merged / durable pending** | Close after durable dev-cad accepts `f87b93dd603b5dc808a3365638cdf39f6ec52d65`. |
+| #779 Native whole-sheet perforation | **complete / durable-green** | Accepted at `f87b93dd603b5dc808a3365638cdf39f6ec52d65`; issue closed. |
 | #751 Native exploded views | **next / CAD unblocker** | After #347, expose native explode.create/show for CAD #367. |
 | #737 Historical changelog alignment | **later / docs-only** | Keep separate from release behavior. |
 | #713 Audit/reduce Forge scripts | **later** | Remove genuine duplicates only after owner migrations settle. |
@@ -127,6 +127,5 @@ Verification coverage or reintroduce per-model runtime startup.
 
 1. finish #347 and require exact PR plus native Verification evidence on the
    v0.14.0 / SolidCraft 0.48.1 baseline;
-2. close #779 once its merged dev-cad durable run is green;
-3. resume #751 native exploded views for downstream CAD #367;
-4. keep #788 concurrency measurement independent.
+2. resume #751 native exploded views for downstream CAD #367;
+3. keep #788 concurrency measurement independent.
