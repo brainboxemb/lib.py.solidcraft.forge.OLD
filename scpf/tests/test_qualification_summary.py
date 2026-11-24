@@ -278,7 +278,7 @@ class QualificationSummaryTests(unittest.TestCase):
         self.assertNotIn("reference", result["checks"])
         self.assertEqual(gate["status"], "fail")
 
-    def test_missing_visual_is_incomplete_and_required(self):
+    def test_missing_visual_is_optional(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(
             summary, "_semantic_api", fake_api
         ):
@@ -286,10 +286,26 @@ class QualificationSummaryTests(unittest.TestCase):
             case = self.make_case(root)
             (case / "model_verify" / "visual.json").unlink()
             result, gate = summary.compose_case(root, "simple-box")
-        self.assertEqual(result["status"], "incomplete")
-        self.assertEqual(result["checks"]["visual"]["status"], "missing")
-        self.assertTrue(result["checks"]["visual"]["required"])
-        self.assertEqual(gate["status"], "incomplete")
+        self.assertEqual(result["status"], "pass")
+        self.assertEqual(result["checks"]["visual"]["status"], "not-required")
+        self.assertFalse(result["checks"]["visual"]["required"])
+        self.assertEqual(gate["status"], "pass")
+
+    def test_case_without_independent_references_passes_internal_gate(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.object(
+            summary, "_semantic_api", fake_api
+        ):
+            root = Path(tmp)
+            case = self.make_case(root)
+            for implementation in summary.REFERENCE_IMPLEMENTATIONS:
+                reference_root = case / implementation
+                if reference_root.exists():
+                    import shutil
+                    shutil.rmtree(reference_root)
+            result, gate = summary.compose_case(root, "simple-box")
+
+        self.assertEqual(result["status"], "pass")
+        self.assertEqual(gate["status"], "pass")
 
     def test_batch_reference_duplicates_are_ignored(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(
