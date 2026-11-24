@@ -912,9 +912,10 @@ particular, the explanation of why outer bounds are or are not sufficient is
 human engineering documentation, not a value to reconstruct later from machine
 checks.
 
-`model.yml` keeps only the agreed generic page metadata fields:
-`section`, `priority`, `title`, `tagline`, `description`, `parameters`, and
-`stages`. It is not a second verification contract.
+`model.yml` keeps only the agreed generic model/page metadata fields:
+`purpose`, `section`, `priority`, `title`, `tagline`, `description`, `parameters`,
+and `stages`. `purpose` classifies public use; it is not a second verification
+contract.
 
 Machine expectations, tolerances and saved-design checks remain solely in
 `verification/verify.py`.
@@ -927,6 +928,8 @@ documentation.
 `examples/<slug>/model.yml` is the authoritative source for human-facing
 example metadata. The required schema contains:
 
+- `purpose`: `example`, `verification`, or a non-empty YAML list containing
+  both without duplicates;
 - `section`;
 - positive integer `priority`;
 - `title`;
@@ -945,8 +948,12 @@ Generated Pages obtain actual status, measurements and evidence links from the
 accepted durable `build/main` item output. `model.yml` must never claim a
 current PASS/FAIL result.
 
-The site generator discovers examples from the filesystem and their local
-metadata. It must not maintain a central model-name/page-content registry.
+The site generator discovers model metadata from the filesystem and derives two
+independent public views from `purpose`: Examples contains models whose purpose
+includes `example`; Verification contains models whose purpose includes
+`verification`. A model may deliberately appear in both. It must not maintain
+a central model-name/page-content registry or infer membership from directory
+placement or `role.yml`.
 
 ## Site source separation
 
@@ -970,8 +977,9 @@ with page markup. HTML belongs to templates or to the dedicated HTML-rendering
 module; guide chapters and model-specific SVG galleries remain external data.
 
 The current site must not depend on retired `qualification.*` source modules.
-The 32 current `examples/` directories and durable `build/main` are the
-catalog/evidence sources.
+The existing `examples/<slug>` source directories and durable `build/main`
+remain the model/evidence sources. Public catalog membership comes from
+`model.yml.purpose`, not from moving source directories.
 
 
 ### Presentation metadata selection boundary
@@ -1572,8 +1580,11 @@ replay bindings rather than guessed tangent-arc ids.
 Forge owns the reusable human-facing `model.yml` contract used by Forge examples
 and CAD consumer repositories.
 
-The canonical document contains exactly these seven fields:
+The canonical document contains exactly these eight fields:
 
+- `purpose`: either the string `example` or `verification`, or a non-empty
+  YAML list containing those values without duplicates; the validator
+  normalizes this to one semantic purpose set;
 - `section`: non-empty string;
 - `priority`: positive integer;
 - `title`: non-empty string;
@@ -1583,9 +1594,10 @@ The canonical document contains exactly these seven fields:
 - `stages`: non-empty list of non-empty strings.
 
 The contract is exact: `model.yml` has no consumer-specific extension mechanism.
-Operational build/source inputs, dependency declarations, verification
-expectations, generated facts and consumer-only presentation controls must live
-in their owning files rather than extending `model.yml`.
+`purpose` is shared human-facing classification, not CI state. Operational
+build/source inputs, dependency declarations, verification expectations,
+generated facts and consumer-only presentation controls must live in their
+owning files rather than extending `model.yml`.
 
 The reusable Forge library validates an already-parsed mapping and must not
 depend on a YAML implementation. Consumers remain free to choose their YAML
